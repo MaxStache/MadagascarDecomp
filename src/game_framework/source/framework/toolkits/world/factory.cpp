@@ -115,6 +115,7 @@ namespace RWS
    *  Create an RpAtomic from the resource specified within the CAttributePacket
    *
    */
+  // \MAD_DECOMP_CHANGED
    RpAtomic *CreateAtomicFromResource( const CAttributePacket& attr, CEventHandler* eventHandler)
    {
       RWS_FUNCTION( "RWS::CreateAtomicFromResource");
@@ -125,6 +126,11 @@ namespace RWS
       
       RWS_ASSERT( pResourceID, "FindFirstResource failed - could not find resource.");
       
+      if (!pResourceID) {
+         // DumpAttributePacket(attr); - TODO: We could implement whats left in release mode, this is a debug function tho
+         return;
+      }
+
       const RwChar *resourceType;
 
       const void *pObject = CResourceManager::FindById(pResourceID, &resourceType);
