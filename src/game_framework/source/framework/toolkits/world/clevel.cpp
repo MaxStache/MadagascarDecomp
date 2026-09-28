@@ -435,7 +435,7 @@ namespace RWS
          if (g_bWorldsReady != 0)
          {
             RpWorld *pWorld = RpClumpGetWorld(g_pLevelClump);
-            RpWorldAddAtomic(pWorld, atomic)
+            RpWorldAddAtomic(pWorld, atomic);
          }
       }
       RWS_RETURN(0);
