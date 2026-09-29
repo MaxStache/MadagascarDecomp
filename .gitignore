@@ -9,3 +9,9 @@ desktop.ini
 # Editors
 .vscode/
 .idea/
+
+
+src/console/game_framework/win32/bin
+# Python
+.venv/
+__pycache__/
