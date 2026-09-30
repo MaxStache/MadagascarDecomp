@@ -1,5 +1,5 @@
 # MadagascarDecomp
-A decompilation of Madagascar (2005)
+A (Work in Progress) decompilation of Madagascar (2005)
 
 ## Building
 
