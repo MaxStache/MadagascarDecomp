@@ -9965,6 +9965,124 @@
 						RelativePath="..\..\source\modules\seqctrl\cseqpos.h">
 					</File>
 				</Filter>
+				<Filter
+					Name="TFB"
+					Filter="">
+					<Filter
+						Name="CProtoActor"
+						Filter="">
+						<File
+							RelativePath="..\..\source\modules\tfb\CProtoActor\cprotoactor.cpp">
+							<FileConfiguration
+								Name="D3D Design Metrics|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Metrics|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Design Release|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="D3D Design Debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="0"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="D3D Release|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="D3D Design Release|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="0"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Release|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Design Debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="0"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="D3D Debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="0"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="OGL Design Metrics|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""
+									BrowseInformation="1"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="D3D Metrics|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									Optimization="2"
+									AdditionalIncludeDirectories=""
+									PreprocessorDefinitions=""/>
+							</FileConfiguration>
+						</File>
+						<File
+							RelativePath="..\..\source\modules\tfb\CProtoActor\cprotoactor.h">
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="toolkits"
@@ -15782,6 +15900,18 @@
 								AdditionalIncludeDirectories=""
 								PreprocessorDefinitions=""/>
 						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\source\framework\startup\win32\cregistry.cpp">
+					</File>
+					<File
+						RelativePath="..\..\source\framework\startup\win32\cregistry.h">
+					</File>
+					<File
+						RelativePath="..\..\source\framework\startup\win32\fileiohooks.cpp">
+					</File>
+					<File
+						RelativePath="..\..\source\framework\startup\win32\fileiohooks.h">
 					</File>
 					<File
 						RelativePath="..\..\source\framework\startup\win32\rwreg.h">

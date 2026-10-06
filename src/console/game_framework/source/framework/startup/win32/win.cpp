@@ -47,6 +47,9 @@ using namespace std;
 
 using namespace CSL;
 
+#include "cregistry.h"
+#include "fileiohooks.h"
+
 //////////////////////////////////////////////////////////////////
 //
 // RenderWare Studio Includes
@@ -62,6 +65,8 @@ using namespace CSL;
 #include "framework/toolkits/world/clevel.h"
 #include "framework/toolkits/world/helpers/camerahelper.h"
 #include "framework/mainloop/logic.h"
+
+HWND g_hMainWindow = NULL;
 
 namespace
 {
@@ -101,9 +106,21 @@ namespace
 
    bool g_bWindowedMode = false;
 
+   int g_skStartupMouseSpeed;
+   STICKYKEYS g_skStartupStickyKeys;
+   STICKYKEYS g_skGameStickyKeys;
+   int g_skStartupScreenSaveTimeout;
+   HINSTANCE g_hInstance;
+
+   CRegistry *g_pRegistry = NULL;
+
    // Used for new RW 3.6 FileSystem
    const RwUInt32 UNC_PATH_SIZE = 256; /* should be sufficient */
    const RwUInt32 MAX_NB_FILES_PER_FS = 20;
+
+   int g_nSoundEffectVolume;
+   int g_nMusicVolume;
+   bool g_bDetailedShadowsDisabled;
 
    int StringToInt(const string &str)
    {
@@ -211,14 +228,11 @@ namespace
          quit = 1;
          PostQuitMessage(0);
          RWS_RETURN(0);
+
       case WM_PAINT:
-         PAINTSTRUCT Paint;
-
-         BeginPaint(window, &Paint);
-         RWS::MainLoop::Render::Poll();
-         EndPaint(window, &Paint);
-
+         ValidateRect(window, NULL);
          RWS_RETURN(0L);
+
       case WM_SIZE:
          RwRect r;
 
@@ -334,12 +348,12 @@ namespace
       }
 
       SetLastError(0);
-      theMainWindow = CreateWindowExA(
+      g_hMainWindow = CreateWindowExA(
           dwExStyle, lpszClassName, lpszWindowName, dwStyle,
           x, y, nWindowWidth, nWindowHeight,
           NULL, NULL, hInstance, NULL);
 
-      RWS_RETURN(theMainWindow);
+      RWS_RETURN(g_hMainWindow);
    }
 
    /*
@@ -349,50 +363,17 @@ namespace
     *  Win32 only: Main message pump
     *
     */
+   // TODO: FINISH
    int PumpMessages()
    {
-      int result = 0;
-
-      while (!quit)
+      MSG message;
+      while (PeekMessageA(&message, g_hMainWindow, 0, 0, PM_REMOVE))
       {
-         MSG message;
-
-         if (PeekMessage(&message, 0, 0U, 0U, PM_REMOVE | PM_NOYIELD))
-         {
-            if (message.message == WM_QUIT)
-            {
-               quit = true;
-               result = message.wParam;
-            }
-            else
-            {
-               TranslateMessage(&message);
-               DispatchMessage(&message);
-            }
-         }
-         else
-         {
-            RwUInt32 startTime = GetTickCount(),
-                     logicTime,
-                     rateTime = (1000 / RWS::MainLoop::Logic::Rate);
-
-            RWS::MainLoop::Poll();
-
-            // Slightly less crude system than before. Check how much time has gone by.
-            // This system does not link to V.Sync of display in any way.
-
-            logicTime = GetTickCount() - startTime;
-
-            if (logicTime < rateTime)
-            {
-               // Running too fast, so sleep for extra time.
-
-               Sleep(rateTime - logicTime);
-            }
-         }
+         TranslateMessage(&message);
+         DispatchMessageA(&message);
       }
 
-      return (result);
+      return 0;
    }
 }
 
@@ -529,6 +510,90 @@ namespace RWS
 }
 
 /*
+ *  \ingroup Win
+ *
+ *  Win32 only: Destroy Main Window
+ *
+ */
+void DestroyMainWindow(void)
+{
+   // NOTE: in the game there is a cleanup for an unused hash table here too
+
+   // TODO: SystemParametersInfoA(SPI_SETSTICKYKEYS, 8, &g_skStartupStickyKeys, 0);
+
+   if (g_hMainWindow != NULL)
+   {
+      DestroyWindow(g_hMainWindow);
+      g_hMainWindow = NULL;
+   }
+}
+
+/*
+ *
+ *  \ingroup Win
+ *
+ *  Win32 only: Run a game frame
+ *
+ */
+void RunGameFrame(void)
+{
+   // TODO: Actually implement
+   RWS::MainLoop::Render::Poll();
+}
+
+void SaveSystemSettings()
+{
+   RWS_FUNCTION("SaveSystemSettings");
+
+   g_hInstance = GetModuleHandleA(NULL);
+
+   SystemParametersInfoA(SPI_GETMOUSESPEED, 0, &g_skStartupMouseSpeed, 0);
+   g_skStartupStickyKeys.cbSize = 8;
+   SystemParametersInfoA(SPI_GETSTICKYKEYS, 8, &g_skStartupStickyKeys, 0);
+   g_skGameStickyKeys.cbSize = g_skStartupStickyKeys.cbSize;
+   g_skGameStickyKeys.dwFlags =
+       g_skStartupStickyKeys.dwFlags & ~(SKF_HOTKEYACTIVE | SKF_CONFIRMHOTKEY);
+   SystemParametersInfoA(SPI_SETSTICKYKEYS, 8, &g_skGameStickyKeys, 0);
+   if (!SystemParametersInfoA(SPI_GETSCREENSAVETIMEOUT, 0, &g_skStartupScreenSaveTimeout, 0))
+   {
+      g_skStartupScreenSaveTimeout = 0;
+   }
+
+   RWS_RETURNVOID()
+}
+
+bool g_bRumbleOff;
+
+void SetRumbleOff(int bRumbleOff)
+{
+   g_bRumbleOff = bRumbleOff != 0;
+}
+
+CRegistry *InitPlatform()
+{
+   RWS_FUNCTION("InitPlatform");
+
+   SaveSystemSettings();
+   //g_pLocaleDict = LoadLocalizationDict("data\\mdgdict.bnx");
+
+   FileIOThreadParams fileIOParams;
+   fileIOParams.nThreadPriority = THREAD_PRIORITY_ABOVE_NORMAL;
+   fileIOParams.fChunkSize = 16384.0f;
+   fileIOParams.dwSleepMs = 3;
+
+   InstallFileIOHooks(&fileIOParams);
+
+   CRegistry *registry = RWS_NEW CRegistry("Activision", "Madagascar");
+
+   g_nSoundEffectVolume = registry->ReadInt("Settings\\Options\\Effect", 0x4b);
+   g_nMusicVolume = registry->ReadInt("Settings\\Options\\Music", 0x4b);
+   SetRumbleOff(registry->ReadInt("Settings\\Options\\RumbleOff", 0));
+   g_bDetailedShadowsDisabled = registry->ReadInt("Settings\\Display\\DetailedShadows", 1) != 0;
+
+   RWS_RETURN(registry);
+}
+
+/*
  *
  *  \ingroup Win
  *
@@ -553,10 +618,12 @@ int PASCAL WinMain(HINSTANCE hInstance,
    {
       if (hMutex != INVALID_HANDLE_VALUE)
       {
-         CloseHandle(hMutex);
+         g_pfnCloseHandle(hMutex);
       }
       RWS_RETURN(0); // exit
    }
+
+   g_pRegistry = InitPlatform();
 
    g_bWindowedMode = false;
 
@@ -584,8 +651,12 @@ int PASCAL WinMain(HINSTANCE hInstance,
    int uIconResourceId = 0x67;
    WNDPROC lpfnWndProc = MainWndProc;
 
+   // lpszWindowName = GetLocalizedString(g_pLocaleDict,"ID_WINNAME"); TODO:
+
    CreateMainWindow("RWSConsoleD3D8", lpszWindowName, x, y, g_nWindowWidth, g_nWindowHeight, lpfnWndProc, hInstance,
                     uIconResourceId, !g_bWindowedMode);
+
+   theMainWindow = g_hMainWindow;
 
    RECT windowClientRect;
    RECT cursorClientRect;
@@ -594,9 +665,9 @@ int PASCAL WinMain(HINSTANCE hInstance,
 
    RwVideoMode videoMode;
 
-   if (theMainWindow != (HANDLE)0x0)
+   if (g_hMainWindow != NULL)
    {
-      GetClientRect(theMainWindow, &windowClientRect);
+      GetClientRect(g_hMainWindow, &windowClientRect);
       if (g_bWindowedMode == '\0')
       {
          videoMode.width = g_nWindowWidth;
@@ -623,126 +694,38 @@ int PASCAL WinMain(HINSTANCE hInstance,
          // g_bGameRunning = 1;
          if (g_bWindowedMode != '\0')
          {
-            ShowWindow(theMainWindow, 1);
+            ShowWindow(g_hMainWindow, SW_SHOWNORMAL);
          }
          ShowCursor(0);
          UpdateWindow(theMainWindow);
          while (!quit)
          {
             PumpMessages();
-            while (true) // (g_bAppActive == '\0' && (quit == false))
+            while (false) // (g_bAppActive == '\0' && (quit == false)) // While the window is not active and we are not quitting
             {
                PumpMessages();
                Sleep(10);
             }
-            // RunGameFrame();
+            RunGameFrame();
          }
          // FreeLevelResources();
          RWS::StartUp::Close();
       }
    }
 
-   /*
-   int result = 0;
+   RestoreFileIOHooks();
 
-   // Check to see if App is already running
-   if (FindWindow(kMainWindowClassName, kMainWindowName))
+   DestroyMainWindow();
+   if (!ChangeDisplaySettingsA((DEVMODEA *)0x0, 0))
    {
-      // We have found the window so the framework is already running
-      // Quit this version.
-
-      RWS_RETURN(-1);
+      MessageBoxA((HWND)0x0, "Display reset failed", "Error", 0);
    }
-
-   if (RegisterMainWindowClass(instance))
-   {
-#ifndef RWS_DESIGN
-      // If were not in design mode, boot in a suitable res full screen.
-      //
-      int PosX    = 0;
-      int PosY    = 0;
-      int SizeX   = 640;
-      int SizeY   = 480;
-
-      const RwVideoModeFlag kFlags = static_cast<RwVideoModeFlag>(rwVIDEOMODEEXCLUSIVE);
-#else
-      // If we are in design mode, allow the user to set the window size etc
-      //
-
-      // Get initial size and position from registry
-      int PosX    = StringToInt(RegGetString(kRegGroup, kRegName, "PosX", "300"));
-      int PosY    = StringToInt(RegGetString(kRegGroup, kRegName, "PosY", "10"));
-      int SizeX   = StringToInt(RegGetString(kRegGroup, kRegName, "SizeX", "640"));
-      int SizeY   = StringToInt(RegGetString(kRegGroup, kRegName, "SizeY", "480"));
-
-      const RwVideoModeFlag kFlags = static_cast<RwVideoModeFlag>(0);
-#endif
-
-      theMainWindow = CreateMainWindow(instance, PosX, PosY, SizeX, SizeY, kFlags);
-
-      if (theMainWindow)
-      {
-         RECT clientRect;
-         GetClientRect(theMainWindow, &clientRect);
-         int clientWidth = clientRect.right - clientRect.left;
-         int clientHeight = clientRect.bottom - clientRect.top;
-
-         RwVideoMode videoModeInfo;
-
-         videoModeInfo.width = clientWidth;
-         videoModeInfo.height = clientHeight;
-         videoModeInfo.depth = kBitDepth;
-         videoModeInfo.flags = kFlags;
-
-         if (RWS::StartUp::Open(
-            0, // Use Defaults
-            0, // Use Defaults
-            (16 << 20), // Arena Size 16 Meg
-            videoModeInfo,
-            kZBitDepth,
-            theMainWindow))
-         {
-
-#ifndef RWS_DESIGN
-
-#define RWS_BOOTUP_FILE ".\\bootup.dff"
-
-#pragma message ("RWS_DESIGN not defined booting from file, RWS_BOOTUP_FILE")
-
-            StartUp::LoadGameDatabaseFile(RWS_BOOTUP_FILE);
-#endif
-
-            // Get maximized/minimized state from registry
-            string maximized = RegGetString(kRegGroup, kRegName, "Maximized", "false");
-            string minimized = RegGetString(kRegGroup, kRegName, "Minimized", "false");
-
-            if (maximized == "true")
-            {
-               ShowWindow(theMainWindow, SW_MAXIMIZE);
-            }
-            else if (minimized == "true")
-            {
-               ShowWindow(theMainWindow, SW_MINIMIZE);
-            }
-            else
-            {
-               ShowWindow(theMainWindow, cmdShow);
-            }
-
-            UpdateWindow(theMainWindow);
-
-            result = PumpMessages();
-
-            RWS::StartUp::Close();
-         }
-      }
-   }*/
 
    RWS_ASSERT(!IsWindow(theMainWindow), "theMainWindow hasn't been destroyed");
 
    if (hMutex != INVALID_HANDLE_VALUE)
    {
-      CloseHandle(hMutex);
+      g_pfnCloseHandle(hMutex);
    }
    RWS_RETURN(1);
 }

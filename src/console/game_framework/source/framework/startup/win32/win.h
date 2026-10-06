@@ -29,6 +29,11 @@
 #include <windows.h>
 #include "framework/core/eventhandler/ceventhandler.h"
 
+extern HWND g_hMainWindow;
+extern bool g_bRumbleOff;
+
+void SetRumbleOff(int bRumbleOff);
+
 namespace RWS
 {
    namespace Win
