@@ -54,7 +54,7 @@ namespace RWS
       *  \param rAttr Reference to a CAttributePacket.
       *
       */
-      CSetCLevelHint::CSetCLevelHint(const CAttributePacket& rAttr)
+      CSetCLevelHint::CSetCLevelHint(const CAttributePacket &rAttr)
       {
          RWS_FUNCTION("RWS::Generic::CSetCLevelHint::CSetCLevelHint");
 
@@ -66,7 +66,7 @@ namespace RWS
       *  \param rAttr Reference to a CAttributePacket.
       *
       */
-      void CSetCLevelHint::HandleAttributes(const CAttributePacket& attr)
+      void CSetCLevelHint::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::Generic::CSetCLevelHint::HandleAttributes");
 
@@ -78,19 +78,19 @@ namespace RWS
          {
             switch (AttrIt->GetCommandId())
             {
-               case CMD_CLevelHint:
-                  switch (AttrIt->GetAs_RwUInt32())
-                  {
-                     default:
-                     case 0:
-                        m_CLevelHint = CLevel::HINT_OPAQUE_WORLD;
-                        break;
-                     case 1:
-                        m_CLevelHint = CLevel::HINT_TRANSLUCENT_WORLD;
-                        break;
-                  }
-                  RWS_TRACE("Warning: Changing CLevelHint requires the level to be reset to take effect,"
-                     " resetting the level will attach the atomics/clumps to the correct worlds.");
+            case CMD_CLevelHint:
+               switch (AttrIt->GetAs_RwUInt32())
+               {
+               default:
+               case 0:
+                  m_CLevelHint = CLevel::HINT_OPAQUE_WORLD;
+                  break;
+               case 1:
+                  m_CLevelHint = CLevel::HINT_TRANSLUCENT_WORLD;
+                  break;
+               }
+               RWS_TRACE("Warning: Changing CLevelHint requires the level to be reset to take effect,"
+                         " resetting the level will attach the atomics/clumps to the correct worlds.");
                break;
             }
             ++AttrIt;
@@ -104,36 +104,36 @@ namespace RWS
          {
             switch (sysattrIt->GetCommandId())
             {
-               case CSystemCommands::CMD_AttachResource:
-                  {
-                     const RwChar *resourceType;
-      
+            case CSystemCommands::CMD_AttachResource:
+               {
+                  const RwChar *resourceType;
+
                      // Const cast is requires as we are going to modify the actual resource.
                      //
-                     const RWSGUID * pResourceId = 0;
-                     sysattrIt->GetCommandData(&pResourceId);
-                     void *pObject = const_cast<void*>(CResourceManager::FindById(pResourceId, &resourceType));
-      
-                     RWS_ASSERT(pObject, "Resource::Find failed, id = " << pResourceId);
+                  const RWSGUID *pResourceId = 0;
+                  sysattrIt->GetCommandData(&pResourceId);
+                  void *pObject = const_cast<void *>(CResourceManager::FindById(pResourceId, &resourceType));
 
-                     if (resourceType)
+                  RWS_ASSERT(pObject, "Resource::Find failed, id = " << pResourceId);
+
+                  if (resourceType)
+                  {
+                     if (!rwstrcmp("rwID_ATOMIC", resourceType))
                      {
-                        if (!rwstrcmp("rwID_ATOMIC", resourceType))
-                        {
-                           CLevel::SetPreferredWorldHint(static_cast<RpAtomic *>(pObject), m_CLevelHint);
-                        }
-                        else if (!rwstrcmp("rwID_CLUMP", resourceType))
-                        {
-                           CLevel::SetPreferredWorldHint(static_cast<RpClump *>(pObject), m_CLevelHint);
-                        }
-                        else
-                        {
-                           RWS_ASSERTFAIL("CSetCLevelHint can only process atomics and clumps.");
-                        }
+                        CLevel::SetPreferredWorldHint(static_cast<RpAtomic *>(pObject), m_CLevelHint);
+                     }
+                     else if (!rwstrcmp("rwID_CLUMP", resourceType))
+                     {
+                        CLevel::SetPreferredWorldHint(static_cast<RpClump *>(pObject), m_CLevelHint);
+                     }
+                     else
+                     {
+                        RWS_ASSERTFAIL("CSetCLevelHint can only process atomics and clumps.");
                      }
                   }
-                  break;
-            }; 
+               }
+               break;
+            };
             ++sysattrIt;
          }
 

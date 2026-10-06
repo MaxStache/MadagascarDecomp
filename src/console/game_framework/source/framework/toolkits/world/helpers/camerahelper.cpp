@@ -71,7 +71,7 @@ namespace RWS
 
          RWS_PRE(pCamera);
 
-         RwFrame* pFrame = RwCameraGetFrame(pCamera);
+         RwFrame *pFrame = RwCameraGetFrame(pCamera);
          if (pFrame)
          {
             // Clean up any frame hierarchy attached to the atomic (the assumption is
@@ -87,20 +87,20 @@ namespace RWS
             RwCameraSetFrame(pCamera, 0);
             FrameHelper::FrameDestroy(pFrame);
          }
-   
+
          // Remove camera from world
-         RpWorld* pWorld = RwCameraGetWorld (pCamera);
+         RpWorld *pWorld = RwCameraGetWorld(pCamera);
          if (pWorld) RpWorldRemoveCamera(pWorld, pCamera);
 
          // Release Color-Buffer if required
          //
          if (RwCameraGetRaster(pCamera))
          {
-            RwRaster* pRaster = RwCameraGetRaster(pCamera);
+            RwRaster *pRaster = RwCameraGetRaster(pCamera);
 
             if (pRaster)
             {
-               RWS_TRACE("rwRASTERTYPECAMERA Destroy [CBuf]: "<<pRaster);
+               RWS_TRACE("rwRASTERTYPECAMERA Destroy [CBuf]: " << pRaster);
 
                RwRasterDestroy(pRaster);
 
@@ -112,16 +112,16 @@ namespace RWS
          //
          if (RwCameraGetZRaster(pCamera))
          {
-               RwRaster *pRaster = RwCameraGetZRaster(pCamera);
+            RwRaster *pRaster = RwCameraGetZRaster(pCamera);
 
-               if (pRaster)
-               {
-                  RWS_TRACE("rwRASTERTYPECAMERA Destroy [ZBuf]: "<<pRaster);
+            if (pRaster)
+            {
+               RWS_TRACE("rwRASTERTYPECAMERA Destroy [ZBuf]: " << pRaster);
 
-                  RwRasterDestroy(pRaster);
+               RwRasterDestroy(pRaster);
 
-                  RwCameraSetZRaster(pCamera, 0);
-               }
+               RwCameraSetZRaster(pCamera, 0);
+            }
          }
 
          // Finally, RenderWare destroy camera
@@ -147,28 +147,28 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::CameraHelper::RwCameraCreateDefault");
 
-         RWS_TRACE("Width "<<Width);
-         RWS_TRACE("Height "<<Height);
-         RWS_TRACE("ZDepth "<<ZDepth);
+         RWS_TRACE("Width " << Width);
+         RWS_TRACE("Height " << Height);
+         RWS_TRACE("ZDepth " << ZDepth);
 
          RwCamera *_camera = RwCameraCreate();
-   
+
          RWS_POST(_camera);
 
          RwRaster *_raster = RwRasterCreate(Width, Height, 0, rwRASTERTYPECAMERA);
 
-         RWS_TRACE("rwRASTERTYPECAMERA Create [CBuf]: "<<_raster);
+         RWS_TRACE("rwRASTERTYPECAMERA Create [CBuf]: " << _raster);
 
-         RwCameraSetRaster (_camera, _raster);
+         RwCameraSetRaster(_camera, _raster);
 
          RWS_POST(RwCameraGetRaster(_camera));
 
          RwRaster *_rasterZ = RwRasterCreate(Width, Height, ZDepth, rwRASTERTYPEZBUFFER);
 
-         RWS_TRACE("rwRASTERTYPECAMERA Create [ZBuf]: "<<_rasterZ);
+         RWS_TRACE("rwRASTERTYPECAMERA Create [ZBuf]: " << _rasterZ);
 
-         RwCameraSetZRaster (_camera, _rasterZ);
-   
+         RwCameraSetZRaster(_camera, _rasterZ);
+
          RWS_POST(RwCameraGetZRaster(_camera));
 
          RwFrame *_frame = RwFrameCreate();
@@ -178,30 +178,30 @@ namespace RWS
          //-----------------------------------------------------
          //
          RwFrameSetIdentity(_frame);
-   
-         RwCameraSetFrame (_camera, _frame);
-   
-         RwCameraSetProjection (_camera, DefaultCameraProjection);
+
+         RwCameraSetFrame(_camera, _frame);
+
+         RwCameraSetProjection(_camera, DefaultCameraProjection);
 
          //-----------------------------------------------------
          //
-         RwCameraSetNearClipPlane (_camera, DefaultNearClipPlane);
-         RwCameraSetFarClipPlane (_camera, DefaultFarClipPlane);
+         RwCameraSetNearClipPlane(_camera, DefaultNearClipPlane);
+         RwCameraSetFarClipPlane(_camera, DefaultFarClipPlane);
 
          //-----------------------------------------------------
          //
          RwReal _aspect;
-      
-         if (Height != 0) 
+
+         if (Height != 0)
          {
             _aspect = (RwReal)Width / (RwReal)Height;
-   
-            RwV2d  _viewwindow;
 
-            _viewwindow.x = static_cast<RwReal>(RwTan (DefaultCameraViewAngle * 0.5f));
+            RwV2d _viewwindow;
+
+            _viewwindow.x = static_cast<RwReal>(RwTan(DefaultCameraViewAngle * 0.5f));
             _viewwindow.y = _viewwindow.x / _aspect;
-   
-            RwCameraSetViewWindow (_camera, &_viewwindow);
+
+            RwCameraSetViewWindow(_camera, &_viewwindow);
          }
 
          RWS_RETURN(_camera);
@@ -238,13 +238,13 @@ namespace RWS
          //-----------------------------------------------------
          //
          RwReal _aspect = (RwReal)width / (RwReal)height;
-   
-         RwV2d  _viewwindow;
 
-         _viewwindow.x = static_cast<RwReal>(RwTan (DefaultCameraViewAngle * 0.5f));
+         RwV2d _viewwindow;
+
+         _viewwindow.x = static_cast<RwReal>(RwTan(DefaultCameraViewAngle * 0.5f));
          _viewwindow.y = _viewwindow.x / _aspect;
-   
-         RwCameraSetViewWindow (_camera, &_viewwindow);
+
+         RwCameraSetViewWindow(_camera, &_viewwindow);
 
          RWS_RETURN(_camera);
       }
@@ -265,20 +265,20 @@ namespace RWS
 
          RwVideoMode videoMode;
          RwEngineGetVideoModeInfo(&videoMode, RwEngineGetCurrentVideoMode());
-      
+
          RwRect rect;
          RwV2d vw;
-      
+
          rect.x = 0;
          rect.y = 0;
          rect.w = RwRasterGetWidth(RwCameraGetRaster(pCamera));
          rect.h = RwRasterGetHeight(RwCameraGetRaster(pCamera));
-      
+
          if (videoMode.flags & rwVIDEOMODEFFINTERLACE) rect.h *= 2;
-      
+
          vw.x = rViewWindow;
          vw.y = (rect.h * rViewWindow) / rect.w;
-      
+
          RwCameraSetViewWindow(pCamera, &vw);
 
          RWS_RETURNVOID();
@@ -293,7 +293,7 @@ namespace RWS
       * \param rAttr A reference to a CAttributePacket.
       *
       */
-      void HandleSystemCommands(RwCamera &pCamera, const CAttributePacket& rAttr)
+      void HandleSystemCommands(RwCamera &pCamera, const CAttributePacket &rAttr)
       {
          RWS_FUNCTION("RWS::CameraHelper::HandleSystemCommands");
 
@@ -302,9 +302,9 @@ namespace RWS
          {
             switch (attrIt->GetCommandId())
             {
-               case CSystemCommands::CMD_LoadMatrix:
+            case CSystemCommands::CMD_LoadMatrix:
                {
-                  RwFrame* pFrame = RwCameraGetFrame(&pCamera);
+                  RwFrame *pFrame = RwCameraGetFrame(&pCamera);
                   if (pFrame) CSystemCommands::UpdateFrame(*pFrame, *attrIt);
                }
                break;

@@ -46,10 +46,10 @@ namespace RWS
       *
       */
 
-      const RwUInt32 MTX_CACHE_MATRIX_CHANGED      = 0x00000001;
-      const RwUInt32 MTX_CACHE_ROTATION_CACHED     = 0x00000002;
-      const RwUInt32 MTX_CACHE_SCALE_CACHED        = 0x00000004;
-      const RwUInt32 MTX_CACHE_QUATERNION_CACHED   = 0x00000008;
+      const RwUInt32 MTX_CACHE_MATRIX_CHANGED = 0x00000001;
+      const RwUInt32 MTX_CACHE_ROTATION_CACHED = 0x00000002;
+      const RwUInt32 MTX_CACHE_SCALE_CACHED = 0x00000004;
+      const RwUInt32 MTX_CACHE_QUATERNION_CACHED = 0x00000008;
 
       class MatrixCache
       {
@@ -70,7 +70,7 @@ namespace RWS
          void SetMatrixFromUnaligned(const RwMatrix *pRefMatrix);
          void SetMatrix(const RwMatrix *pRefMatrix);
          void SetMatrix(const RwV3d &pos, const RwV3d &at, const RwV3d *pWorldUp);
-         
+
       private:
 
          RtQuat m_quat;
@@ -82,8 +82,7 @@ namespace RWS
 
       const RwUInt32 MAX_NUM_SRC_MATRICES = 5;
 
-      class CSeqPos : public CSystemCommands, public CAttributeHandler, public CEventHandler,
-         public LinearAllocationPolicy
+      class CSeqPos : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
 
@@ -91,206 +90,206 @@ namespace RWS
          RWS_DECLARE_CLASSID(CSeqPos);
          RWS_CATEGORY("Sequence");
          RWS_DESCRIPTION("Sequencable position",
-            "Sequencable behaviour for controlling an entity's position.");
+                         "Sequencable behaviour for controlling an entity's position.");
 
-         RWS_BEGIN_COMMANDS            
-            RWS_SEPARATOR("Spline", 0)
-               RWS_ATTRIBUTE(CMD_SPLINE_T_VAL,
-                  "Spline T value",
-                  "Position along the spline controlled by t-value. "
-                     "0 = start of spline. 1 = end of spline",
-                  SLIDER,
-                  RwReal,
-                  RANGE(0, 0, 1))
-            RWS_SEPARATOR("Position", 0)
-               RWS_ATTRIBUTE(CMD_POS_A_FROM,
-                  "Position from (A)",
-                  "Where the position is set from for position channel A.",
-                  LIST,
-                  RwUInt32,
-                  LIST("Matrix|Pos in message A|Pos in message B|Pos in message C|"
-                     "Pos in message D|Pos in message E|Spline"))
-               RWS_ATTRIBUTE(CMD_POS_B_FROM,
-                  "Position from (B)",
-                  "Where the position is set from for position channel B.",
-                  LIST,
-                  RwUInt32,
-                  LIST("Matrix|Pos in message A|Pos in message B|Pos in message C|"
-                     "Pos in message D|Pos in message E|Spline"))
-               RWS_ATTRIBUTE(CMD_POS_BLEND,
-                  "Position blend",
-                  "Blending of positions from channel A and B. "
-                     "0 = 100% channel A. 1 = 100% channel B.",
-                  SLIDER,
-                  RwReal,
-                  RANGE(0, 0, 1))
-               RWS_ATTRIBUTE(CMD_IN_POS_OFFSET,
-                  "Position offset",
-                  "Offset applied to position, aligned to axes, after blending.",
-                  VECTOR,
-                  RwV3d,
-                  RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
-            RWS_SEPARATOR("Rotation", 0)
-               RWS_ATTRIBUTE(CMD_ROT_A_FROM,
-                  "Rotation from - alpha",
-                  "How the rotation is set - for channel alpha.",
-                  LIST,
-                  RwUInt32,
-                  LIST("Matrix|Look at pos in msg A|Look at pos in msg B|"
-                     "Look at pos in msg C|Look at pos in msg D|Look at pos in msg E|"
-                     "Rotation in pos msg A|Rotation in pos msg B|Rotation in pos msg C|"
-                     "Rotation in pos msg D|Rotation in pos msg E|Spline tangent"))
-               RWS_ATTRIBUTE(CMD_ROT_B_FROM,
-                  "Rotation from - beta",
-                  "How the rotation is set - for channel beta.",
-                  LIST,
-                  RwUInt32,
-                  LIST("Matrix|Look at pos in msg A|Look at pos in msg B|"
-                     "Look at pos in msg C|Look at pos in msg D|Look at pos in msg E|"
-                     "Rotation in pos msg A|Rotation in pos msg B|Rotation in pos msg C|"
-                     "Rotation in pos msg D|Rotation in pos msg E|Spline tangent"))
-               RWS_ATTRIBUTE(CMD_ROT_BLEND,
-                  "Rotation blend",
-                  "Blending of rotations from channel A and B. "
-                     "0 = 100% channel alpha. 1 = 100% channel beta.",
-                  SLIDER,
-                  RwReal,
-                  RANGE(0, 0, 1))
-               RWS_ATTRIBUTE(CMD_IN_ROT_OFFSET,
-                  "Rotation offset",
-                  "Offset applied to rotation. In degrees.",
-                  VECTOR,
-                  RwV3d,
-                  RANGES((-360, 0, 360), (-360, 0, 360), (-360, 0, 360)))
-            RWS_SEPARATOR("Scale", 0)
-               RWS_ATTRIBUTE(CMD_SCALE_FROM,
-                  "Scale from",
-                  "Where the scale is set from.",
-                  LIST,
-                  RwUInt32,
-                  LIST("Matrix|Scale in message A|Scale in message B|"
-                     "Scale in message C|Scale in message D|Scale in message E"))
-               RWS_ATTRIBUTE(CMD_IN_SCALE_OFFSET,
-                  "Scale offset",
-                  "Offset applied to scale. Added, ie final = base scale + offset.",
-                  VECTOR,
-                  RwV3d,
-                  RANGES((-100, 0, 100), (-100, 0, 100), (-100, 0, 100)))
-            RWS_SEPARATOR("Messages", 0)
-               RWS_MESSAGE(MSG_FRAME_IN_A,
-                  "Frame in A",
-                  "Name of event sending frame of other entity (A).",
-                  RECEIVE,
-                  RwFrame*,
-                  0)
-               RWS_MESSAGE(MSG_FRAME_IN_B,
-                  "Frame in B",
-                  "Name of event sending frame of other entity (B).",
-                  RECEIVE,
-                  RwFrame*,
-                  0)
-               RWS_MESSAGE(MSG_FRAME_IN_C,
-                  "Frame in C",
-                  "Name of event sending frame of other entity (C).",
-                  RECEIVE,
-                  RwFrame*,
-                  0)
-               RWS_MESSAGE(MSG_FRAME_IN_D,
-                  "Frame in D",
-                  "Name of event sending frame of other entity (D).",
-                  RECEIVE,
-                  RwFrame*,
-                  0)
-               RWS_MESSAGE(MSG_FRAME_IN_E,
-                  "Frame in E",
-                  "Name of event sending frame of other entity (E).",
-                  RECEIVE,
-                  RwFrame*,
-                  0)
-               RWS_MESSAGE(MSG_FRAME_OUT,
-                  "Frame out",
-                  "Name of event to use to send frame of this entity. Data will be "
+         RWS_BEGIN_COMMANDS
+         RWS_SEPARATOR("Spline", 0)
+         RWS_ATTRIBUTE(CMD_SPLINE_T_VAL,
+                       "Spline T value",
+                       "Position along the spline controlled by t-value. "
+                       "0 = start of spline. 1 = end of spline",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 0, 1))
+         RWS_SEPARATOR("Position", 0)
+         RWS_ATTRIBUTE(CMD_POS_A_FROM,
+                       "Position from (A)",
+                       "Where the position is set from for position channel A.",
+                       LIST,
+                       RwUInt32,
+                       LIST("Matrix|Pos in message A|Pos in message B|Pos in message C|"
+                            "Pos in message D|Pos in message E|Spline"))
+         RWS_ATTRIBUTE(CMD_POS_B_FROM,
+                       "Position from (B)",
+                       "Where the position is set from for position channel B.",
+                       LIST,
+                       RwUInt32,
+                       LIST("Matrix|Pos in message A|Pos in message B|Pos in message C|"
+                            "Pos in message D|Pos in message E|Spline"))
+         RWS_ATTRIBUTE(CMD_POS_BLEND,
+                       "Position blend",
+                       "Blending of positions from channel A and B. "
+                       "0 = 100% channel A. 1 = 100% channel B.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 0, 1))
+         RWS_ATTRIBUTE(CMD_IN_POS_OFFSET,
+                       "Position offset",
+                       "Offset applied to position, aligned to axes, after blending.",
+                       VECTOR,
+                       RwV3d,
+                       RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
+         RWS_SEPARATOR("Rotation", 0)
+         RWS_ATTRIBUTE(CMD_ROT_A_FROM,
+                       "Rotation from - alpha",
+                       "How the rotation is set - for channel alpha.",
+                       LIST,
+                       RwUInt32,
+                       LIST("Matrix|Look at pos in msg A|Look at pos in msg B|"
+                            "Look at pos in msg C|Look at pos in msg D|Look at pos in msg E|"
+                            "Rotation in pos msg A|Rotation in pos msg B|Rotation in pos msg C|"
+                            "Rotation in pos msg D|Rotation in pos msg E|Spline tangent"))
+         RWS_ATTRIBUTE(CMD_ROT_B_FROM,
+                       "Rotation from - beta",
+                       "How the rotation is set - for channel beta.",
+                       LIST,
+                       RwUInt32,
+                       LIST("Matrix|Look at pos in msg A|Look at pos in msg B|"
+                            "Look at pos in msg C|Look at pos in msg D|Look at pos in msg E|"
+                            "Rotation in pos msg A|Rotation in pos msg B|Rotation in pos msg C|"
+                            "Rotation in pos msg D|Rotation in pos msg E|Spline tangent"))
+         RWS_ATTRIBUTE(CMD_ROT_BLEND,
+                       "Rotation blend",
+                       "Blending of rotations from channel A and B. "
+                       "0 = 100% channel alpha. 1 = 100% channel beta.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 0, 1))
+         RWS_ATTRIBUTE(CMD_IN_ROT_OFFSET,
+                       "Rotation offset",
+                       "Offset applied to rotation. In degrees.",
+                       VECTOR,
+                       RwV3d,
+                       RANGES((-360, 0, 360), (-360, 0, 360), (-360, 0, 360)))
+         RWS_SEPARATOR("Scale", 0)
+         RWS_ATTRIBUTE(CMD_SCALE_FROM,
+                       "Scale from",
+                       "Where the scale is set from.",
+                       LIST,
+                       RwUInt32,
+                       LIST("Matrix|Scale in message A|Scale in message B|"
+                            "Scale in message C|Scale in message D|Scale in message E"))
+         RWS_ATTRIBUTE(CMD_IN_SCALE_OFFSET,
+                       "Scale offset",
+                       "Offset applied to scale. Added, ie final = base scale + offset.",
+                       VECTOR,
+                       RwV3d,
+                       RANGES((-100, 0, 100), (-100, 0, 100), (-100, 0, 100)))
+         RWS_SEPARATOR("Messages", 0)
+         RWS_MESSAGE(MSG_FRAME_IN_A,
+                     "Frame in A",
+                     "Name of event sending frame of other entity (A).",
+                     RECEIVE,
+                     RwFrame *,
+                     0)
+         RWS_MESSAGE(MSG_FRAME_IN_B,
+                     "Frame in B",
+                     "Name of event sending frame of other entity (B).",
+                     RECEIVE,
+                     RwFrame *,
+                     0)
+         RWS_MESSAGE(MSG_FRAME_IN_C,
+                     "Frame in C",
+                     "Name of event sending frame of other entity (C).",
+                     RECEIVE,
+                     RwFrame *,
+                     0)
+         RWS_MESSAGE(MSG_FRAME_IN_D,
+                     "Frame in D",
+                     "Name of event sending frame of other entity (D).",
+                     RECEIVE,
+                     RwFrame *,
+                     0)
+         RWS_MESSAGE(MSG_FRAME_IN_E,
+                     "Frame in E",
+                     "Name of event sending frame of other entity (E).",
+                     RECEIVE,
+                     RwFrame *,
+                     0)
+         RWS_MESSAGE(MSG_FRAME_OUT,
+                     "Frame out",
+                     "Name of event to use to send frame of this entity. Data will be "
                      "send if name changes or other values change.",
-                  TRANSMIT,
-                  RwFrame*,
-                  0)
-               RWS_ATTRIBUTE(CMD_OUT_POS_OFFSET,
-                  "Position offset",
-                  "Offset applied to position before sending, aligned to rotation of entity.",
-                  VECTOR,
-                  RwV3d,
-                  RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
+                     TRANSMIT,
+                     RwFrame *,
+                     0)
+         RWS_ATTRIBUTE(CMD_OUT_POS_OFFSET,
+                       "Position offset",
+                       "Offset applied to position before sending, aligned to rotation of entity.",
+                       VECTOR,
+                       RwV3d,
+                       RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
          RWS_END_COMMANDS;
 
          RWS_DS_TABLE_START
 
-            RWS_DS_ENABLE_OVERRIDE(CSystemCommands)
+         RWS_DS_ENABLE_OVERRIDE(CSystemCommands)
 
-            RWS_DS_START_CMD_SECTION
+         RWS_DS_START_CMD_SECTION
 
-               RWS_DS_CMD(CMD_SPLINE_T_VAL,
-                  RWS_CMD_DATA(CSeqPos, m_splineTVal),
-                  RWS_CMD_FUNC(CSeqPos, UpdateSplineTVal))
-               RWS_DS_CMD(CMD_POS_A_FROM,
-                  RWS_CMD_DATA(CSeqPos, m_posSourceA),
-                  RWS_CMD_FUNC(CSeqPos, UpdatePosSource))
-               RWS_DS_CMD(CMD_POS_B_FROM,
-                  RWS_CMD_DATA(CSeqPos, m_posSourceB),
-                  RWS_CMD_FUNC(CSeqPos, UpdatePosSource))
-               RWS_DS_CMD(CMD_POS_BLEND,
-                  RWS_CMD_DATA(CSeqPos, m_posBlendTVal),
-                  RWS_CMD_FUNC(CSeqPos, UpdatePosBlendTVal))
-               RWS_DS_CMD(CMD_IN_POS_OFFSET,
-                  RWS_CMD_DATA(CSeqPos, m_inPosOffset),
-                  RWS_CMD_FUNC_BLANK)
-               RWS_DS_CMD(CMD_ROT_A_FROM,
-                  RWS_CMD_DATA(CSeqPos, m_rotSourceA),
-                  RWS_CMD_FUNC(CSeqPos, UpdateRotSource))
-               RWS_DS_CMD(CMD_ROT_B_FROM,
-                  RWS_CMD_DATA(CSeqPos, m_rotSourceB),
-                  RWS_CMD_FUNC(CSeqPos, UpdateRotSource))
-               RWS_DS_CMD(CMD_ROT_BLEND,
-                  RWS_CMD_DATA(CSeqPos, m_rotBlendTVal),
-                  RWS_CMD_FUNC(CSeqPos, UpdateRotBlendTVal))
-               RWS_DS_CMD(CMD_IN_ROT_OFFSET,
-                  RWS_CMD_DATA(CSeqPos, m_rotOffset),
-                  RWS_CMD_FUNC_BLANK)
-               RWS_DS_CMD(CMD_SCALE_FROM,
-                  RWS_CMD_DATA(CSeqPos, m_scaleSource),
-                  RWS_CMD_FUNC_BLANK)
-               RWS_DS_CMD(CMD_IN_SCALE_OFFSET,
-                  RWS_CMD_DATA(CSeqPos, m_scaleOffset),
-                  RWS_CMD_FUNC_BLANK)
-               RWS_DS_CMD(MSG_FRAME_IN_A,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateInMatrixAMsg))
-               RWS_DS_CMD(MSG_FRAME_IN_B,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateInMatrixBMsg))
-               RWS_DS_CMD(MSG_FRAME_IN_C,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateInMatrixCMsg))
-               RWS_DS_CMD(MSG_FRAME_IN_D,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateInMatrixDMsg))
-               RWS_DS_CMD(MSG_FRAME_IN_E,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateInMatrixEMsg))
-               RWS_DS_CMD(MSG_FRAME_OUT,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateOutMatrixMsg))
-               RWS_DS_CMD(CMD_OUT_POS_OFFSET,
-                  RWS_CMD_DATA(CSeqPos, m_outPosOffset),
-                  RWS_CMD_FUNC_BLANK)
+         RWS_DS_CMD(CMD_SPLINE_T_VAL,
+                    RWS_CMD_DATA(CSeqPos, m_splineTVal),
+                    RWS_CMD_FUNC(CSeqPos, UpdateSplineTVal))
+         RWS_DS_CMD(CMD_POS_A_FROM,
+                    RWS_CMD_DATA(CSeqPos, m_posSourceA),
+                    RWS_CMD_FUNC(CSeqPos, UpdatePosSource))
+         RWS_DS_CMD(CMD_POS_B_FROM,
+                    RWS_CMD_DATA(CSeqPos, m_posSourceB),
+                    RWS_CMD_FUNC(CSeqPos, UpdatePosSource))
+         RWS_DS_CMD(CMD_POS_BLEND,
+                    RWS_CMD_DATA(CSeqPos, m_posBlendTVal),
+                    RWS_CMD_FUNC(CSeqPos, UpdatePosBlendTVal))
+         RWS_DS_CMD(CMD_IN_POS_OFFSET,
+                    RWS_CMD_DATA(CSeqPos, m_inPosOffset),
+                    RWS_CMD_FUNC_BLANK)
+         RWS_DS_CMD(CMD_ROT_A_FROM,
+                    RWS_CMD_DATA(CSeqPos, m_rotSourceA),
+                    RWS_CMD_FUNC(CSeqPos, UpdateRotSource))
+         RWS_DS_CMD(CMD_ROT_B_FROM,
+                    RWS_CMD_DATA(CSeqPos, m_rotSourceB),
+                    RWS_CMD_FUNC(CSeqPos, UpdateRotSource))
+         RWS_DS_CMD(CMD_ROT_BLEND,
+                    RWS_CMD_DATA(CSeqPos, m_rotBlendTVal),
+                    RWS_CMD_FUNC(CSeqPos, UpdateRotBlendTVal))
+         RWS_DS_CMD(CMD_IN_ROT_OFFSET,
+                    RWS_CMD_DATA(CSeqPos, m_rotOffset),
+                    RWS_CMD_FUNC_BLANK)
+         RWS_DS_CMD(CMD_SCALE_FROM,
+                    RWS_CMD_DATA(CSeqPos, m_scaleSource),
+                    RWS_CMD_FUNC_BLANK)
+         RWS_DS_CMD(CMD_IN_SCALE_OFFSET,
+                    RWS_CMD_DATA(CSeqPos, m_scaleOffset),
+                    RWS_CMD_FUNC_BLANK)
+         RWS_DS_CMD(MSG_FRAME_IN_A,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateInMatrixAMsg))
+         RWS_DS_CMD(MSG_FRAME_IN_B,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateInMatrixBMsg))
+         RWS_DS_CMD(MSG_FRAME_IN_C,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateInMatrixCMsg))
+         RWS_DS_CMD(MSG_FRAME_IN_D,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateInMatrixDMsg))
+         RWS_DS_CMD(MSG_FRAME_IN_E,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateInMatrixEMsg))
+         RWS_DS_CMD(MSG_FRAME_OUT,
+                    RWS_CMD_DATA_BLANK,
+                    RWS_CMD_FUNC(CSeqPos, UpdateOutMatrixMsg))
+         RWS_DS_CMD(CMD_OUT_POS_OFFSET,
+                    RWS_CMD_DATA(CSeqPos, m_outPosOffset),
+                    RWS_CMD_FUNC_BLANK)
 
-            RWS_DS_END_CMD_SECTION(CSeqPos)
+         RWS_DS_END_CMD_SECTION(CSeqPos)
 
-            RWS_DS_START_OVERRIDE_SECTION(CSystemCommands, CSeqPos)
-               RWS_DS_OVERRIDE_CMD(CSystemCommands,
-                  CMD_LoadMatrix,
-                  RWS_CMD_DATA_BLANK,
-                  RWS_CMD_FUNC(CSeqPos, UpdateMatrixDS))
-            RWS_DS_END_OVERRIDE_SECTION(CSystemCommands)
+         RWS_DS_START_OVERRIDE_SECTION(CSystemCommands, CSeqPos)
+         RWS_DS_OVERRIDE_CMD(CSystemCommands,
+                             CMD_LoadMatrix,
+                             RWS_CMD_DATA_BLANK,
+                             RWS_CMD_FUNC(CSeqPos, UpdateMatrixDS))
+         RWS_DS_END_OVERRIDE_SECTION(CSystemCommands)
 
          RWS_DS_TABLE_END
 
@@ -361,7 +360,7 @@ namespace RWS
          {
             CSeqPos *pSeqPos = static_cast<CSeqPos *>(pThis);
             RWS_ASSERT(pSeqPos->m_splineTVal >= 0.0f && pSeqPos->m_splineTVal <= 1.0f,
-               "new spline t-value is not in range of 0 to 1 (inclusive).");
+                       "new spline t-value is not in range of 0 to 1 (inclusive).");
             pSeqPos->m_updatedSplineTVal = TRUE;
          }
 
@@ -396,7 +395,7 @@ namespace RWS
          {
             CSeqPos *pSeqPos = static_cast<CSeqPos *>(pThis);
             RWS_ASSERT(pSeqPos->m_posBlendTVal >= 0.0f && pSeqPos->m_posBlendTVal <= 1.0f,
-               "new position blend t-value is not in range of 0 to 1 (inclusive).");
+                       "new position blend t-value is not in range of 0 to 1 (inclusive).");
             pSeqPos->m_updatedPosBlendTVal = TRUE;
             pSeqPos->m_curPosInvalid = TRUE;
          }
@@ -432,7 +431,7 @@ namespace RWS
          {
             CSeqPos *pSeqPos = static_cast<CSeqPos *>(pThis);
             RWS_ASSERT(pSeqPos->m_posBlendTVal >= 0.0f && pSeqPos->m_posBlendTVal <= 1.0f,
-               "new position blend t-value is not in range of 0 to 1 (inclusive).");
+                       "new position blend t-value is not in range of 0 to 1 (inclusive).");
             pSeqPos->m_updatedRotBlendTVal = TRUE;
             pSeqPos->m_quatInvalid = TRUE;
          }

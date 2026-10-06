@@ -46,7 +46,8 @@ namespace RWS
       class CFXReplicatorDynamics
       {
       public:
-         CFXReplicatorDynamics() : Time (0)
+         CFXReplicatorDynamics() :
+            Time(0)
          {
          }
 
@@ -89,13 +90,13 @@ namespace RWS
          CFXReplicator(const CFXReplicatorDynamics &ParticleDynamics);
          ~CFXReplicator();
 
-         void UpdateParticleAtomic( void );
+         void UpdateParticleAtomic(void);
 
          CFXReplicatorDynamics m_ParticleDynamics;      /**< \ref CReplicatorDynamics */
 
          CAtomicPtr m_pAtomic;                          /**< \ref CAtomicPtr */
 
-         void SetRenderCallBack( void );
+         void SetRenderCallBack(void);
 
          static RpAtomic *AtomicRenderCallBack(RpAtomic *pAtomic);
 

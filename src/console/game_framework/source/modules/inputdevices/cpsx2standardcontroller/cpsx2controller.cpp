@@ -94,7 +94,7 @@ namespace
       {
          int state = scePadGetState(port, slot);
          ++nbStabFrame;
-         
+
          stable = scePadStateStable == state || scePadStateFindCTP1 == state;
          wait = scePadStateExecCmd == state || nbStabFrame < kPadStabDelay;
       }
@@ -109,26 +109,25 @@ namespace
 
          switch (id)
          {
-            case kPadNormal:      // Standard
+         case kPadNormal:      // Standard
 
                // Check the pad supports analogue/vibration functionality...
-               if (scePadInfoMode(port, slot, InfoModeCurExID, 0) != 0)
-               {
+            if (scePadInfoMode(port, slot, InfoModeCurExID, 0) != 0)
+            {
                   // Change to analogue mode and lock...
-                  do
-                  {
-                    scePadSetMainMode(port, slot, 1, 1);
-                  }
-                  while (scePadGetReqState(port, slot) == scePadReqStateFaild);
-               }
+               do
+               {
+                  scePadSetMainMode(port, slot, 1, 1);
+               } while (scePadGetReqState(port, slot) == scePadReqStateFaild);
+            }
 
-               break;
+            break;
 
-            case kPadAnalog:       // Analog
-            default:              // Unknown
+         case kPadAnalog:       // Analog
+         default:              // Unknown
 
                // In both cases, leave as-is
-               break;
+            break;
          }
       }
    }
@@ -140,40 +139,40 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CPSX2StndController);
       RWS_REGISTERCLASS(CPSX2StndController);
-   
-      static u_long128 padDma[scePadDmaBufferMax] __attribute__((aligned (64)));
-   
+
+      static u_long128 padDma[scePadDmaBufferMax] __attribute__((aligned(64)));
+
       static unsigned int usage_refcount = 0;
-   
+
       //////////////////////////////////////////////////////////////////
       //
-      CPSX2StndController::CPSX2StndController(const CAttributePacket&) : 
+      CPSX2StndController::CPSX2StndController(const CAttributePacket &) :
          InitCEventHandler(0),
          m_DeadZone(0.25),
          m_PortSelect(0)
       {
-            
+
          RWS_FUNCTION("RWS::InputDevices::CPSX2StndController::CPSX2StndController");
 
          if (usage_refcount == 0)
          {
             // Init the controllers
             //
-            scePadInit (0);    
+            scePadInit(0);
          }
 
-         usage_refcount ++;
-      
+         usage_refcount++;
+
          // Open the controller port and set it to analog
          //
-         scePadPortOpen (0, 0, padDma);
+         scePadPortOpen(0, 0, padDma);
          skyPadSetAnalogMode(0, 0);
-      
+
          // Do an initial read
          //
          ReadInput();
-      
-         LinkMsg( iMsgRunningTick );
+
+         LinkMsg(iMsgRunningTick);
 
          ReplaceLinkedMsg(m_Inq_Triangle, "INQ_ACTN_JUMP", "return RwReal");
          ReplaceLinkedMsg(m_Inq_LR1, "INQ_ACTN_STRAFE", "return RwReal");
@@ -184,7 +183,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
       //////////////////////////////////////////////////////////////////
       //
       CPSX2StndController::~CPSX2StndController()
@@ -193,66 +192,66 @@ namespace RWS
 
          // Close the controller port
          //
-         scePadPortClose (0, 0 );
+         scePadPortClose(0, 0);
 
-         usage_refcount --;
+         usage_refcount--;
 
          // Shutdown controllers
          //
          if (usage_refcount == 0)
          {
-            scePadEnd ();
+            scePadEnd();
          }
 
-         UnLinkMsg( iMsgRunningTick );
-      
-         UnLinkMsg( m_Inq_Start );
-         UnLinkMsg( m_Inq_Select );
-         UnLinkMsg( m_Inq_Triangle );
-         UnLinkMsg( m_Inq_Cross );
-         UnLinkMsg( m_Inq_Square );
-         UnLinkMsg( m_Inq_Circle );
-         UnLinkMsg( m_Inq_PAD_Up );
-         UnLinkMsg( m_Inq_PAD_Down );
-         UnLinkMsg( m_Inq_PAD_Left );
-         UnLinkMsg( m_Inq_PAD_Right );
-         UnLinkMsg( m_Inq_DPAD_X );
-         UnLinkMsg( m_Inq_DPAD_Y );
-         UnLinkMsg( m_Inq_L1 );
-         UnLinkMsg( m_Inq_L2 );
-         UnLinkMsg( m_Inq_R1 );
-         UnLinkMsg( m_Inq_R2 );
-         UnLinkMsg( m_LPAD_X );
-         UnLinkMsg( m_LPAD_Y );
-         UnLinkMsg( m_RPAD_X );
-         UnLinkMsg( m_RPAD_Y );
-         UnLinkMsg( m_Inq_LR1 );
-      
-         UnRegisterMsg( m_Inq_Start );
-         UnRegisterMsg( m_Inq_Select );
-         UnRegisterMsg( m_Inq_Triangle );
-         UnRegisterMsg( m_Inq_Cross );
-         UnRegisterMsg( m_Inq_Square );
-         UnRegisterMsg( m_Inq_Circle );
-         UnRegisterMsg( m_Inq_PAD_Up );
-         UnRegisterMsg( m_Inq_PAD_Down );
-         UnRegisterMsg( m_Inq_PAD_Left );
-         UnRegisterMsg( m_Inq_PAD_Right );
-         UnRegisterMsg( m_Inq_DPAD_X );
-         UnRegisterMsg( m_Inq_DPAD_Y );
-         UnRegisterMsg( m_Inq_L1 );
-         UnRegisterMsg( m_Inq_L2 );
-         UnRegisterMsg( m_Inq_R1 );
-         UnRegisterMsg( m_Inq_R2 );
-         UnRegisterMsg( m_LPAD_X );
-         UnRegisterMsg( m_LPAD_Y );
-         UnRegisterMsg( m_RPAD_X );
-         UnRegisterMsg( m_RPAD_Y );
-         UnRegisterMsg( m_Inq_LR1 );
+         UnLinkMsg(iMsgRunningTick);
+
+         UnLinkMsg(m_Inq_Start);
+         UnLinkMsg(m_Inq_Select);
+         UnLinkMsg(m_Inq_Triangle);
+         UnLinkMsg(m_Inq_Cross);
+         UnLinkMsg(m_Inq_Square);
+         UnLinkMsg(m_Inq_Circle);
+         UnLinkMsg(m_Inq_PAD_Up);
+         UnLinkMsg(m_Inq_PAD_Down);
+         UnLinkMsg(m_Inq_PAD_Left);
+         UnLinkMsg(m_Inq_PAD_Right);
+         UnLinkMsg(m_Inq_DPAD_X);
+         UnLinkMsg(m_Inq_DPAD_Y);
+         UnLinkMsg(m_Inq_L1);
+         UnLinkMsg(m_Inq_L2);
+         UnLinkMsg(m_Inq_R1);
+         UnLinkMsg(m_Inq_R2);
+         UnLinkMsg(m_LPAD_X);
+         UnLinkMsg(m_LPAD_Y);
+         UnLinkMsg(m_RPAD_X);
+         UnLinkMsg(m_RPAD_Y);
+         UnLinkMsg(m_Inq_LR1);
+
+         UnRegisterMsg(m_Inq_Start);
+         UnRegisterMsg(m_Inq_Select);
+         UnRegisterMsg(m_Inq_Triangle);
+         UnRegisterMsg(m_Inq_Cross);
+         UnRegisterMsg(m_Inq_Square);
+         UnRegisterMsg(m_Inq_Circle);
+         UnRegisterMsg(m_Inq_PAD_Up);
+         UnRegisterMsg(m_Inq_PAD_Down);
+         UnRegisterMsg(m_Inq_PAD_Left);
+         UnRegisterMsg(m_Inq_PAD_Right);
+         UnRegisterMsg(m_Inq_DPAD_X);
+         UnRegisterMsg(m_Inq_DPAD_Y);
+         UnRegisterMsg(m_Inq_L1);
+         UnRegisterMsg(m_Inq_L2);
+         UnRegisterMsg(m_Inq_R1);
+         UnRegisterMsg(m_Inq_R2);
+         UnRegisterMsg(m_LPAD_X);
+         UnRegisterMsg(m_LPAD_Y);
+         UnRegisterMsg(m_RPAD_X);
+         UnRegisterMsg(m_RPAD_Y);
+         UnRegisterMsg(m_Inq_LR1);
 
          RWS_RETURNVOID();
       }
-   
+
       void CPSX2StndController::CalcJoyVar(float &joyvar)
       {
          RWS_FUNCTION("RWS::InputDevices::CPSX2StndController::CalcJoyVar");
@@ -261,24 +260,24 @@ namespace RWS
 
          // Check for deadzone, prevents drift when joystick is near center position
          //
-         if (joyvar < m_DeadZone && joyvar> - m_DeadZone)
+         if (joyvar < m_DeadZone && joyvar > -m_DeadZone)
          {
             joyvar = 0.0f;
          }
          // Make non-linear : Improves feel of controls makes them less twitchy near
          // center position.
          //
-         else if (joyvar>0)
+         else if (joyvar > 0)
          {
-            joyvar = (joyvar*joyvar);
+            joyvar = (joyvar * joyvar);
          }
          else
          {
-            joyvar = - (joyvar*joyvar);
+            joyvar = -(joyvar * joyvar);
          }
 
          RWS_RETURNVOID();
-      }   
+      }
       //////////////////////////////////////////////////////////////////
       //
       void CPSX2StndController::HandleEvents(CMsg &pMsg)
@@ -291,156 +290,156 @@ namespace RWS
          }
          else
          {
-            if (pMsg.Id == m_Inq_Start )
+            if (pMsg.Id == m_Inq_Start)
             {
-               if (paddata&SCE_PADstart) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADstart) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_Select )
+            else if (pMsg.Id == m_Inq_Select)
             {
-               if (paddata&SCE_PADselect) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                       { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADselect) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_Triangle )
+            else if (pMsg.Id == m_Inq_Triangle)
             {
-               if (paddata&SCE_PADRup) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                    { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADRup) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_Cross )
+            else if (pMsg.Id == m_Inq_Cross)
             {
-               if (paddata&SCE_PADRdown) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADRdown) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_Square )
+            else if (pMsg.Id == m_Inq_Square)
             {
-               if (paddata&SCE_PADRleft) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADRleft) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_Circle )
+            else if (pMsg.Id == m_Inq_Circle)
             {
-               if (paddata&SCE_PADRright) { *(float*)(&pMsg.pData) = 1.0f; }
-               else                       { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADRright) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_PAD_Up )
+            else if (pMsg.Id == m_Inq_PAD_Up)
             {
-               if (paddata&SCE_PADLup)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADLup) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_PAD_Down )
+            else if (pMsg.Id == m_Inq_PAD_Down)
             {
-               if (paddata&SCE_PADLdown)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADLdown) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_PAD_Left )
+            else if (pMsg.Id == m_Inq_PAD_Left)
             {
-               if (paddata&SCE_PADLleft)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADLleft) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_PAD_Right )
+            else if (pMsg.Id == m_Inq_PAD_Right)
             {
-               if (paddata&SCE_PADLright)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                      { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADLright) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_DPAD_X )
-            {
-               float joyvar = 0.0f;
-            
-               if (paddata&SCE_PADLright)   { joyvar = 1.0f; }
-               if (paddata&SCE_PADLleft)   { joyvar -= 1.0f; }
-            
-               *(float*)(&pMsg.pData) = joyvar;
-            }
-            else if (pMsg.Id == m_Inq_DPAD_Y )
+            else if (pMsg.Id == m_Inq_DPAD_X)
             {
                float joyvar = 0.0f;
-            
-               if (paddata&SCE_PADLup)   { joyvar = 1.0f; }
-               if (paddata&SCE_PADLdown)   { joyvar -= 1.0f; }
-            
-               *(float*)(&pMsg.pData) = joyvar;
+
+               if (paddata & SCE_PADLright) { joyvar = 1.0f; }
+               if (paddata & SCE_PADLleft) { joyvar -= 1.0f; }
+
+               *(float *)(&pMsg.pData) = joyvar;
             }
-            else if (pMsg.Id == m_Inq_LR1 )
+            else if (pMsg.Id == m_Inq_DPAD_Y)
             {
                float joyvar = 0.0f;
-            
-               if (paddata&SCE_PADL1)   { joyvar = 1.0f; }
-               if (paddata&SCE_PADR1)   { joyvar -= 1.0f; }
-            
-               *(float*)(&pMsg.pData) = joyvar;
+
+               if (paddata & SCE_PADLup) { joyvar = 1.0f; }
+               if (paddata & SCE_PADLdown) { joyvar -= 1.0f; }
+
+               *(float *)(&pMsg.pData) = joyvar;
             }
-            else if (pMsg.Id == m_Inq_LR2 )
+            else if (pMsg.Id == m_Inq_LR1)
             {
                float joyvar = 0.0f;
-            
-               if (paddata&SCE_PADL2)   { joyvar = 1.0f; }
-               if (paddata&SCE_PADR2)   { joyvar -= 1.0f; }
-            
-               *(float*)(&pMsg.pData) = joyvar;
+
+               if (paddata & SCE_PADL1) { joyvar = 1.0f; }
+               if (paddata & SCE_PADR1) { joyvar -= 1.0f; }
+
+               *(float *)(&pMsg.pData) = joyvar;
             }
-            else if (pMsg.Id == m_Inq_L1 )
+            else if (pMsg.Id == m_Inq_LR2)
             {
-               if (paddata&SCE_PADL1)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                     { *(float*)(&pMsg.pData) = -1.0f; }
+               float joyvar = 0.0f;
+
+               if (paddata & SCE_PADL2) { joyvar = 1.0f; }
+               if (paddata & SCE_PADR2) { joyvar -= 1.0f; }
+
+               *(float *)(&pMsg.pData) = joyvar;
             }
-            else if (pMsg.Id == m_Inq_L2 )
+            else if (pMsg.Id == m_Inq_L1)
             {
-               if (paddata&SCE_PADL2)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                     { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADL1) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_R1 )
+            else if (pMsg.Id == m_Inq_L2)
             {
-               if (paddata&SCE_PADR1)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                    { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADL2) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_Inq_R2 )
+            else if (pMsg.Id == m_Inq_R1)
             {
-               if (paddata&SCE_PADR2)   { *(float*)(&pMsg.pData) = 1.0f; }
-               else                     { *(float*)(&pMsg.pData) = -1.0f; }
+               if (paddata & SCE_PADR1) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
             }
-            else if (pMsg.Id == m_LPAD_X )
+            else if (pMsg.Id == m_Inq_R2)
+            {
+               if (paddata & SCE_PADR2) { *(float *)(&pMsg.pData) = 1.0f; }
+               else { *(float *)(&pMsg.pData) = -1.0f; }
+            }
+            else if (pMsg.Id == m_LPAD_X)
             {
                float joyvar = (float)rdata[6];
-            
-               CalcJoyVar(joyvar);
-            
-               *(float*)(&pMsg.pData) = joyvar;
-            }
-            else if (pMsg.Id == m_LPAD_Y )
-            {
-               float joyvar = (float)rdata[7];
-            
-               CalcJoyVar(joyvar);
-            
-               *(float*)(&pMsg.pData) = joyvar;
-            }
-            else if (pMsg.Id == m_RPAD_X )
-            {
-               float joyvar = (float)rdata[4];
-            
+
                CalcJoyVar(joyvar);
 
-               *(float*)(&pMsg.pData) = joyvar;
+               *(float *)(&pMsg.pData) = joyvar;
             }
-            else if (pMsg.Id == m_RPAD_Y )
+            else if (pMsg.Id == m_LPAD_Y)
+            {
+               float joyvar = (float)rdata[7];
+
+               CalcJoyVar(joyvar);
+
+               *(float *)(&pMsg.pData) = joyvar;
+            }
+            else if (pMsg.Id == m_RPAD_X)
+            {
+               float joyvar = (float)rdata[4];
+
+               CalcJoyVar(joyvar);
+
+               *(float *)(&pMsg.pData) = joyvar;
+            }
+            else if (pMsg.Id == m_RPAD_Y)
             {
                float joyvar = (float)rdata[5];
-            
+
                CalcJoyVar(joyvar);
-            
-               *(float*)(&pMsg.pData) = joyvar;
+
+               *(float *)(&pMsg.pData) = joyvar;
             }
          }
 
          RWS_RETURNVOID();
-      }  
-   
+      }
+
       //////////////////////////////////////////////////////////////////
       //
       void CPSX2StndController::ReadInput()
       {
          RWS_FUNCTION("RWS::InputDevices::CPSX2StndController::ReadInput");
 
-         if ( skyPadCanBeRead(0, 0) && scePadRead(0, 0, rdata) > 0 )
+         if (skyPadCanBeRead(0, 0) && scePadRead(0, 0, rdata) > 0)
          {
             paddata = 0xffff ^ ((((u_int)rdata[2]) << 8) | (u_int)rdata[3]);
          }
@@ -456,17 +455,17 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
       //////////////////////////////////////////////////////////////////
       //
-      void CPSX2StndController::HandleAttributes(const CAttributePacket& attr)
+      void CPSX2StndController::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::InputDevices::CPSX2StndController::HandleAttributes");
 
          CAttributeHandler::HandleAttributes(attr);
 
-         CAttributeCommandIterator attrIt (attr, RWS_CLASSID_OF(CPSX2StndController));
-      
+         CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CPSX2StndController));
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -475,17 +474,17 @@ namespace RWS
             case CMD_m_PortSelect:
                //////////////////////////////////////////////////////////////////
                attrIt->GetCommandData(m_PortSelect);
-            break;
+               break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_SlotSelect:
                //////////////////////////////////////////////////////////////////
                attrIt->GetCommandData(m_SlotSelect);
-            break;
+               break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Start:
                //////////////////////////////////////////////////////////////////
-               ReplaceLinkedMsg (m_Inq_Start, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-            break;
+               ReplaceLinkedMsg(m_Inq_Start, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_DeadZone:
                //////////////////////////////////////////////////////////////////
@@ -494,22 +493,22 @@ namespace RWS
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Select:
                //////////////////////////////////////////////////////////////////
-               ReplaceLinkedMsg (m_Inq_Select, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               ReplaceLinkedMsg(m_Inq_Select, attrIt->GetAs_RwChar_ptr(), "return RwReal");
                break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Triangle:
                //////////////////////////////////////////////////////////////////
-               ReplaceLinkedMsg (m_Inq_Triangle, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               ReplaceLinkedMsg(m_Inq_Triangle, attrIt->GetAs_RwChar_ptr(), "return RwReal");
                break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Cross:
                //////////////////////////////////////////////////////////////////
-               ReplaceLinkedMsg (m_Inq_Cross, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-               break; 
+               ReplaceLinkedMsg(m_Inq_Cross, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Square:
                //////////////////////////////////////////////////////////////////
-               ReplaceLinkedMsg (m_Inq_Square, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               ReplaceLinkedMsg(m_Inq_Square, attrIt->GetAs_RwChar_ptr(), "return RwReal");
                break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_Inq_Circle:
@@ -579,7 +578,7 @@ namespace RWS
             case CMD_m_LPAD_X:
                //////////////////////////////////////////////////////////////////
                ReplaceLinkedMsg(m_LPAD_X, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-               break;     
+               break;
                //////////////////////////////////////////////////////////////////
             case CMD_m_LPAD_Y:
                //////////////////////////////////////////////////////////////////

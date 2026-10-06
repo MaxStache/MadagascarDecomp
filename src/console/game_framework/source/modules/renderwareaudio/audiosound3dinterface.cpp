@@ -56,18 +56,18 @@ namespace RWS
       * \see ~AudioSound3DInterface
       *
       */
-      AudioSound3DInterface::AudioSound3DInterface(const CAttributePacket& attr):
-            m_pOsWave(0) 
+      AudioSound3DInterface::AudioSound3DInterface(const CAttributePacket& attr) :
+         m_pOsWave(0)
       {
          RWS_FUNCTION("RWS::Audio::AudioSound3DInterface::AudioSound3DInterface")
-                      
+
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, 0);
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
 
          m_pAtomic.HandleSystemCommands(attr);
          m_pVoice = RwsAudio::AllocateVirtualVoice();
-         RWS_ASSERT (m_pVoice, "Run out of virtual voices, increase MAXVVOICES.");
+         RWS_ASSERT(m_pVoice, "Run out of virtual voices, increase MAXVVOICES.");
 
          RwaVirtualVoiceSetLoop(m_pVoice, FALSE);
          RwaVirtualVoiceSetGain(m_pVoice, 30.0f);
@@ -75,7 +75,7 @@ namespace RWS
 
          RWS_RETURNVOID()
       }
-    
+
       /**
       *
       * Destroy Audio 3D object.
@@ -85,13 +85,13 @@ namespace RWS
       AudioSound3DInterface::~AudioSound3DInterface()
       {
          RWS_FUNCTION("RWS::Audio::AudioSound3DInterface::~AudioSound3DInterface")
-                  
+
          RwsAudio::FreeVirtualVoice(m_pVoice);
          m_pOsWave = 0;
-               
-         RWS_RETURNVOID()        
-      }        
-    
+
+         RWS_RETURNVOID()
+      }
+
       /**
       *
       * Handle attribute updates.
@@ -102,18 +102,18 @@ namespace RWS
       void AudioSound3DInterface::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Audio::AudioSound3DInterface::HandleAttributes")
-           
+
          CAttributeHandler::HandleAttributes(attr);
-        
+
          // Initialize contained class first
-         m_pAtomic.HandleSystemCommands(attr); 
+         m_pAtomic.HandleSystemCommands(attr);
 
          CAttributeCommandIterator attrIt2(attr, RWS_CLASSID_OF(CSystemCommands));
          while (!attrIt2.IsFinished())
          {
             switch (attrIt2->GetCommandId())
             {
-               case CSystemCommands::CMD_LoadMatrix:
+            case CSystemCommands::CMD_LoadMatrix:
                {
                   RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
                   if (pFrame) CSystemCommands::UpdateFrame(*pFrame, *attrIt2);
@@ -122,10 +122,10 @@ namespace RWS
                }
                break;
             }
-                
+
             ++attrIt2;
          }
-        
+
          RWS_RETURNVOID()
       }
 
@@ -139,18 +139,18 @@ namespace RWS
       void AudioSound3DInterface::SetVirtualVoicePosition(const RwMatrix* const pMatrix)
       {
          RWS_FUNCTION("RWS::Audio::AudioSound3DInterface::SetVirtualVoicePosition")
-            
+
          // If we have a valid matrix here,  then the sound is linked to an event,  to we want
          // to apply the matrix to the atomics frame.
          if (pMatrix)
          {
-            RwFrame *pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
+            RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
             RwFrameTransform(pFrame, pMatrix, rwCOMBINEREPLACE);
          }
-            
+
          // If we don't have a frame then use the atomics position.
          RwaVirtualVoiceSetPos(m_pVoice, RwMatrixGetPos(RwFrameGetMatrix(RpAtomicGetFrame(m_pAtomic.ptr()))));
-            
+
          RWS_RETURNVOID();
       }
    }

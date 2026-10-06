@@ -6,10 +6,10 @@
 
 typedef enum
 {
-	gfcServerStart,
-	gfcServerListen,
-	gfcServerMessage,
-	gfcServerStop
+   gfcServerStart,
+   gfcServerListen,
+   gfcServerMessage,
+   gfcServerStop
 } RPC_GFCServerCall;
 
 #define SSIZE 0x8000 /* 32K buffer */

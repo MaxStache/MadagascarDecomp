@@ -29,7 +29,7 @@
 
 #ifndef NDEBUG
 
-#if defined (SKY)
+#if defined(SKY)
 
 #if defined(__MWERKS__)
 // Force data within sdata,sbss to be in data,bss section, which helps
@@ -58,7 +58,7 @@
  */
 #endif
 
-#elif defined _MSC_VER | defined (DOLPHIN)
+#elif defined _MSC_VER | defined(DOLPHIN)
 
 #include <iostream>
 
@@ -80,7 +80,7 @@ namespace RWS
    *  \see debug_buf::RemoveOutputCallback
    *
    */
-   typedef void (*OutputMessageCB)( const char * szMessage );
+   typedef void (*OutputMessageCB)(const char* szMessage);
 
    /**
    *
@@ -101,26 +101,26 @@ namespace RWS
    class debug_buf : public std::streambuf
    {
    public:
-   
+
       debug_buf();
       virtual ~debug_buf();
-      
-      void AddOutputCallback( OutputMessageCB OutputCB );
-      void RemoveOutputCallback( OutputMessageCB OutputCB );
+
+      void AddOutputCallback(OutputMessageCB OutputCB);
+      void RemoveOutputCallback(OutputMessageCB OutputCB);
 
    protected:
-   
-      void OutputDebugMessage ( char * szMessage );
+
+      void OutputDebugMessage(char* szMessage);
 
       int sync();
-      int overflow( int c = EOF );
+      int overflow(int c = EOF);
       int underflow();
 
    protected:
 
       char m_buffer[1024];
 
-      #define MAXOUTPUTCALLBACKS 8
+#define MAXOUTPUTCALLBACKS 8
       OutputMessageCB m_OutputCallbacks[MAXOUTPUTCALLBACKS];
       RwUInt32 m_OutputCBCount;
    };
@@ -140,15 +140,15 @@ namespace RWS
    class debug_ostream : public std::ostream
    {
    private:
-      
-      debug_buf * m_pBuf;
+
+      debug_buf* m_pBuf;
 
    public:
 
-      debug_ostream( debug_buf * _buf );
+      debug_ostream(debug_buf* _buf);
 
       virtual ~debug_ostream();
-      
+
       debug_buf* rdbuf() const;
    };
 
@@ -172,17 +172,27 @@ namespace std
 {
 
    inline ios& fixed(ios& i)
-   { i.setf(ios::fixed, ios::floatfield); return i; }
+   {
+      i.setf(ios::fixed, ios::floatfield);
+      return i;
+   }
 
    inline ios& scientific(ios& i)
-   { i.setf(ios::scientific, ios::floatfield); return i; }
+   {
+      i.setf(ios::scientific, ios::floatfield);
+      return i;
+   }
 
    // Note: boolalpha flag doesn't seem to have been implemented on this platform.
    inline ios& boolalpha(ios& i)
-   { return i; }
+   {
+      return i;
+   }
 
    inline ios& noboolalpha(ios& i)
-   { return i; }
+   {
+      return i;
+   }
 
 }
 
@@ -194,22 +204,22 @@ namespace std
 */
 
 // Vector / Matrix types
-inline std::ostream& operator << ( std::ostream& s, const RwV2d& v )
+inline std::ostream& operator<<(std::ostream& s, const RwV2d& v)
 {
    return s << '{' << v.x << ',' << v.y << '}';
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwV3d& v )
+inline std::ostream& operator<<(std::ostream& s, const RwV3d& v)
 {
    return s << '{' << v.x << ',' << v.y << ',' << v.z << '}';
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwV4d& v )
+inline std::ostream& operator<<(std::ostream& s, const RwV4d& v)
 {
    return s << '{' << v.x << ',' << v.y << ',' << v.z << ',' << v.w << '}';
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwMatrix& m )
+inline std::ostream& operator<<(std::ostream& s, const RwMatrix& m)
 {
    s << "R: " << m.right << ", ";
    s << "U: " << m.up << ", ";
@@ -220,39 +230,39 @@ inline std::ostream& operator << ( std::ostream& s, const RwMatrix& m )
 }
 
 // Color types
-inline std::ostream& operator << ( std::ostream& s, const RwRGBAReal& c )
+inline std::ostream& operator<<(std::ostream& s, const RwRGBAReal& c)
 {
    return s << '{' << c.red << ',' << c.green << ',' << c.blue << ',' << c.alpha << '}';
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwRGBA& c )
+inline std::ostream& operator<<(std::ostream& s, const RwRGBA& c)
 {
    return s << '{' << c.red << ',' << c.green << ',' << c.blue << ',' << c.alpha << '}';
 }
 
 // Geometrical types
-inline std::ostream& operator << ( std::ostream& s, const RwLine& l )
+inline std::ostream& operator<<(std::ostream& s, const RwLine& l)
 {
    s << "{S: " << l.start << ", E: " << l.end << "}";
 
    return s;
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwRect& r )
+inline std::ostream& operator<<(std::ostream& s, const RwRect& r)
 {
    s << "{" << r.x << ", " << r.y << ", " << r.w << ", " << r.h << "}";
 
    return s;
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwSphere& sp )
+inline std::ostream& operator<<(std::ostream& s, const RwSphere& sp)
 {
    s << "{C: " << sp.center << ", R: " << sp.radius << "}";
 
    return s;
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwBBox& bb )
+inline std::ostream& operator<<(std::ostream& s, const RwBBox& bb)
 {
    s << "{" << bb.sup << ", " << bb.inf << "}";
 
@@ -260,14 +270,14 @@ inline std::ostream& operator << ( std::ostream& s, const RwBBox& bb )
 }
 
 // Misc types
-inline std::ostream& operator << ( std::ostream& s, const RwSurfaceProperties& sp )
+inline std::ostream& operator<<(std::ostream& s, const RwSurfaceProperties& sp)
 {
    s << "{A: " << sp.ambient << ", D: " << sp.diffuse << ", S: " << sp.specular << "}";
 
    return s;
 }
 
-inline std::ostream& operator << ( std::ostream& s, const RwTexCoords& tc )
+inline std::ostream& operator<<(std::ostream& s, const RwTexCoords& tc)
 {
    s << "{" << tc.u << ", " << tc.v << "}";
 

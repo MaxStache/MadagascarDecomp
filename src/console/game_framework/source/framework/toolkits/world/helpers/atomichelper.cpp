@@ -58,7 +58,7 @@ namespace RWS
          RWS_FUNCTION("RWS::AtomicHelper::Destroy");
 
          RWS_PRE(pAtomic);
-   
+
          RwFrame* pFrame = RpAtomicGetFrame(pAtomic);
          if (pFrame)
          {
@@ -66,7 +66,7 @@ namespace RWS
             // that any child frames are managed by other objects, so it is sufficient
             // for us to simply detach them and let them 'float off')
             //
-            RwFrameForAllChildren(pFrame, FrameHelper::RemoveChildFrame,0);
+            RwFrameForAllChildren(pFrame, FrameHelper::RemoveChildFrame, 0);
 
             // If this frame is itself attached to another, detach it
             //
@@ -79,17 +79,17 @@ namespace RWS
          // If this pAtomic is also part of a clump then need do remove it from the clump
          //
          //
-         RpClump *pClump = RpAtomicGetClump(pAtomic);
+         RpClump* pClump = RpAtomicGetClump(pAtomic);
 
          if (pClump)
          {
             RpClumpRemoveAtomic(pClump, pAtomic);
          }
-   
+
          // Remove pAtomic from world
-         RpWorld* pWorld = RpAtomicGetWorld (pAtomic);
+         RpWorld* pWorld = RpAtomicGetWorld(pAtomic);
          if (pWorld) RpWorldRemoveAtomic(pWorld, pAtomic);
-   
+
          // RenderWare destroy pAtomic
          RwBool ret = RpAtomicDestroy(pAtomic);
 
@@ -110,16 +110,16 @@ namespace RWS
       *         the pAtomic is not rendered.
       *
       */
-      void SetIsVisible( RpAtomic& pAtomic, bool isVisible )
+      void SetIsVisible(RpAtomic& pAtomic, bool isVisible)
       {
          RWS_FUNCTION("RWS::AtomicHelper::SetIsVisible");
 
          RwUInt32 flags = RpAtomicGetFlags(&pAtomic);
 
          if (isVisible) flags |= static_cast<RwUInt32>(rpATOMICRENDER);
-         else flags &= ~ static_cast<RwUInt32>(rpATOMICRENDER);
+         else flags &= ~static_cast<RwUInt32>(rpATOMICRENDER);
 
-         (void)RpAtomicSetFlags( &pAtomic, flags);
+         (void)RpAtomicSetFlags(&pAtomic, flags);
 
          RWS_RETURNVOID();
       }
@@ -135,7 +135,7 @@ namespace RWS
       *         the atomic cannot collide.
       *
       */
-      void SetCanCollide( RpAtomic& pAtomic, bool canCollide )
+      void SetCanCollide(RpAtomic& pAtomic, bool canCollide)
       {
          RWS_FUNCTION("RWS::AtomicHelper::SetCanCollide");
 
@@ -144,7 +144,7 @@ namespace RWS
          if (canCollide) flags |= static_cast<RwUInt32>(rpATOMICCOLLISIONTEST);
          else flags &= ~static_cast<RwUInt32>(rpATOMICCOLLISIONTEST);
 
-         (void)RpAtomicSetFlags( &pAtomic, flags);
+         (void)RpAtomicSetFlags(&pAtomic, flags);
 
          RWS_RETURNVOID();
       }
@@ -160,7 +160,7 @@ namespace RWS
       *  \param rAttr Reference to a CAttributePacket containing the attribute data.
       *
       */
-      void HandleSystemCommands(RpAtomic &rAtomic, const CAttributePacket& rAttr)
+      void HandleSystemCommands(RpAtomic& rAtomic, const CAttributePacket& rAttr)
       {
          RWS_FUNCTION("RWS::AtomicHelper::HandleSystemCommands");
 
@@ -179,25 +179,25 @@ namespace RWS
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  RpAtomicCollisionProperties::SetIsSolid(rAtomic, flag?true:false );
+                  RpAtomicCollisionProperties::SetIsSolid(rAtomic, flag ? true : false);
                }
                break;
             case CSystemCommands::CMD_SetInvisibleFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  SetIsVisible( rAtomic, flag?false:true);
+                  SetIsVisible(rAtomic, flag ? false : true);
                }
                break;
             case CSystemCommands::CMD_SetCollisionFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  SetCanCollide( rAtomic, flag?true:false);
+                  SetCanCollide(rAtomic, flag ? true : false);
                }
                break;
             }
-         
+
             ++attrIt;
          }
          RWS_RETURNVOID();

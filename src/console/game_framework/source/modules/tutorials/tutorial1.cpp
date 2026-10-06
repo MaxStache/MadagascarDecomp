@@ -53,8 +53,8 @@ namespace RWS
       *  \param attr the standard attribute data
       *
       */
-      CTutorial1::CTutorial1(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic)
+      CTutorial1::CTutorial1(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial1::CTutorial1");
 
@@ -64,7 +64,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Destroy CTutorial1 object
@@ -75,7 +75,7 @@ namespace RWS
          RWS_FUNCTION("RWS::Tutorial::CTutorial1::~CTutorial1");
          RWS_RETURNVOID();
       }
- 
+
       /**
       *
       *  Handle events, processes message events.
@@ -83,12 +83,12 @@ namespace RWS
       * \param pMsg standard message data.
       *
       */
-      void CTutorial1::HandleEvents(CMsg &pMsg)
+      void CTutorial1::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial1::HandleEvents");
          RWS_RETURNVOID();
       }
-  
+
       /**
       *
       *  Handle attributes, processes attribute changes.
@@ -109,6 +109,6 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
+
    }//namespace Tutorial
 }//namespace RWS

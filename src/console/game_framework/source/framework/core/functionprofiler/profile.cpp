@@ -37,7 +37,7 @@ namespace RWS
    namespace FunctionProfile
    {
 
-      RwUInt32   (*g_pTimeFunc)(void) = 0;
+      RwUInt32 (*g_pTimeFunc)(void) = 0;
 
       ////////////////////////////////////////////////////////////////////////////////////////////////
       //
@@ -58,21 +58,21 @@ namespace RWS
       * efficiency reasons.
       *
       */
-      CProfileNode::CProfileNode( RwChar * pName, CProfileNode * pParent ) :
-         m_pName( pName ),
+      CProfileNode::CProfileNode(RwChar *pName, CProfileNode *pParent) :
+         m_pName(pName),
          m_pFileName(0),
          m_LineNumber(0),
-         m_TotalCalls( 0 ),
-         m_TotalTime( 0 ),
-         m_StartTime( 0 ),
-         m_RecursionCounter( 0 ),
+         m_TotalCalls(0),
+         m_TotalTime(0),
+         m_StartTime(0),
+         m_RecursionCounter(0),
          m_AccumulatedCalls(0),
          m_AccumulatedTime(0.0f),
          m_AccumulatedChildTimes(0.0f),
          m_NumAccumulatedResults(0),
-         m_pParent( pParent ),
-         m_pChild( 0 ),
-         m_pSibling( 0 )
+         m_pParent(pParent),
+         m_pChild(0),
+         m_pSibling(0)
       {
          Reset();
       }
@@ -91,31 +91,31 @@ namespace RWS
       * to find the named node.
       *
       */
-      CProfileNode * CProfileNode::GetSubNode( const RwChar * pName )
+      CProfileNode *CProfileNode::GetSubNode(const RwChar *pName)
       {
          // Try to find this sub-node.
-         CProfileNode * pChild = m_pChild;
-         
-         while ( pChild )
+         CProfileNode *pChild = m_pChild;
+
+         while (pChild)
          {
-            if ( pChild->m_pName == pName ) 
+            if (pChild->m_pName == pName)
             {
                return pChild;
             }
-            
+
             pChild = pChild->m_pSibling;
-         }         
+         }
 
          // If the number of currently allocated nodes is less than the total amount of space in
          // the memory block create a new Profiler node using 'placement new'.
          if (CProfileManager::m_NumNodesAllocated < CProfileManager::m_NumNodesInBuffer)
          {
-            CProfileNode * pNode = 
-                        new(CProfileManager::m_NodeBuffer) CProfileNode( const_cast<RwChar*>(pName), this );
+            CProfileNode *pNode =
+               new (CProfileManager::m_NodeBuffer) CProfileNode(const_cast<RwChar *>(pName), this);
 
             CProfileManager::m_NodeBuffer += sizeof(CProfileNode);
             CProfileManager::m_NumNodesAllocated++;
-         
+
             pNode->m_pSibling = m_pChild;
             m_pChild = pNode;
             return pNode;
@@ -130,24 +130,24 @@ namespace RWS
 
          return 0;
       }
-      
+
       /**
       *
       * Reset all profile times for this node.  This function doesn't destroy the node, it only resets 
       * the recorded total times and number of calls.
       *
       */
-      void  CProfileNode::Reset( void )
+      void CProfileNode::Reset(void)
       {
          m_TotalCalls = 0;
          m_TotalTime = 0.0f;
-         
-         if ( m_pChild ) 
+
+         if (m_pChild)
          {
             m_pChild->Reset();
          }
-         
-         if ( m_pSibling ) 
+
+         if (m_pSibling)
          {
             m_pSibling->Reset();
          }
@@ -162,20 +162,19 @@ namespace RWS
       * \param Linenumber The line number of the function in the source code.
       *
       */
-      void  CProfileNode::Call( const char *pFilename, const int Linenumber )
+      void CProfileNode::Call(const char *pFilename, const int Linenumber)
       {
          m_TotalCalls++;
-         
-         if (m_RecursionCounter++ == 0) 
+
+         if (m_RecursionCounter++ == 0)
          {
             m_StartTime = g_pTimeFunc();
-
          }
 
-         m_pFileName = const_cast<RwChar*>(pFilename);
+         m_pFileName = const_cast<RwChar *>(pFilename);
          m_LineNumber = Linenumber;
       }
-      
+
       /**
       *
       * When a function that is being profiled, returns, this function will get called to calculate the
@@ -184,30 +183,30 @@ namespace RWS
       * \return Return FALSE if a timer function has not been registered with the profiler.
       *
       */
-      RwBool   CProfileNode::Return( void )
+      RwBool CProfileNode::Return(void)
       {
          if (g_pTimeFunc)
          {
-            if ( --m_RecursionCounter == 0 && m_TotalCalls != 0 ) 
-            { 
+            if (--m_RecursionCounter == 0 && m_TotalCalls != 0)
+            {
                RwUInt32 Time = g_pTimeFunc();
 
                Time -= m_StartTime;
                m_TotalTime += static_cast<RwReal>(Time) / 1000.0f;
-            }       
-         
-            return ( m_RecursionCounter == 0 );
+            }
+
+            return (m_RecursionCounter == 0);
          }
          else
             return FALSE;
       }
-    
+
       ////////////////////////////////////////////////////////////////////////////////////////////////
       //
       // CProfileIterator
       //
       ////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
       /**
       *
       * Constructor for a profiler tree iterator. This constructor sets a parent node and stores a pointer 
@@ -216,12 +215,12 @@ namespace RWS
       * \param pStart A pointer to a profiler node.  This node will get set as the parent for the iterator.
       *
       */
-      CProfileIterator::CProfileIterator( CProfileNode * pStart )
+      CProfileIterator::CProfileIterator(CProfileNode *pStart)
       {
          m_pCurrentParent = pStart;
          m_pCurrentChild = m_pCurrentParent->GetChild();
       }
-           
+
       /**
       *
       * In the workspace profiler control, you can view a functions profiler data.  You can also double
@@ -233,17 +232,17 @@ namespace RWS
       * \see EnterParent
       *
       */
-      void  CProfileIterator::EnterChild( RwUInt32  Index )
-      {        
+      void CProfileIterator::EnterChild(RwUInt32 Index)
+      {
          m_pCurrentChild = m_pCurrentParent->GetChild();
 
-         while ( (m_pCurrentChild != 0) && (Index != 0) ) 
+         while ((m_pCurrentChild != 0) && (Index != 0))
          {
             Index--;
             m_pCurrentChild = m_pCurrentChild->GetSibling();
          }
-         
-         if ( m_pCurrentChild != 0 ) 
+
+         if (m_pCurrentChild != 0)
          {
             m_pCurrentParent = m_pCurrentChild;
             m_pCurrentChild = m_pCurrentParent->GetChild();
@@ -251,7 +250,7 @@ namespace RWS
 
          _SendProfileNewChildFlag();
       }
-      
+
       /**
       *
       * Make the current nodes parent the new node. When a new node is entered a message has to be sent 
@@ -260,15 +259,15 @@ namespace RWS
       * \see EnterChild, 
       *
       */
-      void  CProfileIterator::EnterParent( void )
+      void CProfileIterator::EnterParent(void)
       {
-         if ( m_pCurrentParent->GetParent() != 0 ) 
+         if (m_pCurrentParent->GetParent() != 0)
          {
             m_pCurrentParent = m_pCurrentParent->GetParent();
          }
 
          m_pCurrentChild = m_pCurrentParent->GetChild();
-         
+
          _SendProfileNewChildFlag();
       }
 
@@ -278,15 +277,15 @@ namespace RWS
       //
       ////////////////////////////////////////////////////////////////////////////////////////////////
 
-      char            * CProfileManager::m_NodeBuffer = 0; 
-      char            * CProfileManager::m_NodeBufferOriginalPtr = 0;
-      CProfileNode      CProfileManager::m_Root( "Root", 0 );
-      CProfileNode    * CProfileManager::m_pCurrentNode = &CProfileManager::m_Root;
-      RwUInt32          CProfileManager::m_FrameCounter = 0;
-      RwUInt32          CProfileManager::m_ResetTime = 0;
-      CProfileIterator* CProfileManager::pIttr = 0; 
-      RwUInt32          CProfileManager::m_NumNodesInBuffer = 0;
-      RwUInt32          CProfileManager::m_NumNodesAllocated = 0;
+      char *CProfileManager::m_NodeBuffer = 0;
+      char *CProfileManager::m_NodeBufferOriginalPtr = 0;
+      CProfileNode CProfileManager::m_Root("Root", 0);
+      CProfileNode *CProfileManager::m_pCurrentNode = &CProfileManager::m_Root;
+      RwUInt32 CProfileManager::m_FrameCounter = 0;
+      RwUInt32 CProfileManager::m_ResetTime = 0;
+      CProfileIterator *CProfileManager::pIttr = 0;
+      RwUInt32 CProfileManager::m_NumNodesInBuffer = 0;
+      RwUInt32 CProfileManager::m_NumNodesAllocated = 0;
 
       /**
       *
@@ -299,11 +298,11 @@ namespace RWS
       * \see CloseProfiler
       *
       */
-      void CProfileManager::OpenProfiler (RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void))
+      void CProfileManager::OpenProfiler(RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void))
       {
-         m_NodeBuffer = reinterpret_cast<char*>(::RWS_OP_NEW(sizeof(CProfileNode) * NumNodes));          
+         m_NodeBuffer = reinterpret_cast<char *>(::RWS_OP_NEW(sizeof(CProfileNode) * NumNodes));
 
-         RWS_ASSERT (m_NodeBuffer, "Memory for the profiler nodes was not allocated.");
+         RWS_ASSERT(m_NodeBuffer, "Memory for the profiler nodes was not allocated.");
 
          m_NodeBufferOriginalPtr = m_NodeBuffer;
          m_NumNodesInBuffer = NumNodes;
@@ -317,7 +316,7 @@ namespace RWS
 
          m_ResetTime = g_pTimeFunc();
 
-         RWS_ASSERT (g_pTimeFunc, "No 'get time' function provided.");
+         RWS_ASSERT(g_pTimeFunc, "No 'get time' function provided.");
       }
 
       /**
@@ -327,14 +326,14 @@ namespace RWS
       * \see OpenProfiler
       *
       */
-      void CProfileManager::CloseProfiler ()
+      void CProfileManager::CloseProfiler()
       {
-         delete [] m_NodeBufferOriginalPtr;
+         delete[] m_NodeBufferOriginalPtr;
 
          g_pTimeFunc = 0;
-         
+
          if (pIttr)
-         {         
+         {
             ReleaseIterator(pIttr);
          }
       }
@@ -354,22 +353,21 @@ namespace RWS
       *
       * \see StopProfiler
       *
-      */         
-      void  CProfileManager::StartProfile(   const RwChar * pName,
-                                             const char *pFilename,
-                                             const int Linenumber )
+      */
+      void CProfileManager::StartProfile(const RwChar *pName,
+                                         const char *pFilename,
+                                         const int Linenumber)
       {
          // If the timer functions have been registered we can start taking reading.
          if (g_pTimeFunc)
          {
-            if (pName != m_pCurrentNode->GetName()) 
+            if (pName != m_pCurrentNode->GetName())
             {
-               m_pCurrentNode = m_pCurrentNode->GetSubNode( pName );
-            } 
-      
+               m_pCurrentNode = m_pCurrentNode->GetSubNode(pName);
+            }
+
             m_pCurrentNode->Call(pFilename, Linenumber);
          }
-
       }
 
       /**
@@ -379,11 +377,11 @@ namespace RWS
       * \see StartProfiler
       *
       */
-      void  CProfileManager::StopProfile( void )
+      void CProfileManager::StopProfile(void)
       {
          // Return will indicate whether we should back up to our parent (we may
          // be profiling a recursive function).
-         if (m_pCurrentNode->Return()) 
+         if (m_pCurrentNode->Return())
          {
             m_pCurrentNode = m_pCurrentNode->GetParent();
          }
@@ -399,9 +397,9 @@ namespace RWS
       * \see GetFrameCountSinceReset
       *
       */
-      void  CProfileManager::Reset( void )
-      { 
-         m_Root.Reset(); 
+      void CProfileManager::Reset(void)
+      {
+         m_Root.Reset();
          m_FrameCounter = 0;
 
          m_ResetTime = g_pTimeFunc();
@@ -412,7 +410,7 @@ namespace RWS
       * Increment the frame counter.
       *
       */
-      void CProfileManager::IncrementFrameCounter( void )
+      void CProfileManager::IncrementFrameCounter(void)
       {
          m_FrameCounter++;
       }
@@ -427,7 +425,7 @@ namespace RWS
       * \see Reset
       *
       */
-      RwReal CProfileManager::GetTimeSinceReset( void )
+      RwReal CProfileManager::GetTimeSinceReset(void)
       {
          RwUInt32 time = g_pTimeFunc();
 
@@ -446,9 +444,9 @@ namespace RWS
       * \see Reset
       *
       */
-      RwUInt32 CProfileManager::GetFrameCountSinceReset( void )    
-      { 
-         return m_FrameCounter; 
+      RwUInt32 CProfileManager::GetFrameCountSinceReset(void)
+      {
+         return m_FrameCounter;
       }
 
       /**
@@ -460,9 +458,9 @@ namespace RWS
       * \see ReleaseIterator
       *
       */
-      CProfileIterator * CProfileManager::GetIterator( void ) 
-      { 
-         return new CProfileIterator( &m_Root ); 
+      CProfileIterator *CProfileManager::GetIterator(void)
+      {
+         return new CProfileIterator(&m_Root);
       }
 
       /**
@@ -474,9 +472,9 @@ namespace RWS
       * \see GetIterator
       *
       */
-      void CProfileManager::ReleaseIterator( CProfileIterator * pIterator ) 
-      {         
-         delete pIterator; 
+      void CProfileManager::ReleaseIterator(CProfileIterator *pIterator)
+      {
+         delete pIterator;
       }
 
       /**
@@ -487,17 +485,17 @@ namespace RWS
       * \see SendAccumulatedData
       *
       */
-      void CProfileManager::SendProfileDataToWorkspace( void )
+      void CProfileManager::SendProfileDataToWorkspace(void)
       {
          static RwUInt32 LastTime = g_pTimeFunc();
 
          // Delta time before frame rate is recalculated.
          //
          static const RwUInt32 DeltaTimeLimit = BROADCASTRATE;
-      
+
          RwUInt32 ThisTime = g_pTimeFunc();
          RwUInt32 DeltaTime = ThisTime - LastTime;
-     
+
          AccumulateProfileTimes();
 
          // We'll send out the profile data every n seconds.
@@ -507,7 +505,7 @@ namespace RWS
 
             LastTime = ThisTime;
          }
-                 
+
          IncrementFrameCounter();
       }
 
@@ -520,7 +518,7 @@ namespace RWS
       * \return Returns the time spent in the current child child.
       *
       */
-      RwReal CProfileManager::TotalChildTimes( void )
+      RwReal CProfileManager::TotalChildTimes(void)
       {
          RwReal Child = 0;
 
@@ -535,10 +533,10 @@ namespace RWS
          while (!pTempnode == 0)
          {
             pTempnode = pTempnode->GetSibling();
-            
+
             if (pTempnode)
             {
-              Child = Child + pTempnode->GetTotalTime();
+               Child = Child + pTempnode->GetTotalTime();
             }
          }
 
@@ -553,14 +551,14 @@ namespace RWS
       * \see SendAccumulatedData
       *
       */
-      void CProfileManager::AccumulateProfileTimes( void )
+      void CProfileManager::AccumulateProfileTimes(void)
       {
          // Get access to the first child of the current parent.
          pIttr->First();
-         
+
          // Iterate through the siblings of the current child.
          while (!pIttr->IsDone())
-         {       
+         {
             RwUInt32 AccumulatedCalls = pIttr->m_pCurrentChild->GetNumAccumulatedCalls();
             AccumulatedCalls += pIttr->GetCurrentTotalCalls();
             pIttr->m_pCurrentChild->SetNumAccumulatedCalls(AccumulatedCalls);
@@ -575,7 +573,7 @@ namespace RWS
 
             RwUInt32 AccumulatedReuslts = pIttr->m_pCurrentChild->GetNumAccumulatedResults();
             AccumulatedReuslts++;
-            pIttr->m_pCurrentChild->SetNumAccumulatedResults( AccumulatedReuslts );
+            pIttr->m_pCurrentChild->SetNumAccumulatedResults(AccumulatedReuslts);
 
             pIttr->Next();
          }
@@ -591,11 +589,11 @@ namespace RWS
       * \see AccumulateProfileTimes
       *
       */
-      void CProfileManager::SendAccumulatedData( void )
+      void CProfileManager::SendAccumulatedData(void)
       {
          RwUInt32 AccumulateCalls = 0;
-         RwReal   AccumulateTime = 0.0f;
-         RwReal   AccumulateChild = 0.0f;
+         RwReal AccumulateTime = 0.0f;
+         RwReal AccumulateChild = 0.0f;
          RwUInt32 Count = 0;
 
          // Get access to the first child of the current parent.
@@ -603,25 +601,25 @@ namespace RWS
 
          // Iterate through the siblings of the current child.
          while (!pIttr->IsDone())
-         {           
+         {
             if (pIttr->m_pCurrentChild->GetNumAccumulatedResults() > 0)
             {
-               AccumulateCalls = pIttr->m_pCurrentChild->GetNumAccumulatedCalls() / 
+               AccumulateCalls = pIttr->m_pCurrentChild->GetNumAccumulatedCalls() /
                                  pIttr->m_pCurrentChild->GetNumAccumulatedResults();
 
-               AccumulateTime  = pIttr->m_pCurrentChild->GetNumAccumulatedTime() / 
-                                 static_cast<RwReal>(pIttr->m_pCurrentChild->GetNumAccumulatedResults());
+               AccumulateTime = pIttr->m_pCurrentChild->GetNumAccumulatedTime() /
+                                static_cast<RwReal>(pIttr->m_pCurrentChild->GetNumAccumulatedResults());
 
-               AccumulateChild = pIttr->m_pCurrentChild->GetNumAccumulatedChildTime() / 
+               AccumulateChild = pIttr->m_pCurrentChild->GetNumAccumulatedChildTime() /
                                  static_cast<RwReal>(pIttr->m_pCurrentChild->GetNumAccumulatedResults());
             }
- 
+
             _SendProfileDataBuffer(Count,
-                                   pIttr->m_pCurrentChild->GetChild() ?1:0,
+                                   pIttr->m_pCurrentChild->GetChild() ? 1 : 0,
                                    GetFrameCountSinceReset(),
                                    GetTimeSinceReset(),
                                    pIttr->GetCurrentParentName(),
-                                   pIttr->GetCurrentName(), 
+                                   pIttr->GetCurrentName(),
                                    AccumulateCalls,
                                    AccumulateTime,
                                    pIttr->GetCurrentFileName(),
@@ -630,9 +628,9 @@ namespace RWS
 
             pIttr->m_pCurrentChild->SetNumAccumulatedCalls(0);
             pIttr->m_pCurrentChild->SetNumAccumulatedTime(0.0f);
-            pIttr->m_pCurrentChild->SetNumAccumulatedChildTime(0.0f); 
-            pIttr->m_pCurrentChild->SetNumAccumulatedResults(0); 
-            
+            pIttr->m_pCurrentChild->SetNumAccumulatedChildTime(0.0f);
+            pIttr->m_pCurrentChild->SetNumAccumulatedResults(0);
+
             Count++;
 
             pIttr->Next();

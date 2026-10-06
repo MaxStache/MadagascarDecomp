@@ -46,7 +46,7 @@ namespace RWS
       *  CFXBaseLight which in turn is a wrapper to a RpLight struct.
       *
       */
-      class CFXColorLight: public CFXBaseLight
+      class CFXColorLight : public CFXBaseLight
       {
       public:
          RWS_MAKENEWCLASS(CFXColorLight);
@@ -55,21 +55,24 @@ namespace RWS
          RWS_DESCRIPTION("Color Light", "");
 
          RWS_BEGIN_COMMANDS
-            RWS_ATTRIBUTE(CMD_Set_t_color,          
-                          "Color",      
-                          "Set light color, see RpLightSetColor",  
-                          COLOR,  
-                          RwRGBA,   
-                          DEFAULT(0xffffffff))
+         RWS_ATTRIBUTE(CMD_Set_t_color,
+                       "Color",
+                       "Set light color, see RpLightSetColor",
+                       COLOR,
+                       RwRGBA,
+                       DEFAULT(0xffffffff))
          RWS_END_COMMANDS;
-      
-         CFXColorLight(const CAttributePacket& rAttr) : CFXBaseLight(rAttr) {}
+
+         CFXColorLight(const CAttributePacket& rAttr) :
+            CFXBaseLight(rAttr)
+         {
+         }
 
          virtual void HandleAttributes(const CAttributePacket& attr);
       };
 
    }
-   
+
 }
 
 #endif

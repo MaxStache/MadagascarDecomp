@@ -62,7 +62,7 @@ namespace RWS
       */
       struct ATCollisionQuery
       {
-         CEventHandler * pEventHandler;   /**< Pointer to a CEventHandler-derived class that is making the query */
+         CEventHandler* pEventHandler;   /**< Pointer to a CEventHandler-derived class that is making the query */
          RpIntersection Data;             /**< Data for the intersection test, including what type of intersection
                                                to perform. */
       };
@@ -83,26 +83,27 @@ namespace RWS
 
          RWS_BEGIN_COMMANDS
 
-            RWS_MESSAGE(CMD_QueryEvent, "Message", "Specify the message to query for a collision with this entity", 
-                        RECEIVE, ATCollisionQuery*, 0 )
+         RWS_MESSAGE(CMD_QueryEvent, "Message", "Specify the message to query for a collision with this entity",
+                     RECEIVE, ATCollisionQuery*, 0)
 
          RWS_SEPARATOR("Logic", 0)
-            RWS_ATTRIBUTE(CMD_Logic, "Logic Type", "Specify the algorithm to use with this trigger", 
-                          LIST, RwUInt32, LIST(FireContinuouslyOnEntry|@FireOnceOnEntry|FireOnceOnEntryAndExit) )
-            RWS_MESSAGE(CMD_EnterEvent, "Enter Event", "Message sent when an object enters the area", TRANSMIT, 0, 0 )
-            RWS_MESSAGE(CMD_ExitEvent, "Exit Event", "Message sent when an object exits the area", TRANSMIT, 0, 0 )
+         RWS_ATTRIBUTE(CMD_Logic, "Logic Type", "Specify the algorithm to use with this trigger",
+                       LIST, RwUInt32, LIST(FireContinuouslyOnEntry | @FireOnceOnEntry | FireOnceOnEntryAndExit))
+         RWS_MESSAGE(CMD_EnterEvent, "Enter Event", "Message sent when an object enters the area", TRANSMIT, 0, 0)
+         RWS_MESSAGE(CMD_ExitEvent, "Exit Event", "Message sent when an object exits the area", TRANSMIT, 0, 0)
 
          RWS_SEPARATOR("Debug Tools", 0)
-            RWS_ATTRIBUTE(CMD_DebugRender, "Render the area", "Uses DebugTools to render a wire frame representation "
-                          "of the trigger area", BOOLEAN, RwUInt32, DEFAULT(0) )
+         RWS_ATTRIBUTE(CMD_DebugRender, "Render the area", "Uses DebugTools to render a wire frame representation "
+                                                           "of the trigger area",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
 
          RWS_END_COMMANDS;
-      
-         ATBase( const CAttributePacket& attr );
+
+         ATBase(const CAttributePacket& attr);
          virtual ~ATBase();
 
-         void HandleEvents( CMsg& Msg );
-         void HandleAttributes( const CAttributePacket& attr );
+         void HandleEvents(CMsg& Msg);
+         void HandleAttributes(const CAttributePacket& attr);
 
          /**
          *
@@ -113,7 +114,7 @@ namespace RWS
          *  \return TRUE if the point is inside or intersects the area, FALSE otherwise.
          *
          */
-         virtual RwBool PointInsideGeometry( const RwV3d * pPoint ) = 0;
+         virtual RwBool PointInsideGeometry(const RwV3d* pPoint) = 0;
 
          /**
          *
@@ -123,7 +124,7 @@ namespace RWS
          *  \return TRUE if the line intersets the area, FALSE otherwise.
          *
          */
-         virtual RwBool LineIntersectGeometry( const RwLine * pLine ) = 0;
+         virtual RwBool LineIntersectGeometry(const RwLine* pLine) = 0;
 
          /**
          *
@@ -134,18 +135,17 @@ namespace RWS
          *
          */
          virtual void DebugToolsRender() = 0;
-      
+
       protected:
-      
+
          friend class ATLogic;     /* To allow the contained ATLogic access to the Enter/Exit events */
 
          RwMatrix m_Matrix;         /**< World matrix of the area. */
          RwMatrix m_InvMatrix;      /**< Inverse of the world matrix for the trigger area. Cached for speed. */
          CEventId m_QueryEvent;     /**< Event that this is linked to query for a collision */
-         ATLogic * m_pLogic;        /**< Logic for how this trigger responds to things entering or leaving it */
+         ATLogic* m_pLogic;        /**< Logic for how this trigger responds to things entering or leaving it */
          CEventId m_EnterEvent;     /**< Event that is fired when an object 'enters' a trigger area */
          CEventId m_ExitEvent;      /**< Event that gets fired when an object exits a trigger area */
-
       };
 
    } // namespace AreaTrigger

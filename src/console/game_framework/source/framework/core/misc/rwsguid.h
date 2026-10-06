@@ -72,23 +72,20 @@ namespace RWS
       *  operator == for the RWSGUID type
       *
       */
-      bool operator == ( const RWSGUID & Guid ) const
+      bool operator==(const RWSGUID& Guid) const
       {
-         return (m_Data[0] == Guid.m_Data[0]
-                 && m_Data[1] == Guid.m_Data[1]
-                 && m_Data[2] == Guid.m_Data[2]
-                 && m_Data[3] == Guid.m_Data[3]);
+         return (m_Data[0] == Guid.m_Data[0] && m_Data[1] == Guid.m_Data[1] && m_Data[2] == Guid.m_Data[2] && m_Data[3] == Guid.m_Data[3]);
       }
-      
+
       /**
       *
       * operator !=
       *
       */
 
-      bool operator != ( const RWSGUID & Guid) const
+      bool operator!=(const RWSGUID& Guid) const
       {
-         return(!(*this == Guid));
+         return (!(*this == Guid));
       }
 
       /**
@@ -96,7 +93,7 @@ namespace RWS
       *  operator < for the RWSGUID type
       *
       */
-      bool operator < ( const RWSGUID & Guid ) const
+      bool operator<(const RWSGUID& Guid) const
       {
          if (m_Data[0] != Guid.m_Data[0])
          {
@@ -134,21 +131,21 @@ namespace RWS
 
 #include "../macros/debugmacros.h"
 
-inline std::ostream & operator << ( std::ostream & s, const RWS::RWSGUID & Guid )
+inline std::ostream& operator<<(std::ostream& s, const RWS::RWSGUID& Guid)
 {
-   s << "{" << RWS_HEX(Guid.m_Data[0]) 
+   s << "{" << RWS_HEX(Guid.m_Data[0])
      << ", " << RWS_HEX(Guid.m_Data[1])
-     << ", " << RWS_HEX(Guid.m_Data[2]) 
+     << ", " << RWS_HEX(Guid.m_Data[2])
      << ", " << RWS_HEX(Guid.m_Data[3]) << "}";
 
    return s;
 }
 
-inline std::ostream & operator << ( std::ostream & s, const RWS::RWSGUID * pGuid )
+inline std::ostream& operator<<(std::ostream& s, const RWS::RWSGUID* pGuid)
 {
-   s << "{" << RWS_HEX(pGuid->m_Data[0]) 
+   s << "{" << RWS_HEX(pGuid->m_Data[0])
      << ", " << RWS_HEX(pGuid->m_Data[1])
-     << ", " << RWS_HEX(pGuid->m_Data[2]) 
+     << ", " << RWS_HEX(pGuid->m_Data[2])
      << ", " << RWS_HEX(pGuid->m_Data[3]) << "}";
 
    return s;

@@ -152,102 +152,93 @@ namespace RWS
          CMaestro(const CAttributePacket& attr);
          ~CMaestro(void);
 
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
          RWS_BEGIN_COMMANDS
 
-            RWS_SEPARATOR( "Rendering", 0 )
+         RWS_SEPARATOR("Rendering", 0)
 
-            RWS_MESSAGE( 
-                         CMD_Start_Render,
-                         "Start Render Event",
-                         "Begin rendering specified camera.",
-                         RECEIVE ,
-                         RwCamera*,
-                         "iMsgDoRender"
-                       )
+         RWS_MESSAGE(
+            CMD_Start_Render,
+            "Start Render Event",
+            "Begin rendering specified camera.",
+            RECEIVE,
+            RwCamera*,
+            "iMsgDoRender")
 
-            RWS_MESSAGE( CMD_End_Render,
-                         "End Render Event",
-                         "Pass Camera on so that any other rendering can be done.",
-                         TRANSMIT,
-                         RwCamera*,
-                         0
-                       )
+         RWS_MESSAGE(CMD_End_Render,
+                     "End Render Event",
+                     "Pass Camera on so that any other rendering can be done.",
+                     TRANSMIT,
+                     RwCamera*,
+                     0)
 
-            RWS_ATTRIBUTE( 
-                           CMD_Priority,
-                           "Render Priority",
-                           "Specify the render priority.",
-                           SLIDER,
-                           RwUInt32,
-                           RANGE(0, 0, 65535)
-                         )
+         RWS_ATTRIBUTE(
+            CMD_Priority,
+            "Render Priority",
+            "Specify the render priority.",
+            SLIDER,
+            RwUInt32,
+            RANGE(0, 0, 65535))
 
-            RWS_ATTRIBUTE( 
-                           CMD_ShowHide,
-                           "Show/ Hide Current Animation",
-                           "Turn this on to make the current animation visible and off to make it invisible.",
-                           BOOLEAN,
-                           RwUInt32,
-                           DEFAULT(1)
-                         )
+         RWS_ATTRIBUTE(
+            CMD_ShowHide,
+            "Show/ Hide Current Animation",
+            "Turn this on to make the current animation visible and off to make it invisible.",
+            BOOLEAN,
+            RwUInt32,
+            DEFAULT(1))
 
-            RWS_SEPARATOR( "Animation Controls", 0 )
+         RWS_SEPARATOR("Animation Controls", 0)
 
-            RWS_ATTRIBUTE( 
-                           CMD_PlayMessage,
-                           "Play Current Animation",
-                           "Turn this on to play the current animation and off to stop the current animation.",
-                           BOOLEAN,
-                           RwUInt32,
-                           DEFAULT(1)
-                         )
+         RWS_ATTRIBUTE(
+            CMD_PlayMessage,
+            "Play Current Animation",
+            "Turn this on to play the current animation and off to stop the current animation.",
+            BOOLEAN,
+            RwUInt32,
+            DEFAULT(1))
 
-            RWS_ATTRIBUTE(
-                           CMD_Interp,          
-                           "Interpolation",
-                           "Turn this on to enable blending in-between frames of the animation. This results in a smoother animation.",
-                           BOOLEAN, 
-                           RwUInt32,
-                           DEFAULT(1)
-                         )
+         RWS_ATTRIBUTE(
+            CMD_Interp,
+            "Interpolation",
+            "Turn this on to enable blending in-between frames of the animation. This results in a smoother animation.",
+            BOOLEAN,
+            RwUInt32,
+            DEFAULT(1))
 
-            RWS_SEPARATOR( "Position and Scaling", 0 )
+         RWS_SEPARATOR("Position and Scaling", 0)
 
-            RWS_ATTRIBUTE( CMD_SetPosX,
-                           "Position Across",
-                           "Set the offset to move the Maestro animation left or right on the screen. Set as zero to move to default position.",
-                           SLIDER,
-                           RwReal,
-                           RANGE(-500.0, 0.0, 500.0))
+         RWS_ATTRIBUTE(CMD_SetPosX,
+                       "Position Across",
+                       "Set the offset to move the Maestro animation left or right on the screen. Set as zero to move to default position.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(-500.0, 0.0, 500.0))
 
-            RWS_ATTRIBUTE( CMD_SetPosY,
-                           "Position Up And Down",
-                           "Set the offset to move the Maestro animation up or down on the screen. Set as zero to move to default position.",
-                           SLIDER,
-                           RwReal,
-                           RANGE(-500.0, 0.0, 500.0)
-                         )
+         RWS_ATTRIBUTE(CMD_SetPosY,
+                       "Position Up And Down",
+                       "Set the offset to move the Maestro animation up or down on the screen. Set as zero to move to default position.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(-500.0, 0.0, 500.0))
 
-            RWS_ATTRIBUTE( CMD_SetPosZ,
-                           "Scaling",
-                           "Set the offset to move the Maestro animation in or out of the screen. This scales the Maestro animation accordingly. Set as zero to move to default scale.",
-                           SLIDER,
-                           RwReal,
-                           RANGE(-1.0, 0.0, 1.0)
-                         )
+         RWS_ATTRIBUTE(CMD_SetPosZ,
+                       "Scaling",
+                       "Set the offset to move the Maestro animation in or out of the screen. This scales the Maestro animation accordingly. Set as zero to move to default scale.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(-1.0, 0.0, 1.0))
 
-            RWS_SEPARATOR( "Menu Buttons", 0 )
+         RWS_SEPARATOR("Menu Buttons", 0)
 
-            RWS_MESSAGE( CMD_TriggerCntrlButton,
-                         "Send Button Event",
-                         "Specify a button event to trigger which also test fires the event to the Maestro animation.",
-                         RECEIVE,
-                         return RwReal,
-                         "INQ_MENU_BTN_DOWN"
-                        )
+         RWS_MESSAGE(CMD_TriggerCntrlButton,
+                     "Send Button Event",
+                     "Specify a button event to trigger which also test fires the event to the Maestro animation.",
+                     RECEIVE,
+                     return RwReal,
+                     "INQ_MENU_BTN_DOWN")
 
          RWS_END_COMMANDS;
 

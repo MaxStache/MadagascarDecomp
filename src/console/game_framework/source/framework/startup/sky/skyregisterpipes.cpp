@@ -57,7 +57,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  \ingroup StartUp
@@ -68,16 +68,16 @@ namespace RWS
       void PostPluginAttachRegisterPipeLines(void)
       {
          RWS_FUNCTION("PostPluginAttachRegisterPipeLines");
-         
+
          RpPatchPipesAttach();
          RpMatfxPipesAttach();
          Rt2DPipesAttach();
          RpLtMapPipesAttach();
          RpSkinfxPipesAttach();
-         
+
          // These pipelines are used by the rf3 example where the data is being pre-instanced
-         // 
-         rwPDS_G3_Generic_MatPipeRegister(); 
+         //
+         rwPDS_G3_Generic_MatPipeRegister();
          rwPDS_G3_Generic_SctPipeRegister();
          rwPDS_G3_Skin_MatPipeRegister();
          rwPDS_G3_SkinGem_MatPipeRegister();

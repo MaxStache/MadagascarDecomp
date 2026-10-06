@@ -69,55 +69,55 @@ namespace RWS
 
             if (pMatrix)
             {
-               const RwChar szSendTransform[] = RWSTRING ("RWS::SendTransform");
-               RwUInt32 nMessageSize = sizeof (RwChar) * (rwstrlen (szSendTransform) + 1);
-            
+               const RwChar szSendTransform[] = RWSTRING("RWS::SendTransform");
+               RwUInt32 nMessageSize = sizeof(RwChar) * (rwstrlen(szSendTransform) + 1);
+
                // Data is uint for object ID, followed by matrix data (not padded)
-               const RwUInt32 nMatrixLength = 12 * sizeof (RwReal);
+               const RwUInt32 nMatrixLength = 12 * sizeof(RwReal);
                RwInt8 buffer[nMatrixLength];
 
                // Set matrix data
                RwInt8 *pBuf = buffer;
-               memcpy (pBuf, &pMatrix->right, sizeof (RwReal) * 3);
-               pBuf += sizeof (RwReal) * 3;
-               memcpy (pBuf, &pMatrix->up, sizeof (RwReal) * 3);
-               pBuf += sizeof (RwReal) * 3;
-               memcpy (pBuf, &pMatrix->at, sizeof (RwReal) * 3);
-               pBuf += sizeof (RwReal) * 3;
-               memcpy (pBuf, &pMatrix->pos, sizeof (RwReal) * 3);
+               memcpy(pBuf, &pMatrix->right, sizeof(RwReal) * 3);
+               pBuf += sizeof(RwReal) * 3;
+               memcpy(pBuf, &pMatrix->up, sizeof(RwReal) * 3);
+               pBuf += sizeof(RwReal) * 3;
+               memcpy(pBuf, &pMatrix->at, sizeof(RwReal) * 3);
+               pBuf += sizeof(RwReal) * 3;
+               memcpy(pBuf, &pMatrix->pos, sizeof(RwReal) * 3);
 
                // Create a network stream for writing, write data on it and close
                RwUInt32 nDataSize = nMessageSize;
-               nDataSize += sizeof (RWSGUID);
+               nDataSize += sizeof(RWSGUID);
                nDataSize += nMatrixLength;
 
 #ifdef RWS_MEMORY_PROFILING
-               // Open for write can cause a memory allocation, if it does it is released when 
+               // Open for write can cause a memory allocation, if it does it is released when
                // RwStreamClose is called, so it is ok to leave this out of the memory profile.
                //
                RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
-               if (RwStream *pStream = NetStream::OpenForWrite (nDataSize + ChunkHeaderSize))
+               if (RwStream *pStream = NetStream::OpenForWrite(nDataSize + ChunkHeaderSize))
                {
                   // Write the header and message ID
-                  RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData, nDataSize);
-                  RwStreamWrite (pStream, szSendTransform, nMessageSize);
+                  RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData, nDataSize);
+                  RwStreamWrite(pStream, szSendTransform, nMessageSize);
 
                   // Write the entity id (or null guid for camera)
                   if (pEntityID)
                   {
-                     RwStreamWrite (pStream, pEntityID->m_Data, sizeof (RWSGUID));
+                     RwStreamWrite(pStream, pEntityID->m_Data, sizeof(RWSGUID));
                   }
                   else
                   {
                      RWSGUID NullGuid;
-                     NullGuid.Clear ();
-                     RwStreamWrite (pStream, NullGuid.m_Data, sizeof (RWSGUID));
+                     NullGuid.Clear();
+                     RwStreamWrite(pStream, NullGuid.m_Data, sizeof(RWSGUID));
                   }
 
                   // Write the matrix and close
-                  RwStreamWrite (pStream, buffer, nMatrixLength);
-                  RwStreamClose (pStream, 0);
+                  RwStreamWrite(pStream, buffer, nMatrixLength);
+                  RwStreamClose(pStream, 0);
                }
 
 #ifdef RWS_MEMORY_PROFILING
@@ -146,7 +146,7 @@ namespace RWS
       *
       *  \note Only available in design builds of the framework.
       */
-      void SendDebugMessage( const char * message )
+      void SendDebugMessage(const char *message)
       {
          if (message)
          {
@@ -158,27 +158,27 @@ namespace RWS
             RWSRCGLOBAL(debugTrace) = FALSE;
 #endif
 
-            static const RwChar DebugMessage[] = RWSTRING("RWS::DebugMessage");            
-            RwUInt32 nMessageSize = (rwstrlen (DebugMessage) + 1) * sizeof (RwChar);
+            static const RwChar DebugMessage[] = RWSTRING("RWS::DebugMessage");
+            RwUInt32 nMessageSize = (rwstrlen(DebugMessage) + 1) * sizeof(RwChar);
 
             // Data is a null-terminated character string - must transmit the null terminator as well
-            RwUInt32 nDataLength = ( (rwstrlen(message) + 1) * sizeof (RwChar) );
+            RwUInt32 nDataLength = ((rwstrlen(message) + 1) * sizeof(RwChar));
 
 #ifdef RWS_MEMORY_PROFILING
-            // Open for write can cause a memory allocation, if it does it is released when 
+            // Open for write can cause a memory allocation, if it does it is released when
             // RwStreamClose is called, so it is ok to leave this out of the memory profile.
             //
             RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
             // Create a network stream for writing, write data on it and close
-            if (RwStream *pStream = NetStream::OpenForWrite (
-                                       nMessageSize + nDataLength + ChunkHeaderSize))
+            if (RwStream *pStream = NetStream::OpenForWrite(
+                   nMessageSize + nDataLength + ChunkHeaderSize))
             {
-               RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,
-                                         nMessageSize + nDataLength);
-               RwStreamWrite (pStream, DebugMessage, nMessageSize);
-               RwStreamWrite (pStream, message, nDataLength);
-               RwStreamClose (pStream, 0);
+               RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData,
+                                        nMessageSize + nDataLength);
+               RwStreamWrite(pStream, DebugMessage, nMessageSize);
+               RwStreamWrite(pStream, message, nDataLength);
+               RwStreamClose(pStream, 0);
             }
 
 #ifdef RWS_MEMORY_PROFILING
@@ -222,7 +222,7 @@ namespace RWS
       *
       *  \note Only available in design builds of the framework.
       */
-      void SendFile( const char * szFilename, const char * szCategory, const void * pData, RwUInt32 nDataSize )
+      void SendFile(const char *szFilename, const char *szCategory, const void *pData, RwUInt32 nDataSize)
       {
          RWS_FUNCTION("RWS::NetTools::SendFile");
 
@@ -237,42 +237,42 @@ namespace RWS
          if (pData && szFilename)
          {
             const RwChar IDString[] = RWSTRING("RWS::FileSave");
-            RwUInt32 nMessageSize = rwstrlen (IDString) + sizeof (RwChar);
+            RwUInt32 nMessageSize = rwstrlen(IDString) + sizeof(RwChar);
 
             FileHeader Header;
-            memset( &Header, 0, sizeof(FileHeader) );
+            memset(&Header, 0, sizeof(FileHeader));
 
-            strncpy( Header.szFilename, szFilename, sizeof(Header.szFilename) );
-            if ( szCategory )
+            strncpy(Header.szFilename, szFilename, sizeof(Header.szFilename));
+            if (szCategory)
             {
-               strncpy( Header.szCategory, szCategory, sizeof(Header.szCategory) );
+               strncpy(Header.szCategory, szCategory, sizeof(Header.szCategory));
             }
             Header.nDataSize = nDataSize;
-            
+
 #if defined(DOLPHIN)
-            // Because the Gamecube is big-endian, need to change 
+            // Because the Gamecube is big-endian, need to change
             //  the nDataSize field to little endian so it can be read
             //  on a PC.
-            RwMemLittleEndian32( &Header.nDataSize, sizeof(unsigned int) );
+            RwMemLittleEndian32(&Header.nDataSize, sizeof(unsigned int));
 #endif
             RwUInt32 nPacketSize = sizeof(FileHeader) + nDataSize;
 
 #ifdef RWS_MEMORY_PROFILING
-            // Open for write can cause a memory allocation, if it does it is released when 
+            // Open for write can cause a memory allocation, if it does it is released when
             // RwStreamClose is called, so it is ok to leave this out of the memory profile.
             //
             RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
             // Create a network stream for writing, write data on it and close
-            if ( RwStream *pStream = NetStream::OpenForWrite (
-                                        nMessageSize + nPacketSize + ChunkHeaderSize) )
+            if (RwStream *pStream = NetStream::OpenForWrite(
+                   nMessageSize + nPacketSize + ChunkHeaderSize))
             {
-               RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,
-                                         nMessageSize + nPacketSize);
-               RwStreamWrite ( pStream, IDString, nMessageSize );
-               RwStreamWrite ( pStream, &Header, sizeof(FileHeader) );
-               RwStreamWrite ( pStream, pData, nDataSize );
-               RwStreamClose ( pStream, 0 );
+               RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData,
+                                        nMessageSize + nPacketSize);
+               RwStreamWrite(pStream, IDString, nMessageSize);
+               RwStreamWrite(pStream, &Header, sizeof(FileHeader));
+               RwStreamWrite(pStream, pData, nDataSize);
+               RwStreamClose(pStream, 0);
             }
 
 #ifdef RWS_MEMORY_PROFILING

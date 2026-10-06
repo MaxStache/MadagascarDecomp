@@ -58,34 +58,31 @@ namespace RWS
 
       // textured
       DWORD CFXXBoxBaseVertexShader::TexturedDeclaration[] =
-      {
-          D3DVSD_STREAM(0),
-          D3DVSD_REG(VSD_REG_POS,         D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
-          D3DVSD_REG(VSD_REG_NORMAL,      D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
-          D3DVSD_REG(VSD_REG_TEXCOORDS,   D3DVSDT_FLOAT2),        /* TEXCOORDS - register v2 */
-          D3DVSD_END()
-      };
+         {
+            D3DVSD_STREAM(0),
+            D3DVSD_REG(VSD_REG_POS, D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
+            D3DVSD_REG(VSD_REG_NORMAL, D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
+            D3DVSD_REG(VSD_REG_TEXCOORDS, D3DVSDT_FLOAT2),        /* TEXCOORDS - register v2 */
+            D3DVSD_END()};
 
       // No texture, vertex color
       DWORD CFXXBoxBaseVertexShader::VertexColorDeclaration[] =
-      {
-          D3DVSD_STREAM(0),
-          D3DVSD_REG(VSD_REG_POS,         D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
-          D3DVSD_REG(VSD_REG_NORMAL,      D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
-          D3DVSD_REG(VSD_REG_COLOR,       D3DVSDT_D3DCOLOR),      /* D3DCOLOR  - register v3 */
-          D3DVSD_END()
-      };
+         {
+            D3DVSD_STREAM(0),
+            D3DVSD_REG(VSD_REG_POS, D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
+            D3DVSD_REG(VSD_REG_NORMAL, D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
+            D3DVSD_REG(VSD_REG_COLOR, D3DVSDT_D3DCOLOR),      /* D3DCOLOR  - register v3 */
+            D3DVSD_END()};
 
       // texture and vertex color
       DWORD CFXXBoxBaseVertexShader::TexturedVertexColorDeclaration[] =
-      {
-          D3DVSD_STREAM(0),
-          D3DVSD_REG(VSD_REG_POS,         D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
-          D3DVSD_REG(VSD_REG_NORMAL,      D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
-          D3DVSD_REG(VSD_REG_COLOR,       D3DVSDT_D3DCOLOR),      /* D3DCOLOR  - register v3 */
-          D3DVSD_REG(VSD_REG_TEXCOORDS,   D3DVSDT_FLOAT2),        /* TEXCOORDS - register v2 */
-          D3DVSD_END()
-      };
+         {
+            D3DVSD_STREAM(0),
+            D3DVSD_REG(VSD_REG_POS, D3DVSDT_FLOAT3),        /* POSITION  - register v0 */
+            D3DVSD_REG(VSD_REG_NORMAL, D3DVSDT_NORMPACKED3),   /* NORMAL    - register v1 */
+            D3DVSD_REG(VSD_REG_COLOR, D3DVSDT_D3DCOLOR),      /* D3DCOLOR  - register v3 */
+            D3DVSD_REG(VSD_REG_TEXCOORDS, D3DVSDT_FLOAT2),        /* TEXCOORDS - register v2 */
+            D3DVSD_END()};
 
 
       // the default render callback is stored here
@@ -94,12 +91,12 @@ namespace RWS
 
       // geometry plugin
       const RwUInt32 CFXXBoxBaseVertexShaderGeometryPluginID = 0x1CD;
-      RwUInt32       iCFXXBoxBaseVertexShaderGeometryPlugin_Offset = 0;
+      RwUInt32 iCFXXBoxBaseVertexShaderGeometryPlugin_Offset = 0;
 
       struct CVertexShaderPlugin
       {
-         CFXXBoxBaseVertexShader  *m_VShader;
-      };            
+         CFXXBoxBaseVertexShader *m_VShader;
+      };
 
 
       /**
@@ -109,7 +106,7 @@ namespace RWS
       *
       *  \return A pointer to the CVertexShaderPlugin data.
       */
-      CVertexShaderPlugin* CFXXBoxBaseVertexShader::GetPluginData( RpGeometry& geometry )
+      CVertexShaderPlugin *CFXXBoxBaseVertexShader::GetPluginData(RpGeometry &geometry)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::GetPluginData");
 
@@ -118,7 +115,7 @@ namespace RWS
          const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&geometry);
          const RwUInt32 pluginAddr = baseAddr + iCFXXBoxBaseVertexShaderGeometryPlugin_Offset;
 
-         RWS_RETURN( reinterpret_cast<CVertexShaderPlugin*>(pluginAddr) );
+         RWS_RETURN(reinterpret_cast<CVertexShaderPlugin *>(pluginAddr));
       }
 
       /**
@@ -130,14 +127,14 @@ namespace RWS
       *
       *  \returns Returns pointer to the constructed object.
       */
-      void* CFXXBoxBaseVertexShader::Plugin_Constructor(void* pObject, RwInt32 offsetInObject, RwInt32 sizeInObject)
+      void *CFXXBoxBaseVertexShader::Plugin_Constructor(void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::Plugin_Constructor");
 
          RWS_PRE(pObject);
 
-         CVertexShaderPlugin& pluginData = *GetPluginData(*(RpGeometry*)pObject);
-         pluginData.m_VShader       = 0;
+         CVertexShaderPlugin &pluginData = *GetPluginData(*(RpGeometry *)pObject);
+         pluginData.m_VShader = 0;
 
          RWS_RETURN(pObject);
       }
@@ -152,7 +149,7 @@ namespace RWS
       *
       *  \return Returns pDstObject.
       */
-      void *CFXXBoxBaseVertexShader::Plugin_Copy(void* pDstObject, const void* pSrcObject, RwInt32 offset,
+      void *CFXXBoxBaseVertexShader::Plugin_Copy(void *pDstObject, const void *pSrcObject, RwInt32 offset,
                                                  RwInt32 size)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::Plugin_Copy");
@@ -160,8 +157,8 @@ namespace RWS
          RWS_PRE(pDstObject);
          RWS_PRE(pSrcObject);
 
-         CVertexShaderPlugin& srcData = *GetPluginData(*(RpGeometry*)pSrcObject);
-         CVertexShaderPlugin& dstData = *GetPluginData(*(RpGeometry*)pDstObject);
+         CVertexShaderPlugin &srcData = *GetPluginData(*(RpGeometry *)pSrcObject);
+         CVertexShaderPlugin &dstData = *GetPluginData(*(RpGeometry *)pDstObject);
 
          dstData = srcData;
 
@@ -177,15 +174,14 @@ namespace RWS
       */
       RwBool CFXXBoxBaseVertexShader::PluginAttach(void)
       {
-          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::PluginAttach");
+         RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::PluginAttach");
 
-         iCFXXBoxBaseVertexShaderGeometryPlugin_Offset = RpGeometryRegisterPlugin (
-               sizeof(CVertexShaderPlugin),
-               MAKECHUNKID(rwVENDORID_CRITERIONRM, CFXXBoxBaseVertexShaderGeometryPluginID),
-               Plugin_Constructor,  
-               0, // NOT USED
-               Plugin_Copy
-               );
+         iCFXXBoxBaseVertexShaderGeometryPlugin_Offset = RpGeometryRegisterPlugin(
+            sizeof(CVertexShaderPlugin),
+            MAKECHUNKID(rwVENDORID_CRITERIONRM, CFXXBoxBaseVertexShaderGeometryPluginID),
+            Plugin_Constructor,
+            0, // NOT USED
+            Plugin_Copy);
 
          RWS_POST(CFXXBoxBaseVertexShaderGeometryPluginID);
 
@@ -205,7 +201,7 @@ namespace RWS
 
          RpGeometry *pGeometry = RpAtomicGetGeometry(pAtomic);
 
-         CVertexShaderPlugin& pluginData = *GetPluginData(*pGeometry);
+         CVertexShaderPlugin &pluginData = *GetPluginData(*pGeometry);
 
          if (pluginData.m_VShader) RWS_RETURN(pluginData.m_VShader);
 
@@ -227,10 +223,10 @@ namespace RWS
 
          RpGeometry *pGeometry = RpAtomicGetGeometry(pAtomic);
 
-         CVertexShaderPlugin& pluginData = *GetPluginData(*pGeometry);
+         CVertexShaderPlugin &pluginData = *GetPluginData(*pGeometry);
 
          pluginData.m_VShader = pVertexShader;
-      
+
          RWS_RETURNVOID();
       }
 
@@ -253,7 +249,7 @@ namespace RWS
       *  Destroy a CFXXBoxBaseVertexShader object.
       *
       */
-      CFXXBoxBaseVertexShader::~CFXXBoxBaseVertexShader(void) 
+      CFXXBoxBaseVertexShader::~CFXXBoxBaseVertexShader(void)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::~CFXXBoxBaseVertexShader");
 
@@ -265,7 +261,6 @@ namespace RWS
          }
 
          RWS_RETURNVOID();
-
       }
 
       /**
@@ -282,13 +277,13 @@ namespace RWS
          m_AtomicPipe = RxPipelineCreate();
          if (m_AtomicPipe)
          {
-            RxLockedPipe    *lpipe;
+            RxLockedPipe *lpipe;
 
             lpipe = RxPipelineLock(m_AtomicPipe);
             if (lpipe != 0)
             {
-               RxNodeDefinition    *instanceNode;
-               RxPipelineNode      *node;
+               RxNodeDefinition *instanceNode;
+               RxPipelineNode *node;
 
                /*
                 * Get the instance node definition
@@ -319,15 +314,13 @@ namespace RWS
                 * Set the VShader render callback
                 */
                RxXboxAllInOneSetRenderCallBack(node, RenderCallBack);
-
-
             }
          }
 
          RWS_RETURN(TRUE);
       }
 
- 
+
       /**
       *  Creates the pipeline used to render the vertex shaded atomic, and associates the atomic with the
       *  vertex shader object.
@@ -345,7 +338,7 @@ namespace RWS
          RpAtomicSetPipeline(pAtomic, reinterpret_cast<CFXXBoxBaseVertexShader *>(data)->m_AtomicPipe);
 
          // store a pointer to owner shader class, in the plugin area.
-         SetVShader(pAtomic, static_cast<CFXXBoxBaseVertexShader*>(data));
+         SetVShader(pAtomic, static_cast<CFXXBoxBaseVertexShader *>(data));
 
          RWS_RETURN(pAtomic);
       }
@@ -361,17 +354,17 @@ namespace RWS
       void CFXXBoxBaseVertexShader::SetVertexShaderBaseDefs(RwMatrix *ltm)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::SetVertexShaderBaseDefs");
-         RwCamera    *camera;
-         RwMatrix    *camLTM;
-         RwMatrix    invLtm;
-         RwMatrix    invCamMtx;
+         RwCamera *camera;
+         RwMatrix *camLTM;
+         RwMatrix invLtm;
+         RwMatrix invCamMtx;
 
-         D3DMATRIX   viewMatrix;        
-         D3DMATRIX   worldMatrix;
-         D3DMATRIX   projMatrix;
-         D3DMATRIX   destMatrix;
-         D3DMATRIX   tmpMatrix;
-         D3DMATRIX   worldITMat;
+         D3DMATRIX viewMatrix;
+         D3DMATRIX worldMatrix;
+         D3DMATRIX projMatrix;
+         D3DMATRIX destMatrix;
+         D3DMATRIX tmpMatrix;
+         D3DMATRIX worldITMat;
 
          /*
           * View matrix - (camera matrix)
@@ -382,10 +375,10 @@ namespace RWS
          RwMatrixSetIdentity(&invCamMtx);
          RwMatrixInvert(&invCamMtx, camLTM);
 
-         viewMatrix.m[0][0] = - invCamMtx.right.x;
-         viewMatrix.m[0][1] = - invCamMtx.up.x;
-         viewMatrix.m[0][2] = - invCamMtx.at.x;
-         viewMatrix.m[0][3] = - invCamMtx.pos.x;
+         viewMatrix.m[0][0] = -invCamMtx.right.x;
+         viewMatrix.m[0][1] = -invCamMtx.up.x;
+         viewMatrix.m[0][2] = -invCamMtx.at.x;
+         viewMatrix.m[0][3] = -invCamMtx.pos.x;
 
          viewMatrix.m[1][0] = invCamMtx.right.y;
          viewMatrix.m[1][1] = invCamMtx.up.y;
@@ -442,17 +435,17 @@ namespace RWS
          projMatrix.m[2][0] = 0.0f;
          projMatrix.m[2][1] = 0.0f;
          projMatrix.m[2][2] = camera->farPlane / (camera->farPlane - camera->nearPlane);
-         projMatrix.m[2][3] = - projMatrix.m[2][2] * camera->nearPlane;
+         projMatrix.m[2][3] = -projMatrix.m[2][2] * camera->nearPlane;
 
          projMatrix.m[3][0] = 0.0f;
          projMatrix.m[3][1] = 0.0f;
          projMatrix.m[3][2] = 1.0f;
          projMatrix.m[3][3] = 0.0f;
 
-         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&tmpMatrix), reinterpret_cast<D3DXMATRIX*>(&viewMatrix),
-                            reinterpret_cast<D3DXMATRIX*>(&worldMatrix));
-         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&destMatrix), reinterpret_cast<D3DXMATRIX*>(&projMatrix),
-                            reinterpret_cast<D3DXMATRIX*>(&tmpMatrix));
+         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX *>(&tmpMatrix), reinterpret_cast<D3DXMATRIX *>(&viewMatrix),
+                            reinterpret_cast<D3DXMATRIX *>(&worldMatrix));
+         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX *>(&destMatrix), reinterpret_cast<D3DXMATRIX *>(&projMatrix),
+                            reinterpret_cast<D3DXMATRIX *>(&tmpMatrix));
 
          /*
           * Set the constant registers c0-c3 with the transformation matrix
@@ -489,7 +482,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
+
 
       /**
       *  Used as a render call back during rendering of atomics with vertex shaders. From the geometry plugin
@@ -506,7 +499,7 @@ namespace RWS
                                                         RwUInt8 type, RwUInt32 flags)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxBaseVertexShader::ProcessVertexShader");
-         
+
          // get a pointer to the class which owns the vertex shader
          CFXXBoxBaseVertexShader *ShaderClass = GetVShader(static_cast<RpAtomic *>(object));
 

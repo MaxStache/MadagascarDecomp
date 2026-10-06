@@ -25,7 +25,7 @@
 
 #include "precomp.h"
 
-#if defined (SKY)
+#if defined(SKY)
 
 // Left to its own devices, the MW linker will dead-strip the registrar ctors, so...
 #ifdef __MWERKS__
@@ -61,16 +61,18 @@ namespace RWS
       *
       *  \param AtomicCallBackRender The Atomic Render Callback used to setup the lighting for the pipeline.
       */
-      CPipeSelectBase::CPipeSelectBase(const CAttributePacket& rAttr,
-         RpPDSPipeID MaterialPipeID,
-         
-         RpPDSPipeID AtomicPipeID,
-         RpAtomicCallBackRender AtomicCallBackRender,
+      CPipeSelectBase::CPipeSelectBase(const CAttributePacket &rAttr,
+                                       RpPDSPipeID MaterialPipeID,
 
-         RpPDSPipeID SectorPipeID,
-         RpWorldSectorCallBackRender WorldSectorCallBackRender):
+                                       RpPDSPipeID AtomicPipeID,
+                                       RpAtomicCallBackRender AtomicCallBackRender,
 
-         m_MaterialRxPipeline(0), m_AtomicsRxPipeline(0), m_SectorRxPipeline(0)
+                                       RpPDSPipeID SectorPipeID,
+                                       RpWorldSectorCallBackRender WorldSectorCallBackRender) :
+
+         m_MaterialRxPipeline(0),
+         m_AtomicsRxPipeline(0),
+         m_SectorRxPipeline(0)
       {
          RWS_FUNCTION("RWS::Pipelines::CPipeSelectBase::CPipeSelectBase");
 
@@ -79,29 +81,29 @@ namespace RWS
 
          if (MaterialPipeID)
          {
-            m_MaterialRxPipeline = RpPDSGetPipe (MaterialPipeID);
+            m_MaterialRxPipeline = RpPDSGetPipe(MaterialPipeID);
 
             RWS_ASSERT(m_MaterialRxPipeline,
-               "RpPDSGetPipe Failed to locate the material pipeline, please check it has been registered.");
+                       "RpPDSGetPipe Failed to locate the material pipeline, please check it has been registered.");
          }
 
          if (AtomicPipeID)
          {
-            m_AtomicsRxPipeline = RpPDSGetPipe (AtomicPipeID);
+            m_AtomicsRxPipeline = RpPDSGetPipe(AtomicPipeID);
 
             RWS_ASSERT(m_AtomicsRxPipeline,
-               "RpPDSGetPipe Failed to locate the atomic pipeline, please check it has been registered.");
+                       "RpPDSGetPipe Failed to locate the atomic pipeline, please check it has been registered.");
          }
 
          if (SectorPipeID)
          {
-            m_SectorRxPipeline = RpPDSGetPipe( SectorPipeID);
+            m_SectorRxPipeline = RpPDSGetPipe(SectorPipeID);
 
             RWS_ASSERT(m_SectorRxPipeline,
-               "RpPDSGetPipe Failed to locate the WorldSector pipeline, please check it has been registered.");
+                       "RpPDSGetPipe Failed to locate the WorldSector pipeline, please check it has been registered.");
          }
 
-         RWS_TRACE("m_AtomicCallBackRender "<<m_AtomicCallBackRender);
+         RWS_TRACE("m_AtomicCallBackRender " << m_AtomicCallBackRender);
 
          RWS_RETURNVOID();
       }
@@ -114,7 +116,7 @@ namespace RWS
       *
       *  \param rAttr Reference to a CAttributePacket object, \see CAttributeHandler
       */
-      void CPipeSelectBase::HandleAttributes(const CAttributePacket& rAttr)
+      void CPipeSelectBase::HandleAttributes(const CAttributePacket &rAttr)
       {
          RWS_FUNCTION("RWS::Pipelines::CPipeSelectBase::HandleAttributes");
 
@@ -126,46 +128,47 @@ namespace RWS
          {
             switch (sysattrIt->GetCommandId())
             {
-               case CSystemCommands::CMD_AttachResource:
-                  {
-                     const RwChar *resourceType;
-      
+            case CSystemCommands::CMD_AttachResource:
+               {
+                  const RwChar *resourceType;
+
                      // Const cast is requires as we are going to modify the actual resource.
                      //
-                     void *pObject = 0;
-                     const RWSGUID * pResourceId = 0;
-                     sysattrIt->GetCommandData(&pResourceId);
-                     if (pResourceId)
-                     {
-                        pObject = const_cast<void*>(CResourceManager::FindById(pResourceId, &resourceType));
-                     }
-      
-                     RWS_ASSERT(pObject, "Resource::Find failed id = " << pResourceId);
+                  void *pObject = 0;
+                  const RWSGUID *pResourceId = 0;
+                  sysattrIt->GetCommandData(&pResourceId);
+                  if (pResourceId)
+                  {
+                     pObject = const_cast<void *>(CResourceManager::FindById(pResourceId, &resourceType));
+                  }
 
-                     if (resourceType)
+                  RWS_ASSERT(pObject, "Resource::Find failed id = " << pResourceId);
+
+                  if (resourceType)
+                  {
+                     if (!rwstrcmp("rwID_ATOMIC", resourceType))
                      {
-                        if (!rwstrcmp("rwID_ATOMIC", resourceType))
-                        {
-                           if (m_AtomicsRxPipeline)  AttachAtomicPipeLine(reinterpret_cast<RpAtomic *>(pObject));
-                           if (m_MaterialRxPipeline)   AttachMaterialPipeLine(reinterpret_cast<RpAtomic *>(pObject));
-                        }
-                        else if (!rwstrcmp("rwID_CLUMP", resourceType))
-                        {
-                           if (m_AtomicsRxPipeline)  AttachAtomicPipeLine(reinterpret_cast<RpClump *>(pObject));
-                           if (m_MaterialRxPipeline)   AttachMaterialPipeLine(reinterpret_cast<RpClump *>(pObject));
-                        }
-                        else if (!rwstrcmp("rwID_WORLD", resourceType))
-                        {
-                           if (m_AtomicsRxPipeline)  AttachWorldPipeLine(reinterpret_cast<RpWorld *>(pObject));
-                           if (m_MaterialRxPipeline)   AttachMaterialPipeLine(reinterpret_cast<RpWorld *>(pObject));                         }
-                        else
-                        {
-                           RWS_ASSERTFAIL("CPipeSelectBase can only process atomics and clumps and worlds.");
-                        }
+                        if (m_AtomicsRxPipeline) AttachAtomicPipeLine(reinterpret_cast<RpAtomic *>(pObject));
+                        if (m_MaterialRxPipeline) AttachMaterialPipeLine(reinterpret_cast<RpAtomic *>(pObject));
+                     }
+                     else if (!rwstrcmp("rwID_CLUMP", resourceType))
+                     {
+                        if (m_AtomicsRxPipeline) AttachAtomicPipeLine(reinterpret_cast<RpClump *>(pObject));
+                        if (m_MaterialRxPipeline) AttachMaterialPipeLine(reinterpret_cast<RpClump *>(pObject));
+                     }
+                     else if (!rwstrcmp("rwID_WORLD", resourceType))
+                     {
+                        if (m_AtomicsRxPipeline) AttachWorldPipeLine(reinterpret_cast<RpWorld *>(pObject));
+                        if (m_MaterialRxPipeline) AttachMaterialPipeLine(reinterpret_cast<RpWorld *>(pObject));
+                     }
+                     else
+                     {
+                        RWS_ASSERTFAIL("CPipeSelectBase can only process atomics and clumps and worlds.");
                      }
                   }
-                  break;
-            }; 
+               }
+               break;
+            };
             ++sysattrIt;
          }
 
@@ -184,8 +187,8 @@ namespace RWS
 
          RpAtomicSetPipeline(pAtomic, m_AtomicsRxPipeline);
 
-         if (m_AtomicCallBackRender) RpAtomicSetRenderCallBack (pAtomic, m_AtomicCallBackRender);
- 
+         if (m_AtomicCallBackRender) RpAtomicSetRenderCallBack(pAtomic, m_AtomicCallBackRender);
+
          RWS_RETURNVOID();
       }
 
@@ -210,13 +213,13 @@ namespace RWS
             RWS_FUNCTION("RWS::Pipelines::NULL::AttachAtomicPipeLineCB");
 
             AttachAtomicPipeLineCB_data *pAttachAtomicPipeLineCB_data =
-               reinterpret_cast<AttachAtomicPipeLineCB_data*>(pData);
+               reinterpret_cast<AttachAtomicPipeLineCB_data *>(pData);
 
             RpAtomicSetPipeline(pAtomic, pAttachAtomicPipeLineCB_data->pRxPipeline);
 
             if (pAttachAtomicPipeLineCB_data->AtomicCallBackRender)
-               RpAtomicSetRenderCallBack (pAtomic, pAttachAtomicPipeLineCB_data->AtomicCallBackRender);
- 
+               RpAtomicSetRenderCallBack(pAtomic, pAttachAtomicPipeLineCB_data->AtomicCallBackRender);
+
             RWS_RETURN(pAtomic);
          }
       }
@@ -255,7 +258,7 @@ namespace RWS
          {
             RWS_FUNCTION("RWS::Pipelines::NULL::AttachMaterialPipeLineCB");
 
-            RxPipeline *pRxPipeline = reinterpret_cast<RxPipeline*>(pData);
+            RxPipeline *pRxPipeline = reinterpret_cast<RxPipeline *>(pData);
 
             RpMaterialSetPipeline(pMaterial, pRxPipeline);
 
@@ -277,7 +280,7 @@ namespace RWS
 
          RpGeometryForAllMaterials(pRpGeometry, AttachMaterialPipeLineCB, m_MaterialRxPipeline);
 
-         if (m_AtomicCallBackRender) RpAtomicSetRenderCallBack (pAtomic, m_AtomicCallBackRender);
+         if (m_AtomicCallBackRender) RpAtomicSetRenderCallBack(pAtomic, m_AtomicCallBackRender);
 
          RWS_RETURNVOID();
       }
@@ -304,15 +307,15 @@ namespace RWS
             RWS_FUNCTION("RWS::Pipelines::NULL::AttachAtomicPipeLineCB");
 
             AttachMaterialToAtomicPipeLineCB_data *pAttachMaterialToAtomicPipeLineCB_data =
-               reinterpret_cast<AttachMaterialToAtomicPipeLineCB_data*>(pData);
+               reinterpret_cast<AttachMaterialToAtomicPipeLineCB_data *>(pData);
 
             RpGeometry *pRpGeometry = RpAtomicGetGeometry(pAtomic);
 
             RpGeometryForAllMaterials(pRpGeometry, AttachMaterialPipeLineCB,
-               pAttachMaterialToAtomicPipeLineCB_data->pRxPipeline);
-            
+                                      pAttachMaterialToAtomicPipeLineCB_data->pRxPipeline);
+
             if (pAttachMaterialToAtomicPipeLineCB_data->AtomicCallBackRender)
-               RpAtomicSetRenderCallBack (pAtomic, pAttachMaterialToAtomicPipeLineCB_data->AtomicCallBackRender);
+               RpAtomicSetRenderCallBack(pAtomic, pAttachMaterialToAtomicPipeLineCB_data->AtomicCallBackRender);
 
             RWS_RETURN(pAtomic);
          }
@@ -358,7 +361,7 @@ namespace RWS
             RWS_FUNCTION("RWS::Pipelines::NULL::AttachAtomicPipeLineCB");
 
             AttachWorldSectorPipeLineCB_data *pAttachWorldSectorPipeLineCB_data =
-               reinterpret_cast<AttachWorldSectorPipeLineCB_data*>(pData);
+               reinterpret_cast<AttachWorldSectorPipeLineCB_data *>(pData);
 
             RpWorldSectorSetPipeline(pWorldSector, pAttachWorldSectorPipeLineCB_data->pRxPipeline);
 
@@ -382,7 +385,7 @@ namespace RWS
 
          if (m_WorldSectorCallBackRender)
          {
-            RpWorldSetSectorRenderCallBack (pWorld, m_WorldSectorCallBackRender);
+            RpWorldSetSectorRenderCallBack(pWorld, m_WorldSectorCallBackRender);
          }
       }
 
@@ -396,7 +399,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Pipelines::CPipeSelectBase::AttachMaterialPipeLine(RpWorld *pWorld)");
 
-         RpWorldForAllMaterials (pWorld, AttachMaterialPipeLineCB, m_MaterialRxPipeline);
+         RpWorldForAllMaterials(pWorld, AttachMaterialPipeLineCB, m_MaterialRxPipeline);
 
          RWS_RETURNVOID();
       }

@@ -124,25 +124,25 @@ namespace RWS
          Pos.x = (m_OffsetX * HalfWidth);
          Pos.y = (m_OffsetY * HalfHeight);
          Pos.z = 0.0f;
-         RwMatrixTranslate(pMatrix, &Pos, rwCOMBINEREPLACE); 
+         RwMatrixTranslate(pMatrix, &Pos, rwCOMBINEREPLACE);
 
-         RwMatrixRotate(pMatrix, &Axis, m_Angle, rwCOMBINEPOSTCONCAT); 
+         RwMatrixRotate(pMatrix, &Axis, m_Angle, rwCOMBINEPOSTCONCAT);
 
          Scale.x = m_ScaleX * m_Scale;
-         Scale.y = m_ScaleY * m_Scale;          
+         Scale.y = m_ScaleY * m_Scale;
          Scale.z = 1.0f;
-         RwMatrixScale (pMatrix, &Scale, rwCOMBINEPOSTCONCAT); 
+         RwMatrixScale(pMatrix, &Scale, rwCOMBINEPOSTCONCAT);
 
          // translate to the center of the screen
          Pos.x = HalfWidth;
          Pos.y = HalfHeight;
          Pos.z = 0.0f;
-         RwMatrixTranslate(pMatrix, &Pos, rwCOMBINEPOSTCONCAT); 
-                     
+         RwMatrixTranslate(pMatrix, &Pos, rwCOMBINEPOSTCONCAT);
+
          RWS_RETURNVOID();
       }
 
 
    } // namespace FX
-      
+
 } // namespace RWS

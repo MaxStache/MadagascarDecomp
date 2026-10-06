@@ -39,14 +39,14 @@
 // Standard Includes
 //
 #ifdef _MSC_VER
-#pragma warning (disable: 4786)
+#pragma warning(disable : 4786)
 #endif
 
 #include <list>
 
 namespace RWS
 {
-   namespace 
+   namespace
    {
       typedef std::list<CResourceHandler*> CResourceHandlerList;
 
@@ -101,7 +101,7 @@ namespace RWS
    * resource type.
    *
    */
-   CResourceHandler *CResourceHandler::FindHandler(const RwChar * const psType)
+   CResourceHandler* CResourceHandler::FindHandler(const RwChar* const psType)
    {
       RWS_FUNCTION("RWS::CResourceHandler::FindHandler");
 
@@ -111,12 +111,12 @@ namespace RWS
       {
          if ((*it)->IsHandled(psType))
          {
-            RWS_RETURN (*it);
+            RWS_RETURN(*it);
          }
          it++;
       }
 
-      RWS_RETURN( 0 );  // None found
+      RWS_RETURN(0);  // None found
    }
 
    /**
@@ -140,7 +140,7 @@ namespace RWS
 
       RWS_RETURNVOID();
    }
-   
+
    /**
    *
    *  Calls CResourceHandler::Close for each of the registered resource handlers.

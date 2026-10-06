@@ -54,25 +54,25 @@ namespace RWS
       class CSeqAttrHandManager
       {
       public:
-         
+
          CSeqAttrHandManager(CSeqStack &rSeqStack, RwUInt32 flags = 0);
          ~CSeqAttrHandManager(void);
 
          void FreeItems(void);
          void Send(void);
          CSeqAttrHandSlot *CreateSlot(CSeqItem &rSeqItem, RwUInt32 dataSize);
-         CSeqStack *SeqStack(void) { return(m_pSeqStack); }
-         RwUInt32 GetFlags(void) { return(m_flags); }
+         CSeqStack *SeqStack(void) { return (m_pSeqStack); }
+         RwUInt32 GetFlags(void) { return (m_flags); }
 
       private:
-         
+
          class Entity;                             // Pre-define.
-         
+
          Entity *m_pEntityRoot,
             *m_pActiveEntityRoot;
          CSeqStack *m_pSeqStack;
          RwUInt32 m_flags;
-         
+
       public:
 
          void MakeEntityActive(Entity *pEntity)
@@ -101,8 +101,8 @@ namespace RWS
             Class *Next(void);
             void DisconnectFromHandler(void) { m_pEntity->DisconnectFromHandler(); }
             void ConnectToHandler(void) { m_pEntity->ConnectToHandler(); }
-            CAttributeHandler *GetEntityAttrHandler(void) { return(m_pEntity->m_pAttrHandler); }
-            const RwChar *GetName(void) { return(m_name); }
+            CAttributeHandler *GetEntityAttrHandler(void) { return (m_pEntity->m_pAttrHandler); }
+            const RwChar *GetName(void) { return (m_name); }
 
          private:
 
@@ -203,8 +203,7 @@ namespace RWS
                   // Get top-level call back function, needed (optionally) if using direct-setting
                   // on the attributes.
 
-                  m_pAttrTablePostUpdateFunc = m_pAttrHandler->
-                     GetAttrPostUpdateFunc(m_pAttrTableUpdateThis);
+                  m_pAttrTablePostUpdateFunc = m_pAttrHandler->GetAttrPostUpdateFunc(m_pAttrTableUpdateThis);
                }
 
                RWS_RETURNVOID();
@@ -252,7 +251,7 @@ namespace RWS
          RwUInt32 m_commandID;                     /**< The command ID being used. */
          RwBool m_isHandlerConnected;              /**< Indicates if entity specific handlers are
                                                         connected or not. */
-      };                                           
+      };
    }     // namespace SEQUENCE
 }        // namespace RWS
 #endif   // #ifndef CSEQTX_ATTR_HAND_HEADER

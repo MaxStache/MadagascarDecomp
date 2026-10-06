@@ -46,7 +46,11 @@ namespace RWS
       //
 #define RWS_BEGIN_MACRO_DEFINITION
 #undef RWS_MAKENEWCLASS
-#define RWS_MAKENEWCLASS(var) enum{ObFuScAtE_RWS_MAKENEWCLASS = RWFORCEENUMSIZEINT}
+#define RWS_MAKENEWCLASS(var)                         \
+   enum                                               \
+   {                                                  \
+      ObFuScAtE_RWS_MAKENEWCLASS = RWFORCEENUMSIZEINT \
+   }
 #define RWS_END_MACRO_DEFINITION
 
       /**
@@ -73,8 +77,8 @@ namespace RWS
          CEntity() {}
 
       private:
-         CEntity( const CEntity& );
-         CEntity& operator=( const CEntity& );
+         CEntity(const CEntity&);
+         CEntity& operator=(const CEntity&);
       };
    }//namespace Generic
 }//namespace RWS

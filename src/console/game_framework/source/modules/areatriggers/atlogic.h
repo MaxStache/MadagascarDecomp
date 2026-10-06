@@ -54,23 +54,22 @@ namespace RWS
       {
       public:
 
-         ATLogic( ATBase * pBase );
+         ATLogic(ATBase* pBase);
          virtual ~ATLogic();
 
-         virtual void ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting );
+         virtual void ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting);
 
       protected:
 
-         virtual void OnEnter( CEventHandler * pEntered );
-         virtual void OnExit( CEventHandler * pExited );
+         virtual void OnEnter(CEventHandler* pEntered);
+         virtual void OnExit(CEventHandler* pExited);
 
          void SendEnterMsg();
          void SendExitMsg();
 
       protected:
-      
-         ATBase * m_pBase;       /**< ATBase-derived object that this logic belongs to */
 
+         ATBase* m_pBase;       /**< ATBase-derived object that this logic belongs to */
       };
 
       /**
@@ -95,19 +94,19 @@ namespace RWS
       {
       public:
 
-         ATFireOnceOnEntry( ATBase * pBase );
+         ATFireOnceOnEntry(ATBase* pBase);
          virtual ~ATFireOnceOnEntry() {}
 
-         void ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting );
-
-      protected:
-      
-         void OnEnter( CEventHandler * pEntered );
-         void OnExit( CEventHandler * pExited );
+         void ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting);
 
       protected:
 
-         CEventHandler * m_IntersectingObjects[MAX_OBJECTS_TRACKED];
+         void OnEnter(CEventHandler* pEntered);
+         void OnExit(CEventHandler* pExited);
+
+      protected:
+
+         CEventHandler* m_IntersectingObjects[MAX_OBJECTS_TRACKED];
          RwUInt32 m_NumObjects;
       };
 
@@ -123,21 +122,21 @@ namespace RWS
       {
       public:
 
-         ATFireOnceOnEntryAndExit( ATBase * pBase );
+         ATFireOnceOnEntryAndExit(ATBase* pBase);
          virtual ~ATFireOnceOnEntryAndExit() {}
 
-         void ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting );
-
-      protected:
-      
-         void OnEnter( CEventHandler * pEntered );
-         void OnExit( CEventHandler * pExited );
+         void ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting);
 
       protected:
 
-         CEventHandler * m_IntersectingObjects[MAX_OBJECTS_TRACKED];
+         void OnEnter(CEventHandler* pEntered);
+         void OnExit(CEventHandler* pExited);
+
+      protected:
+
+         CEventHandler* m_IntersectingObjects[MAX_OBJECTS_TRACKED];
          RwUInt32 m_NumObjects;
-      };      
+      };
    } // namespace AreaTrigger
 
 } // namespace RWS

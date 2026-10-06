@@ -72,34 +72,35 @@ namespace RWS
       *
       */
 
-      CPB_BasePart::CPB_BasePart(RwUInt32 numBlocks, RwUInt32 blockSize)
-            : m_ppAnimBlocks(0),
-            m_secStageOn(false),
-            m_enabled(true),
-            m_rate(0),
-            m_rateSpread(0),
-            m_useRate(0),
-            m_useRateSpread(0),
-            m_lifeTime(0),
-            m_lifeSpread(0),
-            m_secLifeAdj(0),
-            m_secLifeTime(1),       // Zero will cause problems, minimum value is 1. Disable via separate flag.
-            m_secEmit(0),
-            m_secUseEmit(0),
-            m_secEmitSpread(0),
-            m_secUseEmitSpread(0),
-            m_numBlocks(numBlocks),
-            m_blockSize(blockSize),
-            m_xAngSpread(0.0f),
-            m_zAngSpread(0.0f),
-            m_emitSpreadX(0.0f),
-            m_emitSpreadY(0.0f),
-            m_emitSpreadZ(0.0f),
-            m_secEmitMinAng(0.0f),
-            m_secEmitMaxAng(0.0f),
-            m_rateAdjust(1.0f)
+      CPB_BasePart::CPB_BasePart(RwUInt32 numBlocks, RwUInt32 blockSize) :
+         m_ppAnimBlocks(0),
+         m_secStageOn(false),
+         m_enabled(true),
+         m_rate(0),
+         m_rateSpread(0),
+         m_useRate(0),
+         m_useRateSpread(0),
+         m_lifeTime(0),
+         m_lifeSpread(0),
+         m_secLifeAdj(0),
+         m_secLifeTime(1),       // Zero will cause problems, minimum value is 1. Disable via separate flag.
+         m_secEmit(0),
+         m_secUseEmit(0),
+         m_secEmitSpread(0),
+         m_secUseEmitSpread(0),
+         m_numBlocks(numBlocks),
+         m_blockSize(blockSize),
+         m_xAngSpread(0.0f),
+         m_zAngSpread(0.0f),
+         m_emitSpreadX(0.0f),
+         m_emitSpreadY(0.0f),
+         m_emitSpreadZ(0.0f),
+         m_secEmitMinAng(0.0f),
+         m_secEmitMaxAng(0.0f),
+         m_rateAdjust(1.0f)
 #if defined(SKY)
-            , m_pAnimOriginalAddr(0)
+         ,
+         m_pAnimOriginalAddr(0)
 #endif
       {
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::CPB_BasePart");
@@ -111,11 +112,11 @@ namespace RWS
          m_xAxisVect.x = 1.0f;
          m_xAxisVect.y = 0.0f;
          m_xAxisVect.z = 0.0f;
-         
+
          m_yAxisVect.x = 0.0f;
          m_yAxisVect.y = 1.0f;
          m_yAxisVect.z = 0.0f;
-         
+
          m_zAxisVect.x = 0.0f;
          m_zAxisVect.y = 0.0f;
          m_zAxisVect.z = 1.0f;
@@ -125,7 +126,7 @@ namespace RWS
          // First state MUST setup everything.
 
          m_states[BPS_PRIMARY_START].m_partFlags = CPB_BP_ANIM_ACCEL | CPB_BP_ANIM_GRAVITY | CPB_BP_ANIM_DRAG |
-               CPB_BP_ANIM_COL | CPB_BP_ANIM_SIZE;
+                                                   CPB_BP_ANIM_COL | CPB_BP_ANIM_SIZE;
 
          // Block size & number may be zero in cases where 'Resize' is used to initialize instead.
 
@@ -317,13 +318,13 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::CreateNewPtrArrayElement");
 
-         // On PS2, need to allocate a block that is a multiple of 16Bytes in 
-         // size, to allow the array to be sent to the scratchpad via DMA 
+         // On PS2, need to allocate a block that is a multiple of 16Bytes in
+         // size, to allow the array to be sent to the scratchpad via DMA
          // transfer. (DMA transfers are in blocks of 16Bytes).
 
-         RwUInt32 uBytesToAlloc = ( ( ( sizeof(AnimData) * blockSize ) + 15 ) >> 4 ) << 4;
+         RwUInt32 uBytesToAlloc = (((sizeof(AnimData) * blockSize) + 15) >> 4) << 4;
 
-         if ((m_ppNewAnimBlocks[index] = reinterpret_cast<AnimData *>(::RWS_OP_NEW(uBytesToAlloc)) ) == 0)
+         if ((m_ppNewAnimBlocks[index] = reinterpret_cast<AnimData *>(::RWS_OP_NEW(uBytesToAlloc))) == 0)
          {
             RWS_RETURN(false);
          }
@@ -383,7 +384,7 @@ namespace RWS
       */
 
       void CPB_BasePart::DoStdPartSetup(const StateData &state, RwRGBA *pCol, RwV2d *pSize,
-            AnimData *pAnim, bool isNormVect, bool isInitAccel)
+                                        AnimData *pAnim, bool isNormVect, bool isInitAccel)
       {
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::DoStdPartSetup");
 
@@ -470,20 +471,20 @@ namespace RWS
             else
             {
                RwInt32 r,
-                     g,
-                     b,
-                     a;
+                  g,
+                  b,
+                  a;
 
                // Calculate individual, random, color values.
 
                r = static_cast<RwInt32>(static_cast<RwReal>(state.m_red) +
-                     static_cast<RwReal>(state.m_redSpread) * ((RealRand() * 2) - 1.0f));
+                                        static_cast<RwReal>(state.m_redSpread) * ((RealRand() * 2) - 1.0f));
                g = static_cast<RwInt32>(static_cast<RwReal>(state.m_green) +
-                     static_cast<RwReal>(state.m_greenSpread) * ((RealRand() * 2) - 1.0f));
+                                        static_cast<RwReal>(state.m_greenSpread) * ((RealRand() * 2) - 1.0f));
                b = static_cast<RwInt32>(static_cast<RwReal>(state.m_blue) +
-                     static_cast<RwReal>(state.m_blueSpread) * ((RealRand() * 2) - 1.0f));
+                                        static_cast<RwReal>(state.m_blueSpread) * ((RealRand() * 2) - 1.0f));
                a = static_cast<RwInt32>(static_cast<RwReal>(state.m_alpha) +
-                     static_cast<RwReal>(state.m_alphaSpread) * ((RealRand() * 2) - 1.0f));
+                                        static_cast<RwReal>(state.m_alphaSpread) * ((RealRand() * 2) - 1.0f));
 
                // Clip ranges.
 
@@ -571,7 +572,7 @@ namespace RWS
       */
 
       void CPB_BasePart::DoPartAnimSetup(const StateData &state, const RwRGBA *pCol, const RwV2d *pSize,
-            AnimData *pAnim, RwReal animFrames)
+                                         AnimData *pAnim, RwReal animFrames)
       {
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::DoPartAnimSetup");
          RWS_ASSERT(animFrames, "number of animation frames CANNOT be 0 - divide by zero error");
@@ -617,10 +618,10 @@ namespace RWS
          if ((state.m_partFlags & CPB_BP_ANIM_COL) != 0)
          {
             RwReal endR,
-                  endG,
-                  endB,
-                  endA;
-            
+               endG,
+               endB,
+               endA;
+
             // Choose end color - red...
 
             if (state.m_redSpread == 0)
@@ -703,26 +704,26 @@ namespace RWS
 
             // Setup start color.
 
-            pAnim->m_r = ( pCol->red );
-            pAnim->m_g = ( pCol->green );
-            pAnim->m_b = ( pCol->blue );
-            pAnim->m_a = ( pCol->alpha );
+            pAnim->m_r = (pCol->red);
+            pAnim->m_g = (pCol->green);
+            pAnim->m_b = (pCol->blue);
+            pAnim->m_a = (pCol->alpha);
 
-            pAnim->m_r = ( pAnim->m_r << 8 );
-            pAnim->m_g = ( pAnim->m_g << 8 );
-            pAnim->m_b = ( pAnim->m_b << 8 );
-            pAnim->m_a = ( pAnim->m_a << 8 );
+            pAnim->m_r = (pAnim->m_r << 8);
+            pAnim->m_g = (pAnim->m_g << 8);
+            pAnim->m_b = (pAnim->m_b << 8);
+            pAnim->m_a = (pAnim->m_a << 8);
 
             // Setup steps...
 
-            // Note: The values calculated below need to be in the range 0-255, 
-            //       shifted left by 8 bits (for greater accuracy). Hence, the 
-            //       multiply by 256.0f, which is the same as shifting left by 
+            // Note: The values calculated below need to be in the range 0-255,
+            //       shifted left by 8 bits (for greater accuracy). Hence, the
+            //       multiply by 256.0f, which is the same as shifting left by
             //       8 (2^8 = 256).
-            pAnim->m_rMod = static_cast<RwInt16>( ( ( endR - static_cast<RwReal>(pCol->red) ) / animFrames ) * 256.0f );
-            pAnim->m_gMod = static_cast<RwInt16>( ( ( endG - static_cast<RwReal>(pCol->green) ) / animFrames ) * 256.0f );
-            pAnim->m_bMod = static_cast<RwInt16>( ( ( endB - static_cast<RwReal>(pCol->blue) ) / animFrames ) * 256.0f );
-            pAnim->m_aMod = static_cast<RwInt16>( ( ( endA - static_cast<RwReal>(pCol->alpha) ) / animFrames ) * 256.0f );
+            pAnim->m_rMod = static_cast<RwInt16>(((endR - static_cast<RwReal>(pCol->red)) / animFrames) * 256.0f);
+            pAnim->m_gMod = static_cast<RwInt16>(((endG - static_cast<RwReal>(pCol->green)) / animFrames) * 256.0f);
+            pAnim->m_bMod = static_cast<RwInt16>(((endB - static_cast<RwReal>(pCol->blue)) / animFrames) * 256.0f);
+            pAnim->m_aMod = static_cast<RwInt16>(((endA - static_cast<RwReal>(pCol->alpha)) / animFrames) * 256.0f);
          }
 
          // Size...
@@ -789,13 +790,13 @@ namespace RWS
       */
 
       void CPB_BasePart::SecEmitSetup(PartAccess &addAccess, PartAccess &access, PartAxis &partAxis,
-            CPB_Marker &addMarker)
+                                      CPB_Marker &addMarker)
       {
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::SecEmitSetup");
 
          RwReal addRnd,
-               addSinVal,
-               addCosVal;
+            addSinVal,
+            addCosVal;
          RwV3d addTempVect;
 
          // Lifetime...
@@ -812,11 +813,11 @@ namespace RWS
          // Do specific setup...
 
          addAccess.m_pPos = reinterpret_cast<RwV3d *>(addAccess.m_posLock.data + addAccess.m_posLock.stride *
-               addAccess.m_index);
+                                                                                    addAccess.m_index);
          addAccess.m_pSize = reinterpret_cast<RwV2d *>(addMarker.sizeLock.data + addMarker.sizeLock.stride *
-               addAccess.m_index);
+                                                                                    addAccess.m_index);
          addAccess.m_pCol = reinterpret_cast<RwRGBA *>(addAccess.m_colLock.data + addAccess.m_colLock.stride *
-               addAccess.m_index);
+                                                                                     addAccess.m_index);
          addAccess.m_pAnim = addAccess.m_pAnimBlock + addAccess.m_index;
 
          addRnd = RealRand();
@@ -872,8 +873,8 @@ namespace RWS
          RWS_FUNCTION("RWS::Particle::CPB_BasePart::ModifyPartForSecState");
 
          RwReal rnd,
-               sinVal,
-               cosVal;
+            sinVal,
+            cosVal;
          RwV3d tempVect;
 
          // Modify the input particle, calculate the rotational direction around the
@@ -894,11 +895,11 @@ namespace RWS
          cosVal = RwCos(rnd * partAxis.m_angDiff + partAxis.m_minAng);
 
          access.m_pAnim->m_Vel.x = (tempVect.x * sinVal + partAxis.m_partYAxis.x * cosVal) *
-               partAxis.m_inputLen;
+                                   partAxis.m_inputLen;
          access.m_pAnim->m_Vel.y = (tempVect.y * sinVal + partAxis.m_partYAxis.y * cosVal) *
-               partAxis.m_inputLen;
+                                   partAxis.m_inputLen;
          access.m_pAnim->m_Vel.z = (tempVect.z * sinVal + partAxis.m_partYAxis.z * cosVal) *
-               partAxis.m_inputLen;
+                                   partAxis.m_inputLen;
 
          RWS_RETURNVOID();
       }
@@ -963,7 +964,7 @@ namespace RWS
          else
          {
             RwV3d vect1,
-                  vect2;
+               vect2;
 
             // Calculate vector based on all 3 axis vectors (baseVect, xAxisVect & zAxisVect).
             // Do x and y first...
@@ -971,8 +972,8 @@ namespace RWS
             if (m_xAngSpread != 0.0f)
             {
                RwReal sinVal,
-                     cosVal,
-                     rnd;
+                  cosVal,
+                  rnd;
 
                rnd = RealRand() - 0.5f;
                sinVal = RwSin(m_xAngSpread * rnd);
@@ -991,8 +992,8 @@ namespace RWS
             if (m_zAngSpread != 0.0f)
             {
                RwReal sinVal,
-                     cosVal,
-                     rnd;
+                  cosVal,
+                  rnd;
 
                rnd = RealRand() - 0.5f;
                sinVal = RwSin(m_zAngSpread * rnd);
@@ -1037,7 +1038,7 @@ namespace RWS
          access.m_pCol = reinterpret_cast<RwRGBA *>(access.m_colLock.data + access.m_colLock.stride * access.m_index);
 
          DoStdPartSetup(m_states[BPS_PRIMARY_START], access.m_pCol, access.m_pSize,
-               access.m_pAnimBlock + access.m_index, true, true);
+                        access.m_pAnimBlock + access.m_index, true, true);
 
          // Setup animation...
 
@@ -1067,7 +1068,7 @@ namespace RWS
          }
 
          DoPartAnimSetup(m_states[BPS_PRIMARY_END], access.m_pCol, access.m_pSize, access.m_pAnimBlock + access.m_index,
-               animFrames);
+                         animFrames);
 
          RWS_RETURN(animFrames);
       }
@@ -1191,7 +1192,7 @@ namespace RWS
       */
 
       void CPB_TexPart::DoTexPartSetup(StateData &state, TexStateData &texState, RwV2d *pTexUVs,
-            TexAnimData *pTexAnimData)
+                                       TexAnimData *pTexAnimData)
       {
          RWS_FUNCTION("RWS::Particle::CPB_TexPart::DoTexPartSetup");
 
@@ -1204,7 +1205,7 @@ namespace RWS
             if (texState.m_minSubTex != texState.m_maxSubTex)
             {
                RwUInt32 min,
-                     max;
+                  max;
 
                // Check for min > max - need to store values in case it's being edited (and min changed first), but must
                // also cope with values too. If not, could end up with MASSIVE number for modulus.
@@ -1268,7 +1269,7 @@ namespace RWS
       */
 
       void CPB_TexPart::DoTexAnimSetup(StateData &state, TexStateData &texState, TexAnimData *pTexAnimData,
-            RwReal animFrames)
+                                       RwReal animFrames)
       {
          RWS_FUNCTION("RWS::Particle::CPB_TexPart::DoTexAnimSetup");
 
@@ -1283,7 +1284,7 @@ namespace RWS
                // Random...
 
                pTexAnimData->m_subTexEnd = static_cast<RwReal>(texState.m_minSubTex + (rand() %
-                     (texState.m_maxSubTex - texState.m_minSubTex)));
+                                                                                       (texState.m_maxSubTex - texState.m_minSubTex)));
             }
             else
             {
@@ -1321,7 +1322,9 @@ namespace RWS
                // Animating forward...
 
                pTexAnimData->m_subTexStep = (((pTexAnimData->m_subTexEnd - pTexAnimData->m_subTexIndex + 1.0f) *
-                     (1.0f + numLoops)) - 0.001f) / animFrames;
+                                              (1.0f + numLoops)) -
+                                             0.001f) /
+                                            animFrames;
                pTexAnimData->m_countUp = true;
             }
             else
@@ -1329,7 +1332,9 @@ namespace RWS
                // Animating backward...
 
                pTexAnimData->m_subTexStep = (((pTexAnimData->m_subTexEnd - pTexAnimData->m_subTexIndex - 1.0f) *
-                     (1.0f + numLoops)) + 0.001f) / animFrames;
+                                              (1.0f + numLoops)) +
+                                             0.001f) /
+                                            animFrames;
                pTexAnimData->m_countUp = false;
 
                // Need to ensure first element get an even time on screen, so add 0.999 to it.
@@ -1409,7 +1414,7 @@ namespace RWS
          CPB_BasePart::DeleteOldPtrArrayElement(index);
 
          // Do texture related stuff...
-         
+
          delete (m_ppTexAnimBlocks[index]);
 
          RWS_RETURNVOID();
@@ -1437,13 +1442,13 @@ namespace RWS
 
          // Do stuff for textured version...
 
-         // On PS2, need to allocate a block that is a multiple of 16Bytes in 
-         // size, to allow the array to be sent to the scratchpad via DMA 
+         // On PS2, need to allocate a block that is a multiple of 16Bytes in
+         // size, to allow the array to be sent to the scratchpad via DMA
          // transfer. (DMA transfers are in blocks of 16Bytes).
 
-         RwUInt32 uBytesToAlloc = ( ( ( sizeof(TexAnimData) * blockSize ) + 15 ) >> 4 ) << 4;
+         RwUInt32 uBytesToAlloc = (((sizeof(TexAnimData) * blockSize) + 15) >> 4) << 4;
 
-         if ((m_ppNewTexAnimBlocks[index] = reinterpret_cast<TexAnimData *>(::RWS_OP_NEW(uBytesToAlloc)) ) == 0)
+         if ((m_ppNewTexAnimBlocks[index] = reinterpret_cast<TexAnimData *>(::RWS_OP_NEW(uBytesToAlloc))) == 0)
          {
             RWS_RETURN(false);
          }
@@ -1507,7 +1512,7 @@ namespace RWS
          // Do texture setup...
 
          addAccess.m_pTexUVs = reinterpret_cast<RwV2d *>(addAccess.m_texUVsLock.data +
-               addAccess.m_texUVsLock.stride * addMarker.index);
+                                                         addAccess.m_texUVsLock.stride * addMarker.index);
          addAccess.m_pTexAnim = addAccess.m_pTexAnimBlock + addMarker.index;
 
          addAccess.m_pTexUVs[0] = access.m_pTexUVs[0];

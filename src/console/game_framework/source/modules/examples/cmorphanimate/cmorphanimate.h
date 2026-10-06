@@ -47,33 +47,33 @@ namespace RWS
       *  \see CSystemCommands
       *
       */
-      
-      class CMorphAnimate : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+
+      class CMorphAnimate : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CMorphAnimate);
          RWS_DECLARE_CLASSID(CMorphAnimate);
          RWS_CATEGORY("Examples");
          RWS_DESCRIPTION("Morph Animate", "Example of using the RpMorph plugin.");
-         
-         RWS_BEGIN_COMMANDS
-            RWS_ATTRIBUTE( CMD_rDelta,
-                           "Morph Rate",
-                           "Specified the rate at which morphing proceeds i.e. the higher the value the faster the animation",
-                           SLIDER,
-                           RwReal,
-                           RANGE(0, 0.01, 1.0))
 
-            RWS_END_COMMANDS;
-         
+         RWS_BEGIN_COMMANDS
+         RWS_ATTRIBUTE(CMD_rDelta,
+                       "Morph Rate",
+                       "Specified the rate at which morphing proceeds i.e. the higher the value the faster the animation",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 0.01, 1.0))
+
+         RWS_END_COMMANDS;
+
          CMorphAnimate(const CAttributePacket& attr);
          ~CMorphAnimate(void);
-         
-         virtual void HandleEvents(CMsg &pMsg);
+
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-         
+
       protected:
-         
+
          CClumpPtr m_pClump;     /**< Clump of the behavior */
          RwReal m_rDelta;          /**< Delta value controlling speed of morph */
       };

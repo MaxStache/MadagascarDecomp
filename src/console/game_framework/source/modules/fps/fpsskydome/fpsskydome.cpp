@@ -57,7 +57,7 @@ namespace RWS
          {
             // Modify the camera's frame so the it is positioned at the origin.
             //
-            RwCamera *pRwCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
+            RwCamera *pRwCamera = reinterpret_cast<RwCamera *>(pMsg.pData);
 
             RWS_PRE(pRwCamera);
 

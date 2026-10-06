@@ -41,8 +41,8 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSExampleMonster);
       RWS_REGISTERCLASS(FPSExampleMonster);
-      
-      
+
+
       /**
       *        
       * \ref FPSExampleMonster. Constructor for FPSExampleMonster.
@@ -50,36 +50,36 @@ namespace RWS
       * \see ~FpsExampleMonster.
       *
       */
-      FPSExampleMonster::FPSExampleMonster(const CAttributePacket& attr)
-         :  FPSMonster(attr)
+      FPSExampleMonster::FPSExampleMonster(const CAttributePacket& attr) :
+         FPSMonster(attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSExampleMonster::FPSExampleMonster");
-         
+
          // Can't use initializer lists for these as not member of this class
          m_height = 40.0f;
          m_height_on_ground = 20.0f;
          m_width = 20.0f;
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */ 
+      */
       void FPSExampleMonster::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSExampleMonster::HandleAttributes");
-         
+
          FPSMonster::HandleAttributes(attr);
-         
-         CAttributeCommandIterator attrIt(attr, 
-            RWS_CLASSID_OF(FPSExampleMonster));
-         
+
+         CAttributeCommandIterator attrIt(attr,
+                                          RWS_CLASSID_OF(FPSExampleMonster));
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -87,18 +87,18 @@ namespace RWS
             case CMD_m_height:
                attrIt->GetCommandData(m_height);
                break;
-               
+
             case CMD_m_height_on_ground:
                attrIt->GetCommandData(m_height_on_ground);
                break;
-               
+
             case CMD_m_width:
                attrIt->GetCommandData(m_width);
                break;
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    } // namespace FPS

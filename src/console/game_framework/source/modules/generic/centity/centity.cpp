@@ -51,14 +51,14 @@ namespace RWS
 {
    namespace Generic
    {
-      // If the resource attached to CEntity is an atomic an instance of 
+      // If the resource attached to CEntity is an atomic an instance of
       // CRpAtomicEntity is created to manage it.
       //
       class CRpAtomicEntity : public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
       {
       public:
-      
-         CRpAtomicEntity(const CAttributePacket&attr)
+
+         CRpAtomicEntity(const CAttributePacket& attr)
          {
             RWS_FUNCTION("RWS::Generic::CRpAtomicEntity::CRpAtomicEntity");
 
@@ -83,14 +83,14 @@ namespace RWS
          CAtomicPtr m_pAtomic;
       };
 
-      // If the resource attached to CEntity is a clump an instance of 
+      // If the resource attached to CEntity is a clump an instance of
       // CRpClumpEntity is created to manage it.
       //
-      class CRpClumpEntity: public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
+      class CRpClumpEntity : public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
       {
       public:
-      
-         CRpClumpEntity(const CAttributePacket&attr)
+
+         CRpClumpEntity(const CAttributePacket& attr)
          {
             RWS_FUNCTION("RWS::Generic::CRpClumpEntity::CRpClumpEntity");
 
@@ -126,22 +126,24 @@ namespace RWS
          CClumpPtr m_pClump;
       };
 
-      // If the resource attached to CEntity is a world an instance of 
+      // If the resource attached to CEntity is a world an instance of
       // CRpWorldEntity is created to manage it.
       //
-      class CRpWorldEntity: public CEventHandler, public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
+      class CRpWorldEntity : public CEventHandler, public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
       {
       public:
 
 
-         CRpWorldEntity(const CAttributePacket &attr) : InitCEventHandler(0), m_RpWorld(0)
+         CRpWorldEntity(const CAttributePacket& attr) :
+            InitCEventHandler(0),
+            m_RpWorld(0)
          {
             RWS_FUNCTION("RWS::Generic::CRpWorldEntity:: CRpWorldEntity");
 
-            m_RpWorld = 
+            m_RpWorld =
                static_cast<RpWorld*>(
-               const_cast<void*>(
-               CSystemCommands::FindFirstResourceOfType(attr, "rwID_WORLD")));
+                  const_cast<void*>(
+                     CSystemCommands::FindFirstResourceOfType(attr, "rwID_WORLD")));
 
             if (!m_RpWorld)
             {
@@ -155,16 +157,16 @@ namespace RWS
             {
                 // Assume that this is the default world
                 //
-                CLevel::SetOpaqueWorld(m_RpWorld);
+               CLevel::SetOpaqueWorld(m_RpWorld);
 
-                LinkMsg(iMsgDoRender, "RwCamera*");
+               LinkMsg(iMsgDoRender, "RwCamera*");
             }
 
             RWS_RETURNVOID();
          }
 
          ~CRpWorldEntity()
-         {  
+         {
             RWS_FUNCTION("RWS::Generic::CRpWorldEntity::~CRpWorldEntity");
 
             // If this is the main world, set main world back to previous world.
@@ -179,13 +181,13 @@ namespace RWS
             RWS_RETURNVOID();
          }
 
-         void HandleEvents(CMsg &pMsg)
+         void HandleEvents(CMsg& pMsg)
          {
             RWS_FUNCTION("RWS::Generic::CRpWorldEntity::HandleEvents");
 
             if (pMsg.Id == iMsgDoRender)
             {
-               RwCamera *pRwCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
+               RwCamera* pRwCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
 
                if (pRwCamera && m_RpWorld)
                {
@@ -200,7 +202,7 @@ namespace RWS
 
                   RwV3dSub(&DiagonalVect, &m_RpWorld->boundingBox.sup, &m_RpWorld->boundingBox.inf);
 
-                  RwCameraSetFarClipPlane( pRwCamera, RwV3dLength(&DiagonalVect)*1.5f); 
+                  RwCameraSetFarClipPlane(pRwCamera, RwV3dLength(&DiagonalVect) * 1.5f);
 
                   // Add camera to world
                   //
@@ -211,10 +213,10 @@ namespace RWS
                   const RwRGBA backgroundColor = {0, 0, 128, 255};
 
                   RwCameraClear(pRwCamera,
-                     const_cast<RwRGBA*>(&backgroundColor),
-                     rwCAMERACLEARIMAGE | rwCAMERACLEARZ);
-                  
- 
+                                const_cast<RwRGBA*>(&backgroundColor),
+                                rwCAMERACLEARIMAGE | rwCAMERACLEARZ);
+
+
                   // Begin camera update
                   //
                   if (RwCameraBeginUpdate(pRwCamera))
@@ -224,8 +226,8 @@ namespace RWS
                      RpWorldRender(m_RpWorld);
 
                      // End camera update
-                     //                                   
-                     RwCameraEndUpdate (pRwCamera);
+                     //
+                     RwCameraEndUpdate(pRwCamera);
                   }
 
                   // Remove Camera from world
@@ -239,7 +241,7 @@ namespace RWS
 
       private:
 
-            RpWorld *m_RpWorld;           /**< Pointer to world, owned by this behavior */
+         RpWorld* m_RpWorld;           /**< Pointer to world, owned by this behavior */
       };
 
       RWS_IMPLEMENT_CLASSID(CEntity);
@@ -251,11 +253,11 @@ namespace RWS
       //
       //
 #undef RWS_REGISTERCLASS
-#define RWS_REGISTERCLASS(className) RWS::CClassFactory::CRegistrar\
-      className##Registrar(#className,\
-      className::MakeNew,\
-      CEntity::GetMaxClassSize(),\
-      className::UseLinearMemory())
+#define RWS_REGISTERCLASS(className) RWS::CClassFactory::CRegistrar \
+   className##Registrar(#className,                                 \
+                        className::MakeNew,                         \
+                        CEntity::GetMaxClassSize(),                 \
+                        className::UseLinearMemory())
 
       RWS_REGISTERCLASS(CEntity);
 
@@ -264,33 +266,30 @@ namespace RWS
       RwUInt32 CEntity::GetMaxClassSize(void)
       {
          RWS_FUNCTION("RWS::Generic::CEntity::MaxClassSize");
-         
+
          // Is CRpWorldEntity the biggest
          //
-         if (  sizeof(CRpWorldEntity) >= sizeof(CRpClumpEntity)
-            && sizeof(CRpClumpEntity) >= sizeof(CRpAtomicEntity))
+         if (sizeof(CRpWorldEntity) >= sizeof(CRpClumpEntity) && sizeof(CRpClumpEntity) >= sizeof(CRpAtomicEntity))
          {
-            RWS_RETURN( sizeof(CRpWorldEntity) );
+            RWS_RETURN(sizeof(CRpWorldEntity));
          }
-         
+
          // Is CRpClumpEntity the biggest
          //
-         if (  sizeof(CRpClumpEntity) >= sizeof(CRpWorldEntity)
-            && sizeof(CRpWorldEntity) >= sizeof(CRpAtomicEntity))
+         if (sizeof(CRpClumpEntity) >= sizeof(CRpWorldEntity) && sizeof(CRpWorldEntity) >= sizeof(CRpAtomicEntity))
          {
-            RWS_RETURN( sizeof(CRpClumpEntity) );
+            RWS_RETURN(sizeof(CRpClumpEntity));
          }
-         
+
          // Is CRpAtomicEntity the biggest
          //
-         if (  sizeof(CRpAtomicEntity) >= sizeof(CRpClumpEntity)
-            && sizeof(CRpClumpEntity) >= sizeof(CRpWorldEntity))
+         if (sizeof(CRpAtomicEntity) >= sizeof(CRpClumpEntity) && sizeof(CRpClumpEntity) >= sizeof(CRpWorldEntity))
          {
-            RWS_RETURN( sizeof(CRpAtomicEntity) );
+            RWS_RETURN(sizeof(CRpAtomicEntity));
          }
-         
+
          RWS_ASSERTFAIL("This should never happen, check the logic of the size tests above.");
-         
+
          RWS_RETURN(0);
       }
 
@@ -317,7 +316,7 @@ namespace RWS
          // Look in the attribute packet, work out whether the first resource
          // is an atomic or a clump and create an appropriate behavior
          //
-         const RWSGUID * pFirstResource = CSystemCommands::FindFirstResource(attr);
+         const RWSGUID* pFirstResource = CSystemCommands::FindFirstResource(attr);
 
          if (pFirstResource)
          {

@@ -60,78 +60,78 @@ namespace RWS
       *
       * \see FPSExampleMonster
       */
-      class FPSMonster : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+      class FPSMonster : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_DECLARE_CLASSID(FPSMonster);
-         
+
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE  (CMD_target,
-            "Target",
-            "The triggername of a FPSPathNode /or a teleport ?",
-            TRANSMIT,
-            CEventHandler*,
-            0)
-            
-            RWS_ATTRIBUTE(CMD_m_turn_factor,
-            "Turn rate",
-            "1 = instant 0 = never.",
-            SLIDER,
-            RwReal,
-            RANGE(0, 0.1, 1))
-            
-            RWS_ATTRIBUTE(CMD_m_fwd_speed,
-            "Forward movement rate",
-            "Forwards velocity 0 stationary 5 fast.",
-            SLIDER,
-            RwReal,
-            RANGE(0, 1, 5))
-            
-            RWS_ATTRIBUTE(CMD_m_close_to_node,
-            "Distance when close to node",
-            "Distance used to determine if a monster has reached a specified path node.",
-            SLIDER,
-            RwReal,
-            RANGE(0, 20, 40))
-            
-            RWS_ATTRIBUTE(CMD_ignorePlayer,
-            "Ignore Player",
-            "If checked the monster will ignore the player.",
-            BOOLEAN,
-            RwUInt32,
-            DEFAULT(0))
-            
-            RWS_END_COMMANDS;
-         
-         
+         RWS_MESSAGE(CMD_target,
+                     "Target",
+                     "The triggername of a FPSPathNode /or a teleport ?",
+                     TRANSMIT,
+                     CEventHandler *,
+                     0)
+
+         RWS_ATTRIBUTE(CMD_m_turn_factor,
+                       "Turn rate",
+                       "1 = instant 0 = never.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 0.1, 1))
+
+         RWS_ATTRIBUTE(CMD_m_fwd_speed,
+                       "Forward movement rate",
+                       "Forwards velocity 0 stationary 5 fast.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 1, 5))
+
+         RWS_ATTRIBUTE(CMD_m_close_to_node,
+                       "Distance when close to node",
+                       "Distance used to determine if a monster has reached a specified path node.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0, 20, 40))
+
+         RWS_ATTRIBUTE(CMD_ignorePlayer,
+                       "Ignore Player",
+                       "If checked the monster will ignore the player.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(0))
+
+         RWS_END_COMMANDS;
+
+
          enum states
          {
             State_Init,
-               State_Moving,
-               State_Delayed,
-               State_Guard,
-               State_Attack 
+            State_Moving,
+            State_Delayed,
+            State_Guard,
+            State_Attack
          };
-         
-         virtual void HandleAttributes(const CAttributePacket& attr);
+
+         virtual void HandleAttributes(const CAttributePacket &attr);
          virtual void HandleEvents(CMsg &pMsg);
-         
-         FPSMonster(const CAttributePacket&);
+
+         FPSMonster(const CAttributePacket &);
          ~FPSMonster(void);
-         
+
       protected:
-         
-         RwUInt32 m_state;                       /**< Current state  */            
-         RwV3d m_dst_vector;                     /**< Target Destination vector */            
+
+         RwUInt32 m_state;                       /**< Current state  */
+         RwV3d m_dst_vector;                     /**< Target Destination vector */
          CEventId m_target;                      /**< The triggername of a pathcorner/or a teleport */
 
          RwBool m_ignorePlayer;                  /**< Indicates if the monster should ignore the player.
          Default is FALSE. */
 
-         static CEventId m_pathcorner;           /**< A FPSPathNode response to m_target event */            
+         static CEventId m_pathcorner;           /**< A FPSPathNode response to m_target event */
          static CEventId Event_INQ_POSITION;     /**< Inquire position of player */
-         static CEventId Event_INQ_RpAtomic;     /**< Inquire RpAtomic of player */            
-         static CEventId m_Msg_Shot;             /**< Event received that tells the monster its been shot */            
+         static CEventId Event_INQ_RpAtomic;     /**< Inquire RpAtomic of player */
+         static CEventId m_Msg_Shot;             /**< Event received that tells the monster its been shot */
          static CEventId m_Msg_MonsterShot;      /**< Event sent that tells others that the monster has been shot */
 
          CAtomicPtr m_pAtomic;                   /**< Clump/Atomic/Frame Extension */
@@ -146,7 +146,7 @@ namespace RWS
          RwReal m_height_on_ground;              /**< height use to distinguish between ground and walls */
          RwReal m_width;                         /**< width of character */
 
-         RwBool TriggerTarget(void);               /* Trigger the target event */            
+         RwBool TriggerTarget(void);               /* Trigger the target event */
          bool Proc_m_pathcorner(CMsg &pMsg);     /* If the response the trigger event is a path corner */
 
          // If the response to the trigger is a teleport
@@ -164,16 +164,16 @@ namespace RWS
          // Static function as used as callback for RenderWare func
          //
          static RpCollisionTriangle *CheckLineOfSightCallBack(
-            RpIntersection * intersection,
-            RpWorldSector * sector,       
-            RpCollisionTriangle * collTriangle,
+            RpIntersection *intersection,
+            RpWorldSector *sector,
+            RpCollisionTriangle *collTriangle,
             RwReal distance,
             void *data);
 
          static RpAtomic *AtomicCollideCallBack(
-            RpIntersection * intersection,
-            RpWorldSector * sector,       
-            RpAtomic * atomic,
+            RpIntersection *intersection,
+            RpWorldSector *sector,
+            RpAtomic *atomic,
             RwReal distance,
             void *data);
 

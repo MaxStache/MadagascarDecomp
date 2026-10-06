@@ -63,7 +63,7 @@ namespace RWS
    {
       namespace Render
       {
-         namespace 
+         namespace
          {
             RwBool gbEnabled = TRUE;  // Enable/Disable Rendering event
 
@@ -75,15 +75,15 @@ namespace RWS
          *
          *  \returns Returns a pointer to the global camera.
          */
-         RwCamera *GetCamera(void) {return g_pCamera;}
+         RwCamera *GetCamera(void) { return g_pCamera; }
 
          /**
          *  Set the pointer to the global camera stored within MainLoop::Render.  
          *
          *  \param pCamera Pointer to a RwCamera object, Sets global camera to pCamera
          */
-         void SetCamera(RwCamera * const pCamera) {g_pCamera = pCamera;}
- 
+         void SetCamera(RwCamera *const pCamera) { g_pCamera = pCamera; }
+
          namespace
          {
             /**
@@ -95,16 +95,16 @@ namespace RWS
             *  \param pStream A pointer to the RenderWare Gfx Stream object.
             */
 #ifdef RWS_DESIGN
-            void EnableDirectorsCamera (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void EnableDirectorsCamera(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::SetEnableDirectorsCamera");
-      
+
                DebugSwitches::SetSwitch(DebugSwitches::m_enable_DirectorsCamera, true);
                SendMsg(iMsg_SetEnableDirectorsCamera);
-      
+
                RWS_RETURNVOID();
             }
-#endif   
+#endif
             /**
             *
             *  Disable the directors camera.
@@ -114,13 +114,13 @@ namespace RWS
             *  \param pStream A pointer to the RenderWare Gfx Stream object.
             */
 #ifdef RWS_DESIGN
-            void DisableDirectorsCamera (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void DisableDirectorsCamera(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::DisableDirectorsCamera");
-      
+
                DebugSwitches::SetSwitch(DebugSwitches::m_enable_DirectorsCamera, false);
                SendMsg(iMsg_SetDisableDirectorsCamera);
-      
+
                RWS_RETURNVOID();
             }
 #endif
@@ -134,26 +134,28 @@ namespace RWS
             *  \param pStream A pointer to the RenderWare Gfx Stream object.
             */
 #ifdef RWS_DESIGN
-            void SetDirectorsCameraMatrix (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void SetDirectorsCameraMatrix(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::SetDirectorsCameraMatrix");
-      
-               typedef struct taggfCameraMsg {
+
+               typedef struct taggfCameraMsg
+               {
                   RwMatrix m; /**< Transformation Matrix - Camera Position/Orientation */
                   RwReal fov; /**< Field of view - radians */
                } gfCameraMsg, *pgfCameraMsg;
-      
+
                RWS_ASSERT(MainLoop::Render::GetCamera(), "NewCameraMatrix MainLoop::Render::GetCamera()==0."
-                     " Either no cameras in scene or not yet created.");
-      
-               RwChar *buffer = static_cast<char*>(::RWS_OP_NEW(rChunkHeader.length) );
-      
+                                                         " Either no cameras in scene or not yet created.");
+
+               RwChar *buffer = static_cast<char *>(::RWS_OP_NEW(rChunkHeader.length));
+
                RwStreamRead(pStream, buffer, rChunkHeader.length);
-      
-               pgfCameraMsg pCmsg = reinterpret_cast<pgfCameraMsg>(buffer);;
-      
-               RwFrame *cameraFrame = RwCameraGetFrame (MainLoop::Render::GetCamera());
-      
+
+               pgfCameraMsg pCmsg = reinterpret_cast<pgfCameraMsg>(buffer);
+               ;
+
+               RwFrame *cameraFrame = RwCameraGetFrame(MainLoop::Render::GetCamera());
+
                // Set transformation matrix
                //
                RwMatrix *nmatrix = RwMatrixCreate();
@@ -163,25 +165,25 @@ namespace RWS
 #else
                memcpy(nmatrix, &pCmsg->m, sizeof(RwMatrix));
 #endif
-      
+
                nmatrix->flags = 0;
 
-               RwMatrixOrthoNormalize (nmatrix, nmatrix);
+               RwMatrixOrthoNormalize(nmatrix, nmatrix);
 
                RwFrameTransform(cameraFrame, nmatrix, rwCOMBINEREPLACE);
 
                RwFrameUpdateObjects(cameraFrame);
-      
+
                RwMatrixDestroy(nmatrix);
-      
+
                // Setup aspect ratio
                //
                RwReal ViewWindow = (RwReal)RwTan(pCmsg->fov * 0.5f);
 
                CameraHelper::SetFieldOfView(ViewWindow, MainLoop::Render::GetCamera());
-      
-               operator delete (buffer);
-      
+
+               operator delete(buffer);
+
                RWS_RETURNVOID();
             }
 #endif
@@ -194,27 +196,27 @@ namespace RWS
             *  \param pStream A pointer to the RenderWare Gfx Stream object.
             */
 #ifdef RWS_DESIGN
-            void GetCameraMatrix (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream) 
+            void GetCameraMatrix(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::GetCameraMatrix");
 
                RwFrame *frame;
-      
-               CMsg msg (iMsgRequestCurrentCameraMatrix, reinterpret_cast<void*> (0) );
-      
+
+               CMsg msg(iMsgRequestCurrentCameraMatrix, reinterpret_cast<void *>(0));
+
                if (SendMsg(msg))
                {
-                  // Event handlers that respond to iMsgRequestCurrentCameraMatrix call 
+                  // Event handlers that respond to iMsgRequestCurrentCameraMatrix call
                   // SendTransformToWorkspace with the frame of the camera.
                   //
                }
                else
                {
-                  frame = RwCameraGetFrame (MainLoop::Render::GetCamera());
-         
+                  frame = RwCameraGetFrame(MainLoop::Render::GetCamera());
+
                   NetTools::SendTransform(frame);
                }
-      
+
                RWS_RETURNVOID();
             }
 #endif
@@ -232,19 +234,23 @@ namespace RWS
          void RegisterStreamChunkHandlers(void)
          {
             RWS_FUNCTION("RWS::MainLoop::Render::RegisterStreamChunkHandlers");
-         
+
 #ifdef RWS_DESIGN
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_SetDirectorsCameraMatrix), SetDirectorsCameraMatrix);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_SetDirectorsCameraMatrix),
+                                                 SetDirectorsCameraMatrix);
 
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_EnableDirectorsCamera), EnableDirectorsCamera);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_EnableDirectorsCamera),
+                                                 EnableDirectorsCamera);
 
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_DisableDirectorsCamera), DisableDirectorsCamera);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_DisableDirectorsCamera),
+                                                 DisableDirectorsCamera);
 
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_GetEntityMatrix), GetCameraMatrix);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_GetEntityMatrix),
+                                                 GetCameraMatrix);
 #endif
             RWS_RETURNVOID();
          }
@@ -257,19 +263,19 @@ namespace RWS
          void UnRegisterStreamChunkHandlers(void)
          {
             RWS_FUNCTION("RWS::MainLoop::Render::UnRegisterStreamChunkHandlers");
-            
+
 #ifdef RWS_DESIGN
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_SetDirectorsCameraMatrix));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                               strfunc_SetDirectorsCameraMatrix));
 
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_EnableDirectorsCamera));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                               strfunc_EnableDirectorsCamera));
 
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_DisableDirectorsCamera));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                               strfunc_DisableDirectorsCamera));
 
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_GetEntityMatrix));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                               strfunc_GetEntityMatrix));
 #endif
             RWS_RETURNVOID();
          }
@@ -294,13 +300,13 @@ namespace RWS
 
 #ifdef RWS_DESIGN
             CEventHandler::RegisterMsg(iMsg_SetEnableDirectorsCamera,
-               iMsg_SetEnableDirectorsCameraStr, 0);
+                                       iMsg_SetEnableDirectorsCameraStr, 0);
 
             CEventHandler::RegisterMsg(iMsg_SetDisableDirectorsCamera,
-               iMsg_SetDisableDirectorsCameraStr, 0);
+                                       iMsg_SetDisableDirectorsCameraStr, 0);
 
             CEventHandler::RegisterMsg(iMsgRequestCurrentCameraMatrix,
-               iMsgRequestCurrentCameraMatrixStr, "RwUInt32 InstanceID");
+                                       iMsgRequestCurrentCameraMatrixStr, "RwUInt32 InstanceID");
 
             ::RWS_NEW ConnectionScreen::CRenderConnectionScreen;
 #endif
@@ -329,7 +335,7 @@ namespace RWS
 #endif
             RWS_RETURNVOID();
          }
-         
+
          /**
          *  \ingroup Render
          *
@@ -348,7 +354,7 @@ namespace RWS
             RWS_RETURNVOID();
          }
 
-         namespace 
+         namespace
          {
             RwUInt32 sm_frame_count = 0;
          }
@@ -360,7 +366,7 @@ namespace RWS
          *  \return Returns the number of frames that have been displayed.
          *
          */
-         RwUInt32 GetFrameCount(void) 
+         RwUInt32 GetFrameCount(void)
          {
             RWS_FUNCTION("RWS::MainLoop::Render::GetFrameCount");
 
@@ -388,18 +394,18 @@ namespace RWS
 #endif
 
 #if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
-            if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_DirectorsCamera) == true) 
+            if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_DirectorsCamera) == true)
             {
                // Directors camera enabled
                //
-               CMsg Msg (iMsgDoRenderDirectorsCamera, MainLoop::Render::GetCamera());
-               
+               CMsg Msg(iMsgDoRenderDirectorsCamera, MainLoop::Render::GetCamera());
+
                if (!SendMsg(Msg))
                {
                   // If nothings listening to iMsgDoRenderDirectorsCamera send
                   // iMsgDoRender anyway.
                   //
-                  CMsg Msg (iMsgDoRender, MainLoop::Render::GetCamera());
+                  CMsg Msg(iMsgDoRender, MainLoop::Render::GetCamera());
                   SendMsg(Msg);
                }
             }
@@ -407,7 +413,7 @@ namespace RWS
             {
                // Directors camera disabled
                //
-               CMsg Msg (iMsgDoRender, MainLoop::Render::GetCamera());
+               CMsg Msg(iMsgDoRender, MainLoop::Render::GetCamera());
                SendMsg(Msg);
             }
 #else
@@ -444,8 +450,8 @@ namespace RWS
 #elif defined(DOLPHIN)
                RwCameraShowRaster(MainLoop::Render::GetCamera(), 0, rwRASTERFLIPWAITVSYNC);
 #elif
-#error         Your platform RwCameraShowRaster goes here...
-#endif            
+#error Your platform RwCameraShowRaster goes here...
+#endif
             }
 
             RWS_RETURNVOID();
@@ -455,4 +461,4 @@ namespace RWS
 
    } // namespace MainLoop
 
-} // namespace RWS 
+} // namespace RWS

@@ -48,7 +48,7 @@ namespace RWS
       *  This class implements a generic camera that follows a spline.
       *
       */
-      class CCameraSpline: public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class CCameraSpline : public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CCameraSpline);
@@ -57,92 +57,92 @@ namespace RWS
          RWS_DESCRIPTION("Camera Spline", "Example of a camera that follows a spline");
 
          virtual void HandleEvents(CMsg &pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr);
+         virtual void HandleAttributes(const CAttributePacket &attr);
 
          RWS_BEGIN_COMMANDS
-            RWS_SEPARATOR("Messages", 1)
+         RWS_SEPARATOR("Messages", 1)
 
-               RWS_MESSAGE(CMD_Set_m_RxEnableCameraEvent,
-                           "Enable camera",
-                           "Enables this camera",
-                           RECEIVE,
-                           0,
-                           0)
+         RWS_MESSAGE(CMD_Set_m_RxEnableCameraEvent,
+                     "Enable camera",
+                     "Enables this camera",
+                     RECEIVE,
+                     0,
+                     0)
 
-               RWS_MESSAGE( CMD_Set_m_TxEnableCameraEvent,
-                           "Camera active",
-                           "Send this event when camera becomes active",
-                           TRANSMIT,
-                           0,
-                           0)
+         RWS_MESSAGE(CMD_Set_m_TxEnableCameraEvent,
+                     "Camera active",
+                     "Send this event when camera becomes active",
+                     TRANSMIT,
+                     0,
+                     0)
 
-               RWS_MESSAGE( CMD_Set_m_RxDisableCameraEvent,
-                           "Disable camera",
-                           "Disable this camera",
-                           RECEIVE,
-                           0,
-                           0)
+         RWS_MESSAGE(CMD_Set_m_RxDisableCameraEvent,
+                     "Disable camera",
+                     "Disable this camera",
+                     RECEIVE,
+                     0,
+                     0)
 
-               RWS_MESSAGE(CMD_Set_m_InRender,
-                           "Render msg (input)",
-                           "Incoming rendering message, notes camera settings in data",
-                           RECEIVE,
-                           RwCamera*,
-                           0)
-      
-               RWS_ATTRIBUTE(CMD_priority, "Render Priority", "Specify the render priority",
-                             SLIDER,
-                             RwUInt32,
-                             RANGE(0, 65535, 65535))
+         RWS_MESSAGE(CMD_Set_m_InRender,
+                     "Render msg (input)",
+                     "Incoming rendering message, notes camera settings in data",
+                     RECEIVE,
+                     RwCamera *,
+                     0)
 
-               RWS_MESSAGE(CMD_Set_m_OutRender,
-                           "Render msg (output)",
-                           "Outgoing rendering message, same as world / incoming, but with updated position and view",
-                           TRANSMIT,
-                           RwCamera*,
-                           0)
+         RWS_ATTRIBUTE(CMD_priority, "Render Priority", "Specify the render priority",
+                       SLIDER,
+                       RwUInt32,
+                       RANGE(0, 65535, 65535))
 
-               RWS_ATTRIBUTE(CMD_Speed,
-                             "Speed",
-                             "Speed which the camera moves down the spline.",
-                             SLIDER,
-                             RwReal,
-                             RANGE(0.0, 0.5, 10.0))
+         RWS_MESSAGE(CMD_Set_m_OutRender,
+                     "Render msg (output)",
+                     "Outgoing rendering message, same as world / incoming, but with updated position and view",
+                     TRANSMIT,
+                     RwCamera *,
+                     0)
 
-               RWS_ATTRIBUTE(CMD_Move_Camera,
-                             "Move Camera",
-                             "If checked the camera will move along the spline, if unchecked the movement will be paused.",
-                             BOOLEAN,
-                             RwUInt32,
-                             DEFAULT(1))
+         RWS_ATTRIBUTE(CMD_Speed,
+                       "Speed",
+                       "Speed which the camera moves down the spline.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 0.5, 10.0))
 
-               RWS_ATTRIBUTE(CMD_Loop,
-                             "Loop Camera Movement",
-                             "If checked the camera movement will loop once the end of the spline is reached.",
-                             BOOLEAN,
-                             RwUInt32,
-                             DEFAULT(1))
+         RWS_ATTRIBUTE(CMD_Move_Camera,
+                       "Move Camera",
+                       "If checked the camera will move along the spline, if unchecked the movement will be paused.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(1))
 
-               RWS_MESSAGE(CMD_Set_Next_Control_Point,
-                           "Next Control Point",
-                           "When this message is received, we move to the next control point on the spline.",
-                           RECEIVE,
-                           0,
-                           0)
+         RWS_ATTRIBUTE(CMD_Loop,
+                       "Loop Camera Movement",
+                       "If checked the camera movement will loop once the end of the spline is reached.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(1))
 
-               RWS_SEPARATOR("Workspace Sync Camera Request", 1)
+         RWS_MESSAGE(CMD_Set_Next_Control_Point,
+                     "Next Control Point",
+                     "When this message is received, we move to the next control point on the spline.",
+                     RECEIVE,
+                     0,
+                     0)
 
-               RWS_ATTRIBUTE(CMD_Set_m_respondtocamerarequest, 
-                           "Enable Respond to Workspace Sync Camera Request",
-                           "Enable this camera responding to the workspace sync camera request.",
-                           BOOLEAN,
-                           RwUInt32,
-                           DEFAULT(1))
+         RWS_SEPARATOR("Workspace Sync Camera Request", 1)
+
+         RWS_ATTRIBUTE(CMD_Set_m_respondtocamerarequest,
+                       "Enable Respond to Workspace Sync Camera Request",
+                       "Enable this camera responding to the workspace sync camera request.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(1))
 
 
          RWS_END_COMMANDS;
 
-         CCameraSpline(const CAttributePacket& attr);
+         CCameraSpline(const CAttributePacket &attr);
          ~CCameraSpline(void);
 
          void AddResource(const RWSGUID *pResourceID);
@@ -193,7 +193,7 @@ namespace RWS
                                                This is an expensive operation and so should not be
                                                called every frame. */
 
-         CEventId m_RxEnableCameraEvent;  /**< Event received to enable this camera */ 
+         CEventId m_RxEnableCameraEvent;  /**< Event received to enable this camera */
          CEventId m_TxEnableCameraEvent;  /**< Event sent when this camera is enabled */
          CEventId m_RxDisableCameraEvent; /**< Event received to disable this camera */
          CEventId m_RenderInMsg;          /**< Event for incoming render message. */

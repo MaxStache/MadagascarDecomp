@@ -47,31 +47,31 @@ namespace RWS
 {
    namespace Audio
    {
-      CEventId        iMsgAudioGroupFadeDownGroup;    /**< Fade down event.*/ 
-      CEventId        iMsgAudioGroupFadeUpGroup;      /**< Fade up event.*/ 
-      CEventId        iMsgAudioGroupDisableGroup;     /**< Disable group event.*/ 
-      CEventId        iMsgAudioGroupEnableGroup;      /**< Enable group event.*/ 
+      CEventId iMsgAudioGroupFadeDownGroup;    /**< Fade down event.*/
+      CEventId iMsgAudioGroupFadeUpGroup;      /**< Fade up event.*/
+      CEventId iMsgAudioGroupDisableGroup;     /**< Disable group event.*/
+      CEventId iMsgAudioGroupEnableGroup;      /**< Enable group event.*/
 
       RWS_IMPLEMENT_CLASSID(AudioGroup);
       RWS_REGISTERCLASS(AudioGroup);
-        
+
       /**
       *
       * Constructor for AudioGroup
       *
       * \see ~AudioGroup()
       */
-      AudioGroup::AudioGroup(const CAttributePacket& attr):
+      AudioGroup::AudioGroup(const CAttributePacket &attr) :
          InitCEventHandler(0),
          m_DictionaryId(0)
       {
          RWS_FUNCTION("RWS::Audio::AudioGroup::AudioGroup");
-         
-         RegisterMsg (iMsgAudioGroupFadeDownGroup, "iMsgAudioGroupFadeDownGroup", "RwUInt32");
-         RegisterMsg (iMsgAudioGroupFadeUpGroup, "iMsgAudioGroupFadeUpGroup", "RwUInt32");
-         RegisterMsg (iMsgAudioGroupEnableGroup, "iMsgAudioGroupEnableGroup", "RwUInt32");
-         RegisterMsg (iMsgAudioGroupDisableGroup, "iMsgAudioGroupDisableGroup", "RwUInt32");
-         
+
+         RegisterMsg(iMsgAudioGroupFadeDownGroup, "iMsgAudioGroupFadeDownGroup", "RwUInt32");
+         RegisterMsg(iMsgAudioGroupFadeUpGroup, "iMsgAudioGroupFadeUpGroup", "RwUInt32");
+         RegisterMsg(iMsgAudioGroupEnableGroup, "iMsgAudioGroupEnableGroup", "RwUInt32");
+         RegisterMsg(iMsgAudioGroupDisableGroup, "iMsgAudioGroupDisableGroup", "RwUInt32");
+
          RWS_RETURNVOID();
       }
 
@@ -84,24 +84,24 @@ namespace RWS
       AudioGroup::~AudioGroup(void)
       {
          RWS_FUNCTION("RWS::Audio::AudioGroup::~AudioGroup");
-            
+
          UnRegisterMsg(iMsgAudioGroupFadeDownGroup);
          UnRegisterMsg(iMsgAudioGroupFadeUpGroup);
          UnRegisterMsg(iMsgAudioGroupDisableGroup);
          UnRegisterMsg(iMsgAudioGroupEnableGroup);
-            
+
          UnLinkMsg(m_FadeDown);
          UnRegisterMsg(m_FadeDown);
-            
+
          UnLinkMsg(m_FadeUp);
          UnRegisterMsg(m_FadeUp);
-            
+
          UnLinkMsg(m_Disable);
          UnRegisterMsg(m_Disable);
-            
+
          UnLinkMsg(m_Enable);
          UnRegisterMsg(m_Enable);
-            
+
          RWS_RETURNVOID();
       }
 
@@ -115,31 +115,31 @@ namespace RWS
       void AudioGroup::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Audio::AudioGroup::HandleEvents");
-         
+
          if (pMsg.Id == m_FadeDown)
          {
-            CMsg message(iMsgAudioGroupFadeDownGroup, static_cast<void*>(&m_DictionaryId));
-            SendMsg(message);               
+            CMsg message(iMsgAudioGroupFadeDownGroup, static_cast<void *>(&m_DictionaryId));
+            SendMsg(message);
          }
          else if (pMsg.Id == m_FadeUp)
          {
-            CMsg message(iMsgAudioGroupFadeUpGroup, static_cast<void*>(&m_DictionaryId));
-            SendMsg(message);               
+            CMsg message(iMsgAudioGroupFadeUpGroup, static_cast<void *>(&m_DictionaryId));
+            SendMsg(message);
          }
          else if (pMsg.Id == m_Enable)
          {
-            CMsg message(iMsgAudioGroupEnableGroup, static_cast<void*>(&m_DictionaryId));
-            SendMsg(message);               
+            CMsg message(iMsgAudioGroupEnableGroup, static_cast<void *>(&m_DictionaryId));
+            SendMsg(message);
          }
          else if (pMsg.Id == m_Disable)
          {
-            CMsg message(iMsgAudioGroupDisableGroup, static_cast<void*>(&m_DictionaryId));
-            SendMsg(message);               
+            CMsg message(iMsgAudioGroupDisableGroup, static_cast<void *>(&m_DictionaryId));
+            SendMsg(message);
          }
-         
+
          RWS_RETURNVOID();
-      }        
-        
+      }
+
       /**
       *
       * Handle attribute updates.
@@ -147,36 +147,36 @@ namespace RWS
       * \param attr The standard attribute packets.
       *  
       */
-      void AudioGroup::HandleAttributes(const CAttributePacket& attr)
+      void AudioGroup::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::Audio::AudioGroup::HandleAttributes");
-            
+
          CAttributeHandler::HandleAttributes(attr);
-            
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(AudioGroup));
 
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
-               case CMD_FadeDown:   
-                  ReplaceLinkedMsg(m_FadeDown, attrIt->GetAs_RwChar_ptr(),0);
-                  break; 
+            case CMD_FadeDown:
+               ReplaceLinkedMsg(m_FadeDown, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
-               case CMD_FadeUp:
-                  ReplaceLinkedMsg(m_FadeUp, attrIt->GetAs_RwChar_ptr(),0); 
-                  break;
+            case CMD_FadeUp:
+               ReplaceLinkedMsg(m_FadeUp, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
-               case CMD_Enable:
-                  ReplaceLinkedMsg(m_Enable, attrIt->GetAs_RwChar_ptr(),0);
-                  break;
+            case CMD_Enable:
+               ReplaceLinkedMsg(m_Enable, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
-               case CMD_Disable:
-                  ReplaceLinkedMsg(m_Disable, attrIt->GetAs_RwChar_ptr(),0);
-                  break;
+            case CMD_Disable:
+               ReplaceLinkedMsg(m_Disable, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
-               default:
-                  break;
+            default:
+               break;
             }
 
             ++attrIt;
@@ -188,7 +188,7 @@ namespace RWS
          {
             switch (sysattrIt->GetCommandId())
             {
-               case CSystemCommands::CMD_AttachResource:
+            case CSystemCommands::CMD_AttachResource:
                {
                   const RWS::RWSGUID *pResourceID = 0;
                   sysattrIt->GetCommandData(&pResourceID);
@@ -201,8 +201,8 @@ namespace RWS
                      if (!rwstrcmp("rwaID_WAVEDICT", pResourceType))
                      {
                         m_DictionaryId = RwsAudio::FindDictionaryId(
-                                                  static_cast<RwaWaveDict *>(const_cast<void*>(pObject)));
-                     }                           
+                           static_cast<RwaWaveDict *>(const_cast<void *>(pObject)));
+                     }
                   }
                }
                break;
@@ -210,7 +210,7 @@ namespace RWS
 
             ++sysattrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    }

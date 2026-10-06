@@ -41,7 +41,7 @@ namespace RWS
    {
       strfunc_VersionNumber = -1,            /**<  Used to identify the version number
                                                    of this interface DWORD 0x0100 Revision 1.00 */
-      
+
       strfunc_Reset = 0,                     /**<  Reset, sent at start of stream, used to purge system
                                                    during a connect.*/
 
@@ -57,15 +57,15 @@ namespace RWS
 
       strfunc_SetFrozenMode = 6,             /**<  Pause Game */
       strfunc_SetRunningMode = 7,            /**<  Unpause Game */
-      
+
       strfunc_EnableDirectorsCamera = 8,     /**<  Enable the Directors Camera */
       strfunc_DisableDirectorsCamera = 9,    /**<  Disble the Directors Camera */
-      
+
       strfunc_TextComment = 10,              /**<  Send a text message - useful for debugging streams */
-      
+
       strfunc_StartSystem = 11,              /**<  Start system, during loading system is halted */
       strfunc_StopSystem = 12,               /**<  Stop system */
-      
+
       strfunc_DeleteEntity = 13,             /**<  Delete one entity */
       strfunc_DeleteAllEntities = 14,        /**<  Delete all entities, sent prior to resending
                                                    the entities to reset the scene */
@@ -94,8 +94,8 @@ namespace RWS
                                                    where the Id is 0 meaning the current camera. */
 
       strfunc_CustomData = 25,               /**<  A chunk containing custom data. */
-                                                   
-      strfunc_FunctionProfiler   = 26,       /**<  Used by the function profiler for sending commands to 
+
+      strfunc_FunctionProfiler = 26,       /**<  Used by the function profiler for sending commands to 
                                                    the console.*/
 
       strfunc_ResetEntity = 27,              /**<  Reset an entity. The chunk data consists of the full
@@ -104,7 +104,7 @@ namespace RWS
 
       strFunc_PlacementNew = 28,             /**<  A chunk containing data refering to placement new
                                                    information */
-      
+
       strfunc_Initialize = 29,               /**<  Initialise the framework for the start of a game. */
 
       strfunc_UpdateAsset = 30,              /**<  Update resource, typically calls
@@ -113,14 +113,14 @@ namespace RWS
       strfunc_DynamicSequence = 31           /**<  Sequence data provide from the workspace, contains
                                                    a sequence control data block for 'live update' of
                                                    entities on the console. */
-   } ;
+   };
 
    const RwUInt32 ChunkHeaderSize = 12;
    enum strfuncsend_func // Outgoing commands
    {
       strfuncsend_NamedData = 0              /**<  A command to send arbitrary data to workspace,
                                                    along with a string identifying the data type. */
-   } ;
+   };
 }//namespace RWS
 
 #endif /*__strfunc_func_H__*/

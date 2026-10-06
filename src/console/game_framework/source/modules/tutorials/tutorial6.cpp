@@ -56,8 +56,8 @@ namespace RWS
       *  \param attr the standard attribute packets used to initialize.
       *
       */
-      CTutorial6::CTutorial6(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic)
+      CTutorial6::CTutorial6(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial6::CTutorial6");
 
@@ -71,7 +71,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Destroy CTutorial6 object. Unlink and unregister messages named and the running tick (system) messages.
@@ -95,7 +95,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-  
+
       /**
       *
       *  Handle events.  When the 'incoming' message is received, the data is checked to find the status of the 
@@ -105,7 +105,7 @@ namespace RWS
       *  \param pMsg the standard message packet which may contain either a running tick or 'incoming' message.
       *
       */
-      void CTutorial6::HandleEvents(CMsg &pMsg)
+      void CTutorial6::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial6::HandleEvents");
 
@@ -123,7 +123,7 @@ namespace RWS
             // depending on the state of the incoming data. If there is no data then state is toggled. The
             // toggle is needed as when a message is 'test fired' the data parameter will be zero (NULL).
             RwUInt32 var;
-            
+
             if (pMsg.pData)
             {
                var = *static_cast<RwUInt32*>(pMsg.pData);
@@ -152,7 +152,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-  
+
       /**
       *
       * Handle attributes.  This function retrieves the state of the

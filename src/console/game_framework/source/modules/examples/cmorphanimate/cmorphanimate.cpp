@@ -36,7 +36,7 @@
 #include <rpmorph.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rpmorph.lib")
+#pragma comment(lib, "rpmorph.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -55,8 +55,8 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CMorphAnimate);
       RWS_REGISTERCLASS(CMorphAnimate);
-      
-      namespace 
+
+      namespace
       {
          /*
          *  Initialize each interpolator callback
@@ -65,65 +65,65 @@ namespace RWS
          {
             RwInt32 curIpIndex, newIpIndex, NumInterpolators;
             RwReal newPosition, scale;
-            
+
             scale = RpInterpolatorGetScale(RpAtomicGetInterpolator(atomic));
             newPosition = position - scale;
-            
-            RpGeometry* pGeometry = RpAtomicGetGeometry (atomic);
-            NumInterpolators = (RpGeometryGetNumMorphTargets (pGeometry) - 1) * 2;
-            
+
+            RpGeometry *pGeometry = RpAtomicGetGeometry(atomic);
+            NumInterpolators = (RpGeometryGetNumMorphTargets(pGeometry) - 1) * 2;
+
             curIpIndex = RpMorphAtomicGetCurrentInterpolator(atomic);
-            
+
             newIpIndex = (curIpIndex + 1) % NumInterpolators;
-            
+
             RpMorphAtomicSetCurrentInterpolator(atomic, newIpIndex);
-            
+
             return newPosition;
          }
-         
+
          /*
          *  Initialize the interpolators for each atomic
          */
-         RpAtomic * AtomicInitializeInterpolators(RpAtomic *atomic, void* unused)
+         RpAtomic *AtomicInitializeInterpolators(RpAtomic *atomic, void *unused)
          {
             RpGeometry *geometry;
-            
+
             geometry = RpAtomicGetGeometry(atomic);
-            
-            if ( geometry )
+
+            if (geometry)
             {
                RwInt32 NumMorphTargets = RpGeometryGetNumMorphTargets(geometry);
-               
-               if ( NumMorphTargets > 1 )
+
+               if (NumMorphTargets > 1)
                {
                   RwInt32 i;
-                  
+
                   /*
                   * Create interpolators...
                   */
-                  RpMorphGeometryCreateInterpolators(geometry, (NumMorphTargets * 2)-1);
-                  
+                  RpMorphGeometryCreateInterpolators(geometry, (NumMorphTargets * 2) - 1);
+
                   /*
                   * Link all morph targets...
                   */
-                  for ( i = 0; i < (NumMorphTargets - 1); i++ )
+                  for (i = 0; i < (NumMorphTargets - 1); i++)
                   {
                      RpMorphGeometrySetInterpolator(geometry, i, i, i + 1, 1.0f);
                   }
                   /*
                   * Link final morph target to fisrt creating continuos loop...
                   */
-                  RpMorphGeometrySetInterpolator(geometry, i, i, 0, 1.0f);            
-                  
+                  RpMorphGeometrySetInterpolator(geometry, i, i, 0, 1.0f);
+
                   RpMorphAtomicSetCurrentInterpolator(atomic, 0);
-                  
+
                   RpMorphGeometrySetCallBack(geometry, InterpolatorCallback);
                }
             }
-            
+
             return atomic;
          }
-         
+
          /*
          *  Initialize interpolators
          */
@@ -131,20 +131,20 @@ namespace RWS
          {
             RpClumpForAllAtomics(clump, AtomicInitializeInterpolators, 0);
          }
-         
+
          /*
          *  Callback used to update the morph time of each atomic.
          */
-         RpAtomic * AtomicMorphAddTime (RpAtomic * atomic, void *data)
+         RpAtomic *AtomicMorphAddTime(RpAtomic *atomic, void *data)
          {
-            RwReal *rDelta = static_cast<RwReal*>(data);
-            
+            RwReal *rDelta = static_cast<RwReal *>(data);
+
             RpMorphAtomicAddTime(atomic, *rDelta);
-            
+
             return atomic;
          }
       }
-      
+
       /**
       *
       *  Construct CMorphAnimate object. Links to messages and setups atomic.
@@ -152,21 +152,21 @@ namespace RWS
       *  \attr standard attribute data.
       *
       */
-      CMorphAnimate::CMorphAnimate(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pClump),
+      CMorphAnimate::CMorphAnimate(const CAttributePacket &attr) :
+         InitCEventHandler(&m_pClump),
          m_rDelta(0.1f)
       {
          RWS_FUNCTION("RWS::Examples::CMorphAnimate::CMorphAnimate");
-         
+
          m_pClump = CreateClumpInWorldFromResource(attr, this);
-         
+
          ClumpInitializeInterpolators(m_pClump);
-         
+
          LinkMsg(iMsgRunningTick);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Destroy CMorphAnimate object. Unlinks from messages and cleans up atomic (via smart pointer's destructor).
@@ -175,12 +175,12 @@ namespace RWS
       CMorphAnimate::~CMorphAnimate(void)
       {
          RWS_FUNCTION("RWS::Examples::CMorphAnimate::~CMorphAnimate");
-         
+
          UnLinkMsg(iMsgRunningTick);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Handle events, updates the morph as the control message is received.
@@ -191,16 +191,16 @@ namespace RWS
       void CMorphAnimate::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Examples::CMorphAnimate::HandleEvents");
-         
+
          if (pMsg.Id == iMsgRunningTick)
          {
             RpClumpForAllAtomics(m_pClump, AtomicMorphAddTime, &m_rDelta);
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Handle attributes, updates the delta value.
@@ -208,23 +208,23 @@ namespace RWS
       *  \param rAttr standard attribute data packet.
       *  
       */
-      void CMorphAnimate::HandleAttributes(const CAttributePacket& rAttr)
+      void CMorphAnimate::HandleAttributes(const CAttributePacket &rAttr)
       {
          RWS_FUNCTION("RWS::Examples::CMorphAnimate::HandleAttributes");
-         
+
          m_pClump.HandleSystemCommands(rAttr);
-         
+
          CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(CMorphAnimate));
-         
+
          while (!attrIt.IsFinished())
          {
             if (attrIt->GetCommandId() == CMD_rDelta)
             {
-               attrIt->GetCommandData( m_rDelta);
+               attrIt->GetCommandData(m_rDelta);
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    }//namespace Examples

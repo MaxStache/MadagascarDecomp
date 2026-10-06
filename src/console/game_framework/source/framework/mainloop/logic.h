@@ -61,7 +61,7 @@ namespace RWS
    *  \li iMsgSetFrozenMode
    *  Sent when gameloop is set into frozen mode, game logic is frozen.
    */
-   RWS_DEFINE_EVENT(iMsgSetFrozenMode, 0, "Sent when logic sub-system is set into frozen mode."); 
+   RWS_DEFINE_EVENT(iMsgSetFrozenMode, 0, "Sent when logic sub-system is set into frozen mode.");
    /**
    *  \ingroup SystemEvents
    *  \page LogicEvents
@@ -76,7 +76,7 @@ namespace RWS
    *  Sent each logic loop while the game is unpaused, sends current frame number as parameter.
    */
    RWS_DEFINE_EVENT(iMsgRunningTick, "RwUInt32", "Sent each logic loop while the game is unpaused,"
-      " sends current frame number as parameter.");
+                                                 " sends current frame number as parameter.");
    /**
    *  \ingroup SystemEvents
    *  \page LogicEvents
@@ -98,7 +98,7 @@ namespace RWS
    *  Sent each logic loop while the game is paused, sends current frame number as parameter.
    */
    RWS_DEFINE_EVENT(iMsgPausedTick, "RwUInt32", "Sent each logic loop while the game"
-      " is paused, sends current frame number as parameter.");
+                                                " is paused, sends current frame number as parameter.");
    /**
    *  \ingroup SystemEvents
    *  \page LogicEvents
@@ -129,12 +129,12 @@ namespace RWS
           *  Usage RWS::MainLoop::Logic::Rate
           *
           */
-#if defined (VIDEO_MODE_PAL)
-         const RwUInt32 Rate = 50; 
-#elif defined (VIDEO_MODE_NTSC)
-         const RwUInt32 Rate = 60; 
+#if defined(VIDEO_MODE_PAL)
+         const RwUInt32 Rate = 50;
+#elif defined(VIDEO_MODE_NTSC)
+         const RwUInt32 Rate = 60;
 #else
-         const RwUInt32 Rate = 60; 
+         const RwUInt32 Rate = 60;
 #endif
          void Running(void); // Set Logic sub-system into Running mode.
 
@@ -147,8 +147,8 @@ namespace RWS
          void Open(void);    // Open Logic sub-system.
 
          void Close(void);   // Close Logic sub-system.
-         
-         void SetEnabled(RwBool benabled); // Enable/Disable rendering event 
+
+         void SetEnabled(RwBool benabled); // Enable/Disable rendering event
 
          void RegisterStreamChunkHandlers(void);
 

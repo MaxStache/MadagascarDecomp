@@ -55,46 +55,50 @@
 #ifdef NDEBUG
    // All NOP in release...
    //
-   #define RWS_DEBUGSTREAM(a)
-   #define RWS_DEBUGSTREAM_WARN(a)
-   #define RWS_DEBUGSTREAM_ERR(a)
-   #define RWS_ASSERTFAIL(a)
-   #define RWS_ASSERT(a, b)
-   #define RWS_ASSERTE(a)
-   #define RWS_PRE(a)
-   #define RWS_POST(a)
-   #define RWS_TRACE(a)
-   #define RWS_WARNING(condition, msg)
-   #define RWS_TRACE_NO_FUNC(a)
-   #define RWS_TRACEIF(a, b)
+#define RWS_DEBUGSTREAM(a)
+#define RWS_DEBUGSTREAM_WARN(a)
+#define RWS_DEBUGSTREAM_ERR(a)
+#define RWS_ASSERTFAIL(a)
+#define RWS_ASSERT(a, b)
+#define RWS_ASSERTE(a)
+#define RWS_PRE(a)
+#define RWS_POST(a)
+#define RWS_TRACE(a)
+#define RWS_WARNING(condition, msg)
+#define RWS_TRACE_NO_FUNC(a)
+#define RWS_TRACEIF(a, b)
 
 #ifdef RWS_FUNCTIONPROFILE
-   #define RWS_FUNCTION(a) \
-      RWS::FunctionProfile::CProfileManager::StartProfile( a, __FILE__, __LINE__ ); 
+#define RWS_FUNCTION(a) \
+   RWS::FunctionProfile::CProfileManager::StartProfile(a, __FILE__, __LINE__);
 
-   #define RWS_RETURN(_rwsreturnval) \
-   { \
+#define RWS_RETURN(_rwsreturnval)                           \
+   {                                                        \
       RWS::FunctionProfile::CProfileManager::StopProfile(); \
-      return(_rwsreturnval);\
+      return (_rwsreturnval);                               \
    }
 
-   #define RWS_RETURNVOID() \
-   { \
+#define RWS_RETURNVOID()                                    \
+   {                                                        \
       RWS::FunctionProfile::CProfileManager::StopProfile(); \
-      return; \
+      return;                                               \
    }
 
-   #define RWS_START_PROFILE(a) {RWS::FunctionProfile::CProfileManager:: \
-      StartProfile( a, __FILE__, __LINE__ ); 
-   #define RWS_STOP_PROFILE RWS::FunctionProfile::CProfileManager::StopProfile();}
+#define RWS_START_PROFILE(a)                  \
+   {                                          \
+      RWS::FunctionProfile::CProfileManager:: \
+         StartProfile(a, __FILE__, __LINE__);
+#define RWS_STOP_PROFILE                                 \
+   RWS::FunctionProfile::CProfileManager::StopProfile(); \
+   }
 
 #else
-   #define RWS_FUNCTION(a)
-   #define RWS_RETURN(a) return a;
-   #define RWS_RETURNVOID() return;
+#define RWS_FUNCTION(a)
+#define RWS_RETURN(a) return a;
+#define RWS_RETURNVOID() return;
 #endif
 
-   #define RWS_DEBUGBREAK
+#define RWS_DEBUGBREAK
 
    // Debug Build
    //
@@ -121,7 +125,7 @@
    *
    */
 
-   #define RWS_TRACE_METRIC(rate, name, var)
+#define RWS_TRACE_METRIC(rate, name, var)
 
    /**
    *
@@ -138,7 +142,7 @@
    *  mainloop::Poll() in file mainloop\mainloop.cpp
    */
 
-   #define RWS_SEND_TRACE_METRICS(rate)
+#define RWS_SEND_TRACE_METRICS(rate)
 
    /**
    *
@@ -148,7 +152,7 @@
    *
    */
 
-   #define RWS_CALLSTACKENABLE
+#define RWS_CALLSTACKENABLE
 
    /**
    *
@@ -158,7 +162,7 @@
    *
    */
 
-   #define RWS_TRACEENABLE
+#define RWS_TRACEENABLE
 
    /**
    *
@@ -168,7 +172,7 @@
    *
    */
 
-   #define RWS_DEBUGBREAK
+#define RWS_DEBUGBREAK
 
    /**
    *
@@ -178,7 +182,7 @@
    *
    */
 
-   #define RWS_DEBUGSTREAM(a)
+#define RWS_DEBUGSTREAM(a)
 
    /**
    *
@@ -189,7 +193,7 @@
    *
    */
 
-   #define RWS_DEBUGSTREAM_WARN(a)
+#define RWS_DEBUGSTREAM_WARN(a)
 
    /**
    *
@@ -200,7 +204,7 @@
    *
    */
 
-   #define RWS_DEBUGSTREAM_ERR(a)
+#define RWS_DEBUGSTREAM_ERR(a)
 
    /**
    *
@@ -221,7 +225,7 @@
    *
    */
 
-   #define RWS_ASSERTFAIL(msg)
+#define RWS_ASSERTFAIL(msg)
 
    /**
    *
@@ -242,7 +246,7 @@
    *
    */
 
-   #define RWS_ASSERT(condition, msg)
+#define RWS_ASSERT(condition, msg)
 
    /**
    *
@@ -264,7 +268,7 @@
    *
    */
 
-   #define RWS_ASSERTE(condition)
+#define RWS_ASSERTE(condition)
 
    /**
    *
@@ -286,7 +290,7 @@
    *
    */
 
-   #define RWS_PRE(condition)
+#define RWS_PRE(condition)
 
    /**
    *
@@ -307,8 +311,8 @@
       \endverbatim
    *
    */
-   
-   #define RWS_POST(condition)
+
+#define RWS_POST(condition)
 
    /**
    *
@@ -320,7 +324,7 @@
    *
    */
 
-   #define RWS_TRACE(a)
+#define RWS_TRACE(a)
 
    /**
    *
@@ -329,7 +333,7 @@
    * if the condition is false, generates a warning message.
    *
    */
-   #define RWS_WARNING(condition, msg)
+#define RWS_WARNING(condition, msg)
 
    /**
    *
@@ -343,7 +347,7 @@
    *
    */
 
-   #define RWS_TRACE_NO_FUNC(a)
+#define RWS_TRACE_NO_FUNC(a)
 
    /**
    *
@@ -355,7 +359,7 @@
    *
    */
 
-   #define RWS_TRACEIF(cond, a)
+#define RWS_TRACEIF(cond, a)
 
    /**
    *
@@ -366,7 +370,7 @@
    *
    */
 
-   #define RWS_FUNCTION(a)
+#define RWS_FUNCTION(a)
 
    /**
    *
@@ -377,7 +381,7 @@
    *
    */
 
-   #define RWS_RETURN(_rwsreturnval)
+#define RWS_RETURN(_rwsreturnval)
 
    /**
    *
@@ -388,278 +392,288 @@
    *
    */
 
-   #define RWS_RETURNVOID()
+#define RWS_RETURNVOID()
 
 #else // DOXYGEN
 
 
-   #include "../macros/iocoercion.h"
+#include "../macros/iocoercion.h"
 
-   namespace RWS 
-   {
+namespace RWS
+{
       // Calldepth-based indenting implementation
-      void _IndentToCallDepth();
-      void _IncCallDepth();
-      void _DecCallDepth();
-      int _GetCallDepth();
-   }
+   void _IndentToCallDepth();
+   void _IncCallDepth();
+   void _DecCallDepth();
+   int _GetCallDepth();
+}
 
-   #ifdef _WIN32
-      #ifdef _MSC_VER
-         #define RWS_DEBUGBREAK __asm { int 3 }
-      #elif
-         #error "Your platform specific break code here"
-      #endif
-   #elif defined(SKY)
-      #ifdef __MWERKS__
-         #define RWS_DEBUGBREAK asm volatile ("breakc 0x0")
-      #elif SN_TARGET_PS2
-         #define RWS_DEBUGBREAK asm ("break 0x0")
-      #elif
-         #error "Your platform specific break code here"
-      #endif
-   #elif defined(DOLPHIN)
-        #define RWS_DEBUGBREAK OSHalt("RWS_DEBUGBREAK");
-   #elif
-      #error RWS_DEBUGBREAK is not defined for this platform.
-   #endif
+#ifdef _WIN32
+#ifdef _MSC_VER
+#define RWS_DEBUGBREAK __asm { int 3 }
+#elif
+#error "Your platform specific break code here"
+#endif
+#elif defined(SKY)
+#ifdef __MWERKS__
+#define RWS_DEBUGBREAK asm volatile("breakc 0x0")
+#elif SN_TARGET_PS2
+#define RWS_DEBUGBREAK asm("break 0x0")
+#elif
+#error "Your platform specific break code here"
+#endif
+#elif defined(DOLPHIN)
+#define RWS_DEBUGBREAK OSHalt("RWS_DEBUGBREAK");
+#elif
+#error RWS_DEBUGBREAK is not defined for this platform.
+#endif
 
    /*
    *  Use these defines to enable / disable sending the debug messages back to the RenderWare Studio
    *  workspace. Make sure that the network module has been initialized before sending any messages though!
    */
 
-   #define OUTPUTSTREAM() RWS::cdbg()
+#define OUTPUTSTREAM() RWS::cdbg()
 
-   #define RWS_DEBUGSTREAM(a) ( OUTPUTSTREAM() << a )
+#define RWS_DEBUGSTREAM(a) (OUTPUTSTREAM() << a)
 
    // NOTE: 'RWS_DEBUGSTREAM_WARN' and 'RWS_DEBUGSTREAM_ERR' use a string ('WARNING - ' and 'ERROR - ')
    //       which is picked up by the workspace and is converted into an icon. Therefore these prefix
    //       strings should NOT BE CHANGED unless the code in workspace to convert them is also changed.
 
-   #define RWS_DEBUGSTREAM_WARN(a) ( OUTPUTSTREAM() << "WARNING - " << a )
-   #define RWS_DEBUGSTREAM_ERR(a) ( OUTPUTSTREAM() << "ERROR - " << a )
-   
-   #define RWS_ASSERTFAIL(msg) \
-   { \
-      RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: " << msg << std::endl ); \
-      RWS_DEBUGBREAK; \
+#define RWS_DEBUGSTREAM_WARN(a) (OUTPUTSTREAM() << "WARNING - " << a)
+#define RWS_DEBUGSTREAM_ERR(a) (OUTPUTSTREAM() << "ERROR - " << a)
+
+#define RWS_ASSERTFAIL(msg)                                                                             \
+   {                                                                                                    \
+      RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: " << msg << std::endl); \
+      RWS_DEBUGBREAK;                                                                                   \
    }
 
-   #define RWS_ASSERT(condition, msg) \
-      { if (!(condition)) RWS_ASSERTFAIL(msg) }
+#define RWS_ASSERT(condition, msg)          \
+   {                                        \
+      if (!(condition)) RWS_ASSERTFAIL(msg) \
+   }
 
-   #define RWS_ASSERTE(condition) \
-      RWS_ASSERT( (condition), #condition " Failed" )
+#define RWS_ASSERTE(condition) \
+   RWS_ASSERT((condition), #condition " Failed")
 
-   #define RWS_PRE(condition) \
-      RWS_ASSERT( (condition), "Failed PRE-condition: " #condition )
+#define RWS_PRE(condition) \
+   RWS_ASSERT((condition), "Failed PRE-condition: " #condition)
 
-   #define RWS_POST(condition) \
-      RWS_ASSERT( (condition), "Failed POST-condition: " #condition )
+#define RWS_POST(condition) \
+   RWS_ASSERT((condition), "Failed POST-condition: " #condition)
 
-   #ifdef RWS_TRACEENABLE
-      #define RWS_TRACE(a) \
-      {  \
-         RWS_DEBUGSTREAM(" "); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM( _rwsfunctionstr << " " << a << std::endl ); \
-      }
-   #else
-      #define RWS_TRACE(a)
-   #endif
-
-   #define RWS_WARNING(condition, msg) \
-      {  \
-         if (!(condition))  \
-         {  \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " \
-               << "WARNING: " << msg << std::endl ); \
-         }  \
-      }
-
-   #ifdef RWS_TRACEENABLE
-      #define RWS_TRACE_NO_FUNC(a) \
-      {  \
-         RWS_DEBUGSTREAM(" "); \
-         RWS_DEBUGSTREAM( a << std::endl ); \
-      }
-   #else
-      #define RWS_TRACE_NO_FUNC(a)
-   #endif
-
-   #ifdef RWS_TRACEENABLE
-      #define RWS_TRACEIF(cond, a) \
-      { \
-         if ((cond))  \
-         {  \
-            RWS_DEBUGSTREAM(" "); \
-            RWS::_IndentToCallDepth(); \
-            RWS_DEBUGSTREAM( a << std::endl ); \
-         }  \
-      }
-   #else
-      #define RWS_TRACEIF(cond, a)
-   #endif
-
-#ifdef RWS_FUNCTIONPROFILE
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_FUNCTION(a) \
-         const char _rwsfunctionstr[] = a; \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); \
-         RWS_DEBUGSTREAM(">"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM(_rwsfunctionstr << std::endl ); \
-         RWS::FunctionProfile::CProfileManager::StartProfile( a, __FILE__, __LINE__ ); 
-
-   #elif defined (RWS_TRACEENABLE)
-      #define RWS_FUNCTION(a) \
-         const char _rwsfunctionstr[] = a; \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); \
-         RWS::FunctionProfile::CProfileManager::StartProfile( a, __FILE__, __LINE__ ); 
-   #else
-      #define RWS_FUNCTION(a) \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); \
-         RWS::FunctionProfile::CProfileManager::StartProfile( a, __FILE__, __LINE__ ); 
-   #endif
+#ifdef RWS_TRACEENABLE
+#define RWS_TRACE(a)                                             \
+   {                                                             \
+      RWS_DEBUGSTREAM(" ");                                      \
+      RWS::_IndentToCallDepth();                                 \
+      RWS_DEBUGSTREAM(_rwsfunctionstr << " " << a << std::endl); \
+   }
 #else
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_FUNCTION(a) \
-         const char _rwsfunctionstr[] = a; \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); \
-         RWS_DEBUGSTREAM(">"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM(_rwsfunctionstr << std::endl );
-   #elif defined (RWS_TRACEENABLE)
-      #define RWS_FUNCTION(a) \
-         const char _rwsfunctionstr[] = a; \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); 
-   #else
-      #define RWS_FUNCTION(a) \
-         int _rwscalldepth = RWS::_GetCallDepth(); \
-         RWS::_IncCallDepth(); 
-   #endif
+#define RWS_TRACE(a)
+#endif
+
+#define RWS_WARNING(condition, msg)                                    \
+   {                                                                   \
+      if (!(condition))                                                \
+      {                                                                \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " \
+                                  << "WARNING: " << msg << std::endl); \
+      }                                                                \
+   }
+
+#ifdef RWS_TRACEENABLE
+#define RWS_TRACE_NO_FUNC(a)           \
+   {                                   \
+      RWS_DEBUGSTREAM(" ");            \
+      RWS_DEBUGSTREAM(a << std::endl); \
+   }
+#else
+#define RWS_TRACE_NO_FUNC(a)
+#endif
+
+#ifdef RWS_TRACEENABLE
+#define RWS_TRACEIF(cond, a)              \
+   {                                      \
+      if ((cond))                         \
+      {                                   \
+         RWS_DEBUGSTREAM(" ");            \
+         RWS::_IndentToCallDepth();       \
+         RWS_DEBUGSTREAM(a << std::endl); \
+      }                                   \
+   }
+#else
+#define RWS_TRACEIF(cond, a)
 #endif
 
 #ifdef RWS_FUNCTIONPROFILE
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_RETURN(_rwsreturnval) \
-      {  \
-         RWS::FunctionProfile::CProfileManager::StopProfile(); \
-         RWS_DEBUGSTREAM("<"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM( _rwsfunctionstr << " " << std::endl); \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){   \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return (_rwsreturnval);    \
-      }
-   #else
-      #define RWS_RETURN(_rwsreturnval) \
-      {  \
-         RWS::FunctionProfile::CProfileManager::StopProfile();  \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){   \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return (_rwsreturnval);    \
-      }
-   #endif
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_FUNCTION(a)                           \
+   const char _rwsfunctionstr[] = a;              \
+   int _rwscalldepth = RWS::_GetCallDepth();      \
+   RWS::_IncCallDepth();                          \
+   RWS_DEBUGSTREAM(">");                          \
+   RWS::_IndentToCallDepth();                     \
+   RWS_DEBUGSTREAM(_rwsfunctionstr << std::endl); \
+   RWS::FunctionProfile::CProfileManager::StartProfile(a, __FILE__, __LINE__);
 
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_RETURNVOID() \
-      {  \
-         RWS::FunctionProfile::CProfileManager::StopProfile(); \
-         RWS_DEBUGSTREAM("<"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM( _rwsfunctionstr << " " << std::endl); \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){  \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return;     \
-      }
-   #else
-      #define RWS_RETURNVOID() \
-      {  \
-         RWS::FunctionProfile::CProfileManager::StopProfile(); \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){  \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return;     \
-      }
-   #endif
+#elif defined(RWS_TRACEENABLE)
+#define RWS_FUNCTION(a)                      \
+   const char _rwsfunctionstr[] = a;         \
+   int _rwscalldepth = RWS::_GetCallDepth(); \
+   RWS::_IncCallDepth();                     \
+   RWS::FunctionProfile::CProfileManager::StartProfile(a, __FILE__, __LINE__);
+#else
+#define RWS_FUNCTION(a)                      \
+   int _rwscalldepth = RWS::_GetCallDepth(); \
+   RWS::_IncCallDepth();                     \
+   RWS::FunctionProfile::CProfileManager::StartProfile(a, __FILE__, __LINE__);
+#endif
+#else
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_FUNCTION(a)                      \
+   const char _rwsfunctionstr[] = a;         \
+   int _rwscalldepth = RWS::_GetCallDepth(); \
+   RWS::_IncCallDepth();                     \
+   RWS_DEBUGSTREAM(">");                     \
+   RWS::_IndentToCallDepth();                \
+   RWS_DEBUGSTREAM(_rwsfunctionstr << std::endl);
+#elif defined(RWS_TRACEENABLE)
+#define RWS_FUNCTION(a)                      \
+   const char _rwsfunctionstr[] = a;         \
+   int _rwscalldepth = RWS::_GetCallDepth(); \
+   RWS::_IncCallDepth();
+#else
+#define RWS_FUNCTION(a)                      \
+   int _rwscalldepth = RWS::_GetCallDepth(); \
+   RWS::_IncCallDepth();
+#endif
+#endif
+
+#ifdef RWS_FUNCTIONPROFILE
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_RETURN(_rwsreturnval)                                                            \
+   {                                                                                         \
+      RWS::FunctionProfile::CProfileManager::StopProfile();                                  \
+      RWS_DEBUGSTREAM("<");                                                                  \
+      RWS::_IndentToCallDepth();                                                             \
+      RWS_DEBUGSTREAM(_rwsfunctionstr << " " << std::endl);                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return (_rwsreturnval);                                                                \
+   }
+#else
+#define RWS_RETURN(_rwsreturnval)                                                            \
+   {                                                                                         \
+      RWS::FunctionProfile::CProfileManager::StopProfile();                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return (_rwsreturnval);                                                                \
+   }
+#endif
+
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_RETURNVOID()                                                                     \
+   {                                                                                         \
+      RWS::FunctionProfile::CProfileManager::StopProfile();                                  \
+      RWS_DEBUGSTREAM("<");                                                                  \
+      RWS::_IndentToCallDepth();                                                             \
+      RWS_DEBUGSTREAM(_rwsfunctionstr << " " << std::endl);                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return;                                                                                \
+   }
+#else
+#define RWS_RETURNVOID()                                                                     \
+   {                                                                                         \
+      RWS::FunctionProfile::CProfileManager::StopProfile();                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return;                                                                                \
+   }
+#endif
 
 #else
 
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_RETURN(_rwsreturnval) \
-      {  \
-         RWS_DEBUGSTREAM("<"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM( _rwsfunctionstr << " " << std::endl); \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){   \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return (_rwsreturnval);    \
-      }
-   #else
-      #define RWS_RETURN(_rwsreturnval) \
-      {  \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){   \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return (_rwsreturnval);    \
-      }
-   #endif
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_RETURN(_rwsreturnval)                                                            \
+   {                                                                                         \
+      RWS_DEBUGSTREAM("<");                                                                  \
+      RWS::_IndentToCallDepth();                                                             \
+      RWS_DEBUGSTREAM(_rwsfunctionstr << " " << std::endl);                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return (_rwsreturnval);                                                                \
+   }
+#else
+#define RWS_RETURN(_rwsreturnval)                                                            \
+   {                                                                                         \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return (_rwsreturnval);                                                                \
+   }
+#endif
 
-   #ifdef RWS_CALLSTACKENABLE
-      #define RWS_RETURNVOID() \
-      {  \
-         RWS_DEBUGSTREAM("<"); \
-         RWS::_IndentToCallDepth(); \
-         RWS_DEBUGSTREAM( _rwsfunctionstr << " " << std::endl); \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){  \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return;     \
-      }
-   #else
-      #define RWS_RETURNVOID() \
-      {  \
-         RWS::_DecCallDepth(); \
-         if (RWS::_GetCallDepth() != _rwscalldepth){  \
-            RWS_DEBUGSTREAM( __FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: "); \
-            RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << \
-               std::endl);RWS_DEBUGBREAK;  \
-         } \
-         return;     \
-      }
-   #endif
+#ifdef RWS_CALLSTACKENABLE
+#define RWS_RETURNVOID()                                                                     \
+   {                                                                                         \
+      RWS_DEBUGSTREAM("<");                                                                  \
+      RWS::_IndentToCallDepth();                                                             \
+      RWS_DEBUGSTREAM(_rwsfunctionstr << " " << std::endl);                                  \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return;                                                                                \
+   }
+#else
+#define RWS_RETURNVOID()                                                                     \
+   {                                                                                         \
+      RWS::_DecCallDepth();                                                                  \
+      if (RWS::_GetCallDepth() != _rwscalldepth)                                             \
+      {                                                                                      \
+         RWS_DEBUGSTREAM(__FILE__ << "(" << RWS_DEC(__LINE__) << "): " << "ASSERT: ");       \
+         RWS_DEBUGSTREAM("Missing RWS_FUNCTION, RWS_RETURN or RWS_RETURNVOID" << std::endl); \
+         RWS_DEBUGBREAK;                                                                     \
+      }                                                                                      \
+      return;                                                                                \
+   }
+#endif
 #endif
 
 #endif
@@ -695,7 +709,7 @@
    *
    */
 
-   #define RWS_COMP_MSG(uq_str)
+#define RWS_COMP_MSG(uq_str)
 
    /**
    *
@@ -722,7 +736,7 @@
    *
    */
 
-   #define RWS_COMP_WARN(uq_str)
+#define RWS_COMP_WARN(uq_str)
 
    /**
    *
@@ -749,15 +763,15 @@
    *
    */
 
-   #define RWS_COMP_ERR(uq_str)
+#define RWS_COMP_ERR(uq_str)
 
 #else
 
-   #define STR(str)  #str
-   #define STR2(str) STR(str)
-   #define RWS_COMP_MSG(uq_str) message (__FILE__ "(" STR2(__LINE__) ") : - MESSAGE - " #uq_str)
-   #define RWS_COMP_WARN(uq_str) message (__FILE__ "(" STR2(__LINE__) ") : + WARNING + " #uq_str)
-   #define RWS_COMP_ERR(uq_str) message (__FILE__ "(" STR2(__LINE__) ") : ## ERROR ## " #uq_str)
+#define STR(str) #str
+#define STR2(str) STR(str)
+#define RWS_COMP_MSG(uq_str) message(__FILE__ "(" STR2(__LINE__) ") : - MESSAGE - " #uq_str)
+#define RWS_COMP_WARN(uq_str) message(__FILE__ "(" STR2(__LINE__) ") : + WARNING + " #uq_str)
+#define RWS_COMP_ERR(uq_str) message(__FILE__ "(" STR2(__LINE__) ") : ## ERROR ## " #uq_str)
 
 #endif      // Always enabled & !DOXYGEN
 
@@ -765,59 +779,63 @@
 
 #ifdef RWS_TRACE_METRICS
 
-   namespace RWS
-   {
-      void _TransmitMetricsData(const RwChar * const name, RwUInt32 time, RwReal var);
-      void _SendMetricsDataBuffer(void);
+namespace RWS
+{
+   void _TransmitMetricsData(const RwChar* const name, RwUInt32 time, RwReal var);
+   void _SendMetricsDataBuffer(void);
+}
+
+#define RWS_TRACE_METRIC(rate, name, var)                                                           \
+   {                                                                                                \
+      static RwUInt32 count = 0;                                                                    \
+      count++;                                                                                      \
+      if (rate && count >= rate)                                                                    \
+      {                                                                                             \
+         count = 0;                                                                                 \
+         RWS::_TransmitMetricsData((name),                                                          \
+                                   static_cast<RwUInt32>((RWS::MainLoop::Render::GetFrameCount())), \
+                                   static_cast<RwReal>((var)));                                     \
+      }                                                                                             \
    }
 
-   #define RWS_TRACE_METRIC(rate, name, var) {\
-      static RwUInt32 count = 0;\
-      count++;if (rate && count >= rate)\
-      {\
-         count = 0;\
-         RWS::_TransmitMetricsData((name), \
-               static_cast<RwUInt32>((RWS::MainLoop::Render::GetFrameCount())), \
-               static_cast<RwReal>((var)));\
-      }\
-   }
-
-   #define RWS_SEND_TRACE_METRICS(rate) {\
-      static RwUInt32 count = 0;\
-      count++;if (rate && count >= rate)\
-      {\
-         count = 0;\
-         RWS::_SendMetricsDataBuffer();\
-      }\
+#define RWS_SEND_TRACE_METRICS(rate)    \
+   {                                    \
+      static RwUInt32 count = 0;        \
+      count++;                          \
+      if (rate && count >= rate)        \
+      {                                 \
+         count = 0;                     \
+         RWS::_SendMetricsDataBuffer(); \
+      }                                 \
    }
 
 #else
-   #define RWS_TRACE_METRIC(rate, name, var)
-   #define RWS_SEND_TRACE_METRICS(rate)
+#define RWS_TRACE_METRIC(rate, name, var)
+#define RWS_SEND_TRACE_METRICS(rate)
 #endif
 
 
 #ifdef RWS_FUNCTIONPROFILE
-   namespace RWS
-   {
-   void _SendProfileDataBuffer(const RwUInt32  id,
-                               const RwBool  HasChild,
-                               const RwUInt32  fps,
-                               const RwReal  totaltime,
-                               const char*  pParent,
-                               const char*  pFunction, 
-                               const RwUInt32  Calls, 
-                               const RwReal  time,
+namespace RWS
+{
+   void _SendProfileDataBuffer(const RwUInt32 id,
+                               const RwBool HasChild,
+                               const RwUInt32 fps,
+                               const RwReal totaltime,
+                               const char* pParent,
+                               const char* pFunction,
+                               const RwUInt32 Calls,
+                               const RwReal time,
                                char* pFileName,
                                const RwUInt32 LineNumber,
-                               const RwReal  childTime);
-                                 
+                               const RwReal childTime);
 
-      void _SendProfileNewChildFlag( void );
 
-   }
+   void _SendProfileNewChildFlag(void);
+
+}
 
 #else
-   
+
 #endif
 

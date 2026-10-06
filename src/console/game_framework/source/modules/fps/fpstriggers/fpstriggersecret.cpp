@@ -46,11 +46,11 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSTriggerSecret);
       RWS_REGISTERCLASS(FPSTriggerSecret);
-      
+
       RwUInt32 FPSTriggerSecret::m_Secrets_Found;
       CEventId FPSTriggerSecret::m_targetname;
-      
-      
+
+
       /**
       *
       * \ref FPSTriggerSecret. Constructor for FPSTriggerSecret.
@@ -58,24 +58,25 @@ namespace RWS
       * \see ~FPSTriggerSecret.
       *
       */
-      FPSTriggerSecret::FPSTriggerSecret(const CAttributePacket& attr) : InitCEventHandler(&m_pAtomic)
+      FPSTriggerSecret::FPSTriggerSecret(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerSecret::FPSTriggerSecret");
-         
+
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-         
+
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-         
+
          m_Secrets_Found = 0;
-         
-         RegisterMsg(m_targetname, "ACTN_PLAYERTOUCH",0);
+
+         RegisterMsg(m_targetname, "ACTN_PLAYERTOUCH", 0);
          LinkMsg(m_targetname);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ~FPSTriggerSecret. Destructor for FPSTriggerSecret.
@@ -86,34 +87,34 @@ namespace RWS
       FPSTriggerSecret::~FPSTriggerSecret(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerSecret::~FPSTriggerSecret");
-         
+
          UnLinkMsg(m_targetname);
          UnRegisterMsg(m_targetname);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */   
+      */
       void FPSTriggerSecret::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerSecret::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          // Initialize atomic/clump/frame
          m_pAtomic.HandleSystemCommands(attr);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -122,36 +123,36 @@ namespace RWS
       *  
       * \ref iMsgRunningTick
       */
-      void FPSTriggerSecret::HandleEvents(CMsg &pMsg)
+      void FPSTriggerSecret::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerSecret::HandleEvents");
-         
+
          // Handle trigger event
          if (pMsg.Id == m_targetname)
          {
             IncreaseSecretsFound();
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref IncreaseSecretsFound. Increase number of secrets found when triggered by an event.
       *
       */
-      void FPSTriggerSecret::IncreaseSecretsFound( void )
+      void FPSTriggerSecret::IncreaseSecretsFound(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerSecret::IncreaseSecretsFound");
-         
+
          // Increase total number of secrets found
          m_Secrets_Found++;
-         
+
          RWS_TRACE("FPSTriggerSecret::HandleEvents m_Secrets_Found" << m_Secrets_Found);
-         
+
          Delete();
-         
+
          RWS_RETURNVOID();
       }
    }

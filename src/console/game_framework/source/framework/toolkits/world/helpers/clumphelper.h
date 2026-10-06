@@ -55,10 +55,10 @@ namespace RWS
       *  before the object can be destroyed it needs to detach
       *  itself from the object, for an example \see RWS::FPS::FPSPlayer.
       */
-      RWS_DEFINE_EVENT( iMsgPreRpClumpDestroy,
-                        "RwFrame*",
-                        "Event used to indicate that a frame hierarchy is about"
-                        "to be destroyed by ClumpHelper::Destroy.");
+      RWS_DEFINE_EVENT(iMsgPreRpClumpDestroy,
+                       "RwFrame*",
+                       "Event used to indicate that a frame hierarchy is about"
+                       "to be destroyed by ClumpHelper::Destroy.");
 
       void Open(void);
 
@@ -69,10 +69,10 @@ namespace RWS
       void SetIsVisible(RpClump& clump, bool isVisible);
 
       void SetCanCollide(RpClump& clump, bool canCollide);
-      
+
       void SetEventHandler(RpClump& clump, CEventHandler* pEventHandler);
 
-      void RenderAllVisibleAtomics(RpClump * pClump);
+      void RenderAllVisibleAtomics(RpClump* pClump);
 
       void HandleSystemCommands(RpClump& clump, const CAttributePacket& attr);
    }

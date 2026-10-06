@@ -36,8 +36,8 @@
 #include "rpworld.h"
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ namespace RWS
    namespace FX
    {
 
-      const RwReal ENV_MAP_WIDTH  = 256.0f;
+      const RwReal ENV_MAP_WIDTH = 256.0f;
       const RwReal ENV_MAP_HEIGHT = 256.0f;
 
       /**
@@ -63,18 +63,17 @@ namespace RWS
       */
       class CFXReflectEnvironmentGCN
       {
-         public:
+      public:
 
          CFXReflectEnvironmentGCN();
          ~CFXReflectEnvironmentGCN();
 
-         protected:
+      protected:
 
-            void  UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
+         void UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
 
-         private:
-            void  CameraTextureFlush(const RwRaster *raster, RwBool boxFilter, RwUInt32 X, RwUInt32 Y, RwUInt32 Width, RwUInt32 Height);
-      
+      private:
+         void CameraTextureFlush(const RwRaster *raster, RwBool boxFilter, RwUInt32 X, RwUInt32 Y, RwUInt32 Width, RwUInt32 Height);
       };
 
    } // namespace FX

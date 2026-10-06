@@ -42,11 +42,11 @@
 #endif
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rtbmp.lib")
-#pragma comment (lib, "rtpng.lib")
-#pragma comment (lib, "rtras.lib")
+#pragma comment(lib, "rtbmp.lib")
+#pragma comment(lib, "rtpng.lib")
+#pragma comment(lib, "rtras.lib")
 #if (!defined _XBOX) && (!defined DOLPHIN)
-#pragma comment (lib, "rttiff.lib")
+#pragma comment(lib, "rttiff.lib")
 #endif
 #endif
 
@@ -54,31 +54,31 @@ namespace RWS
 {
    namespace
    {
-#if defined (_XBOX) || defined (DOLPHIN)
+#if defined(_XBOX) || defined(DOLPHIN)
       RwTextureCallBackRead OldCB;
-      RwTexture * DDSTextureRead(const RwChar * szName, const RwChar * szMaskName)
-      {    
-         RwTexture * pTexture = NULL;    // first try to load the dds texture
-      
-#if defined (_XBOX)
+      RwTexture *DDSTextureRead(const RwChar *szName, const RwChar *szMaskName)
+      {
+         RwTexture *pTexture = NULL;    // first try to load the dds texture
+
+#if defined(_XBOX)
          if (pTexture = RwXboxDDSTextureRead(szName, szMaskName))
-#elif defined (DOLPHIN)
+#elif defined(DOLPHIN)
          if (pTexture = RwGameCubeDDSTextureRead(szName, szMaskName))
 #else
          if (0)
 #endif
          {
-            return pTexture;    
+            return pTexture;
          }
-      
+
          // failed, so try to load using normal texture loader
          return OldCB(szName, szMaskName);
       }
-   
+
       // make RW try to load dds textures first of all
       void HookDDSTextureRead(void)
-      {    
-         OldCB = RwTextureGetReadCallBack(); 
+      {
+         OldCB = RwTextureGetReadCallBack();
          RwTextureSetReadCallBack(DDSTextureRead);
       }
 #endif
@@ -101,38 +101,38 @@ namespace RWS
 
 #if (defined(__MWERKS__) || defined(SN_TARGET_PS2)) || defined(SN_TARGET_NGC)
          typedef struct RwImage *(*functorR)(const RwChar *imageName);
-         typedef struct RwImage *(*functorW)(RwImage * image, const RwChar *imageName);
+         typedef struct RwImage *(*functorW)(RwImage *image, const RwChar *imageName);
 #else
-         typedef struct RwImage *(__cdecl *functorR)(const RwChar *imageName);
-         typedef struct RwImage *(__cdecl *functorW)(RwImage * image, const RwChar *imageName);
+         typedef struct RwImage *(__cdecl * functorR)(const RwChar *imageName);
+         typedef struct RwImage *(__cdecl * functorW)(RwImage * image, const RwChar *imageName);
 #endif
-      
+
          typedef struct ImageFormats_tag
          {
             functorR _functorR;
             functorW _functorW;
             RwChar *imagename;
          } ImageFormats;
-      
+
          // Declare which image loaders to use.
          //
          static const ImageFormats _ImageFormats[] =
-         {
-            {RtPNGImageRead, RtPNGImageWrite, RWSTRING("png")},
-            {RtBMPImageRead, RtBMPImageWrite, RWSTRING("bmp")},
-            {RtRASImageRead, RtRASImageWrite, RWSTRING("ras")},
-#if (!defined _XBOX) && (!defined DOLPHIN)         
-            {RtTIFFImageRead, 0, RWSTRING("tif")},
+            {
+               {RtPNGImageRead, RtPNGImageWrite, RWSTRING("png")},
+               {RtBMPImageRead, RtBMPImageWrite, RWSTRING("bmp")},
+               {RtRASImageRead, RtRASImageWrite, RWSTRING("ras")},
+#if (!defined _XBOX) && (!defined DOLPHIN)
+               {RtTIFFImageRead, 0, RWSTRING("tif")},
 #endif
-         };
+            };
 
          for (RwUInt32 i = 0; i < sizeof(_ImageFormats) / sizeof(ImageFormats); i++)
          {
             if (!RwImageRegisterImageFormat(_ImageFormats[i].imagename,
-                                            _ImageFormats[i]._functorR, 
-                                            (RwImageCallBackWrite) _ImageFormats[i]._functorW))
+                                            _ImageFormats[i]._functorR,
+                                            (RwImageCallBackWrite)_ImageFormats[i]._functorW))
             {
-               RWS_ASSERTFAIL("Unable to register image loader: "<<_ImageFormats[i].imagename);
+               RWS_ASSERTFAIL("Unable to register image loader: " << _ImageFormats[i].imagename);
 
                flag = false;
             }

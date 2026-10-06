@@ -1,0 +1,32 @@
+BasedOnStyle: Microsoft
+IndentWidth: 3
+TabWidth: 3
+UseTab: Never
+ContinuationIndentWidth: 3
+ConstructorInitializerIndentWidth: 3
+AccessModifierOffset: -3
+BreakBeforeBraces: Allman
+NamespaceIndentation: All
+FixNamespaceComments: false
+IndentCaseLabels: false
+IndentCaseBlocks: true
+ColumnLimit: 0
+SpaceBeforeParens: ControlStatements
+DerivePointerAlignment: true
+PointerAlignment: Left
+AlignAfterOpenBracket: Align
+AlignTrailingComments: {Kind: Leave}
+AllowShortFunctionsOnASingleLine: All
+AllowShortBlocksOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+BreakConstructorInitializers: AfterColon
+PackConstructorInitializers: Never
+MaxEmptyLinesToKeep: 10
+KeepEmptyLines: {AtEndOfFile: true, AtStartOfBlock: true, AtStartOfFile: true}
+EmptyLineBeforeAccessModifier: Leave
+EmptyLineAfterAccessModifier: Leave
+SortIncludes: Never
+ReflowComments: false
+LineEnding: CRLF

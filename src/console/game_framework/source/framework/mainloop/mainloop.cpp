@@ -84,7 +84,7 @@
 #include "rt2danim.h"
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rt2danim.lib")
+#pragma comment(lib, "rt2danim.lib")
 #endif
 
 
@@ -98,13 +98,13 @@ namespace RWS
    CEventId iMsgStopSystem;
 
    namespace MainLoop
-   {     
-      namespace 
+   {
+      namespace
       {
 #ifdef RWS_DEBUGTOOLS
          DebugTools::DisplayDebugTools *g_pDisplayDebugTools = 0;
 #endif
-         
+
 #ifdef RWS_EVENTVISUALIZATION
          CEventVisualizer *g_pCEventVisualizer = 0;
 #endif
@@ -112,7 +112,7 @@ namespace RWS
          RwBool g_sysStartedFlag = FALSE;
       }
 
-      
+
       namespace
       {
          void NewEntityCreatedCB()
@@ -138,20 +138,20 @@ namespace RWS
          *
          *  \param pStream A pointer to the RenderWare Gfx Stream object.
          */
-         void StartSystem (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+         void StartSystem(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
          {
             RWS_FUNCTION("RWS::MainLoop::NULL::StartSystem");
-            
+
             SendMsg(iMsgStartSystem);
 
             g_sysStartedFlag = TRUE;
-            
-            MainLoop::Render::SetEnabled (TRUE);
-            MainLoop::Logic::SetEnabled (TRUE);
-            
+
+            MainLoop::Render::SetEnabled(TRUE);
+            MainLoop::Logic::SetEnabled(TRUE);
+
             RWS_RETURNVOID();
          }
-         
+
          /**
          *
          *  Send iMsgStopSystem event, disable logic, and render.
@@ -160,16 +160,16 @@ namespace RWS
          *
          *  \param pStream A pointer to the RenderWare Gfx Stream object.
          */
-         void StopSystem (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+         void StopSystem(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
          {
             RWS_FUNCTION("RWS::MainLoop::NULL::StopSystem");
-            
+
             SendMsg(iMsgStopSystem);
             g_sysStartedFlag = FALSE;
-            
-            MainLoop::Render::SetEnabled (FALSE);
-            MainLoop::Logic::SetEnabled (FALSE);
-            
+
+            MainLoop::Render::SetEnabled(FALSE);
+            MainLoop::Logic::SetEnabled(FALSE);
+
             RWS_RETURNVOID();
          }
 
@@ -183,22 +183,22 @@ namespace RWS
          *
          *  \param pStream A pointer to the RenderWare Gfx Stream object.
          */
-         void Reset (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+         void Reset(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
          {
             RWS_FUNCTION("RWS::MainLoop::NULL::Reset");
-      
+
             // Remove 'all' event handlers
             //
             CEventHandler::DeleteEventHandlers(iMsgDeleteEventHandler);
-      
+
             // Remove 'all' attribute handler
             //
             CAttributeHandler::Purge();
-      
+
             // Remove all assets from the system
             //
             CResourceManager::Purge();
-      
+
             RWS_RETURNVOID();
          }
 
@@ -208,7 +208,7 @@ namespace RWS
          *  handlers that may still be around.
          *
          */
-         void Init (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+         void Init(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
          {
             RWS_FUNCTION("RWS::MainLoop::NULL::Init");
 
@@ -227,7 +227,7 @@ namespace RWS
             RWS_RETURNVOID();
          }
       }
-      
+
       /**
       *
       *  Register the chunk handlers implemented by MainLoop, \see strfunc_func \see CStreamHandler.
@@ -240,21 +240,25 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::MainLoop::RegisterStreamChunkHandlers");
 
-         CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-            strfunc_StartSystem), StartSystem);
-         
-         CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-            strfunc_StopSystem), StopSystem);
+         CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                          strfunc_StartSystem),
+                                              StartSystem);
 
-         CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-            strfunc_Reset), Reset);
+         CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                          strfunc_StopSystem),
+                                              StopSystem);
 
-         CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-            strfunc_Initialize), Init);
+         CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                          strfunc_Reset),
+                                              Reset);
+
+         CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                          strfunc_Initialize),
+                                              Init);
 
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Unregister the chunk handlers implemented by MainLoop::Logic, \see strfunc_func \see CStreamHandler.
@@ -263,10 +267,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::MainLoop::UnRegisterStreamChunkHandlers");
 
-         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_StartSystem));
-         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_StopSystem));
-         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_Reset));
-         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_Initialize));
+         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_StartSystem));
+         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_StopSystem));
+         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_Reset));
+         CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_Initialize));
 
          RWS_RETURNVOID();
       }
@@ -292,41 +296,41 @@ namespace RWS
          RWS_FUNCTION("RWS::MainLoop::Open");
 
          RWS::MemoryProfile::Open(Time::GetTime, TRUE);
-         
+
          // Create a default world/camera and set as current
          //
-         MainLoop::Render::SetCamera( CameraHelper::CreateMainRasterCamera( ScreenWidth, ScreenHeight, ZBitDepth) );
-         
+         MainLoop::Render::SetCamera(CameraHelper::CreateMainRasterCamera(ScreenWidth, ScreenHeight, ZBitDepth));
+
          // Initialize RenderWare Gfx Plugin
          //
          Rt2dOpen(MainLoop::Render::GetCamera());
-         
+
          Rt2dAnimOpen();
-                
+
 #ifdef WITH_AUDIO
          // Open RenderWare Audio
-         RwsAudio::Open(); 
+         RwsAudio::Open();
 #endif
          // Open the event handler module
          //
-         CEventHandler::Open ();
-         
+         CEventHandler::Open();
+
          CEventHandler::RegisterStreamChunkHandlers();
-         
+
          CLinearMemoryManager::RegisterStreamChunkHandlers();
 
          // Open the attribute handler module
          //
-         CAttributeHandler::Open (NewEntityCreatedCB);
-         
+         CAttributeHandler::Open(NewEntityCreatedCB);
+
          CAttributeHandler::RegisterStreamChunkHandlers();
 
          CStreamHandler::RegisterStreamChunkHandlers();
-         
+
          CResourceManager::Open();
 
          CResourceManager::RegisterStreamChunkHandlers();
-         
+
          // Register dynamic-sequence handler.
 
 #ifdef RWS_DESIGN
@@ -336,30 +340,30 @@ namespace RWS
         // Open the ClumpHelper module
          //
          ClumpHelper::Open();
-         
+
          // Initialize logic sub-module and set to running
          //
          Logic::Open();
-         
+
          Logic::RegisterStreamChunkHandlers();
-         
+
          Logic::Running();
 
         // Open Rendering sub-module
          //
          Render::Open();
 
-         Render::RegisterStreamChunkHandlers();         
+         Render::RegisterStreamChunkHandlers();
 
 #ifdef RWS_DEBUGTOOLS
          // If we are using DebugTools we need an eventhandler namely DisplayDebugTools in
-         // order to render the debug info at the correct time, i.e. when the event 
+         // order to render the debug info at the correct time, i.e. when the event
          // iMsgPostRpWorldRender occurs.
          //
          g_pDisplayDebugTools = ::RWS_NEW DebugTools::DisplayDebugTools;
          DebugSwitches::SetSwitch(DebugSwitches::m_enable_printf, true);
 #endif
-         
+
 #ifdef RWS_EVENTVISUALIZATION
          g_pCEventVisualizer = ::RWS_NEW CEventVisualizer;
 #endif
@@ -374,15 +378,15 @@ namespace RWS
 
          Network::RegisterStreamChunkHandlers();
 #endif
-                  
+
          RegisterStreamChunkHandlers();
-         
+
          CEventHandler::RegisterMsg(iMsgStartSystem, iMsgStartSystemStr, 0);
          CEventHandler::RegisterMsg(iMsgStopSystem, iMsgStopSystemStr, 0);
 
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  \ingroup MainLoop
@@ -402,25 +406,25 @@ namespace RWS
       void Close(void)
       {
          RWS_FUNCTION("RWS::MainLoop::Close");
-         
+
 #ifdef RWS_EVENTVISUALIZATION
          delete g_pCEventVisualizer;
 #endif
-         
+
 #ifdef RWS_DEBUGTOOLS
          delete g_pDisplayDebugTools;
 #endif
          // Delete all entities, linked to iMsgDeleteEventHandler
          //
-         CEventHandler::DeleteEventHandlers (iMsgDeleteEventHandler); 
-         
+         CEventHandler::DeleteEventHandlers(iMsgDeleteEventHandler);
+
          // Some entities are AttributeHandlers Only... need to remove these using the following
-         // call as SendMsgDeleteEventHandlerId will not remove them 
+         // call as SendMsgDeleteEventHandlerId will not remove them
          //
          CAttributeHandler::PurgeAll();
-         
+
          CStreamHandler::UnRegisterStreamChunkHandlers();
-         
+
 #ifdef RWS_DESIGN
          Network::UnRegisterStreamChunkHandlers();
 
@@ -428,33 +432,33 @@ namespace RWS
          //
          Network::Close();
 #endif
-         
+
          // Close Logic sub-module
          //
          Logic::UnRegisterStreamChunkHandlers();
 
          Logic::Close();
-                  
+
          // Close Rendering sub-module
          //
          Render::UnRegisterStreamChunkHandlers();
 
          Render::Close();
-         
+
          // Shutdown ClumpHelper
          //
          ClumpHelper::Close();
-         
+
          CAttributeHandler::UnRegisterStreamChunkHandlers();
-         
+
          // Close the attribute system
          //
-         CAttributeHandler::Close ();
-         
+         CAttributeHandler::Close();
+
          // Remove an resources left in the resource manager.
          //
          CResourceManager::PurgeAll(); // Purge any remaining resources
-         
+
          CResourceManager::UnRegisterStreamChunkHandlers();
 
          CResourceManager::Close();
@@ -463,24 +467,24 @@ namespace RWS
          CEventHandler::UnRegisterMsg(iMsgStopSystem);
 
          CEventHandler::UnRegisterStreamChunkHandlers();
-         
+
          CLinearMemoryManager::DestroyLinearMemoryManager();
-         
+
          // Close the event system
          //
-         CEventHandler::Close ();
+         CEventHandler::Close();
 
 #ifdef WITH_AUDIO
          // Close RenderWare Audio
-         RwsAudio::Close(); 
+         RwsAudio::Close();
          RwsAudio::UnRegisterAudioObjects();
-#endif         
+#endif
          // Shutdown RenderWare Gfx 2D Plugin
          //
          Rt2dAnimClose();
-         
+
          Rt2dClose();
-         
+
          // Destroy the default camera
          //
          CameraHelper::Destroy(MainLoop::Render::GetCamera());
@@ -490,11 +494,11 @@ namespace RWS
          UnRegisterStreamChunkHandlers();
 
          RWS::MemoryProfile::Close();
-       
-         
+
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  \ingroup MainLoop
@@ -510,7 +514,7 @@ namespace RWS
       void Poll(void)
       {
          RWS_FUNCTION("RWS::MainLoop::Poll");
-         
+
 #ifdef RWS_DESIGN
          // Poll network communications
          //
@@ -519,17 +523,17 @@ namespace RWS
          // Update game logic
          //
          Logic::Poll();
-         
+
          // Render scene
          //
          Render::Poll();
-         
+
          // Send Metrics data back to workspace
          //
          RWS_SEND_TRACE_METRICS(30);
 
          RWS::MemoryProfile::Poll();
-         
+
          RWS::FunctionProfile::CProfileManager::SendProfileDataToWorkspace();
 
          RWS_RETURNVOID();

@@ -76,8 +76,9 @@ namespace RWS
 
             // Link to data from workspace.
 
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_DynamicSequence), HandleDynamicSeq);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_DynamicSequence),
+                                                 HandleDynamicSeq);
          }
 
          RWS_RETURNVOID();
@@ -98,7 +99,7 @@ namespace RWS
          // Close linkage.
 
          CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
-            strfunc_DynamicSequence));
+                                                            strfunc_DynamicSequence));
 
          // Free up the processor.
 
@@ -116,7 +117,7 @@ namespace RWS
       */
 
       void CSeqStrFunc::HandleDynamicSeq(RwChunkHeaderInfo &rChunkHeader,
-         RwStream *pStream)
+                                         RwStream *pStream)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStrFunc::HandleDynamicSeq");
          RWS_ASSERT(sm_pProcessor, "No processor allocated - cannot process data.");
@@ -192,8 +193,7 @@ namespace RWS
                RWS_ASSERTFAIL("Unknown sequence processing return state.");
                break;
             }
-         }
-         while (state != CSeqProcessor::SS_ENDED);
+         } while (state != CSeqProcessor::SS_ENDED);
 
          // Free up memory used by processor.
 

@@ -26,7 +26,7 @@
 
 #ifndef __CANIMSET_H__
 #define __CANIMSET_H__
-                  
+
 //////////////////////////////////////////////////////////////////
 //
 // Standard Includes
@@ -43,8 +43,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rphanim.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rphanim.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -91,11 +91,11 @@ namespace RWS
       bool HasTarget() const;
 
       // RWS_PRE( !HasTarget() )
-      bool SetTarget( RpClump& target );
+      bool SetTarget(RpClump& target);
 
-      void HandleSystemCommands( const CAttributePacket& attr );
+      void HandleSystemCommands(const CAttributePacket& attr);
 
-      void AddAnimation( const RWSGUID * pResourceId );
+      void AddAnimation(const RWSGUID* pResourceId);
 
       //RWS_PRE( HasTarget() )
       //RWS_PRE( IsBlendIntoNext() )
@@ -108,7 +108,7 @@ namespace RWS
       *
       *  \see SetBlendIntoNext
       */
-      bool IsBlendIntoNext() const {return bBlendIntoNext_;}
+      bool IsBlendIntoNext() const { return bBlendIntoNext_; }
 
       /**
       *
@@ -134,7 +134,7 @@ namespace RWS
       *
       *  \param flag If flag is TRUE then blend into next is enabled, otherwise disabled.
       */
-      void SetBlendIntoNext(bool flag) {bBlendIntoNext_ = flag;}
+      void SetBlendIntoNext(bool flag) { bBlendIntoNext_ = flag; }
 
       /**
       *
@@ -142,19 +142,19 @@ namespace RWS
       *  the animation, otherwise false.
       *
       */
-      bool IsAnimating() const {return isAnimating_;}
+      bool IsAnimating() const { return isAnimating_; }
 
       /**
       *
       *  \return Returns true if the anim set is blending from one animation to the next
       *
       */
-      bool IsBlending() const {return isBlending_;}
+      bool IsBlending() const { return isBlending_; }
 
       /**
       *  \return Returns the number of animations in the set
       */
-      RwUInt32 GetAnimationCount() const {return animData_.size();}
+      RwUInt32 GetAnimationCount() const { return animData_.size(); }
 
       // RWS_POST( result < GetAnimationCount() )
       RwUInt32 GetDstAnimation() const;
@@ -164,68 +164,80 @@ namespace RWS
 
       // RWS_PRE( HasTarget() )
       // RWS_PRE( animIndex < GetAnimationCount() )
-      void SetDstAnimation( RwUInt32 animIndex );
+      void SetDstAnimation(RwUInt32 animIndex);
 
       // RWS_PRE( HasTarget() )
-      RwBool GetDstAnimationByName( const RwChar *animName, RwInt32 *animIndex);
+      RwBool GetDstAnimationByName(const RwChar* animName, RwInt32* animIndex);
 
       // RWS_PRE( animIndex < GetAnimationCount() )
-      void SetRateMultiplier( RwUInt32 animIndex, RwReal rate );
+      void SetRateMultiplier(RwUInt32 animIndex, RwReal rate);
       // RWS_PRE( animIndex < GetAnimationCount() )
-      RwReal GetRateMultiplier( RwUInt32 animIndex ) const;
+      RwReal GetRateMultiplier(RwUInt32 animIndex) const;
 
-      enum EndBehavior { LOOP, HOLD };
+      enum EndBehavior
+      {
+         LOOP,
+         HOLD
+      };
       // RWS_PRE( animIndex < GetAnimationCount() )
-      void SetEndBehavior( RwUInt32 animIndex, EndBehavior behavior );
+      void SetEndBehavior(RwUInt32 animIndex, EndBehavior behavior);
       // RWS_PRE( animIndex < GetAnimationCount() )
-      EndBehavior GetEndBehavior( RwUInt32 animIndex ) const;
+      EndBehavior GetEndBehavior(RwUInt32 animIndex) const;
 
       // RWS_PRE( duration >= RwReal(0) )
-      void SetBlendDuration( RwReal duration );
+      void SetBlendDuration(RwReal duration);
       // RWS_POST( result >= RwReal(0) )
       RwReal GetBlendDuration() const;
 
       // RWS_PRE( timeDelta >= RwReal(0) )
-      bool Update( RwReal timeDelta );
+      bool Update(RwReal timeDelta);
 
    protected:
 
       // Revoked ops
-      CAnimSet( const CAnimSet& );
-      CAnimSet& operator = ( const CAnimSet& );
+      CAnimSet(const CAnimSet&);
+      CAnimSet& operator=(const CAnimSet&);
 
       // Implementation
-      void InitiateBlend( RpHAnimHierarchy& currDstHierarchy, RwUInt32 newDstAnimIndex );
+      void InitiateBlend(RpHAnimHierarchy& currDstHierarchy, RwUInt32 newDstAnimIndex);
 
       //RWS_PRE( HasTarget() )
       void TerminateBlend();
-      
-      bool UpdateUnblended( RwReal timeDelta );
-      bool UpdateBlended( RwReal timeDelta );
 
-      bool UpdateHierarchy( RpHAnimHierarchy& hierarchy, RwUInt32 animIndex, RwReal timeDelta );
-      const RpHAnimAnimation& GetRawAnimationData( RwUInt32 animIndex ) const;
-      bool IsCompatibleWithAllAnims( const RpHAnimHierarchy& hierarchy );
+      bool UpdateUnblended(RwReal timeDelta);
+      bool UpdateBlended(RwReal timeDelta);
+
+      bool UpdateHierarchy(RpHAnimHierarchy& hierarchy, RwUInt32 animIndex, RwReal timeDelta);
+      const RpHAnimAnimation& GetRawAnimationData(RwUInt32 animIndex) const;
+      bool IsCompatibleWithAllAnims(const RpHAnimHierarchy& hierarchy);
 
       // Data
       struct AnimData
       {
-         AnimData()
-            : pRawData_(0), rateMultiplier_(RwReal(1)), endBehavior_(LOOP), pName_(RWSTRING(""))
-         {}
+         AnimData() :
+            pRawData_(0),
+            rateMultiplier_(RwReal(1)),
+            endBehavior_(LOOP),
+            pName_(RWSTRING(""))
+         {
+         }
 
-         AnimData( const RpHAnimAnimation* pRawData, const RwChar* pName )
-            : pRawData_(pRawData), rateMultiplier_(RwReal(1)), endBehavior_(LOOP), pName_(pName)
-         {}
+         AnimData(const RpHAnimAnimation* pRawData, const RwChar* pName) :
+            pRawData_(pRawData),
+            rateMultiplier_(RwReal(1)),
+            endBehavior_(LOOP),
+            pName_(pName)
+         {
+         }
 
          const RpHAnimAnimation* pRawData_;
          RwReal rateMultiplier_;
          EndBehavior endBehavior_;
-         const RwChar *pName_;
+         const RwChar* pName_;
       };
 
       typedef std::vector<AnimData> HAnimDataVec;
-      
+
       HAnimDataVec animData_;
 
       RpHAnimHierarchy* pMainHierarchy_;

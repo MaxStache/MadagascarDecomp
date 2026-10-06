@@ -45,7 +45,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CTutorial8);
       RWS_REGISTERCLASS(CTutorial8);
-      
+
       /**
       *
       *  Create CTutorial8 object. Sets up the default values (not set by attributes) for this inherited class.
@@ -66,7 +66,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-            
+
       /**
       *
       *  Destroy CTutorial7 object. Note that this behavior does not need to unlink from the running tick as
@@ -76,10 +76,10 @@ namespace RWS
       CTutorial8::~CTutorial8(void)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial8::~CTutorial8");
-         
+
          RWS_RETURNVOID();
       }
-            
+
       /**
       *
       *  Handle Events, calls CTutorial2's handle events function (if necessary). Handles update of the counter
@@ -90,37 +90,37 @@ namespace RWS
       *  \see Scale_Object
       *
       */
-      void CTutorial8::HandleEvents(CMsg &pMsg)
+      void CTutorial8::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial8::HandleEvents");
-         
-         if(pMsg.Id == iMsgRunningTick)
+
+         if (pMsg.Id == iMsgRunningTick)
          {
             m_counter += 1;
-            
-            if(m_counter>=m_counter_max)
+
+            if (m_counter >= m_counter_max)
             {
                m_counter = 0;
-               
+
                // switch state to control if the object rotates
 
                m_rotate_flag = !m_rotate_flag;
             }
 
-            if(m_rotate_flag)
+            if (m_rotate_flag)
             {
                // Call CTutorial2's HandleEvents function, which will rotate the object
 
-               CTutorial2::HandleEvents(pMsg);    
+               CTutorial2::HandleEvents(pMsg);
             }
 
             Scale_Object();
          }
-            
-         
+
+
          RWS_RETURNVOID();
       }
-            
+
       /**
       *
       *  Handle Attributes, call CTutorial2's handle attributes function and handle attributes for this
@@ -133,16 +133,16 @@ namespace RWS
       void CTutorial8::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial8::HandleAttributes");
-         
+
          // Call CTutorial2's HandleAttributes function which gives us access
          // to CTutorial2's atomic so that it can handle commands from the system.
          CTutorial2::HandleAttributes(attr);
-         
-         CAttributeCommandIterator attrIt(attr,RWS_CLASSID_OF(CTutorial8));
-         
-         while(!attrIt.IsFinished())
+
+         CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CTutorial8));
+
+         while (!attrIt.IsFinished())
          {
-            switch(attrIt->GetCommandId())
+            switch (attrIt->GetCommandId())
             {
             case CMD_counter_max:
 
@@ -151,7 +151,7 @@ namespace RWS
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
 
@@ -207,6 +207,6 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
-    }//namespace Tutorial
+
+   }//namespace Tutorial
 }//namespace RWS

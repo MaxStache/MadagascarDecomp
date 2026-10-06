@@ -40,7 +40,7 @@
 
 namespace RWS
 {
-   namespace Audio 
+   namespace Audio
    {
       /**
       *
@@ -53,8 +53,7 @@ namespace RWS
       * \see CSystemCommands
       *
       */
-      class AudioStream: public CSystemCommands, public CAttributeHandler , public CEventHandler, 
-                         public LinearAllocationPolicy
+      class AudioStream : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(AudioStream);
@@ -62,41 +61,41 @@ namespace RWS
          RWS_CATEGORY("Audio");
          RWS_DESCRIPTION("Stream Player", "Audio stream player.");
 
-         AudioStream(const CAttributePacket&);
+         AudioStream(const CAttributePacket &);
          ~AudioStream();
-            
+
          RWS_BEGIN_COMMANDS
-            RWS_SEPARATOR("Play/Stop Events", 1)
-            RWS_MESSAGE( CMD_m_play,      
-                         "Play stream.",
-                         "Play a loaded stream file.",
-                         RECEIVE,
-                         0,
-                         0)
+         RWS_SEPARATOR("Play/Stop Events", 1)
+         RWS_MESSAGE(CMD_m_play,
+                     "Play stream.",
+                     "Play a loaded stream file.",
+                     RECEIVE,
+                     0,
+                     0)
 
-            RWS_MESSAGE( CMD_m_stop,      
-                         "Stop stream",
-                         "Stop a stream from playing.",
-                         RECEIVE, 
-                         0, 
-                         0)
+         RWS_MESSAGE(CMD_m_stop,
+                     "Stop stream",
+                     "Stop a stream from playing.",
+                     RECEIVE,
+                     0,
+                     0)
 
-            RWS_ATTRIBUTE( CMD_selectText,
-                           "Select stream",
-                           "Select stream. You must enter a filename for the stream file.",
-                           EDIT,
-                           RwChar,
-                           DEFAULT("Enter Filename Here ..."))
+         RWS_ATTRIBUTE(CMD_selectText,
+                       "Select stream",
+                       "Select stream. You must enter a filename for the stream file.",
+                       EDIT,
+                       RwChar,
+                       DEFAULT("Enter Filename Here ..."))
          RWS_END_COMMANDS;
 
-         virtual void HandleAttributes(const CAttributePacket& attr);
+         virtual void HandleAttributes(const CAttributePacket &attr);
          virtual void HandleEvents(CMsg &pMsg);
-         void OpenStream(const RwChar* const pName);
+         void OpenStream(const RwChar *const pName);
       private:
-         CEventId             m_Play;              /**< Event to start a stream playing.*/ 
-         CEventId             m_Stop;              /**< Event to stop a stream from playing.*/
-         RwaOsStream         *m_pStream;           /**< Pointer to a RenderWare Audio stream.*/
-         RwChar              *m_pStreamName;       /**< File name for stream to be loaded.*/
+         CEventId m_Play;              /**< Event to start a stream playing.*/
+         CEventId m_Stop;              /**< Event to stop a stream from playing.*/
+         RwaOsStream *m_pStream;           /**< Pointer to a RenderWare Audio stream.*/
+         RwChar *m_pStreamName;       /**< File name for stream to be loaded.*/
          RwaStreamMediaParams m_MediaParams;       /**< Media parameters for RenderWare Audio streams.
                                                         See RenderWare Audio api reference for 
                                                         information on RwaStreamMediaParams.*/

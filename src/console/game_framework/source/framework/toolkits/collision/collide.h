@@ -35,9 +35,9 @@
 #include <rtintsec.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpcollis.lib")
-#pragma comment (lib, "rtintsec.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpcollis.lib")
+#pragma comment(lib, "rtintsec.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ namespace RWS
    {
       void DisplayCollisionTriangle(RwV3d *pVertices[3], RwV3d *pNormal, const RwUInt8 uiRed, const RwUInt8 uiGreen, const RwUInt8 uiBlue);
 
-      RwReal TrianglePointNearestPoint(RwV3d * vpaVertices[3], RwV3d * vpNormal, RwV3d * vpPt);
+      RwReal TrianglePointNearestPoint(RwV3d *vpaVertices[3], RwV3d *vpNormal, RwV3d *vpPt);
       /**
       *
       *  \ingroup CollisionToolkit
@@ -108,24 +108,24 @@ namespace RWS
          } nearest_collision;
 
          RpCollisionTriangle *WorldTriangleIntersectCB(
-             RpIntersection * intersection,
-             RpWorldSector * sector,       
-             RpCollisionTriangle * collTriangle,
-             RwReal distance,
-             void *data);
+            RpIntersection *intersection,
+            RpWorldSector *sector,
+            RpCollisionTriangle *collTriangle,
+            RwReal distance,
+            void *data);
 
          RpCollisionTriangle *AtomicTriangleIntersectCB(
-             RpIntersection * intersection,
-             RpCollisionTriangle * collTriangle,
-             RwReal distance __RWUNUSED__,
-             void *data);
+            RpIntersection *intersection,
+            RpCollisionTriangle *collTriangle,
+            RwReal distance __RWUNUSED__,
+            void *data);
 
          RpAtomic *AtomicBoundryIntersectCB(
-             RpIntersection * intersection,
-             RpWorldSector * sector,       
-             RpAtomic * atomic,
-             RwReal distance,
-             void *data);
+            RpIntersection *intersection,
+            RpWorldSector *sector,
+            RpAtomic *atomic,
+            RwReal distance,
+            void *data);
 
          //
          // (x^2)+(y^2)+(z^2)<radius

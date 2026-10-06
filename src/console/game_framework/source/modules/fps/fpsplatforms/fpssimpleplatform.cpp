@@ -50,7 +50,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSSimplePlatform);
       RWS_REGISTERCLASS(FPSSimplePlatform);
-      
+
       /**
       *
       * \ref FPSSimplePlatform(). Create FPSSimplePlatform object.
@@ -58,34 +58,34 @@ namespace RWS
       * \see ~FPSSimplePlatform
       *
       */
-      FPSSimplePlatform::FPSSimplePlatform(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic),
-         m_playstate (LOOP)
+      FPSSimplePlatform::FPSSimplePlatform(const CAttributePacket &attr) :
+         InitCEventHandler(&m_pAtomic),
+         m_playstate(LOOP)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::FPSSimplePlatform");
-         
+
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-         
+
          m_mat = RwMatrixCreate();
          RWS_POST(m_mat);
-         
+
          // Target max offset
          m_direction.x = 0.0f;
-         m_direction.y = 0.0f;  
+         m_direction.y = 0.0f;
          m_direction.z = 0.0f;
-         
+
          // current position along max offset
          m_attribDir.x = 0.0f;
          m_attribDir.y = 0.0f;
          m_attribDir.z = 0.0f;
-         
+
          ResetPlatform();
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ~FPSSimplePlatform(). Destroy FPSSimplePlatform object
@@ -95,56 +95,56 @@ namespace RWS
       FPSSimplePlatform::~FPSSimplePlatform(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::~FPSSimplePlatform");
-         
+
          RWS_PRE(m_mat);
          RwMatrixDestroy(m_mat);
          m_mat = 0;
          UnLinkMsg(iMsgRunningTick);
          UnLinkMsg(m_trigger);
          UnRegisterMsg(m_trigger);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref FPSSimplePlatform(). Reset platform to initial state
       *
       */
-      void FPSSimplePlatform::ResetPlatform( void )
+      void FPSSimplePlatform::ResetPlatform(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::ResetPlatform");
-         
+
          m_toX.x = 0.0f;
          m_toX.y = 0.0f;
          m_toX.z = 0.0f;
-         
-         m_toY.x = 0.0f;  
-         m_toY.y = 0.0f;  
-         m_toY.z = 0.0f;  
-         
+
+         m_toY.x = 0.0f;
+         m_toY.y = 0.0f;
+         m_toY.z = 0.0f;
+
          m_toZ.x = 0.0f;
          m_toZ.y = 0.0f;
          m_toZ.z = 0.0f;
-         
+
          m_actual.x = 0.0f;
          m_actual.y = 0.0f;
          m_actual.z = 0.0f;
-         
+
          m_direction.x = m_attribDir.x;
          m_direction.y = m_attribDir.y;
          m_direction.z = m_attribDir.z;
-         m_state    = START;
-         
-         m_dest[0]  = false;
-         m_dest[1]  = false;
-         m_dest[2]  = false;   
-         
+         m_state = START;
+
+         m_dest[0] = false;
+         m_dest[1] = false;
+         m_dest[2] = false;
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleEvents(). Handle events for platform.  Handles movement 
@@ -157,9 +157,9 @@ namespace RWS
       void FPSSimplePlatform::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::HandleEvents");
-         
-         RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-         
+
+         RwFrame *pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
+
          // If linked to the running tick
          if (pMsg.Id == iMsgRunningTick)
          {
@@ -170,48 +170,48 @@ namespace RWS
          {
             ToggleON_OFF();
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ToggleON_OFF(). Turn platform on or off
       *
       * \ref iMsgRunningTick
       */
-      void FPSSimplePlatform::ToggleON_OFF( void )
+      void FPSSimplePlatform::ToggleON_OFF(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::ToggleON_OFF");
-         
+
          // Toggle Running tick
          if (IsLinked(iMsgRunningTick) == false)
          {
             LinkMsg(iMsgRunningTick);
-            
+
             // if platform stopped, reset and start
             if (m_state == STOP)
             {
-               ResetPlatform();   
+               ResetPlatform();
                m_state = START;
             }
          }
          else
          {
             UnLinkMsg(iMsgRunningTick);
-            
+
             // if platform stopped,  reset
             if (m_state == STOP)
             {
-               ResetPlatform();   
+               ResetPlatform();
             }
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref FPSSimplePlatform. Move platform in direction of m_direction attribute.  
@@ -222,25 +222,25 @@ namespace RWS
       * \see MovePlatform, ProcessPlatformX, ProcessPlatformY, ProcessPlatformZ, TransformPlatform
       *
       */
-      void FPSSimplePlatform::MovePlatform( RwFrame *frame )
+      void FPSSimplePlatform::MovePlatform(RwFrame *frame)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::MovePlatform");
-         
+
          switch (m_state)
          {
          case START:
             // All axis have reached target destination,  set new destinion to original starting position
-            if ( (m_dest[0]) && (m_dest[1]) && (m_dest[2]) )
+            if ((m_dest[0]) && (m_dest[1]) && (m_dest[2]))
             {
                m_state = DESTINATION;
-               
+
                m_direction.x = m_direction.x - m_direction.x;
                m_direction.y = m_direction.y - m_direction.y;
                m_direction.z = m_direction.z - m_direction.z;
-               
-               m_dest[0]  = false;
-               m_dest[1]  = false;
-               m_dest[2]  = false;
+
+               m_dest[0] = false;
+               m_dest[1] = false;
+               m_dest[2] = false;
             }
             else
             {
@@ -249,25 +249,25 @@ namespace RWS
                ProcessPlatformZ(frame);
             }
             break;
-            
+
          case DESTINATION:
             // All axis have reached original
-            if ( (m_dest[0]) && (m_dest[1]) && (m_dest[2]) )
+            if ((m_dest[0]) && (m_dest[1]) && (m_dest[2]))
             {
                // If LOOPED: Set new destinion to original starting position
                if (m_playstate == LOOP)
                {
                   m_state = START;
-                  
+
                   m_direction.x = m_attribDir.x;
                   m_direction.y = m_attribDir.y;
                   m_direction.z = m_attribDir.z;
-                  
-                  m_dest[0]  = false;
-                  m_dest[1]  = false;
-                  m_dest[2]  = false;
+
+                  m_dest[0] = false;
+                  m_dest[1] = false;
+                  m_dest[2] = false;
                }
-               
+
                // If PLAY ONCE: Stop platform and unlink from running tick
                if (m_playstate == ONCE)
                {
@@ -282,15 +282,15 @@ namespace RWS
                ProcessPlatformZ(frame);
             }
             break;
-            
-         case  STOP:
+
+         case STOP:
             break;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ProcessPlatformX. Move platform on X axis
@@ -303,32 +303,32 @@ namespace RWS
       void FPSSimplePlatform::ProcessPlatformX(RwFrame *frame)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::ProcessPlatformX");
-         
+
          // If destination reached,  set flag
-         if (m_actual.x ==  m_direction.x)
+         if (m_actual.x == m_direction.x)
          {
             m_dest[0] = true;
          }
-         // if platform not reached destination,  move platform  
-         else if (m_actual.x <=  m_direction.x )
+         // if platform not reached destination,  move platform
+         else if (m_actual.x <= m_direction.x)
          {
             m_toX.x = 1.0f;
             m_actual.x = m_actual.x + 1.0f;
-            
+
             TransformPlatform(frame, &m_toX);
          }
-         else if (m_actual.x >=  m_direction.x )
+         else if (m_actual.x >= m_direction.x)
          {
             m_toX.x = -1.0f;
             m_actual.x = m_actual.x - 1.0f;
-            
+
             TransformPlatform(frame, &m_toX);
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ProcessPlatformY. mMove platform on Y axis
@@ -337,36 +337,36 @@ namespace RWS
       *
       * \see MovePlatform, ProcessPlatformX, ProcessPlatformY, ProcessPlatformZ, TransformPlatform
       *
-      */    
+      */
       void FPSSimplePlatform::ProcessPlatformY(RwFrame *frame)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::ProcessPlatformY");
-         
+
          // If destination reached,  set flag
-         if (m_actual.y ==  m_direction.y)
+         if (m_actual.y == m_direction.y)
          {
             m_dest[1] = true;
          }
-         // if platform not reached destination,  move platform  
-         else if (m_actual.y <=  m_direction.y )
+         // if platform not reached destination,  move platform
+         else if (m_actual.y <= m_direction.y)
          {
             m_toY.y = 1.0f;
             m_actual.y = m_actual.y + 1.0f;
-            
+
             TransformPlatform(frame, &m_toY);
          }
-         else if (m_actual.y >  m_direction.y )
+         else if (m_actual.y > m_direction.y)
          {
             m_toY.y = -1.0f;
             m_actual.y = m_actual.y - 1.0f;
-            
+
             TransformPlatform(frame, &m_toY);
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ProcessPlatformZ. Move platform on Zaxis
@@ -375,36 +375,36 @@ namespace RWS
       *
       * \see MovePlatform, ProcessPlatformX, ProcessPlatformY, ProcessPlatformZ, TransformPlatform
       *
-      */        
+      */
       void FPSSimplePlatform::ProcessPlatformZ(RwFrame *frame)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::ProcessPlatformZ");
-         
+
          // If destination reached,  set flag
-         if (m_actual.z ==  m_direction.z)
+         if (m_actual.z == m_direction.z)
          {
             m_dest[2] = true;
          }
-         // if platform not reached destination,  move platform  
-         else if (m_actual.z <=  m_direction.z )
+         // if platform not reached destination,  move platform
+         else if (m_actual.z <= m_direction.z)
          {
             m_toZ.z = 1.0f;
             m_actual.z = m_actual.z + 1.0f;
-            
+
             TransformPlatform(frame, &m_toZ);
          }
-         else if (m_actual.z >  m_direction.z )
+         else if (m_actual.z > m_direction.z)
          {
             m_toZ.z = -1.0f;
             m_actual.z = m_actual.z - 1.0f;
-            
+
             TransformPlatform(frame, &m_toZ);
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref TransformPlatform: Apply Transformation to platform
@@ -415,17 +415,17 @@ namespace RWS
       * \see MovePlatform, ProcessPlatformX, ProcessPlatformY, ProcessPlatformZ, TransformPlatform
       *
       */
-      void FPSSimplePlatform::TransformPlatform( RwFrame *frame, RwV3d *vec )
+      void FPSSimplePlatform::TransformPlatform(RwFrame *frame, RwV3d *vec)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::TransformPlatform");
-         
-         RwMatrixTranslate (m_mat, vec, rwCOMBINEREPLACE);
+
+         RwMatrixTranslate(m_mat, vec, rwCOMBINEREPLACE);
          RwFrameTransform(frame, m_mat, rwCOMBINEPRECONCAT);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  \ref HandleAttributes.  HandleAttributes
@@ -433,20 +433,20 @@ namespace RWS
       *  \param attr Standard Attribute Package
       *  
       */
-      void FPSSimplePlatform::HandleAttributes(const CAttributePacket& attr)
+      void FPSSimplePlatform::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSSimplePlatform::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
          m_pAtomic.HandleSystemCommands(attr);
-         
+
          RespondToWorkspace(attr);
          RespondToAttributes(attr);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref RespondToWorkspace. Handle system commands.  if atomic reposition in workspace,  reset platform
@@ -454,10 +454,10 @@ namespace RWS
       * \param attr Standard Attribute Package
       *
       */
-      void FPSSimplePlatform::RespondToWorkspace( const CAttributePacket& attr )
+      void FPSSimplePlatform::RespondToWorkspace(const CAttributePacket &attr)
       {
          CAttributeCommandIterator attrItb(attr, RWS_CLASSID_OF(CSystemCommands));
-         
+
          while (!attrItb.IsFinished())
          {
             switch (attrItb->GetCommandId())
@@ -471,8 +471,8 @@ namespace RWS
             ++attrItb;
          }
       }
-      
-      
+
+
       /**
       *
       * \ref RespondToAttributes. Handle standard attributes form
@@ -480,51 +480,51 @@ namespace RWS
       * \param attr Standard Attribute Package
       *
       */
-      void FPSSimplePlatform::RespondToAttributes( const CAttributePacket& attr )
+      void FPSSimplePlatform::RespondToAttributes(const CAttributePacket &attr)
       {
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSSimplePlatform));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
             case CMD_direction:
                attrIt->GetCommandData(m_attribDir);
-               
+
                m_direction.x = m_attribDir.x;
                m_direction.y = m_attribDir.y;
                m_direction.z = m_attribDir.z;
                break;
-               
+
             case CMD_m_trigger:
-               ReplaceLinkedMsg ( m_trigger, attrIt->GetAs_RwChar_ptr(), 0);
+               ReplaceLinkedMsg(m_trigger, attrIt->GetAs_RwChar_ptr(), 0);
                break;
-               
+
             case CMD_State:
                RwUInt32 type;
-               
+
                attrIt->GetCommandData(type);
-               
+
                switch (type)
                {
-               case 0: 
-                  m_playstate = LOOP; 
+               case 0:
+                  m_playstate = LOOP;
                   break;
-                  
-               case 1: 
-                  m_playstate = ONCE; 
+
+               case 1:
+                  m_playstate = ONCE;
                   break;
-                  
+
                default:
                   RWS_ASSERTFAIL("FPSSimplePlatform::HandleAttributes illegal parameter value.");
                   break;
                }
                break;
             }
-            
+
             ++attrIt;
          }
       }
-      
+
    }//namespace FPS
 }//namespace RWS

@@ -45,7 +45,7 @@
 
 namespace RWS
 {
-   
+
    namespace FX
    {
       /**
@@ -57,16 +57,16 @@ namespace RWS
       */
       RWS_IMPLEMENT_CLASSID(CFXLight_2Stage);
       RWS_REGISTERCLASS(CFXLight_2Stage);
-      
+
       const RwReal Angle180Degrees = 180.0f;
-   
+
       /**
       *
       *  Construct a CFXLight_2Stage object and initialize member data.
       *
       */
-      CFXLight_2Stage::CFXLight_2Stage(const CAttributePacket& rAttr)
-         : CFXBaseLight(rAttr),
+      CFXLight_2Stage::CFXLight_2Stage(const CAttributePacket &rAttr) :
+         CFXBaseLight(rAttr),
          InitCEventHandler(&m_pLight),
          pingpong(false),
          step(0),
@@ -77,87 +77,87 @@ namespace RWS
          LerpFinishBlue(false)
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::CFXLight_2Stage");
-         
+
          m_mat = RwMatrixCreate();
          RWS_POST(m_mat);
-         
-         m_rot[0]       = 0.0f;
-         m_rot[1]       = 0.0f;  
-         m_rot[2]       = 0.0f;
-         
-         color1.red     = 0.0f;
-         color1.green   = 0.0f;
-         color1.blue    = 0.0f;
-         color1.alpha   = 0.0f;
-         
-         color2.red     = 0.0f;
-         color2.green   = 0.0f;
-         color2.blue    = 0.0f;
-         color2.alpha   = 0.0f;
-         
-         temp.red       = 0.0f;
-         temp.green     = 0.0f;
-         temp.blue      = 0.0f;
-         temp.alpha     = 0.0f;
-         
+
+         m_rot[0] = 0.0f;
+         m_rot[1] = 0.0f;
+         m_rot[2] = 0.0f;
+
+         color1.red = 0.0f;
+         color1.green = 0.0f;
+         color1.blue = 0.0f;
+         color1.alpha = 0.0f;
+
+         color2.red = 0.0f;
+         color2.green = 0.0f;
+         color2.blue = 0.0f;
+         color2.alpha = 0.0f;
+
+         temp.red = 0.0f;
+         temp.green = 0.0f;
+         temp.blue = 0.0f;
+         temp.alpha = 0.0f;
+
          // Setup pointers for use in Ping-Pong state
          pColor1 = &color1;
          pColor2 = &color2;
 
          // Make sure light is not attached to the world, until an event has been received.
          RemoveLightFromWorld();
-         
+
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Destroy a CFXLight_2Stage object.
       *
       */
-      CFXLight_2Stage::~CFXLight_2Stage() 
+      CFXLight_2Stage::~CFXLight_2Stage()
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::~CFXLight_2Stage");
-         
+
          RWS_PRE(m_mat);
          RwMatrixDestroy(m_mat);
          m_mat = 0;
-         
+
          UnLinkMsg(iMsgRunningTick);
-         
+
          UnLinkMsg(m_trigger_enable);
          UnRegisterMsg(m_trigger_enable);
-         
+
          UnLinkMsg(m_trigger_disable);
          UnRegisterMsg(m_trigger_disable);
-         
+
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Set lights rotation matrix.
       *
       */
-      void CFXLight_2Stage::RotateLight( void )
-      {  
+      void CFXLight_2Stage::RotateLight(void)
+      {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::RotateLight");
-         
+
          // Set lights rotation matrix
-         RwMatrixRotate(m_mat, &XAxis,m_rot[0], rwCOMBINEREPLACE);
-         RwMatrixRotate(m_mat, &YAxis,m_rot[1], rwCOMBINEPRECONCAT);
-         RwMatrixRotate(m_mat, &ZAxis,m_rot[2], rwCOMBINEPRECONCAT);      
+         RwMatrixRotate(m_mat, &XAxis, m_rot[0], rwCOMBINEREPLACE);
+         RwMatrixRotate(m_mat, &YAxis, m_rot[1], rwCOMBINEPRECONCAT);
+         RwMatrixRotate(m_mat, &ZAxis, m_rot[2], rwCOMBINEPRECONCAT);
 
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Handle events.  Interpolate between source and destination RGB values.
       *  
       */
       void CFXLight_2Stage::HandleEvents(CMsg &pMsg)
-      {    
+      {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::HandleEvents");
 
          // If connected to the running tick.
@@ -173,27 +173,27 @@ namespace RWS
          else if (pMsg.Id == m_trigger_disable && DisableLight(pMsg))
          {
          }
-         
+
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Transform and interpolate light source.
       *  
       */
-      void CFXLight_2Stage::UpdateLight( void )
+      void CFXLight_2Stage::UpdateLight(void)
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::UpdateLight");
 
          RwFrameTransform(RpLightGetFrame(m_pLight.ptr()), m_mat, rwCOMBINEPRECONCAT);
-      
+
          // Interpolate the colors.
          LERP_Lights();
-         
+
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  If not already in the world add the light and start animating.
@@ -204,7 +204,7 @@ namespace RWS
       bool CFXLight_2Stage::EnableLight(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::EnableLight");
-         
+
          bool ret = false;
 
          // If not linked to the world link it.
@@ -213,7 +213,7 @@ namespace RWS
          {
             AddLightToWorld();
             LinkMsg(iMsgRunningTick);
-            
+
             ret = true;
          }
 
@@ -221,29 +221,29 @@ namespace RWS
          //
          if (pMsg.pData && m_reset_pos_on_trigger)
          {
-               RwFrame* pSFrame = static_cast<RwFrame*>(pMsg.pData);
+            RwFrame *pSFrame = static_cast<RwFrame *>(pMsg.pData);
 
-               RwMatrix *pSMatrix = RwFrameGetLTM(pSFrame);
+            RwMatrix *pSMatrix = RwFrameGetLTM(pSFrame);
 
-               if (pSMatrix && m_pLight)
-               {
-                  RwFrameTransform(RpLightGetFrame(m_pLight.ptr()), pSMatrix, rwCOMBINEREPLACE);
-               }
+            if (pSMatrix && m_pLight)
+            {
+               RwFrameTransform(RpLightGetFrame(m_pLight.ptr()), pSMatrix, rwCOMBINEREPLACE);
+            }
          }
 
          // Re-trigger effect.
          //
          if (m_reset_on_trigger)
          {
-            LerpFinishRed  = false;
-            LerpFinishGreen   = false;
+            LerpFinishRed = false;
+            LerpFinishGreen = false;
             LerpFinishBlue = false;
-            pingpong       = false;
+            pingpong = false;
          }
-         
+
          RWS_RETURN(ret);
       }
-      
+
       /**
       *
       *  If the light is attached to the world, remove it, and stop animating.
@@ -251,10 +251,10 @@ namespace RWS
       *  \return True if the light has been removed from the world, if the light wasn't already in the world
       *  returns false.
       */
-      bool CFXLight_2Stage::DisableLight( CMsg &pMsg)
+      bool CFXLight_2Stage::DisableLight(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::DisableLight");
-         
+
          bool ret = false;
          // If linked to the world
          //
@@ -263,142 +263,142 @@ namespace RWS
             // remove light from world and unlink from running tick
             RemoveLightFromWorld();
             UnLinkMsg(iMsgRunningTick);
-            
+
             ret = true;
          }
-         
+
          // Update position of light
          //
          if (pMsg.pData && m_reset_pos_on_trigger)
          {
-               RwFrame* pSFrame = static_cast<RwFrame*>(pMsg.pData);
+            RwFrame *pSFrame = static_cast<RwFrame *>(pMsg.pData);
 
-               RwMatrix *pSMatrix = RwFrameGetLTM(pSFrame);
+            RwMatrix *pSMatrix = RwFrameGetLTM(pSFrame);
 
-               if (pSMatrix && m_pLight)
-               {
-                  RwFrameTransform(RpLightGetFrame(m_pLight.ptr()), pSMatrix, rwCOMBINEREPLACE);
-               }
+            if (pSMatrix && m_pLight)
+            {
+               RwFrameTransform(RpLightGetFrame(m_pLight.ptr()), pSMatrix, rwCOMBINEREPLACE);
+            }
          }
-         
+
          RWS_RETURN(ret);
       }
-   
+
       /**
       *
       *  Handle attributes.
       *
       */
-      void CFXLight_2Stage::HandleAttributes(const CAttributePacket& attr)
-      {    
+      void CFXLight_2Stage::HandleAttributes(const CAttributePacket &attr)
+      {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::HandleAttributes");
-         
-         CFXBaseLight::HandleAttributes(attr);    
+
+         CFXBaseLight::HandleAttributes(attr);
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXLight_2Stage));
-      
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
-            {            
+            {
             case CMD_Set_t_color1:
                {
                   RwRGBA Color = attrIt->GetAs_RwRGBA();
-                  RwRGBARealFromRwRGBA  (&color1, &Color);
+                  RwRGBARealFromRwRGBA(&color1, &Color);
                }
                break;
-               
+
             case CMD_Set_t_color2:
                {
                   RwRGBA Color = attrIt->GetAs_RwRGBA();
-                  RwRGBARealFromRwRGBA  (&color2, &Color);
+                  RwRGBARealFromRwRGBA(&color2, &Color);
                }
-               break;            
-               
+               break;
+
             case CMD_rot_x:
                // Get X rotation value
                attrIt->GetCommandData(m_rot[0]);
                m_rot[0] = (m_rot[0] / Angle180Degrees) * rwPI;
                RotateLight();
                break;
-               
+
             case CMD_rot_y:
                // Get Y rotation value
                attrIt->GetCommandData(m_rot[1]);
                m_rot[1] = (m_rot[1] / Angle180Degrees) * rwPI;
                RotateLight();
                break;
-               
+
             case CMD_rot_z:
                // Get Z rotation value
                attrIt->GetCommandData(m_rot[2]);
                m_rot[2] = (m_rot[2] / Angle180Degrees) * rwPI;
                RotateLight();
                break;
-               
+
             case CMD_m_trigger_enable:
                // Re-register new trigger event
-               ReplaceLinkedMsg (m_trigger_enable, attrIt->GetAs_RwChar_ptr(), "RwFrame*");
+               ReplaceLinkedMsg(m_trigger_enable, attrIt->GetAs_RwChar_ptr(), "RwFrame*");
                break;
-               
+
             case CMD_m_trigger_disable:
                // Re-register new trigger event
-               ReplaceLinkedMsg (m_trigger_disable, attrIt->GetAs_RwChar_ptr(), "RwFrame*");
+               ReplaceLinkedMsg(m_trigger_disable, attrIt->GetAs_RwChar_ptr(), "RwFrame*");
                break;
-               
+
             case CMD_Playback_type:
                {
                   RwUInt32 type;
-                  
+
                   attrIt->GetCommandData(type);
 
-                  LerpFinishRed    = false;
-                  LerpFinishGreen  = false;
-                  LerpFinishBlue   = false;
-                 
-                  // LIST sends the element to select, need to convert this to the 
+                  LerpFinishRed = false;
+                  LerpFinishGreen = false;
+                  LerpFinishBlue = false;
+
+                  // LIST sends the element to select, need to convert this to the
                   // define for the light type as they are not 0,1,2
                   switch (type)
                   {
-                  case 0: 
-                     LerpType = PLAY_ONCE; 
+                  case 0:
+                     LerpType = PLAY_ONCE;
                      break;
-                  case 1: 
-                     LerpType = PING_PONG; 
+                  case 1:
+                     LerpType = PING_PONG;
                      break;
-                  case 2: 
-                     LerpType = LOOP; 
+                  case 2:
+                     LerpType = LOOP;
                      break;
-                     
+
                   default:
                      RWS_ASSERTFAIL("CFXLight_2Stage::HandleAttributes illegal parameter value.");
                      break;
                   }
-                  
+
                   // Reset pointers to correct addresses.
                   pColor1 = &color1;
                   pColor2 = &color2;
                }
                break;
-               
+
             case CMD_step:
                // Get new step value
                attrIt->GetCommandData(step);
                break;
-               
+
             case CMD_m_reset_on_trigger:
                attrIt->GetCommandData(m_reset_on_trigger);
                break;
-               
+
             case CMD_m_reset_pos_on_trigger:
                attrIt->GetCommandData(m_reset_pos_on_trigger);
                break;
-               }
-               
-               ++attrIt;
             }
+
+            ++attrIt;
+         }
          RWS_RETURNVOID();
       }
-    
+
       /**
       *
       *  Interpolate color values based on playback type
@@ -411,47 +411,47 @@ namespace RWS
          switch (LerpType)
          {
             // Only interpolate once
-            case PLAY_ONCE: 
-               ColorCycle();
+         case PLAY_ONCE:
+            ColorCycle();
             break;
 
             // Interpolate backwards and forwards
-            case PING_PONG: 
-               ColorCycle();
+         case PING_PONG:
+            ColorCycle();
 
                // If lerp finished
-               if ((LerpFinishRed) && (LerpFinishGreen) && (LerpFinishBlue))
-               {
+            if ((LerpFinishRed) && (LerpFinishGreen) && (LerpFinishBlue))
+            {
                   // Toggle pingpong state
-                  pingpong = !pingpong;
+               pingpong = !pingpong;
 
                   // Swap the pointers to the two colors
-                  RwRGBAReal * pTmp;
-                  pTmp = pColor1;
-                  pColor1 = pColor2;
-                  pColor2 = pTmp;
+               RwRGBAReal *pTmp;
+               pTmp = pColor1;
+               pColor1 = pColor2;
+               pColor2 = pTmp;
 
-                  LerpFinishRed    = false;
-                  LerpFinishGreen  = false;
-                  LerpFinishBlue   = false;
-               }
+               LerpFinishRed = false;
+               LerpFinishGreen = false;
+               LerpFinishBlue = false;
+            }
 
             break;
 
             // Interpolate looped
-            case LOOP: 
-               ColorCycle();
+         case LOOP:
+            ColorCycle();
 
                // If lerp finished
-               if ((LerpFinishRed) && (LerpFinishGreen) && (LerpFinishBlue))
-               {
+            if ((LerpFinishRed) && (LerpFinishGreen) && (LerpFinishBlue))
+            {
                   // Restore source color
-                  temp = color1;
+               temp = color1;
 
-                  LerpFinishRed    = false;
-                  LerpFinishGreen  = false;
-                  LerpFinishBlue   = false;
-               }
+               LerpFinishRed = false;
+               LerpFinishGreen = false;
+               LerpFinishBlue = false;
+            }
 
             break;
          }
@@ -459,13 +459,13 @@ namespace RWS
          RpLightSetColor(m_pLight, &temp);
          RWS_RETURNVOID();
       }
-    
+
       /**
       *
       *  cycle using a step values between a source and destination RGB value
       *
       */
-      void CFXLight_2Stage::ColorCycle( void )
+      void CFXLight_2Stage::ColorCycle(void)
       {
          RWS_FUNCTION("RWS::FX::CFXLight_2Stage::ColorCycle");
 

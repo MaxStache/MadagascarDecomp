@@ -63,17 +63,17 @@ namespace RWS
       *  \param message Null terminated character string to output.
       *
       */
-      void OutputPlatformDebugMessage( const char * message )
+      void OutputPlatformDebugMessage(const char* message)
       {
 #if defined(_MSC_VER)
 
          OutputDebugStringA(message);
 
-#elif defined (SKY)
+#elif defined(SKY)
 
          printf("%s", message);
 
-#elif defined (DOLPHIN)
+#elif defined(DOLPHIN)
 
          OSReport("%s", message);
 
@@ -82,7 +82,7 @@ namespace RWS
 #endif
       }
    }
-   
+
 
    /**
    *
@@ -92,9 +92,10 @@ namespace RWS
    *  \see OutputPlatformDebugMessage
    *
    */
-   debug_buf::debug_buf() : m_OutputCBCount(0)
+   debug_buf::debug_buf() :
+      m_OutputCBCount(0)
    {
-      // Setup the buffer area 
+      // Setup the buffer area
       // (note end is one less, to allow for the null terminating char)
       setp(&m_buffer[0], (&m_buffer[0] + (sizeof(m_buffer) - 1)));
 
@@ -121,11 +122,11 @@ namespace RWS
    *  \param OutputCB Function to add to the callback list.
    *
    */
-   void debug_buf::AddOutputCallback( OutputMessageCB OutputCB )
+   void debug_buf::AddOutputCallback(OutputMessageCB OutputCB)
    {
       RWS_WARNING(m_OutputCBCount < MAXOUTPUTCALLBACKS,
-                  "debug_buf can only keep track of " << MAXOUTPUTCALLBACKS \
-                  << " output callbacks; extra ones will be ignored.");
+                  "debug_buf can only keep track of " << MAXOUTPUTCALLBACKS
+                                                      << " output callbacks; extra ones will be ignored.");
 
       if (m_OutputCBCount >= MAXOUTPUTCALLBACKS)
       {
@@ -147,7 +148,7 @@ namespace RWS
    *  \param OutputCB Function to remove from the callback list.
    *
    */
-   void debug_buf::RemoveOutputCallback( OutputMessageCB OutputCB )
+   void debug_buf::RemoveOutputCallback(OutputMessageCB OutputCB)
    {
       for (RwUInt32 uCount = 0; uCount < m_OutputCBCount; uCount++)
       {
@@ -160,7 +161,7 @@ namespace RWS
             break;
          }
       }
-   }   
+   }
 
    /**
    *
@@ -171,7 +172,7 @@ namespace RWS
    *  \param message Null terminated character string to output.
    *
    */
-   void debug_buf::OutputDebugMessage( char * szMessage )
+   void debug_buf::OutputDebugMessage(char* szMessage)
    {
       static bool recursionguard = false;
 
@@ -199,7 +200,7 @@ namespace RWS
    int debug_buf::sync()
    {
       // Can't use an RWS_ASSERT here, or it will recursively call this trace class
-      if ( pptr() > epptr() )
+      if (pptr() > epptr())
       {
          OutputDebugMessage("Warning: pptr() > epptr(), debug_buf buffer has been overrun.\n");
          RWS_DEBUGBREAK;
@@ -210,7 +211,7 @@ namespace RWS
       // USB connection to the development kit.
       //
       // Only flush the buffer if it is full - to keep the number of network packets down
-      if ( pptr() == epptr() )
+      if (pptr() == epptr())
       {
 #endif
          // null-terminate the string
@@ -233,10 +234,10 @@ namespace RWS
    *  Custom Implementation of std::streambuf::overflow for debug_buf.
    *
    */
-   int debug_buf::overflow( int c )
+   int debug_buf::overflow(int c)
    {
       // flush the current contents of the buffer
-      if ( sync() != -1 )
+      if (sync() != -1)
       {
          // flush went ok - add the given character to the buffer
          return sputc(c);
@@ -268,13 +269,15 @@ namespace RWS
    *           standards-compliant versions hence the slightly different base constructor calls.
    *
    */
-   debug_ostream::debug_ostream( debug_buf * pBuf )
+   debug_ostream::debug_ostream(debug_buf* pBuf)
 #if defined(SKY)
-      : std::ostream ( pBuf ),
+      :
+      std::ostream(pBuf),
 #else
-      : std::basic_ostream<char, std::char_traits<char> > ( pBuf ),
+      :
+      std::basic_ostream<char, std::char_traits<char>>(pBuf),
 #endif
-        m_pBuf(pBuf)
+      m_pBuf(pBuf)
    {
    }
 
@@ -286,7 +289,7 @@ namespace RWS
    debug_ostream::~debug_ostream()
    {
    }
-   
+
    /**
    *
    *  Custom implementation of std::ostream::rdbuf() that
@@ -295,25 +298,25 @@ namespace RWS
    *
    *  \return Pointer to the debug_buf within a debug_ostream.
    */
-   debug_buf * debug_ostream::rdbuf() const
+   debug_buf* debug_ostream::rdbuf() const
    {
       return m_pBuf;
    }
 
-   
+
    /**
    *
    *  Global accessor function for getting at the global debug_ostream.
    *
    */
-   debug_ostream& cdbg() 
+   debug_ostream& cdbg()
    {
       static debug_buf buf;
       static debug_ostream str(&buf);
 
       return str;
    }
-   
+
 }
 
 #endif // NDEBUG

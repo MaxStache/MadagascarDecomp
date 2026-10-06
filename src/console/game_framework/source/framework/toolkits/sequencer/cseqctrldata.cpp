@@ -36,13 +36,13 @@
 //
 // System Includes
 //
-#if (!defined (SKY) && !defined (DOLPHIN))
+#if (!defined(SKY) && !defined(DOLPHIN))
 #include <CString>
 #include <memory.h>
 #endif
 
 #if defined(DOLPHIN) && defined(__MWERKS__)
-   using namespace std;
+using namespace std;
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ namespace RWS
       */
 
       CSeqCtrlData::CSeqCtrlData(RwStream *pStream, const RwChar *pName,
-            RwChunkHeaderInfo *pChunckHeader) :
+                                 RwChunkHeaderInfo *pChunckHeader) :
          m_pRawData(0),
          m_pName(0),
          m_dataSize(0)
@@ -115,7 +115,7 @@ namespace RWS
             if (pChunckHeader)
             {
                RWS_ASSERT(pChunckHeader->type != rwID_SEQUENCE,
-                  "Chunk is not a sequence according to type information in header.");
+                          "Chunk is not a sequence according to type information in header.");
 
                dataSize = pChunckHeader->length;
             }
@@ -131,7 +131,7 @@ namespace RWS
             RWS_ASSERT(dataSize, "data size cannot be zero.");
             m_pRawData = RWS_NEW RwUInt8[dataSize];
             RWS_ASSERT(m_pRawData, "Failed to allocate space for object's data.");
-            
+
             RwStreamRead(pStream, m_pRawData, dataSize);
             m_dataSize = dataSize;
          }
@@ -205,20 +205,20 @@ namespace RWS
       //
       //
 
-      const RwUInt32 ITTR_INT_STRING_TABLE                  = 1;
-      const RwUInt32 ITTR_INT_GUID_TABLE                    = 2;
-      const RwUInt32 ITTR_INT_RESERVED_TABLE                = 3;
-      const RwUInt32 ITTR_INT_WAIT_INSTRUCTION              = 4;
-      const RwUInt32 ITTR_INT_ENTITY_INSTRUCTION            = 5;
-      const RwUInt32 ITTR_INT_CLASS_INSTRUCTION             = 6;
-      const RwUInt32 ITTR_INT_COMMAND_INSTRUCTION           = 7;
-      const RwUInt32 ITTR_INT_KEYFRAME_INSTRUCTION          = 8;
-      const RwUInt32 ITTR_INT_INTERPOL_INSTRUCTION          = 9;
-      const RwUInt32 ITTR_INT_SEND_EVENT_INSTRUCTION        = 10;
-      const RwUInt32 ITTR_INT_WAIT_EVENT_INSTRUCTION        = 11;
-      const RwUInt32 ITTR_INT_CREATE_INSTRUCTION            = 12;
-      const RwUInt32 ITTR_INT_DELETE_INSTRUCTION            = 13;
-      const RwUInt32 ITTR_INT_DYNAMIC_INTERPOL_INSTRUCTION  = 14;
+      const RwUInt32 ITTR_INT_STRING_TABLE = 1;
+      const RwUInt32 ITTR_INT_GUID_TABLE = 2;
+      const RwUInt32 ITTR_INT_RESERVED_TABLE = 3;
+      const RwUInt32 ITTR_INT_WAIT_INSTRUCTION = 4;
+      const RwUInt32 ITTR_INT_ENTITY_INSTRUCTION = 5;
+      const RwUInt32 ITTR_INT_CLASS_INSTRUCTION = 6;
+      const RwUInt32 ITTR_INT_COMMAND_INSTRUCTION = 7;
+      const RwUInt32 ITTR_INT_KEYFRAME_INSTRUCTION = 8;
+      const RwUInt32 ITTR_INT_INTERPOL_INSTRUCTION = 9;
+      const RwUInt32 ITTR_INT_SEND_EVENT_INSTRUCTION = 10;
+      const RwUInt32 ITTR_INT_WAIT_EVENT_INSTRUCTION = 11;
+      const RwUInt32 ITTR_INT_CREATE_INSTRUCTION = 12;
+      const RwUInt32 ITTR_INT_DELETE_INSTRUCTION = 13;
+      const RwUInt32 ITTR_INT_DYNAMIC_INTERPOL_INSTRUCTION = 14;
 
       /**
       *
@@ -228,7 +228,7 @@ namespace RWS
       */
 
       CSeqCtrlDataIttr::CSeqCtrlDataIttr(const CSeqCtrlData &dataObj, RwUInt32 memType,
-         RwUInt32 strBuffSize, RwUInt32 guidBuffSize, RwUInt32 flags) :
+                                         RwUInt32 strBuffSize, RwUInt32 guidBuffSize, RwUInt32 flags) :
          m_pGuidTable(0),
          m_pStringTable(0),
          m_userMemType(memType),
@@ -256,7 +256,7 @@ namespace RWS
       */
 
       CSeqCtrlDataIttr::CSeqCtrlDataIttr(RwUInt32 memType, RwUInt32 strBuffSize,
-            RwUInt32 guidBuffSize, RwUInt32 flags) :
+                                         RwUInt32 guidBuffSize, RwUInt32 flags) :
          m_pDataByte(0),
          m_pUserDataByteStart(0),
          m_pEndDataByte(0),
@@ -307,7 +307,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::MoveToNext");
          RWS_ASSERT((reinterpret_cast<RwUInt32>(m_pDataByte) & 0x03) == 0,
-            "Data pointer is not 4 byte aligned.");
+                    "Data pointer is not 4 byte aligned.");
 
          RwUInt32 curInst = GetInstruction();
 
@@ -323,7 +323,7 @@ namespace RWS
                {
                   const RwUInt32 tableLen = GetStringTableSize();
                   RWS_ASSERT((tableLen & 0x3) == 0,
-                     "String table length not a multiple of 4 bytes.");
+                             "String table length not a multiple of 4 bytes.");
 
                   m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE + tableLen);
                }
@@ -333,7 +333,7 @@ namespace RWS
                {
                   const RwUInt32 tableLen = GetGuidTableSize();
                   RWS_ASSERT((tableLen & 0xF) == 0,
-                     "Guid table length not a multiple of 16 bytes.");
+                             "Guid table length not a multiple of 16 bytes.");
 
                   m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE + tableLen);
                }
@@ -364,17 +364,17 @@ namespace RWS
                   const RwUInt32 dataLen = *reinterpret_cast<const RwUInt32 *>(
                      &m_pDataByte[SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE]);
                   RWS_ASSERT((dataLen & 0x3) == 0,
-                     "Keyframe data length not a multiple of 4 bytes.");
+                             "Keyframe data length not a multiple of 4 bytes.");
 
                   m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE +
-                     SEQ_CTRL_OP_SIZE + dataLen);
+                                  SEQ_CTRL_OP_SIZE + dataLen);
                }
                break;
 
             case IT_INTERPOL:
 
-               m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE + 
-                  SEQ_CTRL_OP_SIZE);
+               m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE +
+                               SEQ_CTRL_OP_SIZE);
                break;
 
             case IT_SEND_EVENT:
@@ -392,7 +392,7 @@ namespace RWS
                   const RwUInt32 dataLen = *reinterpret_cast<const RwUInt32 *>(
                      &m_pDataByte[SEQ_CTRL_OP_SIZE]);
                   RWS_ASSERT((dataLen & 0x3) == 0,
-                     "Creation data length not a multiple of 4 bytes.");
+                             "Creation data length not a multiple of 4 bytes.");
 
                   m_pDataByte += (SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE + dataLen);
                }
@@ -412,7 +412,7 @@ namespace RWS
 
                RWS_ASSERTFAIL("Error instruction found - problem with instruction block.");
                break;
-            
+
             default:
 
                RWS_ASSERTFAIL("Unknown instruction type in data block.");
@@ -421,7 +421,7 @@ namespace RWS
          }
 
          RWS_ASSERT((reinterpret_cast<RwUInt32>(m_pDataByte) & 0x03) == 0,
-            "Data pointer (after moving to next instruction) is not 4 byte aligned.");
+                    "Data pointer (after moving to next instruction) is not 4 byte aligned.");
 
          RWS_RETURNVOID();
       }
@@ -551,9 +551,9 @@ namespace RWS
          RWS_ASSERT(strBuffSize, "String table buffer pre-alloc size cannot be zero.");
          RWS_ASSERT(guidBuffSize, "GUID table buffer pre-alloc size cannot be zero.");
          RWS_ASSERT(m_stringTableSize,
-            "Cannot resize if iterator is in operation. This WILL cause problems.");
+                    "Cannot resize if iterator is in operation. This WILL cause problems.");
          RWS_ASSERT(m_guidTableSize,
-            "Cannot resize if iterator is in operation. This WILL cause problems.");
+                    "Cannot resize if iterator is in operation. This WILL cause problems.");
 
          ResizeStr(strBuffSize);
          ResizeGuid(guidBuffSize);
@@ -608,7 +608,8 @@ namespace RWS
                if ((m_flags & SEQ_FLAG_BUFFER_WARNINGS) != 0)
                {
                   RWS_DEBUGSTREAM_WARN("Resizing string buffer inside sequence data "
-                     "iterator - likely to cause memory fragmentation." << std::endl);
+                                       "iterator - likely to cause memory fragmentation."
+                                       << std::endl);
                }
 
                // Remove old buffer...
@@ -651,7 +652,8 @@ namespace RWS
                if ((m_flags & SEQ_FLAG_BUFFER_WARNINGS) != 0)
                {
                   RWS_DEBUGSTREAM_WARN("Resizing GUID buffer inside sequence data "
-                     "iterator - likely to cause memory fragmentation." << std::endl);
+                                       "iterator - likely to cause memory fragmentation."
+                                       << std::endl);
                }
 
                // Remove old buffer...
@@ -754,12 +756,11 @@ namespace RWS
 
             default:
 
-               RWS_ASSERTFAIL("Unknown instruction found [" << srcInst <<
-                  "] - setting to IT_ERROR.");
+               RWS_ASSERTFAIL("Unknown instruction found [" << srcInst << "] - setting to IT_ERROR.");
                instruction = IT_ERROR;
                break;
             }
-         
+
             RWS_RETURN(instruction);
          }
 
@@ -980,8 +981,8 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::GetKeyframeDataPtr");
          RWS_ASSERT(GetInstruction() == IT_KEYFRAME, "Not a keyframe instruction.");
-         RWS_RETURN(static_cast<const void *>(&m_pDataByte[SEQ_CTRL_OP_SIZE + 
-            SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE]));
+         RWS_RETURN(static_cast<const void *>(&m_pDataByte[SEQ_CTRL_OP_SIZE +
+                                                           SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE]));
       }
 
       /**
@@ -1031,7 +1032,7 @@ namespace RWS
       * NOTE: Dynamic updates are immediate, so the interpolator time is zero.
       * 
       */
- 
+
       void CSeqCtrlDataIttr::GetInterpol(CSeqCtrlInterpolData &rInterpolData, RwUInt32 memType)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::GetInterpol");
@@ -1039,7 +1040,7 @@ namespace RWS
 #ifdef RWS_DESIGN
 
          RWS_ASSERT(GetInstruction() == IT_INTERPOL || GetInstruction() == IT_DYNAMIC_INTERPOL,
-            "Not an interpolation (dynamic or otherwise) instruction.");
+                    "Not an interpolation (dynamic or otherwise) instruction.");
 
          if (GetInstruction() == IT_DYNAMIC_INTERPOL)
          {
@@ -1050,7 +1051,7 @@ namespace RWS
          else
          {
 #else
-            RWS_ASSERT(GetInstruction() == IT_INTERPOL, "Not an interpolation instruction.");
+         RWS_ASSERT(GetInstruction() == IT_INTERPOL, "Not an interpolation instruction.");
 #endif
 
             const RwUInt32 time = GetInterpolTime();
@@ -1059,7 +1060,6 @@ namespace RWS
             rInterpolData.Set(name, 0, 0, time, memType);
 
 #ifdef RWS_DESIGN
-
          }
 #endif
          RWS_RETURNVOID();
@@ -1080,7 +1080,7 @@ namespace RWS
 #ifdef RWS_DESIGN
 
          RWS_ASSERT(GetInstruction() == IT_INTERPOL || GetInstruction() == IT_DYNAMIC_INTERPOL,
-            "Not an interpolation (dynamic or otherwise) instruction.");
+                    "Not an interpolation (dynamic or otherwise) instruction.");
 #else
          RWS_ASSERT(GetInstruction() == IT_INTERPOL, "Not an interpolation instruction.");
 #endif
@@ -1104,7 +1104,7 @@ namespace RWS
 #ifdef RWS_DESIGN
 
          RWS_ASSERT(GetInstruction() == IT_INTERPOL || GetInstruction() == IT_DYNAMIC_INTERPOL,
-            "Not an interpolation (dynamic or otherwise) instruction.");
+                    "Not an interpolation (dynamic or otherwise) instruction.");
 #else
          RWS_ASSERT(GetInstruction() == IT_INTERPOL, "Not an interpolation instruction.");
 #endif
@@ -1163,8 +1163,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::GetCreateData");
          RWS_ASSERT(GetInstruction() == IT_CREATE, "Not a create instruction.");
-         RWS_RETURN(reinterpret_cast<const CAttributePacket *>(&m_pDataByte[
-            SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE]));
+         RWS_RETURN(reinterpret_cast<const CAttributePacket *>(&m_pDataByte[SEQ_CTRL_OP_SIZE + SEQ_CTRL_OP_SIZE]));
       }
 
       /**
@@ -1178,8 +1177,7 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::GetDeleteGuidOffset");
          RWS_ASSERT(GetInstruction() == IT_DELETE, "Not a delete instruction.");
 
-         const RwUInt32 *pOffset = reinterpret_cast<const RwUInt32 *>
-            (&m_pDataByte[SEQ_CTRL_OP_SIZE]);
+         const RwUInt32 *pOffset = reinterpret_cast<const RwUInt32 *>(&m_pDataByte[SEQ_CTRL_OP_SIZE]);
 
          RWS_RETURN(*pOffset);
       }
@@ -1237,7 +1235,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataIttr::GetDynamicInterpolDelta");
          RWS_ASSERT(GetInstruction() == IT_DYNAMIC_INTERPOL,
-            "Not a dynamic Interpolator instruction.");
+                    "Not a dynamic Interpolator instruction.");
          RWS_RETURN(*reinterpret_cast<const RwReal *>(&m_pDataByte[SEQ_CTRL_OP_SIZE]));
       }
 
@@ -1389,8 +1387,7 @@ namespace RWS
 
          case IT_WAIT:
 
-            RWS_DEBUGSTREAM("WAIT - time = [" << GetWaitTime() <<
-               "] milliseconds." << std::endl);
+            RWS_DEBUGSTREAM("WAIT - time = [" << GetWaitTime() << "] milliseconds." << std::endl);
             break;
 
          case IT_ENTITY:
@@ -1400,8 +1397,7 @@ namespace RWS
 
          case IT_CLASS:
 
-            RWS_DEBUGSTREAM("CLASS - name [" << GetClassName() << "] string table offset [" <<
-               GetClassNameOffset() << "]." << std::endl);
+            RWS_DEBUGSTREAM("CLASS - name [" << GetClassName() << "] string table offset [" << GetClassNameOffset() << "]." << std::endl);
             break;
 
          case IT_COMMAND:
@@ -1411,34 +1407,26 @@ namespace RWS
 
          case IT_KEYFRAME:
             {
-               RWS_DEBUGSTREAM("KEYFRAME - data type [" << GetKeyframeTypeName() <<
-                  "] (string table offset [" << GetKeyframeTypeNameOffset() << "]) address [" <<
-                  std::hex << GetKeyframeDataPtr() << "] size [" << std::dec << 
-                  GetKeyframeDataSize() << "]." << std::endl);
+               RWS_DEBUGSTREAM("KEYFRAME - data type [" << GetKeyframeTypeName() << "] (string table offset [" << GetKeyframeTypeNameOffset() << "]) address [" << std::hex << GetKeyframeDataPtr() << "] size [" << std::dec << GetKeyframeDataSize() << "]." << std::endl);
             }
             break;
 
          case IT_INTERPOL:
             {
-               RWS_DEBUGSTREAM("INTERPOLATION - interpolator type [" <<
-                  GetInterpolName() << "] (string table offset [" <<
-                  GetInterpolNameOffset() << "]) over [" << GetInterpolTime() << 
-                  "] msecs." << std::endl);
+               RWS_DEBUGSTREAM("INTERPOLATION - interpolator type [" << GetInterpolName() << "] (string table offset [" << GetInterpolNameOffset() << "]) over [" << GetInterpolTime() << "] msecs." << std::endl);
             }
             break;
 
          case IT_SEND_EVENT:
 
-            RWS_DEBUGSTREAM("SEND EVENT - name [" << GetEventName() << "] string table offset [" << 
-               GetEventNameOffset() << "]." << std::endl);
+            RWS_DEBUGSTREAM("SEND EVENT - name [" << GetEventName() << "] string table offset [" << GetEventNameOffset() << "]." << std::endl);
             break;
 
          case IT_WAIT_EVENT:
 
-            RWS_DEBUGSTREAM("WAIT EVENT - name [" << GetWaitEventName() << "] string table offset [" <<
-               GetWaitEventNameOffset() << "]." << std::endl);
+            RWS_DEBUGSTREAM("WAIT EVENT - name [" << GetWaitEventName() << "] string table offset [" << GetWaitEventNameOffset() << "]." << std::endl);
             break;
-            
+
          case IT_CREATE:
             {
                RWSGUID tempGuid;
@@ -1450,26 +1438,26 @@ namespace RWS
 
          case IT_DELETE:
 
-            RWS_DEBUGSTREAM("DELETE - GUID [" << *GetGuid(GetDeleteGuidOffset()) << 
-               "]." << std::endl);
+            RWS_DEBUGSTREAM("DELETE - GUID [" << *GetGuid(GetDeleteGuidOffset()) << "]." << std::endl);
             break;
 
          case IT_EOF:
 
-            RWS_DEBUGSTREAM("EOF - end of file reached.\n" << std::endl);
+            RWS_DEBUGSTREAM("EOF - end of file reached.\n"
+                            << std::endl);
             break;
 
          case IT_DYNAMIC_INTERPOL:
 
             RWS_DEBUGSTREAM("DYNAMIC INTERPOL - " << std::endl);
             break;
-            
+
          default:
 
             RWS_DEBUGSTREAM_WARN("UNKNOWN - unknown instruction type specified." << std::endl);
             break;
          }
-         
+
          RWS_RETURNVOID();
       }
 
@@ -1486,7 +1474,8 @@ namespace RWS
 
          // Is there a table ?
 
-         RWS_DEBUGSTREAM("String table within sequence instruction block is...\n" << std::endl);
+         RWS_DEBUGSTREAM("String table within sequence instruction block is...\n"
+                         << std::endl);
 
          if (m_pStringTable && m_stringTableSize)
          {
@@ -1503,13 +1492,12 @@ namespace RWS
                {
                   // Only zero length string is at the end of the table (unless damaged data)
                   // so just exit the loop.
-                  
+
                   break;
                }
                else
                {
-                  RWS_DEBUGSTREAM("   [" << offset << "] = [" << (m_pStringTable + offset) <<
-                     "]" << std::endl);
+                  RWS_DEBUGSTREAM("   [" << offset << "] = [" << (m_pStringTable + offset) << "]" << std::endl);
                }
 
                offset += strlen(pString) + 1;
@@ -1538,7 +1526,8 @@ namespace RWS
 
          // Is there a table ?
 
-         RWS_DEBUGSTREAM("GUID table within sequence instruction block is...\n" << std::endl);
+         RWS_DEBUGSTREAM("GUID table within sequence instruction block is...\n"
+                         << std::endl);
 
          if (m_pGuidTable && m_guidTableSize)
          {
@@ -1576,9 +1565,9 @@ namespace RWS
       * in data object - this data object is NOT copied.
       *
       */
-      
-      CSeqCtrlDataNode::CSeqCtrlDataNode(CSeqCtrlData &rData)
-         : m_pNext(0),
+
+      CSeqCtrlDataNode::CSeqCtrlDataNode(CSeqCtrlData &rData) :
+         m_pNext(0),
          m_pData(&rData)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlDataNode::CSeqCtrlDataNode");
@@ -1700,13 +1689,13 @@ namespace RWS
       */
 
       void CSeqCtrlKeyData::Set(const RwChar *name, const void *pData,
-         RwUInt32 dataSize, RwUInt32 memType)
+                                RwUInt32 dataSize, RwUInt32 memType)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCtrlKeyData::Set");
          RWS_ASSERT(name, "Name must be valid.");
          RWS_ASSERT(pData, "Data pointer must be valid.");
          RWS_ASSERT(dataSize || !rwstrcmp(name, MSG_LINK_NAME_TYPE),
-            "Zero data size is illegal for none 'message link name' keys.");
+                    "Zero data size is illegal for none 'message link name' keys.");
 
          // Call resize to handle any necessary up-sizing of the buffer.
 
@@ -1783,7 +1772,8 @@ namespace RWS
                if ((m_flags & SEQ_FLAG_BUFFER_WARNINGS) != 0)
                {
                   RWS_DEBUGSTREAM_WARN("Resizing keyframe data buffer - "
-                     "may cause memory fragmentation." << std::endl);
+                                       "may cause memory fragmentation."
+                                       << std::endl);
                }
                operator delete(m_pData);
             }
@@ -1812,10 +1802,10 @@ namespace RWS
       */
 
       CSeqCtrlInterpolData::CSeqCtrlInterpolData(RwUInt32 maxDataSize,
-            RwUInt32 memType, RwUInt32 flags) :
+                                                 RwUInt32 memType, RwUInt32 flags) :
          CSeqCtrlKeyData(maxDataSize, memType, flags),
          m_lengthTime(0)
-         
+
 #ifdef RWS_DESIGN
 
          ,
@@ -1851,7 +1841,7 @@ namespace RWS
       */
 
       void CSeqCtrlInterpolData::Set(const RwChar *name, const void *pData, RwUInt32 dataSize,
-         RwUInt32 lengthTime, RwUInt32 memType)
+                                     RwUInt32 lengthTime, RwUInt32 memType)
       {
          RWS_FUNCTION("CSeqCtrlInterpolData::Set");
          RWS_ASSERT(lengthTime, "Cannot have zero length interpolations.");
@@ -1889,7 +1879,7 @@ namespace RWS
 #ifdef RWS_DESIGN
 
       void CSeqCtrlInterpolData::Set(const RwChar *name, const void *pData, RwUInt32 dataSize,
-         RwReal delta, RwUInt32 memType)
+                                     RwReal delta, RwUInt32 memType)
       {
          RWS_FUNCTION("CSeqCtrlInterpolData::Set");
          RWS_ASSERT(name, "Name must be valid.");

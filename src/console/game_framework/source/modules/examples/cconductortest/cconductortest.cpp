@@ -51,12 +51,12 @@ namespace RWS
       //
       //
 
-      const RwUInt8 CCT_RWUINT8_MAX    = 100;
-      const RwUInt16 CCT_RWUINT16_MAX  = 10000;
-      const RwUInt32 CCT_RWUINT32_MAX  = 1000000;
-         
-      const RwInt8 CCT_RWINT8_MIN   = -100;
-      const RwInt8 CCT_RWINT8_MAX   = 100;
+      const RwUInt8 CCT_RWUINT8_MAX = 100;
+      const RwUInt16 CCT_RWUINT16_MAX = 10000;
+      const RwUInt32 CCT_RWUINT32_MAX = 1000000;
+
+      const RwInt8 CCT_RWINT8_MIN = -100;
+      const RwInt8 CCT_RWINT8_MAX = 100;
       const RwInt16 CCT_RWINT16_MIN = -10000;
       const RwInt16 CCT_RWINT16_MAX = 10000;
       const RwInt32 CCT_RWINT32_MIN = -1000000;
@@ -111,7 +111,7 @@ namespace RWS
          RWS_FUNCTION("RWS::Examples::CConductorTest::~CConductorTest");
 
          RwMatrixDestroy(m_pBaseMatrix);
-         
+
          RWS_RETURNVOID();
       }
 
@@ -149,7 +149,7 @@ namespace RWS
          }
 
          // Handle own attributes...
-      
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CConductorTest));
          while (!attrIt.IsFinished())
          {
@@ -228,7 +228,7 @@ namespace RWS
          }
 
          RWS_RETURNVOID();
-      }      
+      }
 
       /**
       *
@@ -259,13 +259,12 @@ namespace RWS
             {
             case CMD_LoadMatrix:
                {
-                  const RwMatrix* pUnalignedMat = static_cast<const RwMatrix*>
-                     (attrIt->GetAs_void_ptr());
+                  const RwMatrix *pUnalignedMat = static_cast<const RwMatrix *>(attrIt->GetAs_void_ptr());
 
                   RwMatrixCopy(m_pBaseMatrix, pUnalignedMat);
                   updateNeeded = TRUE;
                }
-               break;               
+               break;
             }
 
             ++attrIt;

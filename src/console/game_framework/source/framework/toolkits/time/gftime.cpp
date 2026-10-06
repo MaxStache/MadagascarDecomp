@@ -143,7 +143,7 @@ namespace RWS
          timeGetDevCaps(&timecaps, sizeof(TIMECAPS));
 
          timeBeginPeriod(timecaps.wPeriodMin);
-         RwUInt32 result = (RwUInt32) timeGetTime();
+         RwUInt32 result = (RwUInt32)timeGetTime();
          timeEndPeriod(timecaps.wPeriodMin);
 
          return (result);
@@ -156,7 +156,7 @@ namespace RWS
       {
          RWS_PRE(gIsInited);
 
-         RwUInt32 result = (RwUInt32) timeGetTime();
+         RwUInt32 result = (RwUInt32)timeGetTime();
 
          return (result);
       }
@@ -164,7 +164,7 @@ namespace RWS
 #elif defined(SKY)
       ////////////////////////////////////////////////////////////////////////
       //
-      // Note: If sweHighCount reaches 0x100000000 * 1024 this will return the wrong result 
+      // Note: If sweHighCount reaches 0x100000000 * 1024 this will return the wrong result
       // 0x100000000 * 1024
       //
       // = 4398046511104 / 9216
@@ -181,50 +181,35 @@ namespace RWS
          unsigned long high0, high1, low0, low1;
 
          /* Just to make sure that the compiler can't mess with this... */
-         asm volatile (".set noat
-                   .set noreorder
-                   .set nomacro
-                   sync.l
-                   sync.p
-                   lui $1, 0x1000
-                   ld  %0, 0(%4)
-                   sync.l
-                   sync.p
-                   lwu %1, 0($1)
-                   sync.l
-                   sync.p
-                   ld  %2, 0(%4)
-                   sync.l
-                   sync.p
-                   lwu %3, 0($1)
-                   sync.l
-                   sync.p
-                   .set macro
-                   .set reorder
-                   .set at
-                   nop"
-                  : "=r&" (high0), "=r&" (low0), "=r&" (high1), "=r&" (low1)
-                  : "r" (&sweHighCount));
+         asm volatile(".set noat
+                         .set noreorder
+                         .set nomacro
+                            sync.l
+                               sync.p
+                                  lui $1,
+                      0x1000 ld % 0, 0(% 4) sync.l sync.p lwu % 1, 0($1)sync.l sync.p ld % 2, 0(% 4) sync.l sync.p lwu % 3, 0($1)sync.l sync.p.set macro.set reorder.set at nop "
+                      : "=r&"(high0), "=r&"(low0), "=r&"(high1), "=r&"(low1)
+                      : "r"(&sweHighCount));
 
          RwUInt32 result = 0;
-         if(high0 == high1)
+         if (high0 == high1)
          {
             // Div (1024 * 9) = 9216
             //
-            result = (RwUInt32) ((high0 | (low0 & 0xffff)) >>10);
-            
+            result = (RwUInt32)((high0 | (low0 & 0xffff)) >> 10);
+
             result = result / 9;
          }
          else
          {
             // Div (1024 * 9) = 9216
             //
-            result = (RwUInt32) ((high1 | (low1 & 0xffff)) >>10); 
+            result = (RwUInt32)((high1 | (low1 & 0xffff)) >> 10);
 
             result = result / 9;
          }
-         
-         return(result);
+
+         return (result);
       }
 
 #elif defined(DOLPHIN)
@@ -233,14 +218,14 @@ namespace RWS
       RwUInt32 GetTime()
       {
          RWS_PRE(gIsInited);
-         
+
          OSTime time;
          time = OSGetTime();
 
-         return(OSTicksToMilliseconds(time));
+         return (OSTicksToMilliseconds(time));
       }
 #else
-   #error Your platform here...
+#error Your platform here...
 #endif
    }
 }

@@ -59,7 +59,7 @@ namespace RWS
       *
       */
 
-      class CMultiAnimate: public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CMultiAnimate : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
 
@@ -72,34 +72,31 @@ namespace RWS
 
          RWS_BEGIN_COMMANDS
 
-            RWS_MESSAGE( CMD_MsgNextAnimTrigger,
+         RWS_MESSAGE(CMD_MsgNextAnimTrigger,
                      "Next animation",
                      "When this message is received, the next animation is played",
                      RECEIVE,
                      0,
                      0)
 
-            RWS_ATTRIBUTE(  CMD_Rate,
-                        "Animation rate",
-                        "Animation rate multiplier - use 1.0 for no multiplication, 0.0 for stop, -ve values for reverse",
-                        SLIDER,
-                        RwReal,
-                        RANGE(-1.5, 1.0, 1.5)
-                        )
-            RWS_ATTRIBUTE(  CMD_BlendDuration,
-                        "Blend duration",
-                        "Blend duration, in seconds",
-                        SLIDER,
-                        RwReal,
-                        RANGE(0.0, 0.0, 2.0)
-                        )
-            RWS_ATTRIBUTE(  CMD_Loop,
-                        "Looping",
-                        "Enables animation looping",
-                        BOOLEAN,
-                        RwUInt32,
-                        DEFAULT(1)
-                        )
+         RWS_ATTRIBUTE(CMD_Rate,
+                       "Animation rate",
+                       "Animation rate multiplier - use 1.0 for no multiplication, 0.0 for stop, -ve values for reverse",
+                       SLIDER,
+                       RwReal,
+                       RANGE(-1.5, 1.0, 1.5))
+         RWS_ATTRIBUTE(CMD_BlendDuration,
+                       "Blend duration",
+                       "Blend duration, in seconds",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 0.0, 2.0))
+         RWS_ATTRIBUTE(CMD_Loop,
+                       "Looping",
+                       "Enables animation looping",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(1))
 
          RWS_END_COMMANDS;
 
@@ -112,12 +109,12 @@ namespace RWS
       protected:
 
          // Revoked ops
-         CMultiAnimate( const CMultiAnimate& );
-         CMultiAnimate& operator = ( const CMultiAnimate& );
+         CMultiAnimate(const CMultiAnimate&);
+         CMultiAnimate& operator=(const CMultiAnimate&);
 
          // Implementation
-         void SetRate( RwReal rate );
-         void SetLooping( bool doLoop );
+         void SetRate(RwReal rate);
+         void SetLooping(bool doLoop);
 
          // Data
          CClumpPtr m_pClump;                 /**< RenderWare clump holding the object to animate. */

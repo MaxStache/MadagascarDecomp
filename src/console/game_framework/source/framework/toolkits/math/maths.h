@@ -33,7 +33,7 @@
 #include <rwcore.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
+#pragma comment(lib, "rwcore.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ namespace RWS
    *
    * \note Based on the RenderWare Gfx macro RWRAD2DEG
    */
-   #define RWDEG2RAD(_x) ((_x) * ( ((RwReal)rwPI) / ((RwReal)180) ))
-   
+#define RWDEG2RAD(_x) ((_x) * (((RwReal)rwPI) / ((RwReal)180)))
+
    /**
    *
    * \ingroup MathsToolkit
@@ -70,13 +70,13 @@ namespace RWS
    *
    */
 
-   template< class T >
-   const T& Clamp( const T& val, const T& min, const T& max )
+   template <class T>
+   const T &Clamp(const T &val, const T &min, const T &max)
    {
-      RWS_PRE( max >= min );
+      RWS_PRE(max >= min);
 
-      if ( val > max ) return max;
-      else if ( val < min ) return min;
+      if (val > max) return max;
+      else if (val < min) return min;
       else return val;
    }
 
@@ -110,7 +110,7 @@ namespace RWS
    *
    */
 
-   const RwV3d XAxis = {(RwReal)(1.0),  (RwReal)(0.0), (RwReal)(0.0)};
+   const RwV3d XAxis = {(RwReal)(1.0), (RwReal)(0.0), (RwReal)(0.0)};
 
    /**
    *
@@ -140,7 +140,7 @@ namespace RWS
    *
    */
 
-   const RwV3d negXAxis = {(RwReal)(-1.0),  (RwReal)(0.0), (RwReal)(0.0)};
+   const RwV3d negXAxis = {(RwReal)(-1.0), (RwReal)(0.0), (RwReal)(0.0)};
 
    /**
    *
@@ -150,7 +150,7 @@ namespace RWS
    *
    */
 
-   const RwV3d negYAxis = {(RwReal)(0.0),  (RwReal)(-1.0), (RwReal)(0.0)};
+   const RwV3d negYAxis = {(RwReal)(0.0), (RwReal)(-1.0), (RwReal)(0.0)};
 
    /**
    *
@@ -160,24 +160,24 @@ namespace RWS
    *
    */
 
-   const RwV3d negZAxis = {(RwReal)(0.0),  (RwReal)(0.0), (RwReal)(-1.0)};
+   const RwV3d negZAxis = {(RwReal)(0.0), (RwReal)(0.0), (RwReal)(-1.0)};
 
    //////////////////////////////////////////////////////////////////
-   // 
+   //
    // func RwReal | DegAngDiff | Determine angle difference between two angles...Degrees
    //
    //
    RwReal DegAngDiff(RwReal a0, RwReal a1);
 
    //////////////////////////////////////////////////////////////////
-   // 
+   //
    // func RwReal | RadAngDiff | Determine angle difference between two angles...Radians
    //
    //
    RwReal RadAngDiff(RwReal a0, RwReal a1);
 
    //////////////////////////////////////////////////////////////////
-   // 
+   //
    // func RwReal | LowPassFilter | Performs a low pass filter operation, where
    // y0 is the current input value, and x1 is the previous output value. k should be between 0 and 1
    //
@@ -214,9 +214,9 @@ namespace RWS
       bool dirty;             /**< dirty flag, marks when recalculation is actually necessary */
 
       RwV3d m_offset,         /**< offset vector of linkage */
-            m_upVect,         /**< up vector of linkage */
-            m_rightVect,      /**< right vector of linkage */
-            m_forwardVect;    /**< forward (look-at) vector of linkage */
+         m_upVect,         /**< up vector of linkage */
+         m_rightVect,      /**< right vector of linkage */
+         m_forwardVect;    /**< forward (look-at) vector of linkage */
 
    public:
 
@@ -260,8 +260,8 @@ namespace RWS
 
       void SetUp(RwV3d &up)
       {
-         RWS_ASSERT(RwV3dLength(&up) >= (1.0f - RWSFT_TOL) && RwV3dLength(&up) <= (1.0f + RWSFT_TOL), \
-               "MUST be a unit vector");
+         RWS_ASSERT(RwV3dLength(&up) >= (1.0f - RWSFT_TOL) && RwV3dLength(&up) <= (1.0f + RWSFT_TOL),
+                    "MUST be a unit vector");
 
          m_upVect = up;
          dirty = true;
@@ -285,8 +285,8 @@ namespace RWS
 
       void SetRight(RwV3d &right)
       {
-         RWS_ASSERT(RwV3dLength(&right) >= (1.0f - RWSFT_TOL) && RwV3dLength(&right) <= (1.0f + RWSFT_TOL), \
-               "MUST be a unit vector");
+         RWS_ASSERT(RwV3dLength(&right) >= (1.0f - RWSFT_TOL) && RwV3dLength(&right) <= (1.0f + RWSFT_TOL),
+                    "MUST be a unit vector");
 
          m_rightVect = right;
          dirty = true;
@@ -310,8 +310,8 @@ namespace RWS
 
       void SetForward(RwV3d &forward)
       {
-         RWS_ASSERT(RwV3dLength(&forward) >= (1.0f - RWSFT_TOL) && RwV3dLength(&forward) <= (1.0f + RWSFT_TOL), \
-               "MUST be a unit vector");
+         RWS_ASSERT(RwV3dLength(&forward) >= (1.0f - RWSFT_TOL) && RwV3dLength(&forward) <= (1.0f + RWSFT_TOL),
+                    "MUST be a unit vector");
 
          m_forwardVect = forward;
          dirty = true;
@@ -330,7 +330,7 @@ namespace RWS
       void Trans(RwFrame &out, RwFrame &in)
       {
          RwMatrix *pOutMtx = RwFrameGetMatrix(&out),
-               *pInMtx = RwFrameGetLTM(&in);
+                  *pInMtx = RwFrameGetLTM(&in);
 
          RwMatrixMultiply(pOutMtx, &m_transMtx, pInMtx);
          RwFrameUpdateObjects(&out);
@@ -347,15 +347,15 @@ namespace RWS
    * \retval a random floating point value between 0.0 and 1.0 as a RwReal
    *
    */
-   
+
    inline RwReal RealRand(void)
    {
       RwReal val;
-      
+
       val = static_cast<RwReal>(rand());
       val /= static_cast<RwReal>(RAND_MAX);
-      
-      return(val);
+
+      return (val);
    }
 
    /**
@@ -369,7 +369,7 @@ namespace RWS
 
    inline bool IsPowerOf2(RwUInt32 a)
    {
-      return(a != 0 ? (!((a - 1) & a)) : 0);
+      return (a != 0 ? (!((a - 1) & a)) : 0);
    }
 
    // Prototypes.

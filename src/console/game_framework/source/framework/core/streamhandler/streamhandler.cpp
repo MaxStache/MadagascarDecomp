@@ -48,42 +48,41 @@ namespace
       RwChar *pName;
    } IdToTextTable;
 
-   IdToTextTable strfunc_func_IdToTextTable[]=
-   {
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_VersionNumber), "strfunc_VersionNumber"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reset), "strfunc_Reset"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved1), "strfunc_Reserved1"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved2), "strfunc_Reserved2"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_SetDirectorsCameraMatrix), "strfunc_SetDirectorsCameraMatrix"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_CreateEntity), "strfunc_CreateEntity"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_UpdateEntityAttributes), "strfunc_UpdateEntityAttributes"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_SetFrozenMode), "strfunc_SetFrozenMode"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_SetRunningMode), "strfunc_SetRunningMode"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_EnableDirectorsCamera), "strfunc_EnableDirectorsCamera"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_DisableDirectorsCamera), "strfunc_DisableDirectorsCamera"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_TextComment), "strfunc_TextComment"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_StartSystem), "strfunc_StartSystem"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_StopSystem), "strfunc_StopSystem"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_DeleteEntity), "strfunc_DeleteEntity"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_DeleteAllEntities), "strfunc_DeleteAllEntities"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_UnLoadAsset), "strfunc_UnLoadAsset"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Shutdown), "strfunc_Shutdown"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_CloseConnection), "strfunc_CloseConnection"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_SendTestEvent), "strfunc_SendTestEvent"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved3), "strfunc_Reserved3"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved3b), "strfunc_Reserved3b"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_LoadAsset), "strfunc_LoadAsset"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_LoadEmbeddedAsset), "strfunc_LoadEmbeddedAsset"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved4), "strfunc_Reserved4"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_GetEntityMatrix), "strfunc_GetEntityMatrix"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_CustomData), "strfunc_CustomData"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_FunctionProfiler), "strfunc_FunctionProfiler"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_ResetEntity), "strfunc_ResetEntity"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strFunc_PlacementNew), "strFunc_PlacementNew"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_Initialize), "strfunc_Initialize"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_UpdateAsset), "strfunc_UpdateAsset"},
-      {MAKECHUNKID (rwVENDORID_CRITERIONRM, RWS::strfunc_DynamicSequence), "strfunc_DynamicSequence"}
-   } ;
+   IdToTextTable strfunc_func_IdToTextTable[] =
+      {
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_VersionNumber), "strfunc_VersionNumber"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reset), "strfunc_Reset"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved1), "strfunc_Reserved1"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved2), "strfunc_Reserved2"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_SetDirectorsCameraMatrix), "strfunc_SetDirectorsCameraMatrix"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_CreateEntity), "strfunc_CreateEntity"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_UpdateEntityAttributes), "strfunc_UpdateEntityAttributes"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_SetFrozenMode), "strfunc_SetFrozenMode"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_SetRunningMode), "strfunc_SetRunningMode"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_EnableDirectorsCamera), "strfunc_EnableDirectorsCamera"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_DisableDirectorsCamera), "strfunc_DisableDirectorsCamera"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_TextComment), "strfunc_TextComment"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_StartSystem), "strfunc_StartSystem"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_StopSystem), "strfunc_StopSystem"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_DeleteEntity), "strfunc_DeleteEntity"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_DeleteAllEntities), "strfunc_DeleteAllEntities"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_UnLoadAsset), "strfunc_UnLoadAsset"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Shutdown), "strfunc_Shutdown"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_CloseConnection), "strfunc_CloseConnection"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_SendTestEvent), "strfunc_SendTestEvent"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved3), "strfunc_Reserved3"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved3b), "strfunc_Reserved3b"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_LoadAsset), "strfunc_LoadAsset"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_LoadEmbeddedAsset), "strfunc_LoadEmbeddedAsset"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Reserved4), "strfunc_Reserved4"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_GetEntityMatrix), "strfunc_GetEntityMatrix"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_CustomData), "strfunc_CustomData"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_FunctionProfiler), "strfunc_FunctionProfiler"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_ResetEntity), "strfunc_ResetEntity"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strFunc_PlacementNew), "strFunc_PlacementNew"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_Initialize), "strfunc_Initialize"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_UpdateAsset), "strfunc_UpdateAsset"},
+         {MAKECHUNKID(rwVENDORID_CRITERIONRM, RWS::strfunc_DynamicSequence), "strfunc_DynamicSequence"}};
 
    /*
    *  Helper function for converting a chunk Id into a meaningful name.
@@ -92,7 +91,7 @@ namespace
    {
       RWS_FUNCTION("NULL::IdToText");
 
-      for(RwUInt32 i = 0; i < sizeof(strfunc_func_IdToTextTable) / sizeof(IdToTextTable); i++)
+      for (RwUInt32 i = 0; i < sizeof(strfunc_func_IdToTextTable) / sizeof(IdToTextTable); i++)
       {
          if (Id == strfunc_func_IdToTextTable[i].Id)
          {
@@ -114,12 +113,12 @@ namespace RWS
    CStreamHandler *CStreamHandler::Instance(void)
    {
       RWS_FUNCTION("RWS::CStreamHandler::Instance");
-      
+
       static CStreamHandler _CStreamHandler;
-      
+
       RWS_RETURN(&_CStreamHandler);
    }
-   
+
    /**
    *
    *  Register a function responsible for handling a specific chunk id. Chunk Id's are used to identify
@@ -132,26 +131,27 @@ namespace RWS
    void CStreamHandler::RegisterChunkHandler(RwUInt32 ChunkType, StreamChunkHandler ChunkHandler)
    {
       RWS_FUNCTION("RWS::CStreamHandler::RegisterChunkHandler");
-      
+
       CStreamHandler *pCStreamHandler = Instance();
-    
+
       // Check if we already have a chunk handler for this chunk type registered
       //
       const StreamChunkHandlerMap::iterator it = pCStreamHandler->m_StreamChunkHandlerMap.find(ChunkType);
-      
+
       if (it != pCStreamHandler->m_StreamChunkHandlerMap.end())
       {
          RWS_ASSERTFAIL("Unable to register chunk handler, a chunk handler for the specified chunk id has already"
-            " been registered. Chunk type = " << ChunkType);
+                        " been registered. Chunk type = "
+                        << ChunkType);
       }
       else
       {
          pCStreamHandler->m_StreamChunkHandlerMap.insert(StreamChunkHandlerMap::value_type(ChunkType, ChunkHandler));
       }
-      
+
       RWS_RETURNVOID();
    }
-   
+
    /**
    *
    *  Unregister a chunk handler function \see RegisterChunkHandler
@@ -160,14 +160,14 @@ namespace RWS
    void CStreamHandler::UnRegisterChunkHandler(RwUInt32 ChunkType)
    {
       RWS_FUNCTION("RWS::CStreamHandler::UnRegisterChunkHandler");
-      
+
       CStreamHandler *pCStreamHandler = Instance();
-      
+
       pCStreamHandler->m_StreamChunkHandlerMap.erase(ChunkType);
-      
+
       RWS_RETURNVOID();
    }
-   
+
    /**
    *
    *  \ref CStreamHandler::RwStreamEOF, extends RenderWare Streams to provide an EOF test.
@@ -180,9 +180,9 @@ namespace RWS
    bool CStreamHandler::RwStreamEOF(RwStream *_pStream)
    {
       RWS_FUNCTION("RWS::CStreamHandler::RwStreamEOF");
-      
+
       RWS_PRE(_pStream);
-      
+
       switch (_pStream->type)
       {
       case rwSTREAMFILENAME:
@@ -194,8 +194,8 @@ namespace RWS
          break;
       case rwSTREAMMEMORY:
          {
-            RwStreamMemory     *smpMem = &_pStream->Type.memory;
-            
+            RwStreamMemory *smpMem = &_pStream->Type.memory;
+
             if (smpMem->nSize == smpMem->position)
             {
                RWS_RETURN(true);
@@ -219,7 +219,7 @@ namespace RWS
             RWS_ASSERTFAIL("Unknown Stream Type.");
          }
       }
-      
+
       RWS_RETURN(false);
    }
 
@@ -231,45 +231,45 @@ namespace RWS
    *  \param pStream A pointer to a RenderWare stream.
    *
    */
-   void CStreamHandler::ProcessStream(RwStream* pStream)
+   void CStreamHandler::ProcessStream(RwStream *pStream)
    {
       RWS_FUNCTION("RWS::CStreamHandler::ProcessStream");
-      
+
       RWS_PRE(pStream);
-      
+
       // For each chunk
       //
       while (!RwStreamEOF(pStream))
       {
          RwStreamReadChunkHeaderInfo(pStream, &Instance()->m_RwChunkHeaderInfo);
-         
-         RWS_TRACE(  "Processing Instance()->m_RwChunkHeaderInfo.type "
-                     <<RWS_HEX(Instance()->m_RwChunkHeaderInfo.type)
-                     <<" "
-                     <<IdToText(Instance()->m_RwChunkHeaderInfo.type));
-         
+
+         RWS_TRACE("Processing Instance()->m_RwChunkHeaderInfo.type "
+                   << RWS_HEX(Instance()->m_RwChunkHeaderInfo.type)
+                   << " "
+                   << IdToText(Instance()->m_RwChunkHeaderInfo.type));
+
          // Check if we have a chunk handler registered
          //
          const StreamChunkHandlerMap::iterator it =
             Instance()->m_StreamChunkHandlerMap.find(Instance()->m_RwChunkHeaderInfo.type);
-         
+
          // Yes then call the handler
          //
          if (it != Instance()->m_StreamChunkHandlerMap.end())
          {
             StreamChunkHandler pFunc = it->second;
-            
+
             // Process the chunk
             //
             pFunc(Instance()->m_RwChunkHeaderInfo, pStream);
          }
          else
          {
-            RWS_TRACE(  "No chunk handler provided for chunk"
-                        <<RWS_HEX(Instance()->m_RwChunkHeaderInfo.type)
-                        <<" "
-                        <<IdToText(Instance()->m_RwChunkHeaderInfo.type)
-                        <<" skipping chunk!");
+            RWS_TRACE("No chunk handler provided for chunk"
+                      << RWS_HEX(Instance()->m_RwChunkHeaderInfo.type)
+                      << " "
+                      << IdToText(Instance()->m_RwChunkHeaderInfo.type)
+                      << " skipping chunk!");
 
             // No then don't process this chunk, skip it.
             //
@@ -286,19 +286,19 @@ namespace RWS
       *  Validate RenderWare Studio Stream version number.
       *
       */
-      void VersionNumber (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream) 
+      void VersionNumber(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
       {
          RWS_FUNCTION("RWS::CDefaultStreamHandler::VersionNumber");
-      
-         RwChar *buffer = static_cast<char*>(RWS_OP_NEW(rChunkHeader.length) );
-      
-         RwStreamRead(pStream, buffer, rChunkHeader.length);
-      
-         RWS_ASSERT((*reinterpret_cast<RwUInt32*>(buffer)) == 0x0100, "Incompatible RenderWare Studio Stream, version number ( "
-               << (*reinterpret_cast<RwUInt32*>(buffer)) << " )");
 
-         operator delete (buffer);
-      
+         RwChar *buffer = static_cast<char *>(RWS_OP_NEW(rChunkHeader.length));
+
+         RwStreamRead(pStream, buffer, rChunkHeader.length);
+
+         RWS_ASSERT((*reinterpret_cast<RwUInt32 *>(buffer)) == 0x0100, "Incompatible RenderWare Studio Stream, version number ( "
+                                                                          << (*reinterpret_cast<RwUInt32 *>(buffer)) << " )");
+
+         operator delete(buffer);
+
          RWS_RETURNVOID();
       }
    }
@@ -312,10 +312,11 @@ namespace RWS
    */
    void CStreamHandler::RegisterStreamChunkHandlers(void)
    {
-      CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-         strfunc_VersionNumber), VersionNumber);
+      CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                       strfunc_VersionNumber),
+                                           VersionNumber);
    }
-   
+
    /**
    *
    *  Unregister the chunk handlers implemented by CResourceManager, \see strfunc_func \see CStreamHandler.
@@ -323,7 +324,7 @@ namespace RWS
    */
    void CStreamHandler::UnRegisterStreamChunkHandlers(void)
    {
-      CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_VersionNumber));
+      CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_VersionNumber));
    }
 }
 

@@ -43,8 +43,7 @@ namespace RWS
       *
       */
 
-      class CConductor : public CSystemCommands, public CAttributeHandler, public CEventHandler,
-         public LinearAllocationPolicy
+      class CConductor : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
 
@@ -52,30 +51,30 @@ namespace RWS
          RWS_DECLARE_CLASSID(CConductor);
          RWS_CATEGORY("Sequence");
          RWS_DESCRIPTION("Sequence conductor",
-            "Controls the sequencing of other object via control instructions.");
+                         "Controls the sequencing of other object via control instructions.");
 
          RWS_BEGIN_COMMANDS
-            RWS_SEPARATOR("Messages", 0)
-               RWS_MESSAGE(MSG_START,
-                  "Start event",
-                  "Name of event which starts sequence. Data is pointer to RwUInt32 of start "
+         RWS_SEPARATOR("Messages", 0)
+         RWS_MESSAGE(MSG_START,
+                     "Start event",
+                     "Name of event which starts sequence. Data is pointer to RwUInt32 of start "
                      "time in milliseconds. If zero, then takes current time.",
-                  RECEIVE,
-                  RwUInt32*,
-                  0)
-            RWS_SEPARATOR("Sequence", 0)
-               RWS_ATTRIBUTE(CMD_LOOP_SEQ,
-                  "Loop sequence",
-                  "Repeatedly loop the sequence.",
-                  BOOLEAN,
-                  RwUInt32,
-                  DEFAULT(0))
-               RWS_ATTRIBUTE(CMD_SEQ_SPEED,
-                  "Speed",
-                  "Speed of playback of sequence.",
-                  SLIDER,
-                  RwReal,
-                  RANGE(0.1, 1, 10))
+                     RECEIVE,
+                     RwUInt32 *,
+                     0)
+         RWS_SEPARATOR("Sequence", 0)
+         RWS_ATTRIBUTE(CMD_LOOP_SEQ,
+                       "Loop sequence",
+                       "Repeatedly loop the sequence.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_SEQ_SPEED,
+                       "Speed",
+                       "Speed of playback of sequence.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.1, 1, 10))
          RWS_END_COMMANDS;
 
          CConductor(const CAttributePacket &attr);

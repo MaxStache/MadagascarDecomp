@@ -30,9 +30,9 @@
 
 #ifndef NDEBUG
 
-namespace RWS 
+namespace RWS
 {
-   namespace 
+   namespace
    {
       int CallDepth = 0;
    }
@@ -43,7 +43,7 @@ namespace RWS
 
    void _IndentToCallDepth()
    {
-      for ( int i = 0; i < CallDepth; ++i )
+      for (int i = 0; i < CallDepth; ++i)
       {
          RWS_DEBUGSTREAM(".");
       }
@@ -53,12 +53,12 @@ namespace RWS
 #endif // #ifndef NDEBUG
 
 #ifdef RWS_TRACE_METRICS
-namespace RWS 
+namespace RWS
 {
-   namespace 
+   namespace
    {
       const unsigned int OUTPUT_BUFFER_SIZE = (64 * 1024);
-      
+
       RwChar outputbuffer[OUTPUT_BUFFER_SIZE + 1];  // 1 extra element for termination
 
       unsigned int uiIndex = 0;
@@ -75,27 +75,27 @@ namespace RWS
 
       if (uiIndex > 0)
       {
-         const RwChar MetricsData[] = RWSTRING ("RWS::MetricsData");
-         RwUInt32 nMessageSize = (rwstrlen (MetricsData) + 1) * sizeof (RwChar);
+         const RwChar MetricsData[] = RWSTRING("RWS::MetricsData");
+         RwUInt32 nMessageSize = (rwstrlen(MetricsData) + 1) * sizeof(RwChar);
 
          outputbuffer[uiIndex] = 0;   // Terminate packet with 0,0
          uiIndex++;
 
 #ifdef RWS_MEMORY_PROFILING
-         // Open for write can cause a memory allocation, if it does it is released when 
+         // Open for write can cause a memory allocation, if it does it is released when
          // RwStreamClose is called, so it is ok to leave this out of the memory profile.
          //
          RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
 
-         if (RwStream *pStream = NetStream::OpenForWrite (
-                                      nMessageSize + uiIndex + ChunkHeaderSize))
+         if (RwStream *pStream = NetStream::OpenForWrite(
+                nMessageSize + uiIndex + ChunkHeaderSize))
          {
-            RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,
-                                      nMessageSize + uiIndex);
-            RwStreamWrite (pStream, MetricsData, nMessageSize);
-            RwStreamWrite (pStream, outputbuffer, uiIndex);
-            RwStreamClose (pStream, 0);
+            RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData,
+                                     nMessageSize + uiIndex);
+            RwStreamWrite(pStream, MetricsData, nMessageSize);
+            RwStreamWrite(pStream, outputbuffer, uiIndex);
+            RwStreamClose(pStream, 0);
          }
 
 #ifdef RWS_MEMORY_PROFILING
@@ -132,7 +132,7 @@ namespace RWS
 
       while (*ptr != 0)
       {
-         if (*ptr == ' ' || *ptr == '\t') 
+         if (*ptr == ' ' || *ptr == '\t')
          {
             RWS_ASSERTFAIL("RWS_TRACE_METRIC, name cannot contain tabs or spaces.");
          }
@@ -143,9 +143,9 @@ namespace RWS
       sprintf(buffer, "%s %d %f", pName, uiTime, rVar);
 
       RWS_ASSERT((rwstrlen(buffer) < TEMP_BUFFER_SIZE),
-         "RWS_TRACE_METRIC, TEMP_BUFFER_SIZE overrun, increase the size of TEMP_BUFFER_SIZE");
+                 "RWS_TRACE_METRIC, TEMP_BUFFER_SIZE overrun, increase the size of TEMP_BUFFER_SIZE");
 
-      if ( (uiIndex + (rwstrlen(buffer) + 1)) >= OUTPUT_BUFFER_SIZE)
+      if ((uiIndex + (rwstrlen(buffer) + 1)) >= OUTPUT_BUFFER_SIZE)
       {
          _SendMetricsDataBuffer();
       }
@@ -161,7 +161,7 @@ namespace RWS
 
 
 #ifdef RWS_FUNCTIONPROFILE
-namespace RWS 
+namespace RWS
 {
 
    const unsigned int PROFILE_BUFFER_SIZE = (2024);
@@ -174,21 +174,21 @@ namespace RWS
    * Function used to send profiler data back to the workspace.
    *
    */
-   void _SendProfileDataBuffer(const RwUInt32  id,
-                               const RwBool   HasChild,
-                               const RwUInt32  fps,
-                               const RwReal  totaltime,
-                               const char*  pParent,
-                               const char*  pFunction, 
-                               const RwUInt32  Calls, 
-                               const RwReal  time,
-                               char* pFileName,
+   void _SendProfileDataBuffer(const RwUInt32 id,
+                               const RwBool HasChild,
+                               const RwUInt32 fps,
+                               const RwReal totaltime,
+                               const char *pParent,
+                               const char *pFunction,
+                               const RwUInt32 Calls,
+                               const RwReal time,
+                               char *pFileName,
                                const RwUInt32 LineNumber,
-                               const RwReal  childTime)
+                               const RwReal childTime)
    {
       RWS_FUNCTION("RWS::_SendProfileDataBuffer");
 
-      RwUInt32 nMessageSize = (rwstrlen (ProfileData) + 1) * sizeof (char);
+      RwUInt32 nMessageSize = (rwstrlen(ProfileData) + 1) * sizeof(char);
 
 #ifdef SKY
       const char PlatformId[] = "PS2";
@@ -211,14 +211,14 @@ namespace RWS
 #ifdef DOLPHIN
       const char PlatformId[] = "GameCube";
 #endif
-      
+
       RwUInt32 i = 0;
       char pTempFileName[1000];
-      rwstrcpy (pTempFileName, pFileName);
+      rwstrcpy(pTempFileName, pFileName);
 
       // Because a file name can contain spaces  we need to replace those spaces with another character
       // or the string will get passed incorrectly by the profiler control.
-      for (i = 0; i < rwstrlen(pTempFileName); i++ )
+      for (i = 0; i < rwstrlen(pTempFileName); i++)
       {
          if (pTempFileName[i] == ' ')
          {
@@ -227,11 +227,11 @@ namespace RWS
       }
 
       char pTempFunctionName[1000];
-      rwstrcpy (pTempFunctionName,  pFunction);
+      rwstrcpy(pTempFunctionName, pFunction);
 
       // The function name string passed into RWS_FUNCTION could contain spaces, so before sending the
       // data to the workspace, go through the string and put a '#' in their place.
-      for ( i = 0; i < rwstrlen(pTempFunctionName); i++ )
+      for (i = 0; i < rwstrlen(pTempFunctionName); i++)
       {
          if (pTempFunctionName[i] == ' ')
          {
@@ -239,35 +239,35 @@ namespace RWS
          }
       }
 
-      sprintf (profiledatabuffer, "RwsChildData %s %d %d %f %s %s %d %f %s %d %d %f", 
-               PlatformId, 
-               id, 
-               fps, 
-               totaltime, 
-               pParent, 
-               pFunction, 
-               Calls, 
-               time,
-               pTempFileName,
-               LineNumber,
-               HasChild,
-               childTime); 
+      sprintf(profiledatabuffer, "RwsChildData %s %d %d %f %s %s %d %f %s %d %d %f",
+              PlatformId,
+              id,
+              fps,
+              totaltime,
+              pParent,
+              pFunction,
+              Calls,
+              time,
+              pTempFileName,
+              LineNumber,
+              HasChild,
+              childTime);
 
       uiProfileIndex = rwstrlen(profiledatabuffer) + 1;
 
 #ifdef RWS_MEMORY_PROFILING
-      // Open for write can cause a memory allocation, if it does it is released when 
+      // Open for write can cause a memory allocation, if it does it is released when
       // RwStreamClose is called, so it is ok to leave this out of the memory profile.
       //
       RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
 
-      if (RwStream *pStream = NetStream::OpenForWrite (nMessageSize + uiProfileIndex + ChunkHeaderSize))
+      if (RwStream *pStream = NetStream::OpenForWrite(nMessageSize + uiProfileIndex + ChunkHeaderSize))
       {
-         RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,nMessageSize + uiProfileIndex);
-         RwStreamWrite (pStream, ProfileData, nMessageSize);
-         RwStreamWrite (pStream, profiledatabuffer, uiProfileIndex);
-         RwStreamClose (pStream, 0);
+         RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData, nMessageSize + uiProfileIndex);
+         RwStreamWrite(pStream, ProfileData, nMessageSize);
+         RwStreamWrite(pStream, profiledatabuffer, uiProfileIndex);
+         RwStreamClose(pStream, 0);
       }
 
 #ifdef RWS_MEMORY_PROFILING
@@ -286,29 +286,29 @@ namespace RWS
    *  child will get sent and give incorrect readings in the workspace.
    *
    */
-   void _SendProfileNewChildFlag( void )
+   void _SendProfileNewChildFlag(void)
    {
       RWS_FUNCTION("RWS::_SendProfileDataBuffer");
 
-      RwUInt32 nMessageSize = (rwstrlen (ProfileData) + 1) * sizeof (char);
-  
-      sprintf (profiledatabuffer, "RwsNewChild"); 
+      RwUInt32 nMessageSize = (rwstrlen(ProfileData) + 1) * sizeof(char);
+
+      sprintf(profiledatabuffer, "RwsNewChild");
 
       uiProfileIndex = rwstrlen(profiledatabuffer) + 1;
 
 #ifdef RWS_MEMORY_PROFILING
-      // Open for write can cause a memory allocation, if it does it is released when 
+      // Open for write can cause a memory allocation, if it does it is released when
       // RwStreamClose is called, so it is ok to leave this out of the memory profile.
       //
       RwBool flag = MemoryProfile::Enable(FALSE);
 #endif
 
-      if (RwStream *pStream = NetStream::OpenForWrite (nMessageSize + uiProfileIndex + ChunkHeaderSize))
+      if (RwStream *pStream = NetStream::OpenForWrite(nMessageSize + uiProfileIndex + ChunkHeaderSize))
       {
-         RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,nMessageSize + uiProfileIndex);
-         RwStreamWrite (pStream, ProfileData, nMessageSize);
-         RwStreamWrite (pStream, profiledatabuffer, uiProfileIndex);
-         RwStreamClose (pStream, 0);
+         RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData, nMessageSize + uiProfileIndex);
+         RwStreamWrite(pStream, ProfileData, nMessageSize);
+         RwStreamWrite(pStream, profiledatabuffer, uiProfileIndex);
+         RwStreamClose(pStream, 0);
       }
 
 #ifdef RWS_MEMORY_PROFILING
@@ -318,7 +318,7 @@ namespace RWS
       RWS_RETURNVOID();
    }
 }
-   
+
 #endif
 
 

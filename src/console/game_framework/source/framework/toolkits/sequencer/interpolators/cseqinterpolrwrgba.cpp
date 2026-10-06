@@ -61,13 +61,13 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwRGBADefaultReg(CSeqInterpolBase::MakeNew,
-         CSeqInterpolBase::MaxSize, RWSTRING("RwRGBA"), 0, FALSE);
+                                             CSeqInterpolBase::MaxSize, RWSTRING("RwRGBA"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwRGBAInterpolReg(CSeqInterpolLinearRwRGBA::MakeNew,
-         CSeqInterpolLinearRwRGBA::MaxSize, RWSTRING("RwUInt32"),
-         INTERPOL_TYPE_LINEAR_NAME, FALSE);
+                                              CSeqInterpolLinearRwRGBA::MaxSize, RWSTRING("RwUInt32"),
+                                              INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       //////////////////////////////////////
       //
@@ -113,9 +113,9 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwRGBA::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
          RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwRGBA),
-            "Memory buffer too small");
+                    "Memory buffer too small");
 
-         CSeqInterpolLinearRwRGBA *pNew = new(rData.GetInterpolMem())
+         CSeqInterpolLinearRwRGBA *pNew = new (rData.GetInterpolMem())
             CSeqInterpolLinearRwRGBA(rData);
          RWS_ASSERT(pNew, "Could not allocate new instance.");
 
@@ -167,10 +167,8 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->DataSize(), "End key's data size invalid.");
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
-         const RwRGBA *pEndVal = reinterpret_cast<const RwRGBA *>
-               (rData.EndKey()->Data()),
-            *pStartVal = reinterpret_cast<const RwRGBA *>
-               (rData.LastKey()->Data());
+         const RwRGBA *pEndVal = reinterpret_cast<const RwRGBA *>(rData.EndKey()->Data()),
+                      *pStartVal = reinterpret_cast<const RwRGBA *>(rData.LastKey()->Data());
 
          // Store start value for each individual channel of the color (using fixed 24 bit decimal).
 
@@ -183,14 +181,15 @@ namespace RWS
 
          if (pEndVal->red >= pStartVal->red)
          {
-            m_data.m_stepR = ((static_cast<RwUInt32>(pEndVal->red) << 24) - 
-               m_data.m_startR) / rData.LengthTime();
+            m_data.m_stepR = ((static_cast<RwUInt32>(pEndVal->red) << 24) -
+                              m_data.m_startR) /
+                             rData.LengthTime();
             m_data.m_incR = TRUE;
          }
          else
          {
-            m_data.m_stepR = (m_data.m_startR - (static_cast<RwUInt32>(pEndVal->red) << 24)) / 
-               rData.LengthTime();
+            m_data.m_stepR = (m_data.m_startR - (static_cast<RwUInt32>(pEndVal->red) << 24)) /
+                             rData.LengthTime();
             m_data.m_incR = FALSE;
          }
 
@@ -198,14 +197,14 @@ namespace RWS
 
          if (pEndVal->green >= pStartVal->green)
          {
-            m_data.m_stepG = ((static_cast<RwUInt32>(pEndVal->green) << 24) - m_data.m_startG) / 
-               rData.LengthTime();
+            m_data.m_stepG = ((static_cast<RwUInt32>(pEndVal->green) << 24) - m_data.m_startG) /
+                             rData.LengthTime();
             m_data.m_incG = TRUE;
          }
          else
          {
-            m_data.m_stepG = (m_data.m_startG - (static_cast<RwUInt32>(pEndVal->green) << 24)) / 
-               rData.LengthTime();
+            m_data.m_stepG = (m_data.m_startG - (static_cast<RwUInt32>(pEndVal->green) << 24)) /
+                             rData.LengthTime();
             m_data.m_incG = FALSE;
          }
 
@@ -213,14 +212,14 @@ namespace RWS
 
          if (pEndVal->blue >= pStartVal->blue)
          {
-            m_data.m_stepB = ((static_cast<RwUInt32>(pEndVal->blue) << 24) - m_data.m_startB) / 
-               rData.LengthTime();
+            m_data.m_stepB = ((static_cast<RwUInt32>(pEndVal->blue) << 24) - m_data.m_startB) /
+                             rData.LengthTime();
             m_data.m_incB = TRUE;
          }
          else
          {
-            m_data.m_stepB = (m_data.m_startB - (static_cast<RwUInt32>(pEndVal->blue) << 24)) / 
-               rData.LengthTime();
+            m_data.m_stepB = (m_data.m_startB - (static_cast<RwUInt32>(pEndVal->blue) << 24)) /
+                             rData.LengthTime();
             m_data.m_incB = FALSE;
          }
 
@@ -228,14 +227,14 @@ namespace RWS
 
          if (pEndVal->alpha >= pStartVal->alpha)
          {
-            m_data.m_stepA = ((static_cast<RwUInt32>(pEndVal->alpha) << 24) - m_data.m_startA) / 
-               rData.LengthTime();
+            m_data.m_stepA = ((static_cast<RwUInt32>(pEndVal->alpha) << 24) - m_data.m_startA) /
+                             rData.LengthTime();
             m_data.m_incA = TRUE;
          }
          else
          {
-            m_data.m_stepA = (m_data.m_startA - (static_cast<RwUInt32>(pEndVal->alpha) << 24)) / 
-               rData.LengthTime();
+            m_data.m_stepA = (m_data.m_startA - (static_cast<RwUInt32>(pEndVal->alpha) << 24)) /
+                             rData.LengthTime();
             m_data.m_incA = FALSE;
          }
 
@@ -269,58 +268,66 @@ namespace RWS
       */
 
       inline void CalcValue(RwRGBA *pResult, CSeqInterpolLinearRwRGBA::Data &rData,
-         RwUInt32 mSecsPassed)
+                            RwUInt32 mSecsPassed)
       {
          // Calc red...
 
          if (rData.m_incR)
          {
-            pResult->red = static_cast<RwUInt8>((rData.m_startR + rData.m_stepR * 
-               mSecsPassed) >> 24);
+            pResult->red = static_cast<RwUInt8>((rData.m_startR + rData.m_stepR *
+                                                                     mSecsPassed) >>
+                                                24);
          }
          else
          {
-            pResult->red = static_cast<RwUInt8>((rData.m_startR - rData.m_stepR * 
-               mSecsPassed) >> 24);
+            pResult->red = static_cast<RwUInt8>((rData.m_startR - rData.m_stepR *
+                                                                     mSecsPassed) >>
+                                                24);
          }
 
          // Calc green...
 
          if (rData.m_incG)
          {
-            pResult->green = static_cast<RwUInt8>((rData.m_startG + rData.m_stepG * 
-               mSecsPassed) >> 24);
+            pResult->green = static_cast<RwUInt8>((rData.m_startG + rData.m_stepG *
+                                                                       mSecsPassed) >>
+                                                  24);
          }
          else
          {
-            pResult->green = static_cast<RwUInt8>((rData.m_startG - rData.m_stepG * 
-               mSecsPassed) >> 24);
+            pResult->green = static_cast<RwUInt8>((rData.m_startG - rData.m_stepG *
+                                                                       mSecsPassed) >>
+                                                  24);
          }
 
          // Calc blue...
 
          if (rData.m_incB)
          {
-            pResult->blue = static_cast<RwUInt8>((rData.m_startB + rData.m_stepB * 
-               mSecsPassed) >> 24);
+            pResult->blue = static_cast<RwUInt8>((rData.m_startB + rData.m_stepB *
+                                                                      mSecsPassed) >>
+                                                 24);
          }
          else
          {
-            pResult->blue = static_cast<RwUInt8>((rData.m_startB - rData.m_stepB * 
-               mSecsPassed) >> 24);
+            pResult->blue = static_cast<RwUInt8>((rData.m_startB - rData.m_stepB *
+                                                                      mSecsPassed) >>
+                                                 24);
          }
 
          // Calc alpha...
 
          if (rData.m_incA)
          {
-            pResult->alpha = static_cast<RwUInt8>((rData.m_startA + rData.m_stepA * 
-               mSecsPassed) >> 24);
+            pResult->alpha = static_cast<RwUInt8>((rData.m_startA + rData.m_stepA *
+                                                                       mSecsPassed) >>
+                                                  24);
          }
          else
          {
-            pResult->alpha = static_cast<RwUInt8>((rData.m_startA - rData.m_stepA * 
-               mSecsPassed) >> 24);
+            pResult->alpha = static_cast<RwUInt8>((rData.m_startA - rData.m_stepA *
+                                                                       mSecsPassed) >>
+                                                  24);
          }
       }
 
@@ -387,9 +394,9 @@ namespace RWS
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta is out of range.");
 
          RwReal realStartVal = static_cast<RwReal>(startVal),
-            realEndVal = static_cast<RwReal>(endVal);
+                realEndVal = static_cast<RwReal>(endVal);
          RwUInt8 result = static_cast<RwUInt8>(realStartVal +
-            (realEndVal - realStartVal) * delta);
+                                               (realEndVal - realStartVal) * delta);
 
          RWS_RETURN(result);
       }
@@ -413,10 +420,8 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta is out of range.");
 
-         const RwRGBA *pEndVal = reinterpret_cast<const RwRGBA *>
-               (rData.EndKey()->Data()),
-            *pStartVal = reinterpret_cast<const RwRGBA *>
-               (rData.LastKey()->Data());
+         const RwRGBA *pEndVal = reinterpret_cast<const RwRGBA *>(rData.EndKey()->Data()),
+                      *pStartVal = reinterpret_cast<const RwRGBA *>(rData.LastKey()->Data());
 
          pResult->red = CalcColElement(pStartVal->red, pEndVal->red, delta);
          pResult->green = CalcColElement(pStartVal->green, pEndVal->green, delta);

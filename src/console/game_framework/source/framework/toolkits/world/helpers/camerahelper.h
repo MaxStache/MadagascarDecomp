@@ -49,6 +49,6 @@ namespace RWS
 
       void SetFieldOfView(RwReal rViewWindow, RwCamera *pCamera);
 
-      void HandleSystemCommands(RwCamera &pCamera, const CAttributePacket& rAttr);
+      void HandleSystemCommands(RwCamera &pCamera, const CAttributePacket &rAttr);
    }
 }//namespace

@@ -53,7 +53,7 @@ namespace RWS
       *
       *  \return TRUE if the point is on or behind the plane, FALSE otherwise.
       */
-      RwBool PointPlaneClip( const RwV3d * pPoint, const RwPlane * pPlane )
+      RwBool PointPlaneClip(const RwV3d* pPoint, const RwPlane* pPlane)
       {
          return ((RwV3dDotProduct(pPoint, &pPlane->normal) + pPlane->distance) <= 0.0f);
       }
@@ -67,8 +67,8 @@ namespace RWS
       /*
       *  Constructor
       */
-      ATBox::ATBox( const CAttributePacket& attr )
-         : ATBase(attr)
+      ATBox::ATBox(const CAttributePacket& attr) :
+         ATBase(attr)
       {
       }
 
@@ -85,7 +85,7 @@ namespace RWS
       *  \param pPoint Point to test, in world space.
       *  \return true if point is inside the box, false otherwise.
       */
-      RwBool ATBox::PointInsideGeometry( const RwV3d * pPoint )
+      RwBool ATBox::PointInsideGeometry(const RwV3d* pPoint)
       {
          RWS_FUNCTION("ATBox::PointInsideGeometry");
 
@@ -114,20 +114,19 @@ namespace RWS
       *  \param pLine Line to test, in world coordinates.
       *  \return TRUE if point is inside the box, FALSE otherwise.
       */
-      RwBool ATBox::LineIntersectGeometry( const RwLine * pLine )
+      RwBool ATBox::LineIntersectGeometry(const RwLine* pLine)
       {
          RWS_FUNCTION("ATBox::LineIntersectGeometry");
 
          // Since the local-space box is a unit one, already know the face normals.
          RwPlane FacePlanes[6] =
-         {
-            { { 1.0f, 0.0f, 0.0f }, -0.5f },
-            { { -1.0f, 0.0f, 0.0f }, -0.5f },
-            { { 0.0f, 1.0f, 0.0f }, -0.5f },
-            { { 0.0f, -1.0f, 0.0f }, -0.5f },
-            { { 0.0f, 0.0f, 1.0f }, -0.5f },
-            { { 0.0f, 0.0f, -1.0f }, -0.5f }
-         };
+            {
+               {{1.0f, 0.0f, 0.0f}, -0.5f},
+               {{-1.0f, 0.0f, 0.0f}, -0.5f},
+               {{0.0f, 1.0f, 0.0f}, -0.5f},
+               {{0.0f, -1.0f, 0.0f}, -0.5f},
+               {{0.0f, 0.0f, 1.0f}, -0.5f},
+               {{0.0f, 0.0f, -1.0f}, -0.5f}};
          RwLine LocalLine;
          RwBool bBehindStart;
          RwBool bBehindEnd;
@@ -162,12 +161,12 @@ namespace RWS
 
 #if defined(RWS_DEBUGTOOLS)
 
-         DebugTools::WireBox( &m_Matrix, 255, 255, 0 );
-      
+         DebugTools::WireBox(&m_Matrix, 255, 255, 0);
+
 #endif // RWS_DEBUGTOOLS
 
          RWS_RETURNVOID();
-      }      
+      }
 
    } // namespace AreaTrigger
 

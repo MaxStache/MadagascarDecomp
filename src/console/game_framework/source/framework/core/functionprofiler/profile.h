@@ -100,7 +100,7 @@ namespace RWS
       * enter a new child node of the profiler tree.
       *
       */
-      const RwUInt32 EnterChild_Command    = 0;
+      const RwUInt32 EnterChild_Command = 0;
 
       /**
       *
@@ -110,7 +110,7 @@ namespace RWS
       * enter the parent node of the current child.
       *
       */
-      const RwUInt32 EnterParent_Command   = 1;
+      const RwUInt32 EnterParent_Command = 1;
 
       /**
       *
@@ -150,21 +150,21 @@ namespace RWS
       * a call tree showing the structure of the code being profiled.  
       *
       */
-      class CProfileNode 
-      {         
+      class CProfileNode
+      {
       public:
-         CProfileNode( char * name, CProfileNode * parent );
-         ~CProfileNode( void ){};
-                  
+         CProfileNode(char *name, CProfileNode *parent);
+         ~CProfileNode(void) {};
+
          /**
          *
          * Returns a pointer to this nodes parent node.
          *
          * \return Returns a pointer to this nodes parent node.
          *
-         */         
-         CProfileNode * GetParent( void ){return m_pParent; };     
-         
+         */
+         CProfileNode *GetParent(void) { return m_pParent; };
+
          /**
          *
          * Return a pointer to this nodes sibling.
@@ -172,8 +172,8 @@ namespace RWS
          * \return Return a pointer to this nodes sibling.
          *
          */
-         CProfileNode * GetSibling( void ){ return m_pSibling; };
-         
+         CProfileNode *GetSibling(void) { return m_pSibling; };
+
          /**
          *
          * Return a pointer to this nodes child.
@@ -181,8 +181,8 @@ namespace RWS
          * \return Return a pointer to this nodes child.
          *
          */
-         CProfileNode * GetChild( void ){ return m_pChild; };          
-                  
+         CProfileNode *GetChild(void) { return m_pChild; };
+
          /**
          *
          * Get the name of the function associated with this node.
@@ -190,8 +190,8 @@ namespace RWS
          * \return Returns a pointer to the function name.     
          *
          */
-         RwChar * GetName( void ){ return m_pName; };
-         
+         RwChar *GetName(void) { return m_pName; };
+
          /**
          *
          * Return the total number of times the function associated with this node has been called.
@@ -199,7 +199,7 @@ namespace RWS
          * \return Return the number of times the function has been called.
          *
          */
-         RwUInt32 GetTotalCalls( void ) { return m_TotalCalls; }  
+         RwUInt32 GetTotalCalls(void) { return m_TotalCalls; }
 
          /**
          *
@@ -208,8 +208,8 @@ namespace RWS
          * \return Returns the amount of time spent in the function in milliseconds.
          *
          */
-         RwReal GetTotalTime( void ){ return m_TotalTime; };
-                    
+         RwReal GetTotalTime(void) { return m_TotalTime; };
+
          /**
          *
          * Return the file name from the source code for the function associated with this node.
@@ -217,17 +217,17 @@ namespace RWS
          * \return A pointer to a string containing the filename.      
          *
          */
-         RwChar * GetFileName( void ) { return m_pFileName; };
-         
+         RwChar *GetFileName(void) { return m_pFileName; };
+
          /**
          *
          * Return the line number from the source code for the function associated with this node.
          *
          * \return A line number
          *
-         */         
-         RwUInt32 GetLineNumber( void ){ return m_LineNumber; };
-         
+         */
+         RwUInt32 GetLineNumber(void) { return m_LineNumber; };
+
          /**
          *
          * Set the number of times results are accumulated before being sent across the network.
@@ -235,8 +235,8 @@ namespace RWS
          * \param num Number to set accumulated count too.
          *
          */
-         void SetNumAccumulatedResults( const RwUInt32 num) { m_NumAccumulatedResults = num; };
-         
+         void SetNumAccumulatedResults(const RwUInt32 num) { m_NumAccumulatedResults = num; };
+
          /**
          *
          * Return the number of times profiler results are accumulated before being sent across the network.
@@ -244,8 +244,8 @@ namespace RWS
          * \return Number of times profiler results are accumulated.
          *
          */
-         RwUInt32 GetNumAccumulatedResults( void ) { return m_NumAccumulatedResults; };
-         
+         RwUInt32 GetNumAccumulatedResults(void) { return m_NumAccumulatedResults; };
+
          /**
          *
          * Accumulate a functions number of call.
@@ -253,25 +253,25 @@ namespace RWS
          * \param num Number to set accumulated calls too.
          *
          */
-         void SetNumAccumulatedCalls( const RwUInt32 num) { m_AccumulatedCalls = num; };
-         
+         void SetNumAccumulatedCalls(const RwUInt32 num) { m_AccumulatedCalls = num; };
+
          /**
          *
          * Return the number of accumulated calls.
          *
          * \return Returns the number of calls.        
          *      
-         */         
-         RwUInt32 GetNumAccumulatedCalls( void ) { return m_AccumulatedCalls; };    
-         
+         */
+         RwUInt32 GetNumAccumulatedCalls(void) { return m_AccumulatedCalls; };
+
          /**
          *
          * Accumulate a functions total execution time.
          *
          * \param num A functions time.
          *
-         */         
-         void SetNumAccumulatedTime( const RwReal num) { m_AccumulatedTime = num; }; 
+         */
+         void SetNumAccumulatedTime(const RwReal num) { m_AccumulatedTime = num; };
 
          /**
          *
@@ -279,56 +279,56 @@ namespace RWS
          *
          * \return Returns the accumulated function time in milliseconds.
          *   
-         */         
-         RwReal GetNumAccumulatedTime( void ) { return m_AccumulatedTime; };     
-         
+         */
+         RwReal GetNumAccumulatedTime(void) { return m_AccumulatedTime; };
+
          /**
          *
          * Accumulate a functions child execution times.
          *
          * \param num A child functions time in milliseconds.
          *
-         */         
-         void SetNumAccumulatedChildTime( const RwReal num){ m_AccumulatedChildTimes = num; }; 
-         
+         */
+         void SetNumAccumulatedChildTime(const RwReal num) { m_AccumulatedChildTimes = num; };
+
          /**
          *
          * Return the accumulated functions child times.
          *
          * \return Returns the accumulated functions child times.
          * 
-         */         
-         RwReal GetNumAccumulatedChildTime( void ){ return m_AccumulatedChildTimes; };  
-         
-         CProfileNode * GetSubNode( const char * name );         
-         void           Reset( void );
-         void           Call( const char *pFilename, const int Linenumber );
-         RwBool         Return( void );
-      protected:         
-         RwChar       * m_pName;             /**< The name of the function being profiled.*/
-         RwChar       * m_pFileName;         /**< The filename of the function being profiled.*/
-         RwUInt32       m_LineNumber;        /**< The source code line number of the function being profiled.*/
-         
-         RwUInt32       m_TotalCalls;        /**< The total number of times the function has been called.*/
-         RwReal         m_TotalTime;         /**< The total amount of time spent in the function.*/
-         RwUInt32       m_StartTime;         /**< Time sample for when the function being profiled begins execution.*/
-         RwUInt32       m_RecursionCounter;  /**< Counter for keeping track of recursion.*/
+         */
+         RwReal GetNumAccumulatedChildTime(void) { return m_AccumulatedChildTimes; };
 
-         RwUInt32       m_AccumulatedCalls;     /**< The call counter that gets accumulated up before being sent 
+         CProfileNode *GetSubNode(const char *name);
+         void Reset(void);
+         void Call(const char *pFilename, const int Linenumber);
+         RwBool Return(void);
+      protected:
+         RwChar *m_pName;             /**< The name of the function being profiled.*/
+         RwChar *m_pFileName;         /**< The filename of the function being profiled.*/
+         RwUInt32 m_LineNumber;        /**< The source code line number of the function being profiled.*/
+
+         RwUInt32 m_TotalCalls;        /**< The total number of times the function has been called.*/
+         RwReal m_TotalTime;         /**< The total amount of time spent in the function.*/
+         RwUInt32 m_StartTime;         /**< Time sample for when the function being profiled begins execution.*/
+         RwUInt32 m_RecursionCounter;  /**< Counter for keeping track of recursion.*/
+
+         RwUInt32 m_AccumulatedCalls;     /**< The call counter that gets accumulated up before being sent 
                                                      across the network.*/
 
-         RwReal         m_AccumulatedTime;      /**< The node time that gets accumulated up before being sent 
+         RwReal m_AccumulatedTime;      /**< The node time that gets accumulated up before being sent 
                                                      across the network.*/
-         
-         RwReal         m_AccumulatedChildTimes;/**< The child time that gets accumulated up before being send 
+
+         RwReal m_AccumulatedChildTimes;/**< The child time that gets accumulated up before being send 
                                                      across the network.*/
-         
-         RwUInt32       m_NumAccumulatedResults;/**< The number of items accumulated before being sent across the 
+
+         RwUInt32 m_NumAccumulatedResults;/**< The number of items accumulated before being sent across the 
                                                      network.*/
-        
-         CProfileNode * m_pParent;           /**< A pointer to this nodes parent.*/
-         CProfileNode * m_pChild;            /**< A pointer to this nodes child.*/
-         CProfileNode * m_pSibling;          /**< A pointer to this nodes siblings.*/
+
+         CProfileNode *m_pParent;           /**< A pointer to this nodes parent.*/
+         CProfileNode *m_pChild;            /**< A pointer to this nodes child.*/
+         CProfileNode *m_pSibling;          /**< A pointer to this nodes siblings.*/
       };
 
       /**
@@ -360,7 +360,7 @@ namespace RWS
          *
          */
          void Next(void) { m_pCurrentChild = m_pCurrentChild->GetSibling(); };
-         
+
          /**
          *
          * If the current child is NULL then return TRUE.  This function is used for iterating through 
@@ -371,7 +371,7 @@ namespace RWS
          *
          */
          RwBool IsDone(void) { return m_pCurrentChild == 0; };
-         
+
          /**
          *
          * Return the name of the current child.
@@ -379,8 +379,8 @@ namespace RWS
          * \param A pointer to a string containing the child names.
          *
          */
-         const RwChar * GetCurrentName( void ) { return m_pCurrentChild->GetName(); };
-         
+         const RwChar *GetCurrentName(void) { return m_pCurrentChild->GetName(); };
+
          /**
          *
          * Return the total number of times the current nodes function has been called.
@@ -388,17 +388,17 @@ namespace RWS
          * \return Returns the total number of times the current child function has been called.
          *
          */
-         RwUInt32 GetCurrentTotalCalls( void ) { return m_pCurrentChild->GetTotalCalls(); };
-         
+         RwUInt32 GetCurrentTotalCalls(void) { return m_pCurrentChild->GetTotalCalls(); };
+
          /**
          *
          * Return the total time which has been spent in the current child function.
          *
          * \return Return the total time spent in the current child function.
          *
-         */         
-         RwReal GetCurrentTotalTime( void ) { return m_pCurrentChild->GetTotalTime(); };
-         
+         */
+         RwReal GetCurrentTotalTime(void) { return m_pCurrentChild->GetTotalTime(); };
+
          /**
          *
          * Return the filename from were the current child function appears in the source code.
@@ -406,8 +406,8 @@ namespace RWS
          * \return Returns a string containing a filename.
          *
          */
-         RwChar * GetCurrentFileName( void ) { return m_pCurrentChild->GetFileName(); };          
-         
+         RwChar *GetCurrentFileName(void) { return m_pCurrentChild->GetFileName(); };
+
          /**
          *
          * Return the line number from were the current child function appears in the source code.
@@ -415,8 +415,8 @@ namespace RWS
          * \return Return the filename from were the current child function appears in the source code.
          *
          */
-         RwUInt32 GetLineNumber( void ) { return m_pCurrentChild->GetLineNumber(); };                   
-         
+         RwUInt32 GetLineNumber(void) { return m_pCurrentChild->GetLineNumber(); };
+
          /**
          *
          * Return the name of the current parent.
@@ -424,8 +424,8 @@ namespace RWS
          * \param A pointer to a string containing the parents names.
          *
          */
-         const RwChar * GetCurrentParentName( void ) { return m_pCurrentParent->GetName(); }; 
-         
+         const RwChar *GetCurrentParentName(void) { return m_pCurrentParent->GetName(); };
+
          /**
          *
          * Return the total number of times the current parents function has been called.
@@ -433,8 +433,8 @@ namespace RWS
          * \return Returns the total number of times the current parents function has been called.
          *
          */
-         RwUInt32 GetCurrentParentTotalCalls( void ) { return m_pCurrentParent->GetTotalCalls(); };
-         
+         RwUInt32 GetCurrentParentTotalCalls(void) { return m_pCurrentParent->GetTotalCalls(); };
+
          /**
          *
          * Return the total time which has been spent in the current parents function.
@@ -442,25 +442,25 @@ namespace RWS
          * \return Return the total time spent in the current parents function.
          *
          */
-         RwReal GetCurrentParentTotalTime( void ) { return m_pCurrentParent->GetTotalTime(); };  
+         RwReal GetCurrentParentTotalTime(void) { return m_pCurrentParent->GetTotalTime(); };
 
-         void           EnterChild( RwUInt32 Index );
-         void           EnterParent( void );
+         void EnterChild(RwUInt32 Index);
+         void EnterParent(void);
 
       protected:
-         CProfileNode * m_pCurrentChild;           /**< A pointer to the current child node.*/
-         CProfileNode * m_pCurrentParent;          /**< A pointer to the current parent node.*/
-         
-         CProfileIterator( CProfileNode * start );
-         friend   class    CProfileManager;
-      };      
+         CProfileNode *m_pCurrentChild;           /**< A pointer to the current child node.*/
+         CProfileNode *m_pCurrentParent;          /**< A pointer to the current parent node.*/
+
+         CProfileIterator(CProfileNode *start);
+         friend class CProfileManager;
+      };
 
 #else
       class CProfileIterator
       {
       };
 #endif
-      
+
       /**
       *
       * \ingroup Profiler
@@ -480,59 +480,59 @@ namespace RWS
       {
 #ifdef RWS_FUNCTIONPROFILE
       public:
-         static void                 OpenProfiler (RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void));
-         static void                 CloseProfiler ();
-       
+         static void OpenProfiler(RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void));
+         static void CloseProfiler();
 
-         static void                 StartProfile( const RwChar * pName, const char *pFilename, const int Linenumber );
-         static void                 StopProfile( void );  
-         
-         static void                 Reset( void );
-         static void                 IncrementFrameCounter( void );
-         
-         static RwUInt32             GetFrameCountSinceReset( void );
-         static RwReal               GetTimeSinceReset( void );
-         static CProfileIterator   * GetIterator( void );
-         static void                 ReleaseIterator( CProfileIterator * pIterator );
-         static void                 SendProfileDataToWorkspace( void );
-         
-         static CProfileIterator   * pIttr;                  /**< Pointer to an itterator for the profiler manager.*/
-         static char               * m_NodeBuffer;           /**< A pointer to an area of memory that gets allocated. 
+
+         static void StartProfile(const RwChar *pName, const char *pFilename, const int Linenumber);
+         static void StopProfile(void);
+
+         static void Reset(void);
+         static void IncrementFrameCounter(void);
+
+         static RwUInt32 GetFrameCountSinceReset(void);
+         static RwReal GetTimeSinceReset(void);
+         static CProfileIterator *GetIterator(void);
+         static void ReleaseIterator(CProfileIterator *pIterator);
+         static void SendProfileDataToWorkspace(void);
+
+         static CProfileIterator *pIttr;                  /**< Pointer to an itterator for the profiler manager.*/
+         static char *m_NodeBuffer;           /**< A pointer to an area of memory that gets allocated. 
                                                                   This area of memory is for storing the profiler 
                                                                   nodes. */
 
-         static char               * m_NodeBufferOriginalPtr;/**< A pointer to the start of the node memory buffer.*/
+         static char *m_NodeBufferOriginalPtr;/**< A pointer to the start of the node memory buffer.*/
 
-         static RwUInt32             m_NumNodesInBuffer;     /**< The number of nodes in the memory buffer.*/
-         static RwUInt32             m_NumNodesAllocated;    /**< The total number of nodes that can be allocated into 
+         static RwUInt32 m_NumNodesInBuffer;     /**< The number of nodes in the memory buffer.*/
+         static RwUInt32 m_NumNodesAllocated;    /**< The total number of nodes that can be allocated into 
                                                                   the memory buffer.*/
       private:
-         static RwReal               TotalChildTimes( void );
-         static void                 AccumulateProfileTimes( void );
-         static void                 SendAccumulatedData( void );
-         
-         static CProfileNode         m_Root;                /**< The root node in the profiler tree.*/
-         static CProfileNode       * m_pCurrentNode;        /**< A pointer to the current node.*/
-         static RwUInt32             m_FrameCounter;        /**< The number of frames elapsed since the profiler 
+         static RwReal TotalChildTimes(void);
+         static void AccumulateProfileTimes(void);
+         static void SendAccumulatedData(void);
+
+         static CProfileNode m_Root;                /**< The root node in the profiler tree.*/
+         static CProfileNode *m_pCurrentNode;        /**< A pointer to the current node.*/
+         static RwUInt32 m_FrameCounter;        /**< The number of frames elapsed since the profiler 
                                                                  started, or was reset,*/
-         static RwUInt32             m_ResetTime;           /**< The time when the profiler was reset.*/
+         static RwUInt32 m_ResetTime;           /**< The time when the profiler was reset.*/
 #else
       public:
-         static void                 OpenProfiler (RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void)){};
-         static void                 CloseProfiler (){};
-         static void                 StartProfile( const char * pName, const char *pFilename, const int Linenumber ){};
-         static void                 StopProfile( void ){};
-         static void                 Reset( void ){};
-         static void                 IncrementFrameCounter( void ){};
-         static RwUInt32             GetFrameCountSinceReset( void ){return 0;};
-         static RwReal               GetTimeSinceReset( void ){return 0.0f;};
-         static CProfileIterator   * GetIterator( void ){return 0;};
-         static void                 ReleaseIterator( CProfileIterator * pIterator ){};
-         static void                 SendProfileDataToWorkspace( void ){};
+         static void OpenProfiler(RwUInt32 NumNodes, RwUInt32 (*pTimeFunc)(void)) {};
+         static void CloseProfiler() {};
+         static void StartProfile(const char *pName, const char *pFilename, const int Linenumber) {};
+         static void StopProfile(void) {};
+         static void Reset(void) {};
+         static void IncrementFrameCounter(void) {};
+         static RwUInt32 GetFrameCountSinceReset(void) { return 0; };
+         static RwReal GetTimeSinceReset(void) { return 0.0f; };
+         static CProfileIterator *GetIterator(void) { return 0; };
+         static void ReleaseIterator(CProfileIterator *pIterator) {};
+         static void SendProfileDataToWorkspace(void) {};
       private:
-         static RwReal               TotalChildTimes( void ){return 0.0f;};
-         static void                 AccumulateProfileTimes( void ){};
-         static void                 SendAccumulatedData( void ){};         
+         static RwReal TotalChildTimes(void) { return 0.0f; };
+         static void AccumulateProfileTimes(void) {};
+         static void SendAccumulatedData(void) {};
 #endif
       };
 

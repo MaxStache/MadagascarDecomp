@@ -59,8 +59,8 @@ namespace RWS
       *  \param attr the attribute packets used to initialize. This includes the attribute control's values.
       *
       */
-      CTutorial7::CTutorial7(const CAttributePacket& attr)
-        : InitCEventHandler(&m_pAtomic)
+      CTutorial7::CTutorial7(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial::CTutorial7");
 
@@ -70,7 +70,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Destroy CTutorial7 object.
@@ -81,7 +81,7 @@ namespace RWS
          RWS_FUNCTION("RWS::Tutorial::CTutorial7::~CTutorial7");
          RWS_RETURNVOID();
       }
-   
+
       /**
       *
       *  Handle events. Would handle any message processing for the behavior, but this tutorial does not do
@@ -90,7 +90,7 @@ namespace RWS
       *  \param pMsg standard message packets.
       *
       */
-      void CTutorial7::HandleEvents(CMsg &pMsg)
+      void CTutorial7::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial7::HandleEvents");
          RWS_RETURNVOID();
@@ -134,11 +134,11 @@ namespace RWS
 
             case CMD_testcolor:
                m_Color = attrIt->GetAs_RwRGBA();
-                            
-               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.alpha) <<" - ALPHA");
-               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.red)   <<" - RED");
-               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.green) <<" - GREEN");
-               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.blue)  <<" - BLUE");
+
+               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.alpha) << " - ALPHA");
+               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.red) << " - RED");
+               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.green) << " - GREEN");
+               RWS_TRACE(reinterpret_cast<RwUInt32*>(m_Color.blue) << " - BLUE");
                break;
 
             case CMD_testlist:
@@ -148,27 +148,27 @@ namespace RWS
 
                switch (type)
                {
-               case 0: 
+               case 0:
                   RWS_TRACE("Selected List Element 1")
                   break;
 
-               case 1: 
+               case 1:
                   RWS_TRACE("Selected List Element 2")
                   break;
 
-               case 2: 
+               case 2:
                   RWS_TRACE("Selected List Element 3")
                   break;
                }
 
-            break;
+               break;
             }
 
-         ++attrIt;
+            ++attrIt;
          }
 
          RWS_RETURNVOID();
       }
-      
+
    }//namespace Tutorial
 }//namespace RWS

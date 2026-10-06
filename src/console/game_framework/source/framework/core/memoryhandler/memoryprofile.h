@@ -51,7 +51,7 @@ namespace RWS
    */
    namespace MemoryProfile
    {
-      typedef RwUInt32 (*TimeCallBackFunc)(void); 
+      typedef RwUInt32 (*TimeCallBackFunc)(void);
 
 #ifdef RWS_MEMORY_PROFILING
 
@@ -70,31 +70,31 @@ namespace RWS
 
       void Poll();
 
-      void Malloc(   const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum);
-      
-      void Calloc(   const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum);
+      void Malloc(const void *Address,
+                  const RwUInt32 Size,
+                  const char *Filename,
+                  const RwUInt32 LineNumber,
+                  const RwUInt32 UserTypeNum);
 
-      void Realloc(  const void *OrgAddress,
-                     const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum);
+      void Calloc(const void *Address,
+                  const RwUInt32 Size,
+                  const char *Filename,
+                  const RwUInt32 LineNumber,
+                  const RwUInt32 UserTypeNum);
+
+      void Realloc(const void *OrgAddress,
+                   const void *Address,
+                   const RwUInt32 Size,
+                   const char *Filename,
+                   const RwUInt32 LineNumber,
+                   const RwUInt32 UserTypeNum);
 
       void Free(const void *Address);
 
       void Comment(const char *CommentText);
 
       void ReportCodeMetrics(void);
-#else 
+#else
       // This section contains dummy functions which are will optimize out when
       // RWS_MEMORY_PROFILING is not defined.
       //
@@ -108,24 +108,24 @@ namespace RWS
 
       inline void ConnectionLost() {}
 
-      inline void Malloc(   const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum) {}
-      
-      inline void Calloc(   const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum) {}
+      inline void Malloc(const void *Address,
+                         const RwUInt32 Size,
+                         const char *Filename,
+                         const RwUInt32 LineNumber,
+                         const RwUInt32 UserTypeNum) {}
 
-      inline void Realloc(  const void *OrgAddress,
-                     const void *Address,
-                     const RwUInt32 Size,
-                     const char *Filename,
-                     const RwUInt32 LineNumber,
-                     const RwUInt32 UserTypeNum) {}
+      inline void Calloc(const void *Address,
+                         const RwUInt32 Size,
+                         const char *Filename,
+                         const RwUInt32 LineNumber,
+                         const RwUInt32 UserTypeNum) {}
+
+      inline void Realloc(const void *OrgAddress,
+                          const void *Address,
+                          const RwUInt32 Size,
+                          const char *Filename,
+                          const RwUInt32 LineNumber,
+                          const RwUInt32 UserTypeNum) {}
 
       inline void Free(const void *Address) {}
 

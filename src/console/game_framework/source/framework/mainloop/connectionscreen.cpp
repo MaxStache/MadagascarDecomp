@@ -52,14 +52,14 @@ namespace RWS
    {
       extern RwChar g_szWaitingMessage[128]; // defined in network.cpp
    }
-   
-   namespace 
+
+   namespace
    {
-#if defined (RWS_DESIGN) && defined (RWS_LOADING_SCREEN)
-      CLoadingScreen *g_SplashScreen; 
+#if defined(RWS_DESIGN) && defined(RWS_LOADING_SCREEN)
+      CLoadingScreen *g_SplashScreen;
 #endif
    }
-   
+
    namespace ConnectionScreen
    {
 #ifdef RWS_DESIGN
@@ -69,16 +69,17 @@ namespace RWS
       *  Construct a CRenderConnectionScreen object
       *
       */
-      CRenderConnectionScreen::CRenderConnectionScreen() : InitCEventHandler(0)
+      CRenderConnectionScreen::CRenderConnectionScreen() :
+         InitCEventHandler(0)
       {
          RWS_FUNCTION("CRenderConnectionScreen::CRenderConnectionScreen");
-         
+
          RegisterForAutoDelete();
 
 #ifdef RWS_LOADING_SCREEN
          g_SplashScreen = ::RWS_NEW CLoadingScreen;
 #endif
-         
+
          LinkMsg(iMsgDoRender, "RwCamera*");
 
 
@@ -87,10 +88,10 @@ namespace RWS
          // the waiting to connect text.
          //
          m_MemoryProfilingEnabled = RWS::MemoryProfile::Enable(FALSE);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Destroy a CRenderConnectionScreen object
@@ -99,9 +100,9 @@ namespace RWS
       CRenderConnectionScreen::~CRenderConnectionScreen()
       {
          RWS_FUNCTION("CRenderConnectionScreen::~CRenderConnectionScreen");
-         
+
          UnLinkMsg(iMsgDoRender);
-         
+
 #ifdef RWS_LOADING_SCREEN
          delete g_SplashScreen;
 #endif
@@ -119,46 +120,46 @@ namespace RWS
       void CRenderConnectionScreen::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("CRenderConnectionScreen::HandleEvents");
-         
+
          if (pMsg.Id == iMsgDoRender)
          {
-            RwCamera *pRwCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
-            
+            RwCamera *pRwCamera = reinterpret_cast<RwCamera *>(pMsg.pData);
+
             if (pRwCamera)
             {
 #ifndef RWS_LOADING_SCREEN
                // Clear background and z buffer, must be done before RwCameraBeginUpdate
                //
                static const RwRGBA backgroundColor = {64, 64, 128, 255};
-               
-               RwCameraClear(pRwCamera, const_cast<RwRGBA*>(&backgroundColor),
-                  rwCAMERACLEARSTENCIL | rwCAMERACLEARIMAGE | rwCAMERACLEARZ);
+
+               RwCameraClear(pRwCamera, const_cast<RwRGBA *>(&backgroundColor),
+                             rwCAMERACLEARSTENCIL | rwCAMERACLEARIMAGE | rwCAMERACLEARZ);
 #endif
-               
+
                // Display the waiting for connection text
                //
 #ifdef RWS_DEBUGTOOLS
                {
                   static int count = 0;
                   RwChar buf[64];
-                  
-                  count ++;
-                  
+
+                  count++;
+
                   if (count == 80) count = 0;
-                  
+
                   char buffer[4];
-                  
+
                   int i;
-                  
-                  for (i = 0;i < (count / 20);i++)
+
+                  for (i = 0; i < (count / 20); i++)
                   {
                      buffer[i] = '.';
                   }
-                  
+
                   buffer[i] = 0;
-                  
+
                   rwsprintf(buf, "%s%s", MainLoop::g_szWaitingMessage, buffer);
-                  
+
 #ifdef RWS_LOADING_SCREEN
                   // Display Loading Screen
                   //

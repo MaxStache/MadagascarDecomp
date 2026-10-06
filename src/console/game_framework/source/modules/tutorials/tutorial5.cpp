@@ -61,8 +61,8 @@ namespace RWS
       *  \param attr standard attribute packets needed to initialize the object.
       *
       */
-      CTutorial5::CTutorial5(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic)
+      CTutorial5::CTutorial5(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial5::CTutorial5");
 
@@ -73,7 +73,7 @@ namespace RWS
          m_mat = RwMatrixCreate();
          RWS_POST(m_mat);
 
-         RegisterMsg( m_trigger, "trigger", "RwUInt32");
+         RegisterMsg(m_trigger, "trigger", "RwUInt32");
          LinkMsg(m_trigger, "RwUInt32");
 
          RWS_RETURNVOID();
@@ -110,7 +110,7 @@ namespace RWS
       *  \param pMsg the standard message packets, which may contain running tick or trigger messages.
       *
       */
-      void CTutorial5::HandleEvents(CMsg &pMsg)
+      void CTutorial5::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial5::HandleEvents");
 

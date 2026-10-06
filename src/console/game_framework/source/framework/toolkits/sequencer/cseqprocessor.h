@@ -83,11 +83,11 @@ namespace RWS
          };
 
          CSeqProcessor(RwUInt32 memType = RWS_MEMORY_TYPE_RWS, RwUInt32 delBuffSize = 0,
-            RwUInt32 flags = 0);
+                       RwUInt32 flags = 0);
          virtual ~CSeqProcessor(void);
 
          virtual void Init(const CSeqCtrlData &dataToUse, RwUInt32 strBuffSize = 0,
-            RwUInt32 guidBuffSize = 0);
+                           RwUInt32 guidBuffSize = 0);
          virtual void Start(RwUInt32 *pStartTime = 0);
          virtual void StepPrepare(void);
          virtual StepState Step(const char *&rpWaitEventName);
@@ -111,7 +111,7 @@ namespace RWS
          *
          */
 
-         virtual RwBool IsFrozen(void) { return(m_isFrozen); }
+         virtual RwBool IsFrozen(void) { return (m_isFrozen); }
 
          /**
          *
@@ -121,7 +121,7 @@ namespace RWS
          *
          */
 
-         virtual RwBool IsRunning(void) { return(m_isRunning); }
+         virtual RwBool IsRunning(void) { return (m_isRunning); }
 
          /**
          *
@@ -145,7 +145,7 @@ namespace RWS
          *
          */
 
-         virtual const char *GetWaitEventName(void) { return(m_waitEventName); }
+         virtual const char *GetWaitEventName(void) { return (m_waitEventName); }
 
          /**
          *
@@ -159,7 +159,7 @@ namespace RWS
          virtual void ClearWaitEvent(void)
          {
             RWS_ASSERT(m_waitEventName && m_isWaitingForEvent, "Not waiting for an event.");
-            
+
             m_isWaitingForEvent = FALSE;
             m_waitEventName = 0;
          }
@@ -195,7 +195,7 @@ namespace RWS
          *
          */
 
-         virtual RwBool IsLooping(void) { return(m_isLooping); }
+         virtual RwBool IsLooping(void) { return (m_isLooping); }
 
       protected:
 

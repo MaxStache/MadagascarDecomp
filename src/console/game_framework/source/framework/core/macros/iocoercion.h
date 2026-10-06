@@ -79,6 +79,6 @@
 *  useful in stream expressions where the string may be invalid.
 *
 */
-#define RWS_VALIDSTRING(a) (a?a:"null")
+#define RWS_VALIDSTRING(a) (a ? a : "null")
 
 #endif

@@ -47,7 +47,7 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial7 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+      class CTutorial7 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial7);
@@ -58,7 +58,7 @@ namespace RWS
          CTutorial7(const CAttributePacket& attr);
          ~CTutorial7(void);
 
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
          /*
@@ -66,20 +66,20 @@ namespace RWS
           * a list box.
           */
          RWS_BEGIN_COMMANDS
-            RWS_SEPARATOR("Attribute List", 0)
-            RWS_MESSAGE( CMD_testmessage, "Receive Event", "Type in event name.", RECEIVE, "RwUInt32", 0)
+         RWS_SEPARATOR("Attribute List", 0)
+         RWS_MESSAGE(CMD_testmessage, "Receive Event", "Type in event name.", RECEIVE, "RwUInt32", 0)
 
-            RWS_ATTRIBUTE(CMD_testboolean, "Test Boolean", "Check box to send event.", BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE(CMD_testslider, "Test Slider", "Set rotation.", SLIDER, RwReal, RANGE(-4000, 0, 4000))
-            RWS_ATTRIBUTE(CMD_testcolor, "Test Color", "Object color.", COLOR, RwRGBA, DEFAULT(0))
-            RWS_ATTRIBUTE(CMD_testlist, "Test List", "List Selection", LIST, RwUInt32, LIST("item1|item2|item3"))
+         RWS_ATTRIBUTE(CMD_testboolean, "Test Boolean", "Check box to send event.", BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_testslider, "Test Slider", "Set rotation.", SLIDER, RwReal, RANGE(-4000, 0, 4000))
+         RWS_ATTRIBUTE(CMD_testcolor, "Test Color", "Object color.", COLOR, RwRGBA, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_testlist, "Test List", "List Selection", LIST, RwUInt32, LIST("item1|item2|item3"))
          RWS_END_COMMANDS;
 
       protected:
 
          CAtomicPtr m_pAtomic;     /**< Behavior's Atomic. */
-         CEventId m_message1;      /**< m_message1 is used to store the clients reference to an event. */ 
+         CEventId m_message1;      /**< m_message1 is used to store the clients reference to an event. */
          RwRGBA m_Color;           /**< Red, green, blue, alpha structure. */
-     };
+      };
    }//namespace Tutorial
 }//namespace RWS

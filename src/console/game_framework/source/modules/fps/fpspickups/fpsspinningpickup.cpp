@@ -42,7 +42,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSSpinningPickup);
       RWS_REGISTERCLASS(FPSSpinningPickup);
-      
+
 
       /**
       *
@@ -50,8 +50,10 @@ namespace RWS
       *
       * \see ~FPSSpinningPickup
       */
-      FPSSpinningPickup::FPSSpinningPickup(const CAttributePacket& rAttr) : FPSPickup(rAttr), m_RotRate(8.0f),
-            m_count(0)
+      FPSSpinningPickup::FPSSpinningPickup(const CAttributePacket& rAttr) :
+         FPSPickup(rAttr),
+         m_RotRate(8.0f),
+         m_count(0)
       {
          RWS_FUNCTION("RWS::FPS::FPSSpinningPickup::FPSSpinningPickup");
 
@@ -63,7 +65,7 @@ namespace RWS
          RWS_RETURNVOID();
       }
 
-      
+
       /**
       *
       * \ref ~FPSSpinningPickup.  Destructor for behavior
@@ -89,18 +91,18 @@ namespace RWS
       *  
       * \ref iMsgRunningTick
       */
-      void FPSSpinningPickup::HandleEvents(CMsg &pMsg)
+      void FPSSpinningPickup::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSSpinningPickup::HandleEvents");
 
          if (pMsg.Id == iMsgRunningTick)
          {
             RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-            RwFrameTransform(pFrame, &m_pRotation,rwCOMBINEPRECONCAT);
+            RwFrameTransform(pFrame, &m_pRotation, rwCOMBINEPRECONCAT);
             if (++m_count > 128)
             {
-                RwFrameOrthoNormalize(pFrame);
-                m_count = 0;
+               RwFrameOrthoNormalize(pFrame);
+               m_count = 0;
             }
          }
          else
@@ -119,22 +121,22 @@ namespace RWS
       * \param rAttr reference to a CAttributePacket.
       *
       */
-      void FPSSpinningPickup::HandleAttributes(const CAttributePacket &rAttr)
+      void FPSSpinningPickup::HandleAttributes(const CAttributePacket& rAttr)
       {
          RWS_FUNCTION("RWS::FPS::FPSSpinningPickup::HandleAttributes");
-         
+
          FPSPickup::HandleAttributes(rAttr);
-         
+
          CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(FPSSpinningPickup));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
-               case CMD_Set_Spin_Rate:
-                  m_RotRate = attrIt->GetAs_RwReal();
+            case CMD_Set_Spin_Rate:
+               m_RotRate = attrIt->GetAs_RwReal();
                   // alter spin rate.
-                  RwMatrixRotate(&m_pRotation, &YAxis, m_RotRate, rwCOMBINEREPLACE);
+               RwMatrixRotate(&m_pRotation, &YAxis, m_RotRate, rwCOMBINEREPLACE);
                break;
             }
             ++attrIt;

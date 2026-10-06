@@ -45,7 +45,7 @@
 
 namespace RWS
 {
-   
+
    namespace FX
    {
       /**
@@ -55,81 +55,82 @@ namespace RWS
       */
       RWS_IMPLEMENT_CLASSID(CFXSpinLight);
       RWS_REGISTERCLASS(CFXSpinLight);
-      
+
       /**
       *
       *  Construct a CFXSpinLight object.
       *
       */
-      CFXSpinLight::CFXSpinLight(const CAttributePacket& rAttr): CFXBaseLight(rAttr),
+      CFXSpinLight::CFXSpinLight(const CAttributePacket& rAttr) :
+         CFXBaseLight(rAttr),
          InitCEventHandler(&m_pLight)
       {
          RWS_FUNCTION("RWS::FX::CFXSpinLight::CFXSpinLight");
-         
+
          m_mat = RwMatrixCreate();
          RWS_POST(m_mat);
-         
+
          // Initialize rotation values
          m_rot[0] = 0.0f;
-         m_rot[1] = 0.0f; 
+         m_rot[1] = 0.0f;
          m_rot[2] = 0.0f;
-         
+
          // Make sure light is not attached to the world. this is because the
          // light is triggered by an event.  If you want the light to appear
          // straight away,  use the iMsgStartSystem event.
          RemoveLightFromWorld();
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Destroy a CFXSpinLight object.
       *
       */
-      CFXSpinLight::~CFXSpinLight() 
+      CFXSpinLight::~CFXSpinLight()
       {
          RWS_FUNCTION("RWS::FX::CFXSpinLight::~CFXSpinLight");
-         
+
          RWS_PRE(m_mat);
          RwMatrixDestroy(m_mat);
          m_mat = 0;
          UnLinkMsg(iMsgRunningTick);
          UnLinkMsg(m_trigger);
          UnRegisterMsg(m_trigger);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Set lights rotation matrix
       *
       */
-      void CFXSpinLight::RotateLight( void )
+      void CFXSpinLight::RotateLight(void)
       {
          RWS_FUNCTION("RWS::FX::CFXSpinLight::RotateLight");
-         
+
          // Set lights rotation matrix
-         RwMatrixRotate(m_mat, &XAxis, m_rot[0],rwCOMBINEREPLACE);
-         RwMatrixRotate(m_mat, &YAxis, m_rot[1],rwCOMBINEPRECONCAT);
-         RwMatrixRotate(m_mat, &ZAxis, m_rot[2],rwCOMBINEPRECONCAT);
-         
+         RwMatrixRotate(m_mat, &XAxis, m_rot[0], rwCOMBINEREPLACE);
+         RwMatrixRotate(m_mat, &YAxis, m_rot[1], rwCOMBINEPRECONCAT);
+         RwMatrixRotate(m_mat, &ZAxis, m_rot[2], rwCOMBINEPRECONCAT);
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Handle events.  Rotate light based on values within m_rot. This happens on the system running tick.
       *  
       */
-      void CFXSpinLight::HandleEvents(CMsg &pMsg)
-      {      
+      void CFXSpinLight::HandleEvents(CMsg& pMsg)
+      {
          RWS_FUNCTION("RWS::FX::CFXSpinLight::HandleEvents");
-         
+
          // If linked to the running tick
          if (pMsg.Id == iMsgRunningTick)
          {
@@ -153,11 +154,11 @@ namespace RWS
                UnLinkMsg(iMsgRunningTick);
             }
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Handle attributes.
@@ -166,11 +167,11 @@ namespace RWS
       void CFXSpinLight::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FX::CFXSpinLight::HandleAttributes");
-         
+
          CFXBaseLight::HandleAttributes(attr);
-         
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXSpinLight));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -179,47 +180,47 @@ namespace RWS
                {
                   RwRGBA Color = attrIt->GetAs_RwRGBA();
                   RwRGBAReal t_color;
-                  RwRGBARealFromRwRGBA  (&t_color, &Color);  
+                  RwRGBARealFromRwRGBA(&t_color, &Color);
 
                   // Set light
-                  RpLightSetColor(m_pLight, &t_color);                          
+                  RpLightSetColor(m_pLight, &t_color);
                }
                break;
-               
+
             case CMD_rot_x:
                // Get X rotation value
                attrIt->GetCommandData(m_rot[0]);
                m_rot[0] = RWDEG2RAD(m_rot[0]);
                RotateLight();
                break;
-               
+
             case CMD_rot_y:
                // Get Y rotation value
                attrIt->GetCommandData(m_rot[1]);
                m_rot[1] = RWDEG2RAD(m_rot[1]);
                RotateLight();
                break;
-               
+
             case CMD_rot_z:
                // Get Z rotation value
                attrIt->GetCommandData(m_rot[2]);
                m_rot[2] = RWDEG2RAD(m_rot[2]);
                RotateLight();
                break;
-               
+
             case CMD_m_trigger:
                // Re-register new trigger event
-               ReplaceLinkedMsg ( m_trigger,  attrIt->GetAs_RwChar_ptr(),0);
+               ReplaceLinkedMsg(m_trigger, attrIt->GetAs_RwChar_ptr(), 0);
                break;
             }
-            
-            
+
+
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
+
    } // namespace FX
-   
+
 } // namespace RWS

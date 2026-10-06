@@ -1,5 +1,5 @@
 //
-// The purpose of this file is to, as much as possible, facilitate the 
+// The purpose of this file is to, as much as possible, facilitate the
 // compilation of the NGC GNU files by the VC6 compiler.  Not all problems
 // can be solved via this file.  So far, a couple of patches are required
 // directly within the headers themselves.
@@ -15,12 +15,12 @@
 // GXGeom: remove inline from static def
 //
 #define __size_t__
-#define inline 
+#define inline
 
 //
-// GXVert at al: remove GNU __attribute__ 
+// GXVert at al: remove GNU __attribute__
 //
-#define __attribute__(x) 
+#define __attribute__(x)
 
 // GNU IEEEFP
 #define __PPC__ 1

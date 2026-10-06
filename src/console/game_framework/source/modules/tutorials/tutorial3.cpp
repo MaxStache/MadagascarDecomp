@@ -44,7 +44,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CTutorial3);
       RWS_REGISTERCLASS(CTutorial3);
-      
+
       /**
       *
       *  Create CTutorial3 object. Gets behaviors atomic by extracting information the behavior needs from the 
@@ -54,23 +54,23 @@ namespace RWS
       *  \param attr the standard attribute data used for initialization.
       *
       */
-      CTutorial3::CTutorial3(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic)
+      CTutorial3::CTutorial3(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial3::CTutorial3");
-         
+
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-         
+
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
          m_mat = RwMatrixCreate();
-         
+
          RWS_POST(m_mat);
-         
+
          LinkMsg(iMsgRunningTick, 0);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Destroy CTutorial3 object.  Destroy matrix and unlink from running tick.
@@ -79,17 +79,17 @@ namespace RWS
       CTutorial3::~CTutorial3(void)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial3::~CTutorial3");
-         
+
          RWS_PRE(m_mat);
-         
+
          RwMatrixDestroy(m_mat);
          m_mat = 0;
-         
+
          UnLinkMsg(iMsgRunningTick);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *   Handle events.  Rotate object based on values within m_rot. This happens on the system running tick.
@@ -97,25 +97,25 @@ namespace RWS
       *   \param pMsg the standard RenderWare Studio message packets.
       *
       */
-      void CTutorial3::HandleEvents(CMsg &pMsg)
+      void CTutorial3::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial3::HandleEvents");
-         
+
          RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-         
+
          if (pMsg.Id == iMsgRunningTick)
          {
             RwMatrixSetIdentity(m_mat);
             RwMatrixRotate(m_mat, &XAxis, m_rot[0], rwCOMBINEPRECONCAT);
             RwMatrixRotate(m_mat, &YAxis, m_rot[1], rwCOMBINEPRECONCAT);
             RwMatrixRotate(m_mat, &ZAxis, m_rot[2], rwCOMBINEPRECONCAT);
-            
+
             RwFrameTransform(pFrame, m_mat, rwCOMBINEPRECONCAT);
          }
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Handle attributes.  This function receives the attribute values from RenderWare Studio.
@@ -127,13 +127,13 @@ namespace RWS
       void CTutorial3::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial3::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          m_pAtomic.HandleSystemCommands(attr);
-         
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CTutorial3));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -142,23 +142,22 @@ namespace RWS
                attrIt->GetCommandData(m_rot[0]);
                m_rot[0] = RWDEG2RAD(m_rot[0]);
                break;
-               
+
             case CMD_rot_y:
                attrIt->GetCommandData(m_rot[1]);
                m_rot[1] = RWDEG2RAD(m_rot[1]);
                break;
-               
+
             case CMD_rot_z:
                attrIt->GetCommandData(m_rot[2]);
                m_rot[2] = RWDEG2RAD(m_rot[2]);
                break;
-               
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
+
    }//namespace Tutorial
 }//namespace RWS

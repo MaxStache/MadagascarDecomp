@@ -7,7 +7,7 @@
 
 #include <prefix_ps2iop.h>
 
-#pragma  divbyzerocheck    on /* break if divided by zero   */
+#pragma divbyzerocheck on /* break if divided by zero   */
 
-#define  DEBUG             /* just for debugging   */
+#define DEBUG             /* just for debugging   */
 

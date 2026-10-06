@@ -40,9 +40,9 @@
 #include <rpskin.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
-#pragma comment (lib, "rpskin.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
+#pragma comment(lib, "rpskin.lib")
 #endif
 
 namespace RWS
@@ -101,7 +101,7 @@ namespace RWS
       if (pSkin)
       {
          RpHAnimHierarchy* pHierarchy = static_cast<RpHAnimHierarchy*>(pData);
-         RWS_ASSERT( HierarchyIsCompatibleWithSkin(*pHierarchy, *pSkin), "Incompatible hierarchy" )
+         RWS_ASSERT(HierarchyIsCompatibleWithSkin(*pHierarchy, *pSkin), "Incompatible hierarchy")
          RpSkinAtomicSetHAnimHierarchy(pAtomic, pHierarchy);
       }
 

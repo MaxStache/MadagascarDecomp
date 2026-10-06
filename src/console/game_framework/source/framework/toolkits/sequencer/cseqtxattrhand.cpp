@@ -37,12 +37,12 @@
 //
 // System Includes
 //
-#if (!defined (SKY) && !defined (DOLPHIN))
+#if (!defined(SKY) && !defined(DOLPHIN))
 #include <memory.h>
 #endif
 
 #if defined(DOLPHIN) && defined(__MWERKS__)
-   using namespace std;
+using namespace std;
 #endif
 
 
@@ -279,18 +279,18 @@ namespace RWS
             void *pAttrTableThis = 0;
 
             pTable = m_pClass->GetEntityAttrHandler()->GetAttributeTable(m_pClass->GetName(),
-               numTableEntries, pAttrTableThis);
+                                                                         numTableEntries, pAttrTableThis);
 
             if (pTable)
             {
                RWS_ASSERT(numTableEntries > m_commandID, "Command index for unknown attribute.");
                RWS_ASSERT(pAttrTableThis,
-                  "Failed to obtain this pointer for attribute table - should NEVER happen.");
+                          "Failed to obtain this pointer for attribute table - should NEVER happen.");
 
                // Table exists, is there an entry for this command ID ?
 
                if (pTable[m_commandID].m_dataOffset != RWS_CMD_DATA_BLANK ||
-                  pTable[m_commandID].m_pFunc != RWS_CMD_FUNC_BLANK)
+                   pTable[m_commandID].m_pFunc != RWS_CMD_FUNC_BLANK)
                {
                   // Valid entry, so store the table entry for later use. Need to calculate the memory
                   // locations of the flag and data FOR THIS SPECIFIC INSTANCE. This stops them being
@@ -301,9 +301,8 @@ namespace RWS
                      // Because the 'this' pointer may have been adjusted, the offset applied needs to
                      // be applied to the data address too, or it will be incorrect.
 
-                     m_pAttrTableData = reinterpret_cast<void *>(reinterpret_cast<RwUInt8 *>
-                        (pAttrTableThis) + pTable[m_commandID].m_dataOffset + 
-                        pTable[m_commandID].m_thisOffset);
+                     m_pAttrTableData = reinterpret_cast<void *>(reinterpret_cast<RwUInt8 *>(pAttrTableThis) + pTable[m_commandID].m_dataOffset +
+                                                                 pTable[m_commandID].m_thisOffset);
                   }
                   else
                   {
@@ -321,8 +320,7 @@ namespace RWS
 
                   // This pointer needs to be adjusted by offset.
 
-                  m_pAttrTableThis = reinterpret_cast<void *>(reinterpret_cast<RwUInt8 *>
-                     (pAttrTableThis) + pTable[m_commandID].m_thisOffset);
+                  m_pAttrTableThis = reinterpret_cast<void *>(reinterpret_cast<RwUInt8 *>(pAttrTableThis) + pTable[m_commandID].m_thisOffset);
 
 #ifdef RWS_DS_DEBUG
 
@@ -330,20 +328,16 @@ namespace RWS
                   {
                      if (m_pAttrTableFunc)
                      {
-                        RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() <<
-                           "]" << "command ID [" << m_commandID << "] data pointer and function pointer" <<
-                           std::endl);
+                        RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() << "]" << "command ID [" << m_commandID << "] data pointer and function pointer" << std::endl);
                      }
                      else
                      {
-                        RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() <<
-                           "]" << "command ID [" << m_commandID << "] data pointer only" << std::endl);
+                        RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() << "]" << "command ID [" << m_commandID << "] data pointer only" << std::endl);
                      }
                   }
                   else
                   {
-                     RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() << "]" <<
-                        "command ID [" << m_commandID << "] function pointer only" << std::endl);
+                     RWS_DEBUGSTREAM("Using direct-set table entry for [" << m_pClass->GetName() << "]" << "command ID [" << m_commandID << "] function pointer only" << std::endl);
                   }
 #endif
                }
@@ -358,8 +352,7 @@ namespace RWS
 
 #ifdef RWS_DS_DEBUG
 
-                  RWS_DEBUGSTREAM_WARN("No direct-set table entry for [" << m_pClass->GetName() << "]" <<
-                     "command ID [" << m_commandID << "]" << std::endl);
+                  RWS_DEBUGSTREAM_WARN("No direct-set table entry for [" << m_pClass->GetName() << "]" << "command ID [" << m_commandID << "]" << std::endl);
 #endif
                }
             }
@@ -384,13 +377,13 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
+
       ///////////////////////////////////
       //
       // CSeqAttrHandManager functions...
       //
       //
-      
+
       /**
       *
       * Constructor - just initialize ready for adding buffers.
@@ -518,7 +511,7 @@ namespace RWS
       */
 
       CSeqAttrHandSlot *CSeqAttrHandManager::CreateSlot(CSeqItem &rSeqItem,
-         RwUInt32 dataSize)
+                                                        RwUInt32 dataSize)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqAttrHandManager::CreateSlot");
          RWS_ASSERT(rSeqItem.SeqStack() == m_pSeqStack, "Item not in same stack as manager.");
@@ -592,7 +585,7 @@ namespace RWS
          CSeqAttrHandSlot *pSlot = RWS_NEW_TYPE(m_pSeqStack->MemType())
             CSeqAttrHandSlot;
          RWS_ASSERT(pSlot, "Failed to allocate slot.");
-         
+
          // Setup the new slot...
 
          pSlot->m_commandID = rSeqItem.CommandID();
@@ -676,7 +669,7 @@ namespace RWS
       */
 
       CSeqAttrHandManager::Class::Class(const RwChar *name, RwUInt32 size,
-         CSeqAttrHandManager::Entity &rEntity, RwUInt32 memType) :
+                                        CSeqAttrHandManager::Entity &rEntity, RwUInt32 memType) :
          m_pBuffer(0),
          m_pBuffIns(0),
          m_bufferSize(0),
@@ -690,8 +683,7 @@ namespace RWS
          RWS_FUNCTION("CSeqAttrHandManager::Class::Class");
          RWS_ASSERT(name, "Invalid name pointer.");
 
-         m_name = RWS_NEW_TYPE(m_pEntity->m_pManager->
-            SeqStack()->MemType()) RwChar[rwstrlen(name) + 1];
+         m_name = RWS_NEW_TYPE(m_pEntity->m_pManager->SeqStack()->MemType()) RwChar[rwstrlen(name) + 1];
          RWS_ASSERT(m_name, "Failed to get memory to copy name with.");
 
          rwstrcpy(m_name, name);
@@ -774,9 +766,9 @@ namespace RWS
          // Check there is room for this...
 
          RwUInt32 sizeNeeded = CAttributePacket::BuildCommandDataChunk(
-               commandID, 0, dataSize, 0, 0),
-            used = m_pBuffIns - m_pBuffer,
-            dataSlotOffset;
+                     commandID, 0, dataSize, 0, 0),
+                  used = m_pBuffIns - m_pBuffer,
+                  dataSlotOffset;
          RwUInt8 *pDataSlot;
 
          // Check to see if there is a buffer - if not pre-sized the first use of the buffer
@@ -807,7 +799,7 @@ namespace RWS
          pDataSlot = m_pBuffIns;
 
          m_pBuffIns += CAttributePacket::BuildCommandDataChunk(
-               commandID, 0, dataSize, m_pBuffIns, &dataSlotOffset);
+            commandID, 0, dataSize, m_pBuffIns, &dataSlotOffset);
 
          pDataSlot += dataSlotOffset;
 
@@ -880,17 +872,14 @@ namespace RWS
 
             if ((m_pEntity->m_pManager->GetFlags() & SEQ_FLAG_BUFFER_WARNINGS) != 0)
             {
-               RWS_DEBUGSTREAM_WARN("Resizing buffer for instance " <<
-                  m_pEntity->m_guid << " class [" << m_name <<
-                  "]. This is likely to cause memory fragmentation. "
-                  "Also slow because of need to preserve memory contents." <<
-                  std::endl);
+               RWS_DEBUGSTREAM_WARN("Resizing buffer for instance " << m_pEntity->m_guid << " class [" << m_name << "]. This is likely to cause memory fragmentation. "
+                                                                                                                    "Also slow because of need to preserve memory contents."
+                                                                    << std::endl);
             }
 
             // Yep, so need to resize. Create new buffer first...
 
-            pNewBuff = RWS_NEW_TYPE(m_pEntity->m_pManager->
-               SeqStack()->MemType()) RwUInt8[size];
+            pNewBuff = RWS_NEW_TYPE(m_pEntity->m_pManager->SeqStack()->MemType()) RwUInt8[size];
             RWS_ASSERT(pNewBuff, "Failed to get new enlarged buffer.");
 
             // Was there an old buffer ?
@@ -974,7 +963,7 @@ namespace RWS
          // If buffer, then add in instance and class ID chunks.
 
          m_pBuffIns = m_pBuffer;
-         
+
          if (m_pBuffer)
          {
             m_pBuffIns += CAttributePacket::BuildInstanceIdChunk(m_pEntity->m_guid, m_pBuffIns);
@@ -998,7 +987,7 @@ namespace RWS
          // Check there is room for this...
 
          RwUInt32 sizeNeeded = CAttributePacket::BuildTerminatorChunk(0),
-            used = m_pBuffIns - m_pBuffer;
+                  used = m_pBuffIns - m_pBuffer;
 
          if (m_bufferSize < (sizeNeeded + used))
          {

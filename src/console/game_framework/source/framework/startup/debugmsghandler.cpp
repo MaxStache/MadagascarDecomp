@@ -45,23 +45,23 @@ namespace RWS
 
          switch (type)
          {
-            case rwDEBUGASSERT:              /* Print an assert message */
-               RWS_DEBUGSTREAM(pMessage<< std::endl);
-               RWS_DEBUGBREAK;
+         case rwDEBUGASSERT:              /* Print an assert message */
+            RWS_DEBUGSTREAM(pMessage << std::endl);
+            RWS_DEBUGBREAK;
 #ifdef RWS_DESIGN
-               throw(0);                     /* In design mode we include some exception handling
+            throw(0);                     /* In design mode we include some exception handling
                                                 which allows errors to be reported in more detail
                                                 to the workspace. */
 #endif
-               break;
-            case rwDEBUGERROR:               /* Print an error message */
-            case rwDEBUGMESSAGE:             /* Print an informational message */
-            case rwDEBUGTRACE:               /* Print a trace message */
-               RWS_DEBUGSTREAM(pMessage<< std::endl);
-               break;
-            default:
-               RWS_ASSERTFAIL("Unknown error message, this should never happen.");
-               break;
+            break;
+         case rwDEBUGERROR:               /* Print an error message */
+         case rwDEBUGMESSAGE:             /* Print an informational message */
+         case rwDEBUGTRACE:               /* Print a trace message */
+            RWS_DEBUGSTREAM(pMessage << std::endl);
+            break;
+         default:
+            RWS_ASSERTFAIL("Unknown error message, this should never happen.");
+            break;
          }
 
          RWS_RETURNVOID();

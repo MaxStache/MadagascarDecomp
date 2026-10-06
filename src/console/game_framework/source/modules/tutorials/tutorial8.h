@@ -57,19 +57,19 @@ namespace RWS
          RWS_DESCRIPTION("Tutorial8", "Inherited behavior (from CTutorial2)");
 
          RWS_BEGIN_COMMANDS
-            RWS_ATTRIBUTE( CMD_counter_max, 
-                           "Counter Limit", 
-                           "Specify the time taken to change state", 
-                           SLIDER, 
-                           RwUInt32, 
-                           RANGE(0, 30, 60))
+         RWS_ATTRIBUTE(CMD_counter_max,
+                       "Counter Limit",
+                       "Specify the time taken to change state",
+                       SLIDER,
+                       RwUInt32,
+                       RANGE(0, 30, 60))
          RWS_END_COMMANDS;
-  
+
          CTutorial8(const CAttributePacket& attr);
          ~CTutorial8(void);
 
-         virtual void HandleEvents(CMsg &pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr); 
+         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleAttributes(const CAttributePacket& attr);
 
       protected:
          void Scale_Object(void);

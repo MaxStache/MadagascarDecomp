@@ -36,8 +36,7 @@ namespace RWS
 {
    namespace Examples
    {
-      class CConductorTest : public CSystemCommands, public CAttributeHandler, public CEventHandler,
-         public LinearAllocationPolicy
+      class CConductorTest : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
 
@@ -45,22 +44,22 @@ namespace RWS
          RWS_DECLARE_CLASSID(CConductorTest);
          RWS_CATEGORY("Examples");
          RWS_DESCRIPTION("Conductor Test",
-            "Provided as an example / test of the CConductor sequence controller.");
+                         "Provided as an example / test of the CConductor sequence controller.");
 
          RWS_BEGIN_COMMANDS
-            RWS_SEPARATOR("Offset", 0)
-               RWS_ATTRIBUTE(CMD_OFFSET_VECT,
-                  "offset vector",
-                  "the offset vector at full range on the offset value",
-                  VECTOR,
-                  RwV3d,
-                  RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
-               RWS_ATTRIBUTE(CMD_OFFSET_TYPE,
-                  "offset type",
-                  "type of offset to use, signed will cause negative offset when less than zero",
-                  LIST,
-                  RwUInt32,
-                  LIST("RwUInt8|RwUInt16|RwUInt32|RwInt8|RwInt16|RwInt32|RwReal"))
+         RWS_SEPARATOR("Offset", 0)
+         RWS_ATTRIBUTE(CMD_OFFSET_VECT,
+                       "offset vector",
+                       "the offset vector at full range on the offset value",
+                       VECTOR,
+                       RwV3d,
+                       RANGES((-1000, 0, 1000), (-1000, 0, 1000), (-1000, 0, 1000)))
+         RWS_ATTRIBUTE(CMD_OFFSET_TYPE,
+                       "offset type",
+                       "type of offset to use, signed will cause negative offset when less than zero",
+                       LIST,
+                       RwUInt32,
+                       LIST("RwUInt8|RwUInt16|RwUInt32|RwInt8|RwInt16|RwInt32|RwReal"))
 /*
                   RWS_ATTRIBUTE(CMD_UNSIGNED_8,
                   "uint8",
@@ -75,12 +74,12 @@ namespace RWS
                   RwUInt16,
                   RANGE(0, 0, 10000))
 */
-               RWS_ATTRIBUTE(CMD_UNSIGNED_32,
-                  "uint32",
-                  "RwUInt32 based offset value",
-                  SLIDER,
-                  RwUInt32,
-                  RANGE(0, 0, 1000000))
+         RWS_ATTRIBUTE(CMD_UNSIGNED_32,
+                       "uint32",
+                       "RwUInt32 based offset value",
+                       SLIDER,
+                       RwUInt32,
+                       RANGE(0, 0, 1000000))
 /*
                RWS_ATTRIBUTE(CMD_SIGNED_8,
                   "int8",
@@ -95,25 +94,25 @@ namespace RWS
                   RwInt16,
                   RANGE(-10000, 0, 10000))
 */
-               RWS_ATTRIBUTE(CMD_SIGNED_32,
-                  "int32",
-                  "RwInt32 based offset value",
-                  SLIDER,
-                  RwInt32,
-                  RANGE(-1000000, 0, 1000000))
-               RWS_ATTRIBUTE(CMD_REAL,
-                  "real",
-                  "RwReal based offset value",
-                  SLIDER,
-                  RwReal,
-                  RANGE(-1000000, 0, 1000000))
-            RWS_SEPARATOR("Color", 0)
-               RWS_ATTRIBUTE(CMD_COLOR,
-                  "color",
-                  "color value of object",
-                  COLOR,
-                  RwRGBA,
-                  DEFAULT(4294967295))
+         RWS_ATTRIBUTE(CMD_SIGNED_32,
+                       "int32",
+                       "RwInt32 based offset value",
+                       SLIDER,
+                       RwInt32,
+                       RANGE(-1000000, 0, 1000000))
+         RWS_ATTRIBUTE(CMD_REAL,
+                       "real",
+                       "RwReal based offset value",
+                       SLIDER,
+                       RwReal,
+                       RANGE(-1000000, 0, 1000000))
+         RWS_SEPARATOR("Color", 0)
+         RWS_ATTRIBUTE(CMD_COLOR,
+                       "color",
+                       "color value of object",
+                       COLOR,
+                       RwRGBA,
+                       DEFAULT(4294967295))
          RWS_END_COMMANDS;
 
          CConductorTest(const CAttributePacket &attr);

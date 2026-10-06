@@ -46,15 +46,15 @@
 * See RWS::CCameraPtr::Destroy for details.
 *
 */
-RwBool RwCameraDestroy( RWS::CCameraPtr &rCCameraPtr )
+RwBool RwCameraDestroy(RWS::CCameraPtr &rCCameraPtr)
 {
    RWS_FUNCTION("RWS::RwCameraDestroy");
-   
+
    RwCamera *pCamera = rCCameraPtr;
 
    RwBool ret = RWS::CameraHelper::Destroy(pCamera);
 
    rCCameraPtr.setptr(0);
-   
+
    RWS_RETURN(ret);
 }

@@ -44,19 +44,20 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CLogic_OR);
       RWS_REGISTERCLASS(CLogic_OR);
-      
+
       /**
       *
       *  Create CLogic_OR object.
       *
       */
-      CLogic_OR::CLogic_OR(const CAttributePacket& attr) : InitCEventHandler(0)
+      CLogic_OR::CLogic_OR(const CAttributePacket& attr) :
+         InitCEventHandler(0)
       {
          RWS_FUNCTION("RWS::Logic::CLogic_OR::CLogic_OR");
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Destroy CLogic_OR object
@@ -75,14 +76,14 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Handle events
       *
       */
-      void CLogic_OR::HandleEvents(CMsg &pMsg)
+      void CLogic_OR::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Logic::CLogic_OR::HandleEvents");
 
@@ -95,8 +96,8 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       *  Handle attributes
@@ -105,11 +106,11 @@ namespace RWS
       void CLogic_OR::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Logic::CLogic_OR:HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CLogic_OR));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -117,18 +118,18 @@ namespace RWS
             case CMD_InputA:
                ReplaceLinkedMsg(m_InputA, attrIt->GetAs_RwChar_ptr(), 0);
                break;
-               
+
             case CMD_InputB:
                ReplaceLinkedMsg(m_InputB, attrIt->GetAs_RwChar_ptr(), 0);
                break;
-               
+
             case CMD_Output:
                ReplaceRegisteredMsg(m_Output, attrIt->GetAs_RwChar_ptr(), 0);
                break;
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    }//namespace Logic

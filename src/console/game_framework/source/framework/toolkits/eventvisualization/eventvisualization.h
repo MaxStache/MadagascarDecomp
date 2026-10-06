@@ -41,28 +41,28 @@ namespace RWS
    *  to the following system events iMsgEventSend, iMsgEventSent, iMsgEventReceived and iMsgEventUnRegistered.
    *
    */
-   class CEventVisualizer: public CEventHandler
+   class CEventVisualizer : public CEventHandler
    {
-      public:
+   public:
 
-         CEventVisualizer();
-         ~CEventVisualizer();
+      CEventVisualizer();
+      ~CEventVisualizer();
 
-         virtual void HandleEvents(CMsg &pMsg);
+      virtual void HandleEvents(CMsg &pMsg);
 
-      private:
+   private:
 
-         void Process_iMsgEventSend(CMsg &pMsg);
+      void Process_iMsgEventSend(CMsg &pMsg);
 
-         void Process_iMsgEventSent(CMsg &pMsg);
+      void Process_iMsgEventSent(CMsg &pMsg);
 
-         void Process_iMsgEventReceived(CMsg &pMsg);
+      void Process_iMsgEventReceived(CMsg &pMsg);
 
-         void Process_iMsgEventUnRegistered(CMsg &pMsg);
+      void Process_iMsgEventUnRegistered(CMsg &pMsg);
 
-         void Indent();
+      void Indent();
 
-         static RwUInt32 m_uiDepth;
+      static RwUInt32 m_uiDepth;
    };
 }
 

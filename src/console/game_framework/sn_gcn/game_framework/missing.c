@@ -10,13 +10,13 @@
 #include <setjmp.h>
 int __setjmp(jmp_buf env)
 {
-   return(setjmp(env));
+   return (setjmp(env));
 }
 
 // floating point values, should be in a library file (.a file).
 
-unsigned long __float_nan[]    ={0x7FFFFFFF};
-unsigned long __float_huge[]   ={0x7f800000};
+unsigned long __float_nan[] = {0x7FFFFFFF};
+unsigned long __float_huge[] = {0x7f800000};
 
 // calloc_r - INTERNAL function to ProDG libraries, not defined !!!
 
@@ -25,5 +25,5 @@ void *calloc_r(size_t num, size_t size)
    void *pData = RwMalloc(num * size, rwMEMHINTDUR_GLOBAL);
    memset(pData, 0, num * size);
 
-   return(pData);
+   return (pData);
 }

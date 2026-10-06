@@ -55,7 +55,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(AudioGlobalMixer);
       RWS_REGISTERCLASS(AudioGlobalMixer);
-         
+
       /**
       *
       * Constructor for AudioGlobalMixer.
@@ -64,7 +64,7 @@ namespace RWS
       *
       * \see AudioGlobalMixer()
       */
-      AudioGlobalMixer::AudioGlobalMixer(const CAttributePacket& attr) : 
+      AudioGlobalMixer::AudioGlobalMixer(const CAttributePacket &attr) :
          InitCEventHandler(0),
          m_Gain(30.0f),
          m_DopplerScale(1.0f),
@@ -75,12 +75,12 @@ namespace RWS
          m_FadeState(FadeStopped)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::AudioGlobalMixer")
-            
+
          LinkMsg(iMsgRunningTick);
-         
+
          RWS_RETURNVOID()
       }
-      
+
       /**
       *
       * Destructor for AudioGlobalMixer.
@@ -90,23 +90,23 @@ namespace RWS
       AudioGlobalMixer::~AudioGlobalMixer()
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::~AudioGlobalMixer")
-               
+
          UnLinkMsg(iMsgRunningTick);
          UnLinkMsg(m_RenderIn);
          UnRegisterMsg(m_RenderIn);
-            
+
          UnLinkMsg(m_FadeUp);
          UnRegisterMsg(m_FadeUp);
-            
+
          UnLinkMsg(m_FadeDown);
          UnRegisterMsg(m_FadeDown);
-            
+
          UnLinkMsg(m_EndFade);
          UnRegisterMsg(m_EndFade);
-            
+
          RWS_RETURNVOID()
       }
-        
+
       /**
       *
       * Handle attribute updates.
@@ -114,86 +114,86 @@ namespace RWS
       * \param attr The standard attribute packets.
       *
       */
-      void AudioGlobalMixer::HandleAttributes(const CAttributePacket& attr)
+      void AudioGlobalMixer::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::HandleAttributes")
-                
+
          CAttributeHandler::HandleAttributes(attr);
 
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(AudioGlobalMixer));
-            
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
             case CMD_gain:
-                attrIt->GetCommandData(m_Gain);
-                RwaOsOutputSetGain(RwsAudio::GetOutputObject(), m_Gain);
-                break;
-                    
+               attrIt->GetCommandData(m_Gain);
+               RwaOsOutputSetGain(RwsAudio::GetOutputObject(), m_Gain);
+               break;
+
             case CMD_dopplerScale:
-                attrIt->GetCommandData(m_DopplerScale);
-                RwaListenerSetDopplerScale(RwsAudio::GetListener(), m_DopplerScale);
-                break;
-                      
-                     
+               attrIt->GetCommandData(m_DopplerScale);
+               RwaListenerSetDopplerScale(RwsAudio::GetListener(), m_DopplerScale);
+               break;
+
+
             case CMD_distanceFactor:
-                attrIt->GetCommandData(m_DistanceFactor);
-                RwaListenerSetDistanceFactor(RwsAudio::GetListener(), m_DistanceFactor);
-                break;
-                      
+               attrIt->GetCommandData(m_DistanceFactor);
+               RwaListenerSetDistanceFactor(RwsAudio::GetListener(), m_DistanceFactor);
+               break;
+
             case CMD_rolloffFactor:
-                attrIt->GetCommandData(m_RollOffFactor);
-                RwaListenerSetRolloffFactor(RwsAudio::GetListener(), m_RollOffFactor);
-                break;
+               attrIt->GetCommandData(m_RollOffFactor);
+               RwaListenerSetRolloffFactor(RwsAudio::GetListener(), m_RollOffFactor);
+               break;
 
             case CMD_speakerConfig:
-                RwUInt32  SpeakerConfig;
-                attrIt->GetCommandData(SpeakerConfig);
-                SetSpeakerConfig(SpeakerConfig);
-                break;
+               RwUInt32 SpeakerConfig;
+               attrIt->GetCommandData(SpeakerConfig);
+               SetSpeakerConfig(SpeakerConfig);
+               break;
 
             case CMD_In:
-                UnLinkMsg(m_RenderIn);
-                UnRegisterMsg(m_RenderIn);
-                RegisterMsg(m_RenderIn, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-                LinkMsg(m_RenderIn, "RwCamera*");
-                break;
+               UnLinkMsg(m_RenderIn);
+               UnRegisterMsg(m_RenderIn);
+               RegisterMsg(m_RenderIn, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+               LinkMsg(m_RenderIn, "RwCamera*");
+               break;
 
             case CMD_Debug:
-                attrIt->GetCommandData(m_DebugInfo);
-                break;
-                      
+               attrIt->GetCommandData(m_DebugInfo);
+               break;
+
             case CMD_StopAll:
-                RwsAudio::StopAllVirtualVoices();
-                break;
+               RwsAudio::StopAllVirtualVoices();
+               break;
 
             case CMD_FadeUp:
-                ReplaceLinkedMsg(m_FadeUp, attrIt->GetAs_RwChar_ptr(),0);
-                break;
+               ReplaceLinkedMsg(m_FadeUp, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
             case CMD_FadeDown:
-                ReplaceLinkedMsg(m_FadeDown, attrIt->GetAs_RwChar_ptr(),0);
-                break;
+               ReplaceLinkedMsg(m_FadeDown, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
             case CMD_FadeStep:
-                attrIt->GetCommandData(m_FadeInc);
-                break;
+               attrIt->GetCommandData(m_FadeInc);
+               break;
 
             case CMD_FadeEnd:
-                ReplaceRegisteredMsg(m_EndFade, attrIt->GetAs_RwChar_ptr(),0);
-                break;
-                      
+               ReplaceRegisteredMsg(m_EndFade, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
+
             default:
-                break;
+               break;
             }
 
             ++attrIt;
          }
-            
+
          RWS_RETURNVOID()
       }
-        
+
       /**
       *
       * Handle events passed into the behavior.
@@ -204,7 +204,7 @@ namespace RWS
       void AudioGlobalMixer::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::HandleEvents")
-            
+
          if (pMsg.Id == iMsgRunningTick)
          {
             DisplayDebugInfo();
@@ -225,7 +225,7 @@ namespace RWS
             // Trigger fade up.
             m_FadeState = FadeUp;
          }
-            
+
          RWS_RETURNVOID()
       }
 
@@ -238,7 +238,7 @@ namespace RWS
       void AudioGlobalMixer::DisplayDebugInfo(void)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::DisplayDebugInfo")
-            
+
          // Display mixer debug info on target if debug tools selected.
          if (m_DebugInfo)
          {
@@ -248,11 +248,11 @@ namespace RWS
             DebugTools::Printf("Distance Factor %.3f\n", RwaListenerGetDistanceFactor(RwsAudio::GetListener()));
             DebugTools::Printf("Roll-off %.3f\n", RwaListenerGetRolloffFactor(RwsAudio::GetListener()));
          }
-            
+
          RWS_RETURNVOID();
       }
 #endif
-      
+
       /**
       *
       * Process fade on output device.
@@ -261,27 +261,27 @@ namespace RWS
       void AudioGlobalMixer::ProcessFade(void)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::ProcessFade")
-            
+
          // If fade event triggered,  perform fading operation.
          switch (m_FadeState)
          {
-            case FadeDown:
-               if (RwsAudio::FadeOutputObject(0.0f, m_FadeInc))
-               {
-                  m_FadeState = FadeStopped;
-                  SendMsg(m_EndFade);
-               }
-               break;
-               
-            case FadeUp:
-               if (RwsAudio::FadeOutputObject(m_Gain, m_FadeInc))
-               {
-                  m_FadeState = FadeStopped;
-                  SendMsg(m_EndFade);
-               }
-               break;
+         case FadeDown:
+            if (RwsAudio::FadeOutputObject(0.0f, m_FadeInc))
+            {
+               m_FadeState = FadeStopped;
+               SendMsg(m_EndFade);
+            }
+            break;
+
+         case FadeUp:
+            if (RwsAudio::FadeOutputObject(m_Gain, m_FadeInc))
+            {
+               m_FadeState = FadeStopped;
+               SendMsg(m_EndFade);
+            }
+            break;
          }
-         
+
          RWS_RETURNVOID();
       }
 
@@ -295,24 +295,24 @@ namespace RWS
       void AudioGlobalMixer::UpdateListener(const CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::UpdateListener")
-            
+
          RwV3d *pPos;
          RwMatrix *pMatrix;
-         
+
          // Update listener position based on incoming camera position.
          if (pMsg.pData != 0)
          {
-            RwCamera *pInputCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
+            RwCamera *pInputCamera = reinterpret_cast<RwCamera *>(pMsg.pData);
             pMatrix = RwFrameGetLTM(RwCameraGetFrame(pInputCamera));
             pPos = RwMatrixGetPos(pMatrix);
-            
+
             RwaListenerSetPosition(RwsAudio::GetListener(), pPos);
-            RwaListenerSetOrientation(RwsAudio::GetListener(), pMatrix);   
+            RwaListenerSetOrientation(RwsAudio::GetListener(), pMatrix);
          }
-         
+
          RWS_RETURNVOID()
       }
-      
+
       /**
       *
       * SetSpeakerConfig. Sets the speaker configuration for the output object. See RenderWare Audio Api reference 
@@ -324,17 +324,16 @@ namespace RWS
       void AudioGlobalMixer::SetSpeakerConfig(const RwUInt32 Config)
       {
          RWS_FUNCTION("RWS::Audio::AudioGlobalMixer::SetSpeakerConfig")
-            
+
          static RwaSpeakerConfig SpeakerConfig[] =
-         {
-            rwaSPEAKERCONFIG_STEREO, rwaSPEAKERCONFIG_MONO, rwaSPEAKERCONFIG_HEADPHONES, rwaSPEAKERCONFIG_SURROUND
-         };   
-         
+            {
+               rwaSPEAKERCONFIG_STEREO, rwaSPEAKERCONFIG_MONO, rwaSPEAKERCONFIG_HEADPHONES, rwaSPEAKERCONFIG_SURROUND};
+
          RwaOsOutputSetSpeakerConfig(RwsAudio::GetOutputObject(), SpeakerConfig[Config]);
-         
+
          RWS_RETURNVOID();
       }
-      
+
    }
 }
 #endif

@@ -65,13 +65,13 @@ namespace RWS
 
       // Must match CMD_subTexType.
       RwUInt32 CFXPartSpray::m_subTexLookupU[] = {1, 1, 2, 2, 4, 4, 8};
-      
+
       // Must match CMD_subTexType.
       RwUInt32 CFXPartSpray::m_subTexLookupV[] = {1, 2, 2, 4, 4, 8, 8};
-      
+
       // Must match CMD_srcBlend & CMD_destBlend
-      RwBlendFunction CFXPartSpray::m_blendLookup[11] =                
-            {
+      RwBlendFunction CFXPartSpray::m_blendLookup[11] =
+         {
             rwBLENDZERO,
             rwBLENDONE,
             rwBLENDSRCCOLOR,
@@ -82,14 +82,12 @@ namespace RWS
             rwBLENDINVDESTALPHA,
             rwBLENDDESTCOLOR,
             rwBLENDINVDESTCOLOR,
-            rwBLENDSRCALPHASAT
-            };
+            rwBLENDSRCALPHASAT};
       CycPartBuff<CPB_TexPart>::RENDER_MODE CFXPartSpray::m_renderModeLookup[3] =   // Must match CMD_rendMode
-            {
+         {
             CycPartBuff<CPB_TexPart>::RM_NO_Z_WRITE,
             CycPartBuff<CPB_TexPart>::RM_Z_WRITE,
-            CycPartBuff<CPB_TexPart>::RM_DUAL_PASS
-            };
+            CycPartBuff<CPB_TexPart>::RM_DUAL_PASS};
 
       /**
       *
@@ -100,11 +98,11 @@ namespace RWS
       *
       */
 
-      CFXPartSpray::CFXPartSpray(const CAttributePacket &attr)
-            : InitCEventHandler(&m_pAtomic),
-            m_ftHeading(0),
-            m_ftDeflect(0),
-            m_renderPrior(0)
+      CFXPartSpray::CFXPartSpray(const CAttributePacket &attr) :
+         InitCEventHandler(&m_pAtomic),
+         m_ftHeading(0),
+         m_ftDeflect(0),
+         m_renderPrior(0)
       {
          RWS_FUNCTION("RWS::FX::CFXPartSpray::CFXPartSpray");
 
@@ -138,7 +136,7 @@ namespace RWS
       RwTexture *CFXPartSpray::GetTexture(const char *pName)
       {
          RWS_FUNCTION("RWS::FX::CFXPartSpray::GetTexture");
-      
+
          tex_select texSelect;
 
          // Set up the texture to search for...
@@ -197,7 +195,6 @@ namespace RWS
 
                RWS_RETURN(pMaterial);
             }
-
          }
          else
          {
@@ -321,11 +318,11 @@ namespace RWS
             if (pCamera)
             {
                RpWorldAddCamera(CLevel::GetOpaqueWorld(), pCamera);
-            
+
                // Matrix flags are sometimes discarded, RwCameraBeginUpdate will assert if these are not set
                //
                rwMatrixSetFlags(RwFrameGetLTM(RwCameraGetFrame(pCamera)),
-                  rwMATRIXTYPENORMAL | rwMATRIXTYPEORTHOGONAL);
+                                rwMATRIXTYPENORMAL | rwMATRIXTYPEORTHOGONAL);
 
                if (RwCameraBeginUpdate(pCamera))
                {
@@ -569,7 +566,7 @@ namespace RWS
                break;
 
             case CMD_col:
-               { 
+               {
                   m_pParticles->GetBase()->SetColor(CPB_BasePart::BPS_PRIMARY_START, attrIt->GetAs_RwRGBA());
                }
                break;
@@ -725,7 +722,7 @@ namespace RWS
             // Secondary stage master control.
 
             case CMD_secOn:
-            
+
                m_pParticles->GetBase()->EnableSecState((attrIt->GetAs_RwUInt32() ? true : false));
                break;
 

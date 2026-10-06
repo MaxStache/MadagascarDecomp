@@ -48,7 +48,7 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial3 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+      class CTutorial3 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial3);
@@ -59,19 +59,19 @@ namespace RWS
          // The attribute definition for this behavior allows you to alter the amount the object is moved in each axis.
          //
          RWS_BEGIN_COMMANDS
-            RWS_ATTRIBUTE( CMD_rot_x, "X Rotation", "Specify the x axis rotation", SLIDER, RwReal, RANGE(0,0,360))
-            RWS_ATTRIBUTE( CMD_rot_y, "Y Rotation", "Specify the y axis rotation", SLIDER, RwReal, RANGE(0,180,360))
-            RWS_ATTRIBUTE( CMD_rot_z, "Z Rotation", "Specify the z axis rotation", SLIDER, RwReal, RANGE(0,0,360))
+         RWS_ATTRIBUTE(CMD_rot_x, "X Rotation", "Specify the x axis rotation", SLIDER, RwReal, RANGE(0, 0, 360))
+         RWS_ATTRIBUTE(CMD_rot_y, "Y Rotation", "Specify the y axis rotation", SLIDER, RwReal, RANGE(0, 180, 360))
+         RWS_ATTRIBUTE(CMD_rot_z, "Z Rotation", "Specify the z axis rotation", SLIDER, RwReal, RANGE(0, 0, 360))
          RWS_END_COMMANDS;
 
          CTutorial3(const CAttributePacket& attr);
          ~CTutorial3(void);
 
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
       protected:
-         RwMatrix *m_mat;        /**< Matrix used for rotating object. */
+         RwMatrix* m_mat;        /**< Matrix used for rotating object. */
          CAtomicPtr m_pAtomic;   /**< Behavior's Atomic. */
          RwReal m_rot[3];        /**< RwReal array for storing rotation values. */
       };

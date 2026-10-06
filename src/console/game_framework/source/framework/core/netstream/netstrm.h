@@ -28,7 +28,7 @@
 #define RWSNETSTREAM_H
 
 namespace RWS
-{ 
+{
    namespace NetStream
    {
       /**
@@ -45,11 +45,11 @@ namespace RWS
       *
       */
 
-      RwBool Init (RwUInt32 Port, RwUInt32 (*pTimeFunc)(void));
-      void Shutdown (void);
-      RwStream *OpenForRead (void);
-      RwStream *OpenForWrite (RwUInt32 TotalDataSize);
-      RwUInt32 GetAddress (RwChar * const szAddress, RwUInt32 BufferSize);
+      RwBool Init(RwUInt32 Port, RwUInt32 (*pTimeFunc)(void));
+      void Shutdown(void);
+      RwStream *OpenForRead(void);
+      RwStream *OpenForWrite(RwUInt32 TotalDataSize);
+      RwUInt32 GetAddress(RwChar *const szAddress, RwUInt32 BufferSize);
    }
 }     // namespace RWS::NetStream
 

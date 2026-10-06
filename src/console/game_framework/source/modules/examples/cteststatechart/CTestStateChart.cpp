@@ -44,7 +44,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CTestStateChart);
       RWS_REGISTERCLASS(CTestStateChart);
-      
+
       /**
       *
       *  Create CTestStateChart object. Gets behaviors atomic by extracting information the behavior needs from the 
@@ -54,26 +54,27 @@ namespace RWS
       *  \param attr the standard attribute data used for initialization.
       *
       */
-      CTestStateChart::CTestStateChart(const CAttributePacket& attr)
-         : InitCEventHandler(&m_pAtomic), CStateChartHandler(attr)
+      CTestStateChart::CTestStateChart(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic),
+         CStateChartHandler(attr)
       {
          RWS_FUNCTION("RWS::Examples::CTestStateChart::CTestStateChart");
-         
+
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-         
+
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
          m_mat = RwMatrixCreate();
-         
+
          RWS_POST(m_mat);
-         
+
          LinkMsg(iMsgRunningTick, 0);
 
          // Create the statechart instance
          CreateInstance(this);
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Destroy CTestStateChart object.  Destroy matrix and unlink from running tick.
@@ -82,20 +83,20 @@ namespace RWS
       CTestStateChart::~CTestStateChart(void)
       {
          RWS_FUNCTION("RWS::Examples::CTestStateChart::~CTestStateChart");
-         
+
          RWS_PRE(m_mat);
-         
+
          RwMatrixDestroy(m_mat);
          m_mat = 0;
-         
+
          UnLinkMsg(iMsgRunningTick);
 
          // Destroy the statechart instance
          DestroyInstance();
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *   Handle events.  Rotate object based on values within m_rot. This happens on the system running tick.
@@ -103,26 +104,26 @@ namespace RWS
       *   \param pMsg the standard RenderWare Studio message packets.
       *
       */
-      void CTestStateChart::HandleEvents(CMsg &pMsg)
+      void CTestStateChart::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Examples::CTestStateChart::HandleEvents");
-         
+
          RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-         
+
          // Execute the statechart every tick
          if (pMsg.Id == iMsgRunningTick)
          {
             if (GetExecState() == CStateMachine::RUNNING)
             {
-                Tick(this);
+               Tick(this);
             }
          }
-         
+
          HandleStateChartEvents(pMsg);
 
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Handle attributes.  This function receives the attribute values from RenderWare Studio.
@@ -134,16 +135,16 @@ namespace RWS
       void CTestStateChart::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Examples::CTestStateChart::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          m_pAtomic.HandleSystemCommands(attr);
 
          HandleStateChartAttributes(attr);
-         
-         
+
+
          RWS_RETURNVOID();
       }
-      
+
    }//namespace Examples
 }//namespace RWS

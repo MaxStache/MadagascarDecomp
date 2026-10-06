@@ -46,8 +46,8 @@ namespace RWS
       *  \see CSystemCommands
       *  \see CAtomicPtr
       *
-      */ 
-      class CTutorial5 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+      */
+      class CTutorial5 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial5);
@@ -58,13 +58,13 @@ namespace RWS
          CTutorial5(const CAttributePacket& attr);
          ~CTutorial5(void);
 
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
       protected:
-         RwMatrix *m_mat;        /**< Matrix used for rotating object. */
+         RwMatrix* m_mat;        /**< Matrix used for rotating object. */
          CAtomicPtr m_pAtomic;   /**< Behavior's Atomic. */
-         CEventId m_trigger;     /**< m_trigger is used to store the clients reference to an event. */ 
-     };
+         CEventId m_trigger;     /**< m_trigger is used to store the clients reference to an event. */
+      };
    }//namespace Tutorial
 }//namespace RWS

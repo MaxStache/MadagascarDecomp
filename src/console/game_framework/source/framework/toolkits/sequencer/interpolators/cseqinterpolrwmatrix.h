@@ -57,7 +57,7 @@ namespace RWS
          static RwUInt32 MaxSize(void);
 
       private:
-         
+
          void CalcValues(CSeqItem &rData, RwBool CalcStartQuat);
 
          RwReal m_xStartPos,

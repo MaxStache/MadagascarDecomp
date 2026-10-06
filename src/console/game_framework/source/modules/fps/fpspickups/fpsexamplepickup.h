@@ -33,7 +33,7 @@
 namespace RWS
 {
    namespace FPS
-   { 
+   {
       class FPSExamplePickup : public FPSPickup, public LinearAllocationPolicy
       {
       public:
@@ -41,8 +41,9 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSExamplePickup);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Standard Pickup", "A static pickup.");
-         
-         FPSExamplePickup(const CAttributePacket& attr) : FPSPickup(attr)
+
+         FPSExamplePickup(const CAttributePacket& attr) :
+            FPSPickup(attr)
          {
             Set_m_msg_response_tx("FPS_Example_Pickup");
          }

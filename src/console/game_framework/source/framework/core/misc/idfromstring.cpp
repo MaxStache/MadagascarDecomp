@@ -48,18 +48,18 @@ namespace RWS
 
       if (!cptr) RWS_RETURN(0);
 
-      RwChar *ptr = const_cast<RwChar*>(cptr);
+      RwChar *ptr = const_cast<RwChar *>(cptr);
 
       RwUInt32 id = 0;
 
       while (*ptr != 0)
       {
-         id = (id<<1) ^ (static_cast<RwUInt32>(*ptr));
+         id = (id << 1) ^ (static_cast<RwUInt32>(*ptr));
 
-         ptr ++;
+         ptr++;
       };
 
-      RWS_TRACE(RWS_HEX(id)<<" "<<cptr);
+      RWS_TRACE(RWS_HEX(id) << " " << cptr);
 
       RWS_RETURN(id);
    }

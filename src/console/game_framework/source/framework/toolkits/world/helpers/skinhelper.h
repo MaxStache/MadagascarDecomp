@@ -33,7 +33,7 @@
 #include <rpskin.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rpskin.lib")
+#pragma comment(lib, "rpskin.lib")
 #endif
 
 
@@ -58,7 +58,7 @@ namespace RWS
       */
       typedef RpSkin* (*RpSkinCallBack)(RpSkin* pSkin, void* pData);
 
-      void ForAllSkins( RpClump& clump, RpSkinCallBack callback, void* pData );
+      void ForAllSkins(RpClump& clump, RpSkinCallBack callback, void* pData);
 
       RpSkin* FindFirstSkin(RpClump& clump);
    }

@@ -45,8 +45,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSTriggerOnce);
       RWS_REGISTERCLASS(FPSTriggerOnce);
-      
+
       /**
       *
       * \ref FPSTriggerOnce. Constructor for FPSTriggerOnce.
@@ -70,23 +70,24 @@ namespace RWS
       * \see ~FPSTriggerOnce
       *
       */
-      FPSTriggerOnce::FPSTriggerOnce(const CAttributePacket& attr) : InitCEventHandler(&m_pAtomic)
+      FPSTriggerOnce::FPSTriggerOnce(const CAttributePacket &attr) :
+         InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerOnce::FPSTriggerOnce");
-         
+
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-         
+
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-         
+
          // if no m_targetname is specified then use ACTN_PLAYERTOUCH
          RegisterMsg(m_targetname, "ACTN_PLAYERTOUCH", 0);
          LinkMsg(m_targetname, 0);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ~FPSTriggerOnce. Destructor for FPSTriggerOnce.
@@ -97,16 +98,16 @@ namespace RWS
       FPSTriggerOnce::~FPSTriggerOnce(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerOnce::~FPSTriggerOnce");
-         
+
          UnLinkMsg(m_targetname);
          UnRegisterMsg(m_targetname);
          UnRegisterMsg(m_target);
          UnRegisterMsg(m_killtarget);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -118,55 +119,55 @@ namespace RWS
       void FPSTriggerOnce::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerOnce::HandleEvents");
-         
+
          // Receive Event m_targetname
          if (pMsg.Id == m_targetname)
          {
             TriggerEvent();
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref TriggerEvent. Trigger event then kill all attached to event m_killtarget.  
       * Then kill this CEventHandler.
       *
       */
-      void FPSTriggerOnce::TriggerEvent( void )
+      void FPSTriggerOnce::TriggerEvent(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerOnce::TriggerEvent");
-         
+
          // Send Event m_target
          SendMsg(m_target);
-         
+
          // Kill all attached to Event m_killtarget
          RegisterToDeleteEventHandlers(m_killtarget);
-         
+
          // Delete this CEventHandler
          Delete();
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */     
-      void FPSTriggerOnce::HandleAttributes(const CAttributePacket& attr)
+      */
+      void FPSTriggerOnce::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerOnce::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSTriggerOnce));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -175,29 +176,29 @@ namespace RWS
                {
                   const RwChar *name;
                   attrIt->GetCommandData(&name);
-                  
-                  UnLinkMsg (m_targetname);
+
+                  UnLinkMsg(m_targetname);
                   UnRegisterMsg(m_targetname);
                   RegisterMsg(m_targetname, name, 0);
                   LinkMsg(m_targetname, 0);
                }
                break;
-               
+
             case CMD_target:
                {
                   const RwChar *name;
                   attrIt->GetCommandData(&name);
-                  
+
                   UnRegisterMsg(m_target);
                   RegisterMsg(m_target, name, 0);
                }
                break;
-               
+
             case CMD_killtarget:
                {
                   const RwChar *name;
                   attrIt->GetCommandData(&name);
-                  
+
                   UnRegisterMsg(m_killtarget);
                   RegisterMsg(m_killtarget, name, 0);
                }
@@ -205,9 +206,9 @@ namespace RWS
             }
             ++attrIt;
          }
-         
+
          m_pAtomic.HandleSystemCommands(attr); // Initialize atomic/clump/frame
-         
+
          RWS_RETURNVOID();
       }
    }//namespace

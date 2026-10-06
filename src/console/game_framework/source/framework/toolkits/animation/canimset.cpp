@@ -37,9 +37,9 @@
 #include <rpskin.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "RpHAnim.lib")
-#pragma comment (lib, "RpSkin.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "RpHAnim.lib")
+#pragma comment(lib, "RpSkin.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -69,34 +69,31 @@ namespace
    *  \return Returns if successful a pointer to the new RpHAnimHierarchy, otherwise 0.
    *
    */
-   RpHAnimHierarchy* CloneRpHAnimHierarchy( const RpHAnimHierarchy& cloneMe )
+   RpHAnimHierarchy* CloneRpHAnimHierarchy(const RpHAnimHierarchy& cloneMe)
    {
       RWS_FUNCTION("RWS::CloneRpHAnimHierarchy");
 
 // RenderWare Version Precedes 3.4
-//      
+//
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-      RWS_RETURN( RpHAnimHierarchyCreateFromHierarchy(
+      RWS_RETURN(RpHAnimHierarchyCreateFromHierarchy(
          unconst(&cloneMe),
          static_cast<RpHAnimHierarchyFlag>(RpHAnimHierarchyGetFlags(unconst(&cloneMe))),
-         cloneMe.maxKeyFrameSize
-         ) );
+         cloneMe.maxKeyFrameSize));
 // RenderWare Version 3.4xxx
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002 && rwLIBRARYCURRENTVERSION < 0x35000)
-      RWS_RETURN( RpHAnimHierarchyCreateFromHierarchy(
+      RWS_RETURN(RpHAnimHierarchyCreateFromHierarchy(
          const_cast<RpHAnimHierarchy*>(&cloneMe),
          static_cast<RpHAnimHierarchyFlag>(RpHAnimHierarchyGetFlags(const_cast<RpHAnimHierarchy*>(&cloneMe))),
-         cloneMe.currentAnim->maxKeyFrameSize
-         ) );
+         cloneMe.currentAnim->maxKeyFrameSize));
 // RenderWare Version 3.5 and above
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x35000)
-      RWS_RETURN( RpHAnimHierarchyCreateFromHierarchy(
+      RWS_RETURN(RpHAnimHierarchyCreateFromHierarchy(
          const_cast<RpHAnimHierarchy*>(&cloneMe),
          static_cast<RpHAnimHierarchyFlag>(RpHAnimHierarchyGetFlags(const_cast<RpHAnimHierarchy*>(&cloneMe))),
-         cloneMe.currentAnim->maxInterpKeyFrameSize
-         ) );
+         cloneMe.currentAnim->maxInterpKeyFrameSize));
 #endif
    }
 
@@ -110,16 +107,16 @@ namespace
    *  \param startTime The start time used to determine where to start within the animation.
    *
    */
-   void SetCurrentAnim( RpHAnimHierarchy& hierarchy, const RpHAnimAnimation& anim, RwReal startTime )
+   void SetCurrentAnim(RpHAnimHierarchy& hierarchy, const RpHAnimAnimation& anim, RwReal startTime)
    {
       RWS_FUNCTION("RWS::SetCurrentAnim")
 
-      RWS_PRE( AnimationIsCompatibleWithHierarchy(anim, hierarchy) )
+      RWS_PRE(AnimationIsCompatibleWithHierarchy(anim, hierarchy))
 
       // RpHAnimHierarchySetCurrentAnim() resets the hierarchy time, so make sure the time is set
       // AFTER the anim...
-      RpHAnimHierarchySetCurrentAnim( (&hierarchy), const_cast<RpHAnimAnimation*>(&anim) );
-      RpHAnimHierarchySetCurrentAnimTime( (&hierarchy), startTime );
+      RpHAnimHierarchySetCurrentAnim((&hierarchy), const_cast<RpHAnimAnimation*>(&anim));
+      RpHAnimHierarchySetCurrentAnimTime((&hierarchy), startTime);
 
       RWS_RETURNVOID();
    }
@@ -137,12 +134,12 @@ namespace
    *  time is within 0 and duration.
    *
    */
-   RwReal ClampedTimeDelta( RwReal unClampedDeltaTime, RwReal currTime, RwReal duration )
+   RwReal ClampedTimeDelta(RwReal unClampedDeltaTime, RwReal currTime, RwReal duration)
    {
       RWS_FUNCTION("RWS::ClampedTimeDelta")
 
       const RwReal demandedTargetTime = currTime + unClampedDeltaTime;
-      const RwReal clampedTargetTime = Clamp( demandedTargetTime, RwReal(0), duration );
+      const RwReal clampedTargetTime = Clamp(demandedTargetTime, RwReal(0), duration);
 
       RWS_RETURN(clampedTargetTime - currTime);
    }
@@ -155,22 +152,22 @@ namespace RWS
    *  Default constructor for CAnimSet
    *
    */
-   CAnimSet::CAnimSet()
-      :  pMainHierarchy_(0),
-         pBlendSrcHierarchy_(0),
-         pBlendDstHierarchy_(0),
-         blendDuration_(RwReal(0)),
-         elapsedBlendTime_(RwReal(0)),
-         dstAnimIndex_(0),
-         srcAnimIndex_(0),
-         bBlendIntoNext_(false),
-         isBlending_(false),
-         isAnimating_(false)
+   CAnimSet::CAnimSet() :
+      pMainHierarchy_(0),
+      pBlendSrcHierarchy_(0),
+      pBlendDstHierarchy_(0),
+      blendDuration_(RwReal(0)),
+      elapsedBlendTime_(RwReal(0)),
+      dstAnimIndex_(0),
+      srcAnimIndex_(0),
+      bBlendIntoNext_(false),
+      isBlending_(false),
+      isAnimating_(false)
    {
       RWS_FUNCTION("RWS::CAnimSet::CAnimSet")
 
-      RWS_POST( !HasTarget() );
-      RWS_POST( RwReal(0) == GetBlendDuration() );
+      RWS_POST(!HasTarget());
+      RWS_POST(RwReal(0) == GetBlendDuration());
 
       RWS_RETURNVOID()
    }
@@ -185,8 +182,8 @@ namespace RWS
       RWS_FUNCTION("RWS::CAnimSet::~CAnimSet")
 
       // Destroy cloned hierarchies, if any
-      if ( pBlendSrcHierarchy_ ) RpHAnimHierarchyDestroy( pBlendSrcHierarchy_ );
-      if ( pBlendDstHierarchy_ ) RpHAnimHierarchyDestroy( pBlendDstHierarchy_ );
+      if (pBlendSrcHierarchy_) RpHAnimHierarchyDestroy(pBlendSrcHierarchy_);
+      if (pBlendDstHierarchy_) RpHAnimHierarchyDestroy(pBlendDstHierarchy_);
 
       RWS_RETURNVOID()
    }
@@ -216,21 +213,21 @@ namespace RWS
    *
    *  \return True if target is associated successfully, otherwise false.
    */
-   bool CAnimSet::SetTarget( RpClump& target )
+   bool CAnimSet::SetTarget(RpClump& target)
    {
       RWS_FUNCTION("RWS::CAnimSet::SetTarget")
 
-      RWS_PRE( !HasTarget() )
+      RWS_PRE(!HasTarget())
 
       // Find any attached hierarchy (can't actually do a great deal without it)
       pMainHierarchy_ = FindHAnimHierarchy(target);
 
-      if ( pMainHierarchy_)
+      if (pMainHierarchy_)
       {
          // Make sure that it's set to the default pose (if any)
          RpSkin* pFirstSkin = SkinHelper::FindFirstSkin(target);
 
-         if ( pFirstSkin) 
+         if (pFirstSkin)
          {
             ApplyDefaultPoseToHierarchy(*pMainHierarchy_, *pFirstSkin);
          }
@@ -239,18 +236,17 @@ namespace RWS
           * Set flags to update all matrices 
           */
          (void)RpHAnimHierarchySetFlags(pMainHierarchy_,
-                                          (RpHAnimHierarchyFlag)
-                                          ( RpHAnimHierarchyGetFlags(pMainHierarchy_) | 
-                                          rpHANIMHIERARCHYUPDATELTMS |
-                                          rpHANIMHIERARCHYUPDATEMODELLINGMATRICES) );
+                                        (RpHAnimHierarchyFlag)(RpHAnimHierarchyGetFlags(pMainHierarchy_) |
+                                                               rpHANIMHIERARCHYUPDATELTMS |
+                                                               rpHANIMHIERARCHYUPDATEMODELLINGMATRICES));
 
          /* 
           * Attach the hierarchy to the RwFrame hierarchy 
           */
-         RpHAnimHierarchyAttach(pMainHierarchy_);        
+         RpHAnimHierarchyAttach(pMainHierarchy_);
 
          // Now plug all the clump's skins into the hierarchy
-         RWS_ASSERT( IsCompatibleWithAllAnims(*pMainHierarchy_), "Incompatible hierarchy" );
+         RWS_ASSERT(IsCompatibleWithAllAnims(*pMainHierarchy_), "Incompatible hierarchy");
          AttachHAnimHierarchy(target, *pMainHierarchy_);
 
          // Create copies of the hierarchy for blending src/dst
@@ -269,7 +265,7 @@ namespace RWS
    *  \param attr A reference to a CAttributePacket packet.
    *
    */
-   void CAnimSet::HandleSystemCommands( const CAttributePacket& attr )
+   void CAnimSet::HandleSystemCommands(const CAttributePacket& attr)
    {
       RWS_FUNCTION("RWS::CAnimSet::HandleSystemCommands")
 
@@ -277,9 +273,9 @@ namespace RWS
       while (!attrIt.IsFinished())
       {
          // Intercept CMD_AttachResource's only
-         if ( CMD_AttachResource == attrIt->GetCommandId() )
+         if (CMD_AttachResource == attrIt->GetCommandId())
          {
-            const RWSGUID * pResourceId;
+            const RWSGUID* pResourceId;
             attrIt->GetCommandData(&pResourceId);
             AddAnimation(pResourceId);
          }
@@ -298,16 +294,16 @@ namespace RWS
    *  \param ResourceID A pointer to a RwChar, containing the resource Id of the animation to attach.
    *
    */
-   void CAnimSet::AddAnimation( const RWSGUID * pResourceId )
+   void CAnimSet::AddAnimation(const RWSGUID* pResourceId)
    {
       RWS_FUNCTION("RWS::CAnimSet::AddAnimation")
 
       // Look up the object in the global store
-      const RwChar *ResourceType;
-      const RwChar *ResourceName;
-      const void *pObject = RWS::CResourceManager::FindById (pResourceId, &ResourceType, 0, &ResourceName);
+      const RwChar* ResourceType;
+      const RwChar* ResourceName;
+      const void* pObject = RWS::CResourceManager::FindById(pResourceId, &ResourceType, 0, &ResourceName);
 
-      if (pObject && !rwstrcmp ("rwID_HANIMANIMATION", ResourceType))
+      if (pObject && !rwstrcmp("rwID_HANIMANIMATION", ResourceType))
       {
 #ifdef _DEBUG
          // We found some RpHAnim anim data - assume it's compatible with any existing
@@ -316,12 +312,11 @@ namespace RWS
 
          RWS_ASSERT(
             (!HasTarget() || AnimationIsCompatibleWithHierarchy(*pAnim, *pMainHierarchy_)),
-            "Incompatible anim data or no target for animation."
-            );
+            "Incompatible anim data or no target for animation.");
 #endif
          // Push the anim into the collection (no need to take a copy - we have no
          // intention of altering the anim data)
-         animData_.push_back(AnimData (static_cast<const RpHAnimAnimation*>(pObject), ResourceName));
+         animData_.push_back(AnimData(static_cast<const RpHAnimAnimation*>(pObject), ResourceName));
       }
 
       RWS_RETURNVOID()
@@ -339,11 +334,11 @@ namespace RWS
    *  \param rate The new rate value.
    *
    */
-   void CAnimSet::SetRateMultiplier( RwUInt32 animIndex, RwReal rate )
+   void CAnimSet::SetRateMultiplier(RwUInt32 animIndex, RwReal rate)
    {
       RWS_FUNCTION("RWS::CAnimSet::SetRateMultiplier")
-      
-      RWS_PRE( animIndex < GetAnimationCount() )
+
+      RWS_PRE(animIndex < GetAnimationCount())
 
       animData_[animIndex].rateMultiplier_ = rate;
 
@@ -359,11 +354,11 @@ namespace RWS
    *
    *  \return Returns the rate of the animation \see SetRateMultiplier.
    */
-   RwReal CAnimSet::GetRateMultiplier( RwUInt32 animIndex ) const
+   RwReal CAnimSet::GetRateMultiplier(RwUInt32 animIndex) const
    {
       RWS_FUNCTION("RWS::CAnimSet::GetRateMultiplier")
 
-      RWS_PRE( animIndex < GetAnimationCount() )
+      RWS_PRE(animIndex < GetAnimationCount())
 
       RWS_RETURN(animData_[animIndex].rateMultiplier_);
    }
@@ -381,11 +376,11 @@ namespace RWS
    *
    *  \param behavior The end behavior loop or hold.
    */
-   void CAnimSet::SetEndBehavior( RwUInt32 animIndex, EndBehavior behavior )
+   void CAnimSet::SetEndBehavior(RwUInt32 animIndex, EndBehavior behavior)
    {
       RWS_FUNCTION("RWS::CAnimSet::SetEndBehavior")
 
-      RWS_PRE( animIndex < GetAnimationCount() );
+      RWS_PRE(animIndex < GetAnimationCount());
 
       animData_[animIndex].endBehavior_ = behavior;
 
@@ -402,11 +397,11 @@ namespace RWS
    *
    *  \return Returns the end behavior either loop or hold.
    */
-   CAnimSet::EndBehavior CAnimSet::GetEndBehavior( RwUInt32 animIndex ) const
+   CAnimSet::EndBehavior CAnimSet::GetEndBehavior(RwUInt32 animIndex) const
    {
       RWS_FUNCTION("RWS::CAnimSet::GetEndBehavior")
 
-      RWS_PRE( animIndex < GetAnimationCount() );
+      RWS_PRE(animIndex < GetAnimationCount());
 
       RWS_RETURN(animData_[animIndex].endBehavior_);
    }
@@ -422,7 +417,7 @@ namespace RWS
       RWS_FUNCTION("RWS::CAnimSet::GetDstAnimation")
 
       const RwUInt32 result = dstAnimIndex_;
-      RWS_POST( result < GetAnimationCount() )
+      RWS_POST(result < GetAnimationCount())
 
       RWS_RETURN(result);
    }
@@ -438,7 +433,7 @@ namespace RWS
       RWS_FUNCTION("RWS::CAnimSet::GetSrcAnimation")
 
       const RwUInt32 result = srcAnimIndex_;
-      RWS_POST( result < GetAnimationCount() )
+      RWS_POST(result < GetAnimationCount())
 
       RWS_RETURN(result);
    }
@@ -457,13 +452,13 @@ namespace RWS
    *  \return Returns TRUE if the animation was found and animIndex was filled in with the
    *  index of the animation, otherwise FALSE.
    */
-   RwBool CAnimSet::GetDstAnimationByName( const RwChar *animName, RwInt32 *animIndex )
+   RwBool CAnimSet::GetDstAnimationByName(const RwChar* animName, RwInt32* animIndex)
    {
       RWS_FUNCTION("RWS::CAnimSet::GetDstAnimationByName")
 
-      RWS_PRE( animName )
-      RWS_PRE( animIndex )
-      RWS_PRE( HasTarget() )
+      RWS_PRE(animName)
+      RWS_PRE(animIndex)
+      RWS_PRE(HasTarget())
 
       RwUInt32 i = 0;
       HAnimDataVec::iterator ittr;
@@ -500,21 +495,21 @@ namespace RWS
    *
    *  \param animIndex An index used to specify the animation.
    */
-   void CAnimSet::SetDstAnimation( RwUInt32 animIndex )
+   void CAnimSet::SetDstAnimation(RwUInt32 animIndex)
    {
       RWS_FUNCTION("RWS::CAnimSet::SetDstAnimation")
 
-      RWS_PRE( HasTarget() )
-      RWS_PRE( animIndex < GetAnimationCount() )
+      RWS_PRE(HasTarget())
+      RWS_PRE(animIndex < GetAnimationCount())
 
-      if ( IsBlendIntoNext() )
+      if (IsBlendIntoNext())
       {
-         if ( IsBlending() ) InitiateBlend( *pBlendDstHierarchy_, animIndex );
-         else InitiateBlend( *pMainHierarchy_, animIndex );
+         if (IsBlending()) InitiateBlend(*pBlendDstHierarchy_, animIndex);
+         else InitiateBlend(*pMainHierarchy_, animIndex);
       }
       else
       {
-         SetCurrentAnim( *pMainHierarchy_, GetRawAnimationData(animIndex), RwReal(0) );
+         SetCurrentAnim(*pMainHierarchy_, GetRawAnimationData(animIndex), RwReal(0));
          dstAnimIndex_ = animIndex;
          SetBlendIntoNext(true);
       }
@@ -531,20 +526,20 @@ namespace RWS
    *
    *  \return TRUE if the animation is still playing, FALSE if the animation has ended.
    */
-   bool CAnimSet::Update( RwReal timeDelta )
+   bool CAnimSet::Update(RwReal timeDelta)
    {
       RWS_FUNCTION("RWS::CAnimSet::Update")
 
-      RWS_PRE( timeDelta >= RwReal(0) );
+      RWS_PRE(timeDelta >= RwReal(0));
 
       bool ret = false;
 
-      if ( IsBlendIntoNext() )
+      if (IsBlendIntoNext())
       {
-         if ( IsBlending() )
+         if (IsBlending())
          {
             elapsedBlendTime_ += timeDelta;
-            if ( elapsedBlendTime_ >= blendDuration_ )
+            if (elapsedBlendTime_ >= blendDuration_)
             {
                TerminateBlend();
 
@@ -573,15 +568,15 @@ namespace RWS
    *
    *  \note Used by Update.
    */
-   bool CAnimSet::UpdateUnblended( RwReal timeDelta )
+   bool CAnimSet::UpdateUnblended(RwReal timeDelta)
    {
       RWS_FUNCTION("RWS::CAnimSet::UpdateUnblended")
 
-      RWS_PRE( timeDelta >= RwReal(0) )
-      RWS_PRE( HasTarget() )
-      RWS_PRE( !IsBlending() )
+      RWS_PRE(timeDelta >= RwReal(0))
+      RWS_PRE(HasTarget())
+      RWS_PRE(!IsBlending())
 
-      bool ret = UpdateHierarchy( *pMainHierarchy_, dstAnimIndex_, timeDelta );
+      bool ret = UpdateHierarchy(*pMainHierarchy_, dstAnimIndex_, timeDelta);
 
       RWS_RETURN(ret)
    }
@@ -596,22 +591,22 @@ namespace RWS
    *
    *  \note Used by Update.
    */
-   bool CAnimSet::UpdateBlended( RwReal timeDelta )
+   bool CAnimSet::UpdateBlended(RwReal timeDelta)
    {
       RWS_FUNCTION("RWS::CAnimSet::UpdateBlended")
 
-      RWS_PRE( timeDelta >= RwReal(0) )
-      RWS_PRE( HasTarget() )
-      RWS_PRE( IsBlending() )
-      RWS_PRE( elapsedBlendTime_ < blendDuration_ );
+      RWS_PRE(timeDelta >= RwReal(0))
+      RWS_PRE(HasTarget())
+      RWS_PRE(IsBlending())
+      RWS_PRE(elapsedBlendTime_ < blendDuration_);
 
       // Update both inputs and blend 'em
-      UpdateHierarchy( *pBlendSrcHierarchy_, srcAnimIndex_, timeDelta );
+      UpdateHierarchy(*pBlendSrcHierarchy_, srcAnimIndex_, timeDelta);
 
-      bool ret = UpdateHierarchy( *pBlendDstHierarchy_, dstAnimIndex_, timeDelta );
+      bool ret = UpdateHierarchy(*pBlendDstHierarchy_, dstAnimIndex_, timeDelta);
 
-      RpHAnimHierarchyBlend( pMainHierarchy_, pBlendSrcHierarchy_, pBlendDstHierarchy_, 
-                                                         elapsedBlendTime_ / blendDuration_ );
+      RpHAnimHierarchyBlend(pMainHierarchy_, pBlendSrcHierarchy_, pBlendDstHierarchy_,
+                            elapsedBlendTime_ / blendDuration_);
 
       RWS_RETURN(ret)
    }
@@ -627,11 +622,11 @@ namespace RWS
    *  \return TRUE if the animation is still playing, FALSE if the animation has ended.
    *
    */
-   bool CAnimSet::UpdateHierarchy( RpHAnimHierarchy& hierarchy, RwUInt32 animIndex, RwReal timeDelta )
+   bool CAnimSet::UpdateHierarchy(RpHAnimHierarchy& hierarchy, RwUInt32 animIndex, RwReal timeDelta)
    {
       RWS_FUNCTION("RWS::CAnimSet::UpdateHierarchy")
-         
-      RWS_PRE( timeDelta >= RwReal(0) )
+
+      RWS_PRE(timeDelta >= RwReal(0))
 
       isAnimating_ = TRUE;
 
@@ -647,13 +642,13 @@ namespace RWS
             const RpHAnimAnimation& animData = GetRawAnimationData(animIndex);
 
 // RenderWare Version Precedes 3.4
-//      
+//
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-            clampedTimeDelta = ClampedTimeDelta( rateAdjustedTimeDelta, hierarchy.currentTime, animData.duration );
+            clampedTimeDelta = ClampedTimeDelta(rateAdjustedTimeDelta, hierarchy.currentTime, animData.duration);
 // RenderWare Version Exceeds 3.4
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002)
-            clampedTimeDelta = ClampedTimeDelta( rateAdjustedTimeDelta, hierarchy.currentAnim->currentTime, animData.duration );
+            clampedTimeDelta = ClampedTimeDelta(rateAdjustedTimeDelta, hierarchy.currentAnim->currentTime, animData.duration);
 #endif
 
             // Animation is complete
@@ -668,21 +663,20 @@ namespace RWS
          // Unclamped delta is fine - RpHAnim handles the looping for us
          break;
       default:
-         RWS_ASSERT( false, "Unknown behaviour for animation index [" << animIndex <<
-               "]. Need to add support for new end behavior.");
+         RWS_ASSERT(false, "Unknown behaviour for animation index [" << animIndex << "]. Need to add support for new end behavior.");
          break;
       }
 
 // RenderWare Version Precedes 3.4
-//      
+//
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-      if ( clampedTimeDelta >= RwReal(0) ) RpHAnimHierarchyAddAnimTime(&hierarchy, clampedTimeDelta);
-      else RpHAnimHierarchySubAnimTime(&hierarchy, ( - clampedTimeDelta));
+      if (clampedTimeDelta >= RwReal(0)) RpHAnimHierarchyAddAnimTime(&hierarchy, clampedTimeDelta);
+      else RpHAnimHierarchySubAnimTime(&hierarchy, (-clampedTimeDelta));
 // RenderWare Version Exceeds 3.4
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002)
-      if ( clampedTimeDelta >= RwReal(0) ) RpHAnimHierarchyAddAnimTime((&hierarchy), clampedTimeDelta);
-      else RpHAnimHierarchySubAnimTime((&hierarchy), ( - clampedTimeDelta));
+      if (clampedTimeDelta >= RwReal(0)) RpHAnimHierarchyAddAnimTime((&hierarchy), clampedTimeDelta);
+      else RpHAnimHierarchySubAnimTime((&hierarchy), (-clampedTimeDelta));
 #endif
 
 
@@ -697,11 +691,11 @@ namespace RWS
    *
    *  \param Set the duration of the blend operation.
    */
-   void CAnimSet::SetBlendDuration( RwReal duration )
+   void CAnimSet::SetBlendDuration(RwReal duration)
    {
       RWS_FUNCTION("RWS::CAnimSet::SetBlendDuration")
 
-      RWS_PRE( duration >= RwReal(0) );
+      RWS_PRE(duration >= RwReal(0));
 
       blendDuration_ = duration;
 
@@ -719,7 +713,7 @@ namespace RWS
       RWS_FUNCTION("RWS::CAnimSet::GetBlendDuration")
 
       const RwReal result = blendDuration_;
-      RWS_POST( result >= RwReal(0) );
+      RWS_POST(result >= RwReal(0));
 
       RWS_RETURN(result);
    }
@@ -732,23 +726,23 @@ namespace RWS
    *
    *  \param newDstAnimIndex An index used to specify the animation.
    */
-   void CAnimSet::InitiateBlend( RpHAnimHierarchy& currDstHierarchy, RwUInt32 newDstAnimIndex )
+   void CAnimSet::InitiateBlend(RpHAnimHierarchy& currDstHierarchy, RwUInt32 newDstAnimIndex)
    {
       RWS_FUNCTION("RWS::CAnimSet::InitiateBlend")
 
-      RWS_PRE( HasTarget() )
-      RWS_PRE( IsBlendIntoNext() )
+      RWS_PRE(HasTarget())
+      RWS_PRE(IsBlendIntoNext())
 
       // Src
 
 // RenderWare Version Precedes 3.4
-//      
+//
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-      SetCurrentAnim( *pBlendSrcHierarchy_, GetRawAnimationData(dstAnimIndex_), currDstHierarchy.currentTime );
+      SetCurrentAnim(*pBlendSrcHierarchy_, GetRawAnimationData(dstAnimIndex_), currDstHierarchy.currentTime);
 // RenderWare Version Exceeds 3.4
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002)
-      SetCurrentAnim( *pBlendSrcHierarchy_, GetRawAnimationData(dstAnimIndex_), currDstHierarchy.currentAnim->currentTime );
+      SetCurrentAnim(*pBlendSrcHierarchy_, GetRawAnimationData(dstAnimIndex_), currDstHierarchy.currentAnim->currentTime);
 #endif
 
       srcAnimIndex_ = dstAnimIndex_;
@@ -756,11 +750,11 @@ namespace RWS
       elapsedBlendTime_ = RwReal(0);
 
       // Dst
-      SetCurrentAnim( *pBlendDstHierarchy_, GetRawAnimationData(newDstAnimIndex), RwReal(0) );
+      SetCurrentAnim(*pBlendDstHierarchy_, GetRawAnimationData(newDstAnimIndex), RwReal(0));
       dstAnimIndex_ = newDstAnimIndex;
 
-      RWS_POST( IsBlendIntoNext() )
-      RWS_POST( IsBlending() )
+      RWS_POST(IsBlendIntoNext())
+      RWS_POST(IsBlending())
 
       RWS_RETURNVOID()
    }
@@ -775,24 +769,24 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CAnimSet::TerminateBlend")
 
-      RWS_PRE( HasTarget() )
+      RWS_PRE(HasTarget())
 
       if (IsBlending())
       {
 // RenderWare Version Precedes 3.4
-//      
+//
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-         SetCurrentAnim( *pMainHierarchy_, GetRawAnimationData(dstAnimIndex_), pBlendDstHierarchy_->currentTime );
+         SetCurrentAnim(*pMainHierarchy_, GetRawAnimationData(dstAnimIndex_), pBlendDstHierarchy_->currentTime);
 // RenderWare Version Exceeds 3.4
-//      
+//
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002)
-         SetCurrentAnim( *pMainHierarchy_, GetRawAnimationData(dstAnimIndex_), pBlendDstHierarchy_->currentAnim->currentTime );
+         SetCurrentAnim(*pMainHierarchy_, GetRawAnimationData(dstAnimIndex_), pBlendDstHierarchy_->currentAnim->currentTime);
 #endif
 
          isBlending_ = false;
       }
 
-      RWS_RETURNVOID() 
+      RWS_RETURNVOID()
    }
 
    /**
@@ -800,12 +794,12 @@ namespace RWS
    *  Retrieves raw animation data for the specified animation.
    *
    */
-   const RpHAnimAnimation& CAnimSet::GetRawAnimationData( RwUInt32 animIndex ) const
+   const RpHAnimAnimation& CAnimSet::GetRawAnimationData(RwUInt32 animIndex) const
    {
       RWS_FUNCTION("RWS::CAnimSet::GetRawAnimationData")
 
-      RWS_PRE( animIndex < GetAnimationCount() )
-      RWS_RETURN (*animData_[animIndex].pRawData_);
+      RWS_PRE(animIndex < GetAnimationCount())
+      RWS_RETURN(*animData_[animIndex].pRawData_);
    }
 
    /**
@@ -819,14 +813,14 @@ namespace RWS
    *  \return Returns TRUE if all attached animations are compatible with this hierarchy,
    *  otherwise FALSE.
    */
-   bool CAnimSet::IsCompatibleWithAllAnims( const RpHAnimHierarchy& hierarchy )
+   bool CAnimSet::IsCompatibleWithAllAnims(const RpHAnimHierarchy& hierarchy)
    {
       RWS_FUNCTION("RWS::CAnimSet::IsCompatibleWithAllAnims")
 
       bool isCompatible = true;
-      for ( RwUInt32 i = 0; i < GetAnimationCount() && isCompatible; ++i )
+      for (RwUInt32 i = 0; i < GetAnimationCount() && isCompatible; ++i)
       {
-          isCompatible = AnimationIsCompatibleWithHierarchy( GetRawAnimationData(i), hierarchy );
+         isCompatible = AnimationIsCompatibleWithHierarchy(GetRawAnimationData(i), hierarchy);
       }
 
       RWS_RETURN(isCompatible)

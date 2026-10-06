@@ -61,16 +61,18 @@ namespace RWS
       *  Construct a CFXXBoxExamplePS object.
       *
       */
-      CFXXBoxExamplePS::CFXXBoxExamplePS(const CAttributePacket& rAttr) : InitCEventHandler(0),
-                                          m_RampDir(0), m_Blend(0.0f)
+      CFXXBoxExamplePS::CFXXBoxExamplePS(const CAttributePacket &rAttr) :
+         InitCEventHandler(0),
+         m_RampDir(0),
+         m_Blend(0.0f)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxExamplePS::CFXXBoxExamplePS");
 
-         LinkMsg (iMsgDoRender, "RwCamera*");
-                        
-         m_PixelShader = RpXboxPixelShaderCreate (dwExamplePSPixelShader);
-         m_RampDir   = 0;
-         m_Blend     = 0.0f;
+         LinkMsg(iMsgDoRender, "RwCamera*");
+
+         m_PixelShader = RpXboxPixelShaderCreate(dwExamplePSPixelShader);
+         m_RampDir = 0;
+         m_Blend = 0.0f;
 
          RWS_RETURNVOID();
       }
@@ -109,37 +111,36 @@ namespace RWS
 
          if (pMsg.Id == iMsgDoRender)
          {
-            const RwReal   SpeedReduction = 0.25f;
+            const RwReal SpeedReduction = 0.25f;
             // ramp the blend value up and down
             if (m_RampDir)
             {
                m_Blend -= (m_Speed * SpeedReduction);
                if (m_Blend < 0.0f)
-               {                   
+               {
                   m_RampDir = 0;
                   m_Blend = 0.0f;
-               }               
+               }
             }
-               else
+            else
             {
                m_Blend += (m_Speed * SpeedReduction);
                if (m_Blend > 1.0f)
                {
                   m_RampDir = 1;
                   m_Blend = 1.0f;
-               }               
+               }
             }
             // blend vect stores the amount to blend between the grey scale and normal version
             // of the pixel
             RwV4d BlendVect;
             BlendVect.x = BlendVect.y = BlendVect.z = BlendVect.w = m_Blend;
-            RpXboxPixelShaderSetConstant(m_PixelShader, 0, &BlendVect, 1); 
+            RpXboxPixelShaderSetConstant(m_PixelShader, 0, &BlendVect, 1);
 
             // pass 1.0f, 1.0f, 1.0f, 1.0f into c1
             RwV4d One;
             One.x = One.y = One.z = One.w = 1.0f;
-            RpXboxPixelShaderSetConstant(m_PixelShader, 1, &One, 1); 
-
+            RpXboxPixelShaderSetConstant(m_PixelShader, 1, &One, 1);
          }
 
          RWS_RETURNVOID();
@@ -150,62 +151,62 @@ namespace RWS
       *  Update attributes.
       *
       */
-      void CFXXBoxExamplePS::HandleAttributes(const CAttributePacket& attr)
+      void CFXXBoxExamplePS::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxExamplePS::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          CAttributeCommandIterator sysattrIt(attr, RWS_CLASSID_OF(CSystemCommands));
          while (!sysattrIt.IsFinished())
          {
             switch (sysattrIt->GetCommandId())
             {
-               case CSystemCommands::CMD_AttachResource:
+            case CSystemCommands::CMD_AttachResource:
+               {
+                  const RWSGUID *pResourceId = 0;
+                  sysattrIt->GetCommandData(&pResourceId);
+
+                  const RwChar *resourceType;
+
+                  const void *pObject = 0;
+                  if (pResourceId)
                   {
-                     const RWSGUID * pResourceId = 0;
-                     sysattrIt->GetCommandData(&pResourceId);
+                     pObject = CResourceManager::FindById(pResourceId, &resourceType);
+                  }
 
-                     const RwChar *resourceType;
-      
-                     const void *pObject = 0;
-                     if (pResourceId)
+                  RWS_ASSERT(pObject, "Resource::Find failed for id = " << pResourceId);
+
+                  if (resourceType)
+                  {
+                     if (!rwstrcmp("rwID_ATOMIC", resourceType))
                      {
-                        pObject = CResourceManager::FindById(pResourceId, &resourceType);
+                        AtomicSetPixelShader(const_cast<RpAtomic *>(reinterpret_cast<const RpAtomic *>(pObject)),
+                                             m_PixelShader);
                      }
-      
-                     RWS_ASSERT (pObject, "Resource::Find failed for id = " << pResourceId);
-
-                     if (resourceType)
+                     else if (!rwstrcmp("rwID_CLUMP", resourceType))
                      {
-                        if (!rwstrcmp("rwID_ATOMIC", resourceType))
-                        {
-                           AtomicSetPixelShader(const_cast<RpAtomic*>(reinterpret_cast<const RpAtomic *>(pObject)),
-                                                m_PixelShader);
-                        }
-                           else if (!rwstrcmp("rwID_CLUMP", resourceType))
-                        {
-                           ClumpSetPixelShader(const_cast<RpClump*>(reinterpret_cast<const RpClump *>(pObject)),
-                                               m_PixelShader);
-                        }
+                        ClumpSetPixelShader(const_cast<RpClump *>(reinterpret_cast<const RpClump *>(pObject)),
+                                            m_PixelShader);
                      }
                   }
-                  break;
-            }; 
+               }
+               break;
+            };
             ++sysattrIt;
          }
 
          // deal with the attributes related to the pixel shader behaviour
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXXBoxExamplePS));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
-               case CMD_Set_m_Speed:
-                  attrIt->GetCommandData(m_Speed);
-                  RWS_TRACE("CMD_Set_m_Speed "<<m_Speed);
-                  break;
+            case CMD_Set_m_Speed:
+               attrIt->GetCommandData(m_Speed);
+               RWS_TRACE("CMD_Set_m_Speed " << m_Speed);
+               break;
             }
             ++attrIt;
          }

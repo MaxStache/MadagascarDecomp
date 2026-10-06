@@ -23,7 +23,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined (_XBOX))
+#if (defined(_XBOX))
 
 #ifndef __CFXXBOXBASEVERTEXSHADER_H__
 #define __CFXXBOXBASEVERTEXSHADER_H__
@@ -37,8 +37,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -115,35 +115,35 @@ namespace RWS
 
       public:
 
-         static RxXboxAllInOneRenderCallBack             DefaultRenderCallback;
-         static DWORD                                    TexturedDeclaration[];
-         static DWORD                                    VertexColorDeclaration[];
-         static DWORD                                    TexturedVertexColorDeclaration[];
+         static RxXboxAllInOneRenderCallBack DefaultRenderCallback;
+         static DWORD TexturedDeclaration[];
+         static DWORD VertexColorDeclaration[];
+         static DWORD TexturedVertexColorDeclaration[];
 
 
-         CFXXBoxBaseVertexShader                             ();
-         ~CFXXBoxBaseVertexShader                            (void);
-                                                         
-         RwBool               CreatePipeLine             (RxXboxAllInOneRenderCallBack RenderCallBack);
-         virtual void         VShaderRenderCallBack      (RxXboxResEntryHeader *resEntryHeader, void *object, RwUInt8 type, RwUInt32 flags) = 0;
-         static void          ProcessVertexShader        (RxXboxResEntryHeader *resEntryHeader, void *object, RwUInt8 type, RwUInt32 flags);
-         static RpAtomic     *SetAtomicVShaderPipeline   (RpAtomic *pAtomic, void *data);
-         static void          SetVertexShaderBaseDefs    (RwMatrix *ltm);
+         CFXXBoxBaseVertexShader();
+         ~CFXXBoxBaseVertexShader(void);
 
-         static CVertexShaderPlugin* GetPluginData       (RpGeometry &geometry );
-         static void         *Plugin_Constructor         (void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject);
-         static void         *Plugin_Copy                (void *pDstObject, const void *pSrcObject, RwInt32 offset, RwInt32 size);
-         static RwBool        PluginAttach               (void);
-         static CFXXBoxBaseVertexShader *GetVShader      (RpAtomic *pAtomic);
-         static void          SetVShader                 (RpAtomic *pAtomic, CFXXBoxBaseVertexShader *pVertexShader);
+         RwBool CreatePipeLine(RxXboxAllInOneRenderCallBack RenderCallBack);
+         virtual void VShaderRenderCallBack(RxXboxResEntryHeader *resEntryHeader, void *object, RwUInt8 type, RwUInt32 flags) = 0;
+         static void ProcessVertexShader(RxXboxResEntryHeader *resEntryHeader, void *object, RwUInt8 type, RwUInt32 flags);
+         static RpAtomic *SetAtomicVShaderPipeline(RpAtomic *pAtomic, void *data);
+         static void SetVertexShaderBaseDefs(RwMatrix *ltm);
+
+         static CVertexShaderPlugin *GetPluginData(RpGeometry &geometry);
+         static void *Plugin_Constructor(void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject);
+         static void *Plugin_Copy(void *pDstObject, const void *pSrcObject, RwInt32 offset, RwInt32 size);
+         static RwBool PluginAttach(void);
+         static CFXXBoxBaseVertexShader *GetVShader(RpAtomic *pAtomic);
+         static void SetVShader(RpAtomic *pAtomic, CFXXBoxBaseVertexShader *pVertexShader);
 
 
       protected:
-         RxPipeline          *m_AtomicPipe;
+         RxPipeline *m_AtomicPipe;
       };
 
    } // namespace FX
-      
+
 } // namespace RWS
 
 #endif

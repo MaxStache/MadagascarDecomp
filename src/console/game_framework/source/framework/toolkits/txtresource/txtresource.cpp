@@ -59,12 +59,12 @@ namespace RWS
    *  \returns If successful returns a pointer to the loaded resource, otherwise 0.
    *
    */
-   void *CTextResource::Load(const RwChar *psName, const RwChar *psType, const RwChar *psResourcePath, RwStream* pStream, RwUInt32 uiStreamSize,RwUInt32 &uiResourceSize)
+   void *CTextResource::Load(const RwChar *psName, const RwChar *psType, const RwChar *psResourcePath, RwStream *pStream, RwUInt32 uiStreamSize, RwUInt32 &uiResourceSize)
    {
       RWS_FUNCTION("RWS::CTextResource::Load");
       RWS_PRE(pStream);
 
-      void * pBuffer = 0;
+      void *pBuffer = 0;
 
       if (uiStreamSize > 0)
       {
@@ -124,5 +124,8 @@ namespace RWS
    * Create an instance of the Text Resource handler, this is required in order to register the handler.
    *
    */
-   namespace { CTextResource gCTextResource; }
+   namespace
+   {
+      CTextResource gCTextResource;
+   }
 }

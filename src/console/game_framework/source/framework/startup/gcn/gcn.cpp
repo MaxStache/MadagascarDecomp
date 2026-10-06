@@ -41,17 +41,17 @@
 using namespace RWS;
 
 // Data/constants
-const RwUInt32 kScreenWidth   = 640;
-const RwUInt32 kScreenHeight  = 448;
-const RwUInt32 kBitDepth      = 32;
-const RwUInt32 kZBitDepth     = 16;
+const RwUInt32 kScreenWidth = 640;
+const RwUInt32 kScreenHeight = 448;
+const RwUInt32 kBitDepth = 32;
+const RwUInt32 kZBitDepth = 16;
 const RwUInt32 kFlags = static_cast<RwUInt32>(rwVIDEOMODEEXCLUSIVE);
 
 #ifdef BUG_INDX_ALIGN
 #include "dolphin/gx/gxmanage.h"
 #endif /* BUG_INDX_ALIGN */
 
-static RwTextureCallBackRead    DefaultTextureRead;
+static RwTextureCallBackRead DefaultTextureRead;
 
 static void DebugMessageHandler(RwDebugType type __RWUNUSED__, const RwChar *str)
 {
@@ -61,7 +61,7 @@ static void DebugMessageHandler(RwDebugType type __RWUNUSED__, const RwChar *str
 static bool InstallFileSystem()
 {
    RWS_FUNCTION("InstallFileSystem");
- 
+
    bool result = false;
 
    if (DolphinInstallFileSystem())
@@ -69,10 +69,10 @@ static bool InstallFileSystem()
       RWS_TRACE("Sky file system installed");
       result = true;
    }
- 
+
    RWS_RETURN(result);
 }
- 
+
 int main()
 {
 
@@ -82,8 +82,8 @@ int main()
 #endif
 
     /* Initialize the OS */
-    OSInit();
-    
+   OSInit();
+
 #ifdef BUG_XF_STALL
    GXSetMisc(GX_MT_XF_FLUSH, GX_XF_FLUSH_SAFE);
 #endif /* BUG_XF_STALL */
@@ -94,9 +94,9 @@ int main()
    DVDInit();
 
    // NOTE: Memory system is now handled via the 'RWSMemory' code. This includes init, etc.
-    
+
    VIInit();
-    
+
    PADInit();
 
    /* fix display list write gather pipe bug */
@@ -112,35 +112,35 @@ int main()
    videoModeInfo.flags = static_cast<RwVideoModeFlag>(kFlags);
 
    if (RWS::StartUp::Open(
-      InstallFileSystem,
-      0, // Use Defaults
-      (4 << 20), // Arena Size 4 Meg
-      videoModeInfo,
-      kZBitDepth,
-      0))
+          InstallFileSystem,
+          0, // Use Defaults
+          (4 << 20), // Arena Size 4 Meg
+          videoModeInfo,
+          kZBitDepth,
+          0))
    {
 
       // set the gx warning level to none
       GXSetVerifyLevel(GX_WARN_NONE);
-      
+
 #ifndef RWS_DESIGN
 #define RWS_BOOTUP_FILE "bootup.dff"
 
-#pragma message ("RWS_DESIGN not defined booting from file, RWS_BOOTUP_FILE")
+#pragma message("RWS_DESIGN not defined booting from file, RWS_BOOTUP_FILE")
 
       StartUp::LoadGameDatabaseFile(RWS_BOOTUP_FILE);
 
 #endif
-       
+
       while (true) RWS::MainLoop::Poll();
 
       StartUp::Close();
    }
-    
+
    /* Halt the OS */
    OSHalt("The End.");
 
-   return(0);
+   return (0);
 }
 
 namespace RWS
@@ -157,10 +157,10 @@ namespace RWS
    */
    RwBool psInstallFileSystem(void)
    {
-      RwChar *dDeviceName = "dvd:"; 
+      RwChar *dDeviceName = "dvd:";
       RtFileSystem *dfs;
       RwChar *fsName = "dvd";
-      static RwChar hBuffer[MAX_NB_FILES_PER_FS * READ_BUFFER_SIZE] __attribute__ ((aligned(32)));
+      static RwChar hBuffer[MAX_NB_FILES_PER_FS * READ_BUFFER_SIZE] __attribute__((aligned(32)));
 
       /* Init and register the host file system */
       dfs = RtGcnDVDFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE,
@@ -179,8 +179,8 @@ namespace RWS
       }
       else
       {
-          return (FALSE);
+         return (FALSE);
       }
-      return (TRUE);    
+      return (TRUE);
    }
 }

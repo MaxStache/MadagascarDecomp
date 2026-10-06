@@ -23,7 +23,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined (SKY))
+#if (defined(SKY))
 
 #ifndef __CFXSKYMOTIONBLUR_H__
 #define __CFXSKYMOTIONBLUR_H__
@@ -37,8 +37,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 #include "../cfxmotionblurbase.h"
@@ -69,17 +69,16 @@ namespace RWS
          CFXSkyMotionBlur();
          ~CFXSkyMotionBlur();
 
-         void  CreateBlendPoly(RwCamera *pCamera);
-         void  BlendFrontBuffer(RwCamera *pCamera);
+         void CreateBlendPoly(RwCamera *pCamera);
+         void BlendFrontBuffer(RwCamera *pCamera);
 
       protected:
-         RwIm2DVertex   m_Vertex[4];         /**< Defines the blend polygon. */
-         RwRaster       *m_pFrameRaster;     /**< Pointer to the frame buffer raster. */
-
+         RwIm2DVertex m_Vertex[4];         /**< Defines the blend polygon. */
+         RwRaster *m_pFrameRaster;     /**< Pointer to the frame buffer raster. */
       };
 
    } // namespace FX
-      
+
 } // namespace RWS
 
 #endif

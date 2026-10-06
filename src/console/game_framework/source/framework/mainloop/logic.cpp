@@ -53,7 +53,7 @@ namespace RWS
    {
       namespace Logic
       {
-         
+
 
          namespace
          {
@@ -64,7 +64,7 @@ namespace RWS
             int frame_number = 0;
 
             //////////////////////////////////////////////////////////////////
-            // 
+            //
             // Registered message Id's
             //
             CMsg msg_MsgPreTick;
@@ -86,16 +86,16 @@ namespace RWS
          void Running(void)
          {
             RWS_FUNCTION("SetMainLoopRunning");
-         
+
             SendMsg(iMsgSetRunningMode);  // Event running mode selected
-         
+
             msg_MsgPreTick.Id = iMsgRunningPreTick;
             msg_MsgTick.Id = iMsgRunningTick;
             msg_MsgPostTick.Id = iMsgRunningPostTick;
-         
+
             RWS_RETURNVOID();
          }
-      
+
          /**
          *
          *  \ingroup Logic
@@ -110,13 +110,13 @@ namespace RWS
          void Paused(void)
          {
             RWS_FUNCTION("SetMainLoopPaused");
-         
+
             SendMsg(iMsgSetPausedMode);   // Event pause mode selected
-         
+
             msg_MsgPreTick.Id = iMsgPausedPreTick;
             msg_MsgTick.Id = iMsgPausedTick;
             msg_MsgPostTick.Id = iMsgPausedPostTick;
-         
+
             RWS_RETURNVOID();
          }
 
@@ -133,16 +133,16 @@ namespace RWS
          void Frozen(void)
          {
             RWS_FUNCTION("SetMainLoopPaused");
-         
+
             SendMsg(iMsgSetFrozenMode);   // Event frozen mode selected
-         
+
             msg_MsgPreTick.Id = ERROR_NOT_A_VALID_MESSAGE_ID;
             msg_MsgTick.Id = ERROR_NOT_A_VALID_MESSAGE_ID;
             msg_MsgPostTick.Id = ERROR_NOT_A_VALID_MESSAGE_ID;
-         
+
             RWS_RETURNVOID();
          }
- 
+
          /**
          *  \ingroup Logic
          *
@@ -156,7 +156,7 @@ namespace RWS
          {
             gbEnabled = benabled;
          }
-         
+
         /**
          *
          *  \ingroup Logic
@@ -167,11 +167,11 @@ namespace RWS
          *  Also calls the EventSystem to delete any CEventHandlers registered for deletion. 
          *
          */
-         
+
          void Poll(void)
          {
             if (!gbEnabled) return;
-            
+
 #if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
             RwUInt32 start_time = Time::GetTime();
 #endif
@@ -190,7 +190,7 @@ namespace RWS
             // Send current frame number as part of tick event, useful for distributing processing over
             // several frames.
             //
-            msg_MsgTick.pData = reinterpret_cast<void*>(frame_number);
+            msg_MsgTick.pData = reinterpret_cast<void *>(frame_number);
 
             frame_number++;
 
@@ -206,7 +206,7 @@ namespace RWS
 
             start_time = Time::GetTime();
 #endif
-            
+
             // Send Post Tick Event
             //
             SendMsg(msg_MsgPostTick);
@@ -217,7 +217,7 @@ namespace RWS
                DebugTools::_Printf("RWS::Logic::Poll msg_MsgPostTick %d\n", Time::GetTime() - start_time);
             }
 #endif
-            
+
             // Do Safe cleanup of deleted entities
             //
             CEventHandler::DeleteEventHandlers(iMsgDeleteEntity);
@@ -244,17 +244,17 @@ namespace RWS
 
          void Open(void)
          {
-            CEventHandler::RegisterMsg (iMsgSetRunningMode, iMsgSetRunningModeStr, 0);
-            CEventHandler::RegisterMsg (iMsgSetPausedMode, iMsgSetPausedModeStr, 0);
-            CEventHandler::RegisterMsg (iMsgSetFrozenMode, iMsgSetFrozenModeStr, 0);
-         
-            CEventHandler::RegisterMsg (iMsgRunningPreTick, iMsgRunningPreTickStr, 0);
-            CEventHandler::RegisterMsg (iMsgRunningTick, iMsgRunningTickStr, "RwUInt32");
-            CEventHandler::RegisterMsg (iMsgRunningPostTick, iMsgRunningPostTickStr, 0);
-         
-            CEventHandler::RegisterMsg (iMsgPausedPreTick, iMsgPausedPreTickStr, 0);
-            CEventHandler::RegisterMsg (iMsgPausedTick, iMsgPausedTickStr, "RwUInt32");
-            CEventHandler::RegisterMsg (iMsgPausedPostTick, iMsgPausedPostTickStr, 0);
+            CEventHandler::RegisterMsg(iMsgSetRunningMode, iMsgSetRunningModeStr, 0);
+            CEventHandler::RegisterMsg(iMsgSetPausedMode, iMsgSetPausedModeStr, 0);
+            CEventHandler::RegisterMsg(iMsgSetFrozenMode, iMsgSetFrozenModeStr, 0);
+
+            CEventHandler::RegisterMsg(iMsgRunningPreTick, iMsgRunningPreTickStr, 0);
+            CEventHandler::RegisterMsg(iMsgRunningTick, iMsgRunningTickStr, "RwUInt32");
+            CEventHandler::RegisterMsg(iMsgRunningPostTick, iMsgRunningPostTickStr, 0);
+
+            CEventHandler::RegisterMsg(iMsgPausedPreTick, iMsgPausedPreTickStr, 0);
+            CEventHandler::RegisterMsg(iMsgPausedTick, iMsgPausedTickStr, "RwUInt32");
+            CEventHandler::RegisterMsg(iMsgPausedPostTick, iMsgPausedPostTickStr, 0);
          }
 
         /**
@@ -277,17 +277,17 @@ namespace RWS
          */
          void Close(void)
          {
-            CEventHandler::UnRegisterMsg ( iMsgSetRunningMode );
-            CEventHandler::UnRegisterMsg ( iMsgSetPausedMode );
-            CEventHandler::UnRegisterMsg ( iMsgSetFrozenMode );
+            CEventHandler::UnRegisterMsg(iMsgSetRunningMode);
+            CEventHandler::UnRegisterMsg(iMsgSetPausedMode);
+            CEventHandler::UnRegisterMsg(iMsgSetFrozenMode);
 
-            CEventHandler::UnRegisterMsg ( iMsgRunningPreTick );
-            CEventHandler::UnRegisterMsg ( iMsgRunningTick );
-            CEventHandler::UnRegisterMsg ( iMsgRunningPostTick );
+            CEventHandler::UnRegisterMsg(iMsgRunningPreTick);
+            CEventHandler::UnRegisterMsg(iMsgRunningTick);
+            CEventHandler::UnRegisterMsg(iMsgRunningPostTick);
 
-            CEventHandler::UnRegisterMsg ( iMsgPausedPreTick );
-            CEventHandler::UnRegisterMsg ( iMsgPausedTick );
-            CEventHandler::UnRegisterMsg ( iMsgPausedPostTick );
+            CEventHandler::UnRegisterMsg(iMsgPausedPreTick);
+            CEventHandler::UnRegisterMsg(iMsgPausedTick);
+            CEventHandler::UnRegisterMsg(iMsgPausedPostTick);
          }
 
          namespace
@@ -297,28 +297,28 @@ namespace RWS
             *  Enter frozen mode.
             *
             */
-            void SetFrozenMode (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void SetFrozenMode(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::SetFrozenMode");
-      
+
                MainLoop::Logic::Frozen();
-      
+
                RWS_RETURNVOID();
             }
-   
+
             /**
             *
             *  Enter running mode.
             *
             */
-            void SetRunningMode (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void SetRunningMode(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::NULL::SetRunningMode");
-      
+
                // FE, extend this to return to the previous state from frozen.
                //
                MainLoop::Logic::Running();
-      
+
                RWS_RETURNVOID();
             }
          }
@@ -333,11 +333,13 @@ namespace RWS
          */
          void RegisterStreamChunkHandlers(void)
          {
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_SetFrozenMode), SetFrozenMode);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_SetFrozenMode),
+                                                 SetFrozenMode);
 
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_SetRunningMode), SetRunningMode);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_SetRunningMode),
+                                                 SetRunningMode);
          }
 
          /**
@@ -346,8 +348,8 @@ namespace RWS
          */
          void UnRegisterStreamChunkHandlers(void)
          {
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_SetFrozenMode));
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_SetRunningMode));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_SetFrozenMode));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_SetRunningMode));
          }
       }
    }

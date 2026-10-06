@@ -34,7 +34,7 @@
 //
 #include "rprandom.h"
 #ifdef _MSC_VER
-#pragma comment (lib, "rprandom.lib")
+#pragma comment(lib, "rprandom.lib")
 #endif
 
 
@@ -53,7 +53,7 @@ namespace RWS
 
       RWS_IMPLEMENT_CLASSID(FPSBouncyPickup);
       RWS_REGISTERCLASS(FPSBouncyPickup);
-      
+
       /**
       *
       * \ref FPSBouncyPickup.  Constructor for pickup
@@ -61,26 +61,27 @@ namespace RWS
       * \see ~FPSBouncyPickup
       *
       */
-      FPSBouncyPickup::FPSBouncyPickup(const CAttributePacket& rAttr) : FPSPickup(rAttr),
-                                                                        m_rTheta(0),
-                                                                        m_rActualHeight(0),
-                                                                        m_RotRate(8.0f),
-                                                                        m_BounceHeight(3.0f),
-                                                                        m_Count(RpRandom() & 0x7f)
+      FPSBouncyPickup::FPSBouncyPickup(const CAttributePacket& rAttr) :
+         FPSPickup(rAttr),
+         m_rTheta(0),
+         m_rActualHeight(0),
+         m_RotRate(8.0f),
+         m_BounceHeight(3.0f),
+         m_Count(RpRandom() & 0x7f)
       {
          RWS_FUNCTION("RWS::FPS::FPSBouncyPickup::FPSBouncyPickup");
 
          Set_m_msg_response_tx("FPS_Example_Pickup");
-                      
-         RwMatrixRotate(&m_pRotation, &YAxis, m_RotRate, rwCOMBINEREPLACE);      
-                 
+
+         RwMatrixRotate(&m_pRotation, &YAxis, m_RotRate, rwCOMBINEREPLACE);
+
          LinkMsg(iMsgRunningTick, 0);
 
          m_BounceRate = RWDEG2RAD(8.0f);
 
          RWS_RETURNVOID();
       }
-      
+
 
       /**
       *
@@ -97,7 +98,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-      
+
 
       /**
       *
@@ -107,7 +108,7 @@ namespace RWS
       *  
       * \ref iMsgRunningTick
       */
-      void FPSBouncyPickup::HandleEvents(CMsg &pMsg)
+      void FPSBouncyPickup::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSBouncyPickup::HandleEvents");
 
@@ -115,19 +116,19 @@ namespace RWS
          {
             RwFrame* pRwFrame = RpAtomicGetFrame(m_pAtomic.ptr());
 
-            RwV3d *pPos = RwMatrixGetPos(RwFrameGetMatrix(pRwFrame));
+            RwV3d* pPos = RwMatrixGetPos(RwFrameGetMatrix(pRwFrame));
 
-            pPos->y = m_rActualHeight + m_BounceHeight * static_cast<RwReal>(RwSin( m_rTheta ));
+            pPos->y = m_rActualHeight + m_BounceHeight * static_cast<RwReal>(RwSin(m_rTheta));
 
             m_rTheta += m_BounceRate;
- 
+
             RwFrameTransform(pRwFrame, &m_pRotation, rwCOMBINEPRECONCAT);
 
             // The RenderWare API documentation recommends this happen at least once every 128 concatenations
             //
             m_Count++;
-            
-            if (m_Count>128)
+
+            if (m_Count > 128)
             {
                RwFrameOrthoNormalize(pRwFrame);
                m_Count = 0;
@@ -170,21 +171,21 @@ namespace RWS
                   {
                      // We need to setup the initial height of the frame
                      //
-                     RwV3d *pPos = RwMatrixGetPos(RwFrameGetMatrix(pRwFrame));
-                     
-                     m_rTheta = static_cast<RwReal>(RwFmod (pPos->x + pPos->z, 360.0f));
+                     RwV3d* pPos = RwMatrixGetPos(RwFrameGetMatrix(pRwFrame));
+
+                     m_rTheta = static_cast<RwReal>(RwFmod(pPos->x + pPos->z, 360.0f));
                      m_rActualHeight = pPos->y;
                   }
                }
                break;
             }
-            
+
             ++attrIt_sys;
-         } 
+         }
 
 
          CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(FPSBouncyPickup));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -192,17 +193,17 @@ namespace RWS
             case CMD_Set_Spin_Rate:
                {
                   m_RotRate = attrIt->GetAs_RwReal();
-                  
+
                   RwMatrixRotate(&m_pRotation, &YAxis, m_RotRate, rwCOMBINEREPLACE);
                }
                break;
-               
+
             case CMD_Set_Bounce_Height:
                {
                   m_BounceHeight = attrIt->GetAs_RwReal();
                }
                break;
-               
+
             case CMD_Set_Bounce_Rate:
                {
                   m_BounceRate = RWDEG2RAD(attrIt->GetAs_RwReal());
@@ -211,7 +212,7 @@ namespace RWS
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    }

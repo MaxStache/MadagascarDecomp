@@ -52,31 +52,31 @@ namespace RWS
       class FPSTeleporter : public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
-         
+
          RWS_MAKENEWCLASS(FPSTeleporter);
          RWS_DECLARE_CLASSID(FPSTeleporter);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Teleport Start Point", "Specifies a teleport destination, see also FPSTeleportDestination");
-         
+
          FPSTeleporter(const CAttributePacket&);
          ~FPSTeleporter(void);
-         
+
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE( CMD_targetname,    "Target name", "Trigger Teleport"            , RECEIVE , CEventHandler*, "ACTN_PLAYERTOUCH")
-            RWS_MESSAGE( CMD_target    ,    "Target"    , "Request Destination Position", TRANSMIT, RwFrame**     , 0)
-            RWS_END_COMMANDS;
-         
-         virtual void HandleEvents(CMsg &pMsg);
+         RWS_MESSAGE(CMD_targetname, "Target name", "Trigger Teleport", RECEIVE, CEventHandler*, "ACTN_PLAYERTOUCH")
+         RWS_MESSAGE(CMD_target, "Target", "Request Destination Position", TRANSMIT, RwFrame**, 0)
+         RWS_END_COMMANDS;
+
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-         
+
       protected:
          CEventId m_targetname;      /**< Event which triggers the teleport  */
          CEventId m_target;          /**< Event which finds the destination of the teleport */
-                                     CEventId m_ACTN_TELEPORT;   /**< Event which tells the object being teleport, that 
-                                     it has been teleported and where to go */           
-                                     CAtomicPtr m_pAtomic;
+         CEventId m_ACTN_TELEPORT;   /**< Event which tells the object being teleport, that 
+                                     it has been teleported and where to go */
+         CAtomicPtr m_pAtomic;
       };
-      
+
    }// namespace FPS
 }// namespace RWS
 

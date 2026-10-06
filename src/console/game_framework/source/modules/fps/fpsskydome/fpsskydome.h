@@ -39,19 +39,22 @@ namespace RWS
       *  a scene that is very far away from the viewer i.e. the sky.
       *
       */
-      class FPSSkyDome: public FPSRender
+      class FPSSkyDome : public FPSRender
       {
-         public:
+      public:
 
-            RWS_MAKENEWCLASS(FPSSkyDome);
-            RWS_DECLARE_CLASSID(FPSSkyDome);
-            RWS_CATEGORY("FPS");
-            RWS_DESCRIPTION("Sky Dome Rendering Behavior", "All the functionality of FPSRender, but always rendered as if camera is at origin.");
+         RWS_MAKENEWCLASS(FPSSkyDome);
+         RWS_DECLARE_CLASSID(FPSSkyDome);
+         RWS_CATEGORY("FPS");
+         RWS_DESCRIPTION("Sky Dome Rendering Behavior", "All the functionality of FPSRender, but always rendered as if camera is at origin.");
 
-            FPSSkyDome(const CAttributePacket& rAttr) : FPSRender(rAttr) {}
-            ~FPSSkyDome(void) {}
+         FPSSkyDome(const CAttributePacket& rAttr) :
+            FPSRender(rAttr)
+         {
+         }
+         ~FPSSkyDome(void) {}
 
-            virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
       };
    }
 }

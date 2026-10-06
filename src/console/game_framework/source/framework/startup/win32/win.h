@@ -44,7 +44,7 @@ namespace RWS
       *  \li iMsgResizeCameraRasters
       *  Sent if main raster is resized, where the main raster represents the visible display area.
       */
-      
+
       RWS_DEFINE_EVENT(iMsgResizeCameraRasters, 0, "If the main Camera is resized, any sub-rasters need to update");
 
       HWND GetMainWindow();

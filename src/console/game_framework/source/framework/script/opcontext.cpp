@@ -3,8 +3,8 @@
 namespace Script
 {
 
-    bool OpContext::load(char *pszTypeName, void **ppData) {
-        
-    }
+   bool OpContext::load(char *pszTypeName, void **ppData)
+   {
+   }
 
 } // namespace Script

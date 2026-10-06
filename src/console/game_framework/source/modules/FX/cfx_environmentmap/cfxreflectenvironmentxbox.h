@@ -30,7 +30,7 @@
 
 #ifndef __CFXREFLECTENVIRONMENTXBOX_H__H_
 #define _CFXREFLECTENVIRONMENTXBOX_H_
-          
+
 //////////////////////////////////////////////////////////////////
 //
 // RenderWare Includes
@@ -39,8 +39,8 @@
 #include "rpworld.h"
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ namespace RWS
    namespace FX
    {
 
-      const RwReal ENV_MAP_WIDTH  = 256.0f;
+      const RwReal ENV_MAP_WIDTH = 256.0f;
       const RwReal ENV_MAP_HEIGHT = 256.0f;
 
       /**
@@ -66,18 +66,18 @@ namespace RWS
       */
       class CFXReflectEnvironmentXBox //: public CFXReflectEnvironmentCommon
       {
-         public:
+      public:
 
          CFXReflectEnvironmentXBox();
          ~CFXReflectEnvironmentXBox();
 
-         protected:
+      protected:
 
-         void                 UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
+         void UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
 
-         private:
+      private:
 
-         LPDIRECT3DDEVICE8    m_Dev; /**< D3D Device*/
+         LPDIRECT3DDEVICE8 m_Dev; /**< D3D Device*/
       };
 
    } // namespace FX

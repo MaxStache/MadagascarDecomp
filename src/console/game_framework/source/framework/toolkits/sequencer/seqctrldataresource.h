@@ -64,8 +64,8 @@ namespace RWS
       virtual void Close(void);
       virtual RwBool IsHandled(const RwChar *psType);
       virtual void *Load(const RwChar *psName, const RwChar *psType,
-         const RwChar *psResourcePath, RwStream* pStream, RwUInt32 uiStreamSize,
-         RwUInt32 &uiResourceSize);
+                         const RwChar *psResourcePath, RwStream *pStream, RwUInt32 uiStreamSize,
+                         RwUInt32 &uiResourceSize);
       virtual RwBool UnLoad(const RwChar *pStrType, void *pResource);
 
       virtual void Update(const void *pResData,

@@ -95,16 +95,16 @@ static int netstat()
 /*                                                                            */
 /* Returns 0 if successful, non-zero if failed.                               */
 /*----------------------------------------------------------------------------*/
-static int ConnectionThreadLoop ()
+static int ConnectionThreadLoop()
 {
    int RetVal;
    int Flags;
 
    struct sceInetParam InetParams;
-   memset (&InetParams, 0, sizeof (struct sceInetParam));
+   memset(&InetParams, 0, sizeof(struct sceInetParam));
 
    /* generate an address structure that defines any address */
-   RetVal = sceInetName2Address (0, &InetParams.remote_addr, NULL, -1, -1);
+   RetVal = sceInetName2Address(0, &InetParams.remote_addr, NULL, -1, -1);
    if (RetVal != sceINETE_OK)
    {
       printf("Server: sceInetName2Address() failed.(%d)\n", RetVal);
@@ -116,7 +116,7 @@ static int ConnectionThreadLoop ()
    InetParams.local_port = g_nPort;
    InetParams.remote_port = sceINETP_ANY; /* set on first receive for TCP */
 
-   ConnectionID = sceInetCreate (&InetParams);
+   ConnectionID = sceInetCreate(&InetParams);
    if (0 == ConnectionID)
    {
       printf("Server: Connection failed.\n");
@@ -124,10 +124,10 @@ static int ConnectionThreadLoop ()
    }
 
    /* sceInetOpen will block with TCP (until a connection is made or there's an error). */
-   if (sceINETE_OK != (RetVal = sceInetOpen (ConnectionID, -1)))
+   if (sceINETE_OK != (RetVal = sceInetOpen(ConnectionID, -1)))
    {
-      printf ("Server: sceInetOpen() failed.(%d)\n", RetVal);
-      sceInetClose (ConnectionID, 0);
+      printf("Server: sceInetOpen() failed.(%d)\n", RetVal);
+      sceInetClose(ConnectionID, 0);
       ConnectionID = 0;
       return -3;
    }
@@ -136,13 +136,13 @@ static int ConnectionThreadLoop ()
          packets sent - it doesn't work well for rapid sending of small packets (e.g. trace messages) */
    Flags = sceINETC_FLAGS_NODELAY;
    RetVal = sceInetControl(ConnectionID, sceINETC_CODE_SET_FLAGS, &Flags, sizeof(Flags));
-   if ( sceINETE_OK != RetVal )
+   if (sceINETE_OK != RetVal)
    {
-      printf("Server: sceInetControl() failed.(%d)\n", RetVal );
+      printf("Server: sceInetControl() failed.(%d)\n", RetVal);
       return -4;
    }
 
-   printf ("Client connected, ID = %d\n", ConnectionID);
+   printf("Client connected, ID = %d\n", ConnectionID);
 
    return 0;
 }
@@ -152,19 +152,19 @@ static int ConnectionThreadLoop ()
 /*                                                                            */
 /* Returns 0 if successful, non-zero if failed.                               */
 /*----------------------------------------------------------------------------*/
-static int StartConnectionThread ()
+static int StartConnectionThread()
 {
    int nThread;
    struct ThreadParam ThreadParams;
-   ThreadParams.attr         = TH_C;
-   ThreadParams.entry        = ConnectionThreadLoop;
+   ThreadParams.attr = TH_C;
+   ThreadParams.entry = ConnectionThreadLoop;
    ThreadParams.initPriority = 32;/*BASE_priority;*/
-   ThreadParams.stackSize    = 0x800;
-   ThreadParams.option       = 0;
-   nThread = CreateThread (&ThreadParams);
+   ThreadParams.stackSize = 0x800;
+   ThreadParams.option = 0;
+   nThread = CreateThread(&ThreadParams);
    if (nThread > 0)
    {
-      StartThread (nThread, 0);
+      StartThread(nThread, 0);
       return 0;
    }
    return -1;
@@ -175,14 +175,14 @@ static int StartConnectionThread ()
 /*                                                                            */
 /* Handles net "interface up" event                                           */
 /*----------------------------------------------------------------------------*/
-static void EventHandlerFunc (int id, int type)
+static void EventHandlerFunc(int id, int type)
 {
    if (sceINETCTL_IEV_Start == type)
    {
       int ret;
       g_IFID = id;
-      if (KE_OK != (ret = SetEventFlag (g_IFEventID, 0x04))) /* 0x04 = start */
-         printf ("SetEventFlag failed. ret = %d\n", ret);
+      if (KE_OK != (ret = SetEventFlag(g_IFEventID, 0x04))) /* 0x04 = start */
+         printf("SetEventFlag failed. ret = %d\n", ret);
    }
 }
 
@@ -194,14 +194,14 @@ static void EventHandlerFunc (int id, int type)
 /*                                                                            */
 /* Returns 0 if successful, non-zero if failed.                               */
 /*----------------------------------------------------------------------------*/
-int ServerInitialise (int nPort, char * const szIPAddress)
+int ServerInitialise(int nPort, char *const szIPAddress)
 {
    int nRetVal;
    int nState = 0;
    int nInterfaceNum;
    int nInterface = 0;
    int anIFIDs[2];
-   
+
    /* "interface up" event structures */
    struct sceInetCtlEventHandlers EventHandlers;
    struct EventFlagParam EventFlagParams;
@@ -212,33 +212,33 @@ int ServerInitialise (int nPort, char * const szIPAddress)
    if (ConnectionID != 0)
    {
       /* disconnect */
-      printf ("Disconnecting client, ID = %d\n", ConnectionID);
-      sceInetClose (ConnectionID, 0);/*-1);*/
+      printf("Disconnecting client, ID = %d\n", ConnectionID);
+      sceInetClose(ConnectionID, 0);/*-1);*/
       /* check sceInetClose return value? */
    }
    ConnectionID = 0;
-   
+
    /* kick of a thread to listen for connections */
-   StartConnectionThread ();
+   StartConnectionThread();
 
    /* try to find an interface that is already started */
-   if ( 0 == g_IFID )
+   if (0 == g_IFID)
    {
-      nInterfaceNum = sceInetGetInterfaceList(&anIFIDs[0], sizeof(anIFIDs) );
-      if ( nInterfaceNum < 0 )
+      nInterfaceNum = sceInetGetInterfaceList(&anIFIDs[0], sizeof(anIFIDs));
+      if (nInterfaceNum < 0)
       {
          printf("ServerInitialise: sceInetGetInterfaceList failed, code [%d]\n", nInterfaceNum);
       }
 
-      while ( nInterface < nInterfaceNum )
+      while (nInterface < nInterfaceNum)
       {
-         nRetVal = sceInetCtlGetState( anIFIDs[nInterface], &nState );
-         if ( nRetVal != 0 )
+         nRetVal = sceInetCtlGetState(anIFIDs[nInterface], &nState);
+         if (nRetVal != 0)
          {
             printf("ServerInitialise: sceInetCtlGetState failed, code [%d]\n", nRetVal);
          }
-   
-         if ( nState == sceINETCTL_S_STARTED )
+
+         if (nState == sceINETCTL_S_STARTED)
          {
             g_IFID = anIFIDs[nInterface];
             break;
@@ -255,33 +255,33 @@ int ServerInitialise (int nPort, char * const szIPAddress)
       EventFlagParams.initPattern = 0;
       EventFlagParams.option = 0;
 
-      g_IFEventID = CreateEventFlag (&EventFlagParams);
+      g_IFEventID = CreateEventFlag(&EventFlagParams);
       if (g_IFEventID < 0)
          return -1;
 
       /* set up event handler function */
       EventHandlers.func = EventHandlerFunc;
 
-      nRetVal = sceInetCtlRegisterEventHandler (&EventHandlers);
+      nRetVal = sceInetCtlRegisterEventHandler(&EventHandlers);
       if (nRetVal < 0)
          return -2;
 
       /* wait for net interface to start */
-      nRetVal = WaitEventFlag (g_IFEventID, 0x04, EW_OR, NULL); /* 0x04 = start */
+      nRetVal = WaitEventFlag(g_IFEventID, 0x04, EW_OR, NULL); /* 0x04 = start */
       if (nRetVal != KE_OK)
          return -3;
    }
 
    /* get receiving address */
-   if ((nRetVal = sceInetInterfaceControl (g_IFID,
-                                           sceInetCC_GetAddress,
-                                           &Address,
-                                           sizeof (struct sceInetAddress))) < 0)
+   if ((nRetVal = sceInetInterfaceControl(g_IFID,
+                                          sceInetCC_GetAddress,
+                                          &Address,
+                                          sizeof(struct sceInetAddress))) < 0)
    {
       return -4;
    }
 
-   if (sceInetAddress2String (szIPAddress, 128, &Address) < 0)
+   if (sceInetAddress2String(szIPAddress, 128, &Address) < 0)
       return -5;
 
    return 0; /* OK */
@@ -295,7 +295,7 @@ int ServerInitialise (int nPort, char * const szIPAddress)
 /*                                                                            */
 /* Returns the number of bytes received.                                      */
 /*----------------------------------------------------------------------------*/
-int ServerListen (void *pData, int nDataSize, int nTimeout)
+int ServerListen(void *pData, int nDataSize, int nTimeout)
 {
    /* if connected, try to receive some bytes */
    if (ConnectionID != 0)
@@ -303,9 +303,9 @@ int ServerListen (void *pData, int nDataSize, int nTimeout)
       int Flags;
       int nRetVal;
 
-      nDataSize -= sizeof (int); /* 1st returned byte is number of bytes */
-      nRetVal = sceInetRecv (ConnectionID, (int *)pData + 1,
-                                nDataSize, &Flags, nTimeout);
+      nDataSize -= sizeof(int); /* 1st returned byte is number of bytes */
+      nRetVal = sceInetRecv(ConnectionID, (int *)pData + 1,
+                            nDataSize, &Flags, nTimeout);
 
       return nRetVal;
    }
@@ -320,16 +320,16 @@ int ServerListen (void *pData, int nDataSize, int nTimeout)
 /*                                                                            */
 /* Returns the number of bytes sent.                                          */
 /*----------------------------------------------------------------------------*/
-int ServerMessage (void *pData, int nDataSize, int nTimeout)
+int ServerMessage(void *pData, int nDataSize, int nTimeout)
 {
    /* send message to client */
    if (ConnectionID != 0)
    {
-      int Flags = 0;/*sceINETF_PSH;*/ /*sceINETF_URG*/
+      int Flags = 0; /*sceINETF_PSH;*/ /*sceINETF_URG*/
       int nRetVal;
 
-      nRetVal = sceInetSend (ConnectionID, pData, nDataSize, &Flags, nTimeout);
-      
+      nRetVal = sceInetSend(ConnectionID, pData, nDataSize, &Flags, nTimeout);
+
       return nRetVal;
    }
    return 0;
@@ -342,12 +342,12 @@ int ServerMessage (void *pData, int nDataSize, int nTimeout)
 /*                                                                            */
 /* Returns 0.                                                                 */
 /*----------------------------------------------------------------------------*/
-int ServerStop ()
+int ServerStop()
 {
    if (ConnectionID)
    {
       /* disconnect */
-      sceInetClose (ConnectionID, 0);
+      sceInetClose(ConnectionID, 0);
    }
    ConnectionID = 0;
 

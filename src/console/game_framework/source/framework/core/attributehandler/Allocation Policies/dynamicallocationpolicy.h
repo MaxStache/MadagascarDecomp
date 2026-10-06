@@ -32,42 +32,42 @@ namespace RWS
 
    class DynamicAllocationPolicy
    {
-      public:
-      static RwBool UseLinearMemory() {return false;}
+   public:
+      static RwBool UseLinearMemory() { return false; }
 
       // Needed for RWS_NEW macro expansion of new operator
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
 
-      void * operator new(size_t size, const RwUInt32 Type)
+      void *operator new(size_t size, const RwUInt32 Type)
       {
          return MemHandlerNewEx(size, Type);
       }
 
-      void * operator new[](size_t size, const RwUInt32 Type)
+      void *operator new[](size_t size, const RwUInt32 Type)
       {
          return MemHandlerNewEx(size, Type);
       }
 
 #else
 
-      void * operator new(size_t size, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void *operator new(size_t size, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          return MemHandlerNewEx(size, File, Line, Type);
       }
 
-      void * operator new[](size_t size, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void *operator new[](size_t size, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          return MemHandlerNewEx(size, File, Line, Type);
       }
 
 #endif
-      
+
       void *operator new(size_t size)
       {
          return MemHandlerNew(size);
       }
-      
+
       void *operator new[](size_t size)
       {
          return MemHandlerNew(size);
@@ -75,15 +75,15 @@ namespace RWS
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
 
-      void operator delete(void * pObj, const RwUInt32 Type)
+      void operator delete(void *pObj, const RwUInt32 Type)
       {
          if (pObj)
          {
             MemHandlerDel(pObj);
          }
       };
-         
-      void operator delete[](void * pObj, const RwUInt32 Type)
+
+      void operator delete[](void *pObj, const RwUInt32 Type)
       {
          if (pObj)
          {
@@ -93,15 +93,15 @@ namespace RWS
 
 #else
 
-      void operator delete(void * pObj, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void operator delete(void *pObj, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          if (pObj)
          {
             MemHandlerDel(pObj);
          }
       };
-         
-      void operator delete[](void * pObj, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+
+      void operator delete[](void *pObj, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          if (pObj)
          {

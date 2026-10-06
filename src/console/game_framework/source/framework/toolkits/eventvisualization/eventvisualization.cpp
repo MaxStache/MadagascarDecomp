@@ -34,7 +34,7 @@
 //
 #include "rprandom.h"
 #ifdef _MSC_VER
-#pragma comment (lib, "rprandom.lib")
+#pragma comment(lib, "rprandom.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -55,7 +55,8 @@ namespace RWS
    *
    *  Constructor fo CEventVisualizer class.
    */
-   CEventVisualizer::CEventVisualizer() :InitCEventHandler(0)
+   CEventVisualizer::CEventVisualizer() :
+      InitCEventHandler(0)
    {
       RWS_FUNCTION("RWS::CEventVisualizer::CEventVisualizer");
 
@@ -127,7 +128,7 @@ namespace RWS
 
       if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_message_flow_debug_info))
       {
-         EventData *pEventData = static_cast<EventData*>(pMsg.pData);
+         EventData *pEventData = static_cast<EventData *>(pMsg.pData);
 
          RwV3d DummySrcVect;
 
@@ -143,7 +144,7 @@ namespace RWS
             // If no world co-ords can be obtained for the destination then
             // it cannot be visualized.
             //
-            RWS_RETURNVOID ();
+            RWS_RETURNVOID();
          }
 
          if (pEventData->m_pSrc && pEventData->m_pSrc->Get_m_pCEventVisualization())
@@ -165,10 +166,10 @@ namespace RWS
          }
 
          RwV3d TextVect;
-      
+
          RwV3dAdd(&TextVect, pSrcVect, pDstVect);
          RwV3dScale(&TextVect, &TextVect, 0.5f);
-      
+
 #ifdef RWS_DEBUGTOOLS
          if (pEventData->m_pRegisteredEvent && pEventData->m_pRegisteredEvent->p_msgname)
          {
@@ -193,7 +194,7 @@ namespace RWS
       RWS_FUNCTION("RWS::CEventVisualizer::Process_iMsgEventDeleted");
 
 #ifdef _DEBUG
-      CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs*>(pMsg.pData);
+      CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs *>(pMsg.pData);
 
       pCRegisteredMsgs = pCRegisteredMsgs; // Prevent unused variable warning
 #endif
@@ -226,7 +227,7 @@ namespace RWS
 
       if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_message_flow_debug_info))
       {
-         CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs*>(pMsg.pData);
+         CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs *>(pMsg.pData);
 
 #ifdef RWS_DEBUGTOOLS
          m_uiDepth++;
@@ -251,7 +252,7 @@ namespace RWS
       if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_message_flow_debug_info))
       {
 #ifdef _DEBUG
-         CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs*>(pMsg.pData);
+         CRegisteredMsgs *pCRegisteredMsgs = static_cast<CRegisteredMsgs *>(pMsg.pData);
 
          pCRegisteredMsgs = pCRegisteredMsgs;   // Prevent unused variable warning
 #endif

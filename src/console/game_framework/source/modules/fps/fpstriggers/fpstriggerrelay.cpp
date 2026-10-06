@@ -51,7 +51,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSTriggerRelay);
       RWS_REGISTERCLASS(FPSTriggerRelay);
-      
+
       /**
       *
       * \ref FPSTriggerRelay. Constructor for FPSTriggerRelay.
@@ -59,19 +59,21 @@ namespace RWS
       * \see ~FPSTriggerRelay.
       *
       */
-      FPSTriggerRelay::FPSTriggerRelay(const CAttributePacket& attr) : InitCEventHandler(&m_pAtomic), m_state(State_Waiting)
+      FPSTriggerRelay::FPSTriggerRelay(const CAttributePacket& attr) :
+         InitCEventHandler(&m_pAtomic),
+         m_state(State_Waiting)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::FPSTriggerRelay");
-         
+
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-         
+
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref ~FPSTriggerRelay. Destructor for FPSTriggerRelay.
@@ -82,17 +84,17 @@ namespace RWS
       FPSTriggerRelay::~FPSTriggerRelay(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::~FPSTriggerRelay");
-         
+
          UnLinkMsg(m_targetname);
          UnLinkMsg(iMsgRunningTick);
          UnRegisterMsg(m_targetname);
          UnRegisterMsg(m_target);
          UnRegisterMsg(m_killtarget);
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -101,30 +103,30 @@ namespace RWS
       *  
       * \ref iMsgRunningTick
       */
-      void FPSTriggerRelay::HandleEvents(CMsg &pMsg)
+      void FPSTriggerRelay::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::HandleEvents");
-         
+
          switch (m_state)
          {
          case State_Waiting:
             if (pMsg.Id == m_targetname)
             {
-               TriggerEvent( );
+               TriggerEvent();
             }
             break;
-            
+
          case State_Delayed:
             if (pMsg.Id == iMsgRunningTick)
             {
-               TriggerDelayed( );
+               TriggerDelayed();
             }
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref TriggerEvent. Trigger Target event and kill target.
@@ -132,32 +134,32 @@ namespace RWS
       * \see TriggerEvent, TriggerDelayed
       *
       */
-      void FPSTriggerRelay::TriggerEvent( void )
+      void FPSTriggerRelay::TriggerEvent(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::TriggerEvent");
-         
+
          if (m_delay == 0)
          {
             CMsg msg(m_target, RpAtomicGetFrame(m_pAtomic.ptr()));
-            
+
             // Send Event m_target
             SendMsg(msg);
-            
+
             // Kill all attached to Event m_killtarget
             RegisterToDeleteEventHandlers(m_killtarget);
          }
          else
          {
             LinkMsg(iMsgRunningTick);
-            
+
             m_delay_count = 0;
             m_state = State_Delayed;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /*
       *
       * \ref TriggerDelayed. Trigger event after delay.
@@ -165,49 +167,49 @@ namespace RWS
       * \see TriggerEvent, TriggerDelayed
       *
       */
-      void FPSTriggerRelay::TriggerDelayed( void )
+      void FPSTriggerRelay::TriggerDelayed(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::TriggerDelayed");
-         
+
          m_delay_count++;
-         
+
          if (m_delay_count >= m_delay)
          {
             CMsg msg(m_target, RpAtomicGetFrame(m_pAtomic.ptr()));
-            
+
             // Send Event m_target
             SendMsg(msg);
-            
+
             // Kill all attached to Event m_killtarget
             RegisterToDeleteEventHandlers(m_killtarget);
-            
+
             UnLinkMsg(iMsgRunningTick);
-            
+
             m_state = State_Waiting;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
-      
+
+
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */   
+      */
       void FPSTriggerRelay::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSTriggerRelay::HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          // Initialize atomic/clump/frame
-         m_pAtomic.HandleSystemCommands(attr); 
-         
+         m_pAtomic.HandleSystemCommands(attr);
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSTriggerRelay));
-         
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -215,35 +217,35 @@ namespace RWS
             case CMD_targetname:
                ReplaceLinkedMsg(m_targetname, attrIt->GetAs_RwChar_ptr(), 0);
                break;
-               
+
             case CMD_target:
                ReplaceRegisteredMsg(m_target, attrIt->GetAs_RwChar_ptr(), "RwFrame*");
                break;
-               
+
             case CMD_killtarget:
                {
-                  const RwChar *name;
-                  
+                  const RwChar* name;
+
                   attrIt->GetCommandData(&name);
-                  
+
                   UnRegisterMsg(m_killtarget);
                   RegisterMsg(m_killtarget, name, 0);
                }
                break;
-               
+
             case CMD_delay:
                {
                   RwReal t;
-                  
+
                   attrIt->GetCommandData(t);
-                  
+
                   m_delay = static_cast<RwUInt32>(t * RWS::MainLoop::Logic::Rate);
                }
                break;
             }
             ++attrIt;
          }
-         
+
          RWS_RETURNVOID();
       }
    }

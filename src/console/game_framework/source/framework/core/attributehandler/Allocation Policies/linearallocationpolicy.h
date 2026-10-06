@@ -34,19 +34,19 @@ namespace RWS
 
    class LinearAllocationPolicy
    {
-      public:
+   public:
 
-      static RwBool UseLinearMemory() {return true;}
+      static RwBool UseLinearMemory() { return true; }
 
-      // Needed for RWS_NEW macro expansion of new operator      
+      // Needed for RWS_NEW macro expansion of new operator
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
 
-      void * operator new(size_t size, const RwUInt32 Type)
+      void *operator new(size_t size, const RwUInt32 Type)
       {
          if (size % CClassFactory::m_AlignmentSize)
          {
-            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize );
+            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize);
          }
 
          void *ptr = CLinearMemoryManager::Instance()->RequestMemory(size);
@@ -55,22 +55,21 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHintEx(size, Type, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHintEx(size, Type, rwMEMHINTDUR_GLOBAL);
          }
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
 
          return ptr;
-         
       }
 
-      void * operator new[](size_t size, const RwUInt32 Type)
+      void *operator new[](size_t size, const RwUInt32 Type)
       {
          if (size % CClassFactory::m_AlignmentSize)
          {
-            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize );
+            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize);
          }
 
          void *ptr = CLinearMemoryManager::Instance()->RequestMemory(size);
@@ -79,24 +78,23 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHintEx(size, Type, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHintEx(size, Type, rwMEMHINTDUR_GLOBAL);
          }
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
 
          return ptr;
-         
       }
 
 #else
 
-      void * operator new(size_t size, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void *operator new(size_t size, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          if (size % CClassFactory::m_AlignmentSize)
          {
-            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize );
+            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize);
          }
 
          void *ptr = CLinearMemoryManager::Instance()->RequestMemory(size);
@@ -105,22 +103,21 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHintEx(size, File, Line, Type, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHintEx(size, File, Line, Type, rwMEMHINTDUR_GLOBAL);
          }
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
 
          return ptr;
-         
       }
 
-      void * operator new[](size_t size, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void *operator new[](size_t size, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
          if (size % CClassFactory::m_AlignmentSize)
          {
-            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize );
+            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize);
          }
 
          void *ptr = CLinearMemoryManager::Instance()->RequestMemory(size);
@@ -129,15 +126,14 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHintEx(size, File, Line, Type, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHintEx(size, File, Line, Type, rwMEMHINTDUR_GLOBAL);
          }
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
 
          return ptr;
-         
       }
 
 #endif
@@ -147,7 +143,7 @@ namespace RWS
          // Check the passed in size will align the next allocation on the boundary alignment.
          if (size % CClassFactory::m_AlignmentSize)
          {
-            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize );
+            size += CClassFactory::m_AlignmentSize - (size % CClassFactory::m_AlignmentSize);
          }
 
          void *ptr = CLinearMemoryManager::Instance()->RequestMemory(size);
@@ -156,12 +152,12 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHint(size, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHint(size, rwMEMHINTDUR_GLOBAL);
          }
 
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
 
          return ptr;
@@ -175,18 +171,18 @@ namespace RWS
 
          if (!ptr)
          {
-           ptr = MemHandlerNewHint(size, rwMEMHINTDUR_GLOBAL);
+            ptr = MemHandlerNewHint(size, rwMEMHINTDUR_GLOBAL);
          }
 #else
          RWS_ASSERT(ptr != 0,
-               "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
+                    "PlacementNewPolicy doesn't expect to perform dynamic initialization in none design mode.");
 #endif
          return ptr;
       }
-   
+
 #ifdef RWS_DISABLE_MEMORY_CHECKING
 
-      void operator delete(void * pObj, const RwUInt32 Type)
+      void operator delete(void *pObj, const RwUInt32 Type)
       {
 #ifdef RWS_DESIGN
          if (pObj)
@@ -204,7 +200,7 @@ namespace RWS
 #endif
       };
 
-      void operator delete[](void * pObj, const RwUInt32 Type)
+      void operator delete[](void *pObj, const RwUInt32 Type)
       {
 #ifdef RWS_DESIGN
          if (pObj)
@@ -224,7 +220,7 @@ namespace RWS
 
 #else
 
-      void operator delete(void * pObj, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void operator delete(void *pObj, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
 #ifdef RWS_DESIGN
          if (pObj)
@@ -242,7 +238,7 @@ namespace RWS
 #endif
       };
 
-      void operator delete[](void * pObj, const RwChar * File, const RwInt32 Line, const RwUInt32 Type)
+      void operator delete[](void *pObj, const RwChar *File, const RwInt32 Line, const RwUInt32 Type)
       {
 #ifdef RWS_DESIGN
          if (pObj)

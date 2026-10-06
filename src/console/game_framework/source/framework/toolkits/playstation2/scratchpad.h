@@ -29,7 +29,7 @@
 #ifndef __SCRATCHPAD_H_
 #define __SCRATCHPAD_H_
 
-// In the RWDMA_SPR_WAIT_ON_TO macro, the line 
+// In the RWDMA_SPR_WAIT_ON_TO macro, the line
 //    while (*(volatile RwUInt32*)(0x1000d400) & 0x100);
 // produces a warning from the MW compiler about the semi-colon. So,
 // turn off the warning to avoid generating it every time the functions
@@ -37,7 +37,7 @@
 #if defined(__MWERKS__)
 #pragma warn_possunwant off
 #endif
-            
+
 #include "precomp.h"
 
 
@@ -51,7 +51,7 @@ namespace RWS
       *
       *  Size of the scratchpad, in bytes
       */
-      static const RwUInt32 SCRATCHPAD_SIZE = 16384;  
+      static const RwUInt32 SCRATCHPAD_SIZE = 16384;
 
       /**
       *
@@ -63,7 +63,7 @@ namespace RWS
       class CScratchPad
       {
       public:
-         
+
          /**
          *
          *  Transfers data to the scratchpad, using the ToSPR DMA channel.
@@ -85,30 +85,29 @@ namespace RWS
          *  \see CScratchPad::WaitOnUpload
          *
          */
-         template<class SrcType, class DestType>
-         static SrcType Upload( DestType pDst, SrcType pSrc, RwUInt32 uQWords )
+         template <class SrcType, class DestType>
+         static SrcType Upload(DestType pDst, SrcType pSrc, RwUInt32 uQWords)
          {
-            RWS_ASSERT( ((RwUInt32)pDst % 16) == 0, 
-                        "Destination address is not 16Byte aligned.");
+            RWS_ASSERT(((RwUInt32)pDst % 16) == 0,
+                       "Destination address is not 16Byte aligned.");
 
-            RWS_ASSERT( (((RwUInt32)pDst >= RWDMA_SCRATCHPAD)
-                         && ((RwUInt32)pDst <= (RWDMA_SCRATCHPAD + SCRATCHPAD_SIZE))),
-                        "Destination address is not within the scratchpad.");
+            RWS_ASSERT((((RwUInt32)pDst >= RWDMA_SCRATCHPAD) && ((RwUInt32)pDst <= (RWDMA_SCRATCHPAD + SCRATCHPAD_SIZE))),
+                       "Destination address is not within the scratchpad.");
 
-            RWS_ASSERT( ((RwUInt32)pSrc % 16) == 0, 
-                        "Source address is not 16Byte aligned.");
+            RWS_ASSERT(((RwUInt32)pSrc % 16) == 0,
+                       "Source address is not 16Byte aligned.");
 
-            RWS_ASSERT( uQWords < (SCRATCHPAD_SIZE >> 4),
-                        "There is not enough room on the scratchpad for this data.");
+            RWS_ASSERT(uQWords < (SCRATCHPAD_SIZE >> 4),
+                       "There is not enough room on the scratchpad for this data.");
 
-            RWS_ASSERT( RwCameraGetCurrentCamera() == NULL,
-                        "Cannot use the scratchpad during rendering - RenderWare \
+            RWS_ASSERT(RwCameraGetCurrentCamera() == NULL,
+                       "Cannot use the scratchpad during rendering - RenderWare \
                          Graphics uses it to build DMA packets.");
 
-            RWDMA_SPR_WAIT_ON_TO();            
-            RWDMA_SPR_CPY_TO( pDst, pSrc, uQWords );
+            RWDMA_SPR_WAIT_ON_TO();
+            RWDMA_SPR_CPY_TO(pDst, pSrc, uQWords);
 
-            return( reinterpret_cast<SrcType>(pDst) );
+            return (reinterpret_cast<SrcType>(pDst));
          }
 
          /**
@@ -131,30 +130,29 @@ namespace RWS
          *  \see CScratchPad::WaitOnDownload
          *
          */
-         template<class SrcType, class DestType>
-         static DestType Download( DestType pDst, SrcType pSrc, RwUInt32 uQWords )
+         template <class SrcType, class DestType>
+         static DestType Download(DestType pDst, SrcType pSrc, RwUInt32 uQWords)
          {
-            RWS_ASSERT( ((RwUInt32)pDst % 16) == 0, 
-                        "Destination address is not 16Byte aligned");
+            RWS_ASSERT(((RwUInt32)pDst % 16) == 0,
+                       "Destination address is not 16Byte aligned");
 
-            RWS_ASSERT( ((RwUInt32)pSrc % 16) == 0, 
-                        "Source address is not 16Byte aligned");
+            RWS_ASSERT(((RwUInt32)pSrc % 16) == 0,
+                       "Source address is not 16Byte aligned");
 
-            RWS_ASSERT( (((RwUInt32)pSrc >= RWDMA_SCRATCHPAD)
-                         && ((RwUInt32)pSrc <= (RWDMA_SCRATCHPAD + SCRATCHPAD_SIZE))),
-                        "Source address is not within the scratchpad.");
+            RWS_ASSERT((((RwUInt32)pSrc >= RWDMA_SCRATCHPAD) && ((RwUInt32)pSrc <= (RWDMA_SCRATCHPAD + SCRATCHPAD_SIZE))),
+                       "Source address is not within the scratchpad.");
 
-            RWS_ASSERT( uQWords < (SCRATCHPAD_SIZE >> 4), 
-                        "Cannot transfer more data than is on the scratchpad.");
+            RWS_ASSERT(uQWords < (SCRATCHPAD_SIZE >> 4),
+                       "Cannot transfer more data than is on the scratchpad.");
 
-            RWS_ASSERT( RwCameraGetCurrentCamera() == NULL,
-                        "Cannot use the scratchpad during rendering - RenderWare \
+            RWS_ASSERT(RwCameraGetCurrentCamera() == NULL,
+                       "Cannot use the scratchpad during rendering - RenderWare \
                          Graphics uses it to build DMA packets.");
 
             RWDMA_SPR_WAIT_ON_FROM();
-            RWDMA_SPR_CPY_FROM( pDst, pSrc, uQWords );
+            RWDMA_SPR_CPY_FROM(pDst, pSrc, uQWords);
 
-            return( reinterpret_cast<DestType>(pDst) );
+            return (reinterpret_cast<DestType>(pDst));
          }
 
          /**
@@ -164,7 +162,7 @@ namespace RWS
          */
          static void WaitOnUpload()
          {
-            RWDMA_SPR_WAIT_ON_TO();       
+            RWDMA_SPR_WAIT_ON_TO();
          }
 
          /**

@@ -55,7 +55,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CSubRasterCamera);
       RWS_REGISTERCLASS(CSubRasterCamera);
-      
+
       /**
       *
       *  Create CSubRasterCamera object.
@@ -63,7 +63,8 @@ namespace RWS
       *  \params attr reference to a CAttributePacket object.
       *
       */
-      CSubRasterCamera::CSubRasterCamera(const CAttributePacket& attr) : InitCEventHandler(&m_pCamera),
+      CSubRasterCamera::CSubRasterCamera(const CAttributePacket &attr) :
+         InitCEventHandler(&m_pCamera),
          m_top(0.25f),
          m_bottom(0.75f),
          m_left(0.25f),
@@ -138,19 +139,23 @@ namespace RWS
 
          // if right is less than left, make left = right
          //
-         tmp_left = m_left; if (m_right < m_left) tmp_left = m_right;
+         tmp_left = m_left;
+         if (m_right < m_left) tmp_left = m_right;
 
          // if left is greater than right, make right = left
          //
-         tmp_right = m_right; if (m_left > m_right) tmp_right = m_left;
+         tmp_right = m_right;
+         if (m_left > m_right) tmp_right = m_left;
 
          // if bottom is less than top then top = bottom
          //
-         tmp_top = m_top; if (m_bottom < m_top) tmp_top = m_bottom;
+         tmp_top = m_top;
+         if (m_bottom < m_top) tmp_top = m_bottom;
 
          // if top is greater than bottom then bottom = top
          //
-         tmp_bottom = m_bottom; if (m_top > m_bottom) tmp_bottom = m_top;
+         tmp_bottom = m_bottom;
+         if (m_top > m_bottom) tmp_bottom = m_top;
 
          RwRect rect;
 
@@ -162,7 +167,7 @@ namespace RWS
 
          if (rect.w != 0 && rect.h != 0)
          {
-            RWS_TRACE("rect "<<rect.x<<" "<<rect.y<<" "<<rect.w<<" "<<rect.h);
+            RWS_TRACE("rect " << rect.x << " " << rect.y << " " << rect.w << " " << rect.h);
 
             m_pCamera = CameraHelper::CreateSubRasterCamera(rect);
          }
@@ -172,10 +177,10 @@ namespace RWS
 
             m_pCamera = 0;
          }
-         
+
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Handle events:
@@ -204,7 +209,7 @@ namespace RWS
             //
             if (pMsg.pData)
             {
-               RwCamera *pInputCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
+               RwCamera *pInputCamera = reinterpret_cast<RwCamera *>(pMsg.pData);
 
                RWS_ASSERTE(pInputCamera);
 
@@ -243,7 +248,7 @@ namespace RWS
 #endif
          RWS_RETURNVOID();
       }
-      
+
       /**
       *
       *  Handle attributes
@@ -251,16 +256,16 @@ namespace RWS
       *  \params attr reference to a CAttributePacket object.
       *
       */
-      void CSubRasterCamera::HandleAttributes(const CAttributePacket& attr)
+      void CSubRasterCamera::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::Generic::CSubRasterCamera:HandleAttributes");
-         
+
          CAttributeHandler::HandleAttributes(attr);
-         
+
          m_pCamera.HandleSystemCommands(attr);
-         
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CSubRasterCamera));
-         
+
          bool flag = false;   // Camera needs to be re-created
 
          while (!attrIt.IsFinished())
@@ -268,51 +273,51 @@ namespace RWS
             switch (attrIt->GetCommandId())
             {
                   //////////////////////////////////////////////////////////////////
-               case CMD_In:
+            case CMD_In:
                   //////////////////////////////////////////////////////////////////
-                  UnLinkMsg(m_Render_In);
-                  UnRegisterMsg(m_Render_In);
-                  RegisterMsg(m_Render_In, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-                  LinkMsg(m_Render_In, "RwCamera*", m_link_priority);
+               UnLinkMsg(m_Render_In);
+               UnRegisterMsg(m_Render_In);
+               RegisterMsg(m_Render_In, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+               LinkMsg(m_Render_In, "RwCamera*", m_link_priority);
                break;
                   //////////////////////////////////////////////////////////////////
-               case CMD_priority:
+            case CMD_priority:
                   //////////////////////////////////////////////////////////////////
-                  m_link_priority = attrIt->GetAs_RwUInt32();
+               m_link_priority = attrIt->GetAs_RwUInt32();
                   // If already linked, unlink as were about to relink at a different priority
                   //
-                  UnLinkMsg(m_Render_In);
-                  LinkMsg(m_Render_In, "RwCamera*", m_link_priority);
-                  break;
-                  //////////////////////////////////////////////////////////////////
-               case CMD_Out:
-                  //////////////////////////////////////////////////////////////////
-                  ReplaceRegisteredMsg(m_Render_Out, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+               UnLinkMsg(m_Render_In);
+               LinkMsg(m_Render_In, "RwCamera*", m_link_priority);
                break;
                   //////////////////////////////////////////////////////////////////
-               case CMD_Left:
+            case CMD_Out:
                   //////////////////////////////////////////////////////////////////
-                  attrIt->GetCommandData(m_left);
-                  flag = true;
-                  break;
+               ReplaceRegisteredMsg(m_Render_Out, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+               break;
                   //////////////////////////////////////////////////////////////////
-               case CMD_Right:
+            case CMD_Left:
                   //////////////////////////////////////////////////////////////////
-                  attrIt->GetCommandData(m_right);
-                  flag = true;
-                  break;
+               attrIt->GetCommandData(m_left);
+               flag = true;
+               break;
                   //////////////////////////////////////////////////////////////////
-               case CMD_Top:
+            case CMD_Right:
                   //////////////////////////////////////////////////////////////////
-                  attrIt->GetCommandData(m_top);
-                  flag = true;
-                  break;
+               attrIt->GetCommandData(m_right);
+               flag = true;
+               break;
                   //////////////////////////////////////////////////////////////////
-               case CMD_Bottom:
+            case CMD_Top:
                   //////////////////////////////////////////////////////////////////
-                  attrIt->GetCommandData(m_bottom);
-                  flag = true;
-                  break;
+               attrIt->GetCommandData(m_top);
+               flag = true;
+               break;
+                  //////////////////////////////////////////////////////////////////
+            case CMD_Bottom:
+                  //////////////////////////////////////////////////////////////////
+               attrIt->GetCommandData(m_bottom);
+               flag = true;
+               break;
             }
             ++attrIt;
          }

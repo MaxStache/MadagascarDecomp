@@ -27,7 +27,7 @@
 //#define RWS_TRACEENABLE
 
 #ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ namespace
    */
    struct cstrless : std::binary_function<const char*, const char*, bool>
    {
-      bool operator() (const char* x, const char* y) const
+      bool operator()(const char* x, const char* y) const
       {
          return strcmp(x, y) < 0;
       }
@@ -74,8 +74,8 @@ namespace
    */
    struct SClassInfo
    {
-      RWS::MakeNewPtr  MakeNewFunc; /**< Pointer to class's make new function */
-      size_t      size;             /**< Size of class in bytes */
+      RWS::MakeNewPtr MakeNewFunc; /**< Pointer to class's make new function */
+      size_t size;             /**< Size of class in bytes */
    };
 
    /*
@@ -102,7 +102,7 @@ namespace RWS
 {
    namespace CClassFactory
    {
-   
+
       /**
       *
       *  \ingroup CClassFactory
@@ -120,7 +120,7 @@ namespace RWS
          RWS_PRE(pClassName)
 
          NameToPtrMap::iterator foundIt = GetNameToPtrMap().find(pClassName);
-         SClassInfo * pclassInfo = GetNameToPtrMap().end() != foundIt ? (*foundIt).second : 0;
+         SClassInfo* pclassInfo = GetNameToPtrMap().end() != foundIt ? (*foundIt).second : 0;
 
          if (!pclassInfo)
             RWS_RETURN(0);
@@ -169,9 +169,9 @@ namespace RWS
          RWS_FUNCTION("RWS::CClassFactory::RegisterClass")
 
          RWS_PRE(pClassName)
-         RWS_PRE( !ClassIsRegistered(pClassName) )
+         RWS_PRE(!ClassIsRegistered(pClassName))
 
-         SClassInfo* pClassInfo = (SClassInfo *)new(SClassInfo);
+         SClassInfo* pClassInfo = (SClassInfo*)new (SClassInfo);
 
          pClassInfo->MakeNewFunc = makeNewFn;
          pClassInfo->size = 0;
@@ -183,17 +183,17 @@ namespace RWS
             if (size % m_AlignmentSize)
                pClassInfo->size += m_AlignmentSize - (size % m_AlignmentSize);
 
-            RWS_TRACE(" "<<pClassName<<" Actual size : "<<size<<" Aligned size: "<<pClassInfo->size);
+            RWS_TRACE(" " << pClassName << " Actual size : " << size << " Aligned size: " << pClassInfo->size);
          }
          else
          {
-            RWS_TRACE(" "<<pClassName<<" Actual size : "<<size);
+            RWS_TRACE(" " << pClassName << " Actual size : " << size);
          }
 
 
          GetNameToPtrMap().insert(std::make_pair(pClassName, pClassInfo));
 
-         RWS_POST( ClassIsRegistered(pClassName) )
+         RWS_POST(ClassIsRegistered(pClassName))
 
          RWS_RETURNVOID()
       }
@@ -210,20 +210,20 @@ namespace RWS
       *  \return pointer to a CAttributeHandler object.
       *
       */
-      CAttributeHandler *MakeNew(const char* pClassName, const CAttributePacket& rAttr)
+      CAttributeHandler* MakeNew(const char* pClassName, const CAttributePacket& rAttr)
       {
          RWS_FUNCTION("RWS::CClassFactory::GetMakeNew")
 
          RWS_PRE(pClassName)
 
          NameToPtrMap::iterator foundIt = GetNameToPtrMap().find(pClassName);
-         SClassInfo * pclassInfo = GetNameToPtrMap().end() != foundIt ? (*foundIt).second : 0;
-         
-         RWS_WARNING(pclassInfo, pClassName<<" is not registered on this target and so cannot be created.");
+         SClassInfo* pclassInfo = GetNameToPtrMap().end() != foundIt ? (*foundIt).second : 0;
+
+         RWS_WARNING(pclassInfo, pClassName << " is not registered on this target and so cannot be created.");
 
          if (pclassInfo && pclassInfo->MakeNewFunc)
          {
-            CAttributeHandler *pCAttributeHandler = pclassInfo->MakeNewFunc(rAttr);
+            CAttributeHandler* pCAttributeHandler = pclassInfo->MakeNewFunc(rAttr);
 
             if (pCAttributeHandler)
             {
@@ -275,7 +275,7 @@ namespace RWS
          }
 
          GetNameToPtrMap().clear();
-         
+
          RWS_RETURNVOID()
       }
    }

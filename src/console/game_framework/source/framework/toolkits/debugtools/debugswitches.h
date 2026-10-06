@@ -68,16 +68,16 @@ namespace RWS
       };
 
 #ifdef RWS_DEBUGSWITCHES   // Include debug tools code
-      
+
       extern void SetSwitch(enum_flags var, bool flag);
       extern bool GetSwitch(enum_flags var);
 
       extern void Open(void);
 
-#else          // Exclude debug tools code 
+#else          // Exclude debug tools code
 
       __inline void SetSwitch(enum_flags var, bool flag) {}
-      __inline bool GetSwitch(enum_flags var) {return false;}
+      __inline bool GetSwitch(enum_flags var) { return false; }
 
       __inline void Open(void) {}
 #endif

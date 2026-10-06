@@ -44,14 +44,14 @@
 * See RWS::CClumpPtr::Destroy for details.
 *
 */
-RwBool RpClumpDestroy( RWS::CClumpPtr &rCClumpPtr )
+RwBool RpClumpDestroy(RWS::CClumpPtr &rCClumpPtr)
 {
    RWS_FUNCTION("RWS::RpClumpDestroy");
-   
+
    RpClump *pClump = rCClumpPtr;
 
    RwBool ret = RWS::ClumpHelper::Destroy(pClump);
-   
+
    rCClumpPtr.setptr(0);
 
    RWS_RETURN(ret);

@@ -36,12 +36,12 @@
 //
 // System Includes
 //
-#if (!defined (SKY) && !defined (DOLPHIN))
+#if (!defined(SKY) && !defined(DOLPHIN))
 #include <memory.h>
 #endif
 
 #if defined(DOLPHIN) && defined(__MWERKS__)
-   using namespace std;
+using namespace std;
 #endif
 
 #include <new.h>
@@ -68,13 +68,13 @@ namespace RWS
       //
 
       CSeqInterpolRegister gDefaultInterpolReg(CSeqInterpolBase::MakeNew,
-         CSeqInterpolBase::MaxSize, 0, 0, FALSE);
+                                               CSeqInterpolBase::MaxSize, 0, 0, FALSE);
 
       // Handler for message link name update, cannot interpolate these (by
       // default) so just use base interpolator (which can only set values).
 
       CSeqInterpolRegister gMsgLinkNameDefaultReg(CSeqInterpolBase::MakeNew,
-         CSeqInterpolBase::MaxSize, MSG_LINK_NAME_TYPE, 0, FALSE);
+                                                  CSeqInterpolBase::MaxSize, MSG_LINK_NAME_TYPE, 0, FALSE);
 
       //////////////////////////////
       //
@@ -138,12 +138,12 @@ namespace RWS
 
          // Use placement new to create the object within the memory buffer...
 
-         CSeqInterpolBase *pBase = new(rData.GetInterpolMem()) CSeqInterpolBase(rData);
+         CSeqInterpolBase *pBase = new (rData.GetInterpolMem()) CSeqInterpolBase(rData);
          RWS_ASSERT(pBase, "Failed to allocate new instance.");
 
          RWS_RETURN(pBase);
       }
-      
+
       /**
       *
       * Returns the maximum size the object will every be. This is used to allow the sequence
@@ -191,11 +191,11 @@ namespace RWS
          RWS_ASSERT(rData.EndKey(), "No end keyframe to use.");
          RWS_ASSERT(rData.EndKey()->Name(), "End-keyframe type name is invalid.");
          RWS_ASSERT(rData.EndKey()->DataSize() ||
-            !rwstrcmp(rData.EndKey()->Name(), MSG_LINK_NAME_TYPE),
-            "Zero end-keyframe data size - only valid for message link name data.");
+                       !rwstrcmp(rData.EndKey()->Name(), MSG_LINK_NAME_TYPE),
+                    "Zero end-keyframe data size - only valid for message link name data.");
          RWS_ASSERT(rData.EndKey()->Data() ||
-            !rwstrcmp(rData.EndKey()->Name(), MSG_LINK_NAME_TYPE),
-            "Zero data pointer in end-keyframe - only valid for message link name data.");
+                       !rwstrcmp(rData.EndKey()->Name(), MSG_LINK_NAME_TYPE),
+                    "Zero data pointer in end-keyframe - only valid for message link name data.");
 
          void *pBuff;
 
@@ -346,7 +346,7 @@ namespace RWS
          // Store pointer to type name string.
 
          m_typeName = typeName;
-         
+
          RWS_RETURNVOID();
       }
 
@@ -412,7 +412,7 @@ namespace RWS
             if (rpRoot && rpRoot->m_typeName == 0)
             {
                RWS_ASSERTFAIL("Already have default, cannot add second."
-                  " Original default must be removed first.");
+                              " Original default must be removed first.");
             }
             else
             {
@@ -462,8 +462,7 @@ namespace RWS
                // time, so must not be conditionally-short-circuited, ie as a result of
                // and && or ||.
 
-               while ((cmpRes = rwstrcmp(m_typeName, pCur->m_typeName)) > 0
-                  && pCur->m_pNext)
+               while ((cmpRes = rwstrcmp(m_typeName, pCur->m_typeName)) > 0 && pCur->m_pNext)
                {
                   pCur = pCur->m_pNext;
                }
@@ -565,7 +564,7 @@ namespace RWS
       */
 
       CSeqInterpolRegister *CSeqInterpolRegGroup::FindInterpol(const RwChar *interpolName,
-         RwBool specifiedOnly)
+                                                               RwBool specifiedOnly)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRegGroup::FindInterpol");
 
@@ -617,18 +616,13 @@ namespace RWS
 
                   // Inform user that requested interpolator could not be found...
 
-                  RWS_DEBUGSTREAM_ERR("Could not find [" << interpolName <<
-                     "] interpolator for [" <<
-                     (m_typeName ? m_typeName : "DEFAULT") << 
-                     "] type - using default interpolator." << std::endl);
+                  RWS_DEBUGSTREAM_ERR("Could not find [" << interpolName << "] interpolator for [" << (m_typeName ? m_typeName : "DEFAULT") << "] type - using default interpolator." << std::endl);
 
                   CSeqInterpolRegister *pReportReg = m_pRootReg;
 
                   while (pReportReg)
                   {
-                     RWS_DEBUGSTREAM("Did find [" << (pReportReg->InterpolName() ?
-                        pReportReg->InterpolName() : "DEFAULT") << 
-                        "] interpolator." << std::endl);
+                     RWS_DEBUGSTREAM("Did find [" << (pReportReg->InterpolName() ? pReportReg->InterpolName() : "DEFAULT") << "] interpolator." << std::endl);
                      pReportReg = pReportReg->Next();
                   }
                }
@@ -658,7 +652,7 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRegGroup::Add");
          RWS_ASSERT(pRegister, "Interpolator registry entry cannot be zero.");
          RWS_ASSERT(!(m_typeName == 0 && pRegister->InterpolName() != 0),
-            "Cannot add a non-default interpolator into a default group.");
+                    "Cannot add a non-default interpolator into a default group.");
 
          // Link into the list...
 
@@ -687,7 +681,7 @@ namespace RWS
 
          RWS_RETURN(m_pRootReg == 0);
       }
-         
+
       //////////////////////////////////
       //
       // CSeqInterpolRegister functions.
@@ -728,13 +722,14 @@ namespace RWS
       */
 
       CSeqInterpolRegister::CSeqInterpolRegister(CSeqInterpolBase *(*pMakeFunc)(
-            CSeqItem &rData), RwUInt32 (*pSizeFunc)(void), const RwChar *typeName, 
-            const RwChar *interpolName, RwBool override) :
+                                                    CSeqItem &rData),
+                                                 RwUInt32 (*pSizeFunc)(void), const RwChar *typeName,
+                                                 const RwChar *interpolName, RwBool override) :
          m_pGroup(0)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRegister::CSeqInterpolRegister");
          RWS_ASSERT(!(typeName == 0 && interpolName != 0),
-            "Cannot specify interpolator name if no type name.");
+                    "Cannot specify interpolator name if no type name.");
          RWS_ASSERT(pMakeFunc, "make function MUST BE VALID.");
          RWS_ASSERT(pSizeFunc, "size function MUST BE VALID.");
 
@@ -891,7 +886,7 @@ namespace RWS
             if (rpRoot && rpRoot->m_interpolName == 0)
             {
                RWS_ASSERTFAIL("Already have default, cannot add second."
-                  " Original default must be removed first.");
+                              " Original default must be removed first.");
             }
             else
             {
@@ -941,8 +936,7 @@ namespace RWS
                // time, so must not be conditionally-short-circuited, ie as a result of
                // and && or ||.
 
-               while ((cmpRes = rwstrcmp(m_interpolName, pCur->m_interpolName)) > 0
-                  && pCur->m_pNext)
+               while ((cmpRes = rwstrcmp(m_interpolName, pCur->m_interpolName)) > 0 && pCur->m_pNext)
                {
                   pCur = pCur->m_pNext;
                }
@@ -1048,7 +1042,7 @@ namespace RWS
       */
 
       CSeqInterpolRegGroup *CSeqInterpolRegister::FindGroup(const RwChar *typeName,
-         RwBool specifiedOnly)
+                                                            RwBool specifiedOnly)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRegister::FindGroup");
 
@@ -1142,14 +1136,14 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRegister::Sort");
 
          CSeqInterpolRegister *pNewReg = sm_pRootUnsorted,
-            *pNextReg;
+                              *pNextReg;
 
          // All items in about to be sorted, so clear the pointer. Have copy of it
          // for processing and will need to recursively call the 'FindGroup' function - it
          // the pointer is NOT cleared here, then infinite recursion would occur.
 
          sm_pRootUnsorted = 0;
-         
+
          // Process each item in the unsorted list (via local pointer).
 
          while (pNewReg)
@@ -1191,16 +1185,10 @@ namespace RWS
             // If one already exists check validity of 'overriding' it.
 
             RWS_ASSERT(!pCurReg || !pCurReg->m_overridden,
-               "cannot override already overridden interpolator. Type [" <<
-               (pNewReg->m_typeName ? pNewReg->m_typeName : "<< Default >>") <<
-               "] interpol [" << (pNewReg->m_interpolName ? pNewReg->m_interpolName :
-               "<< Default >>") << "].");
+                       "cannot override already overridden interpolator. Type [" << (pNewReg->m_typeName ? pNewReg->m_typeName : "<< Default >>") << "] interpol [" << (pNewReg->m_interpolName ? pNewReg->m_interpolName : "<< Default >>") << "].");
 
             RWS_ASSERT(!pCurReg || pNewReg->m_overridden,
-               "cannot have two interpolators for type when not overriding. Type [" <<
-               (pNewReg->m_typeName ? pNewReg->m_typeName : "<< Default >>") << 
-               "] interpol [" << (pNewReg->m_interpolName ? pNewReg->m_interpolName : 
-               "<< Default >>") << "].");
+                       "cannot have two interpolators for type when not overriding. Type [" << (pNewReg->m_typeName ? pNewReg->m_typeName : "<< Default >>") << "] interpol [" << (pNewReg->m_interpolName ? pNewReg->m_interpolName : "<< Default >>") << "].");
 
             // Remove old one...
 
@@ -1235,18 +1223,18 @@ namespace RWS
       */
 
       CSeqItem::CSeqItem(RWSGUID &rGuid, const RwChar *pClassName,
-         RwUInt32 commandID, const RwChar *typeName, RwUInt32 addTime,
-         CSeqStack &rSeqStack, RwUInt32 flags) :
-            m_startTime(0),
-            m_lastUpdateTime(0),
-            m_isActive(FALSE),
-            m_pInterpolReg(0),
-            m_pInterpol(0),
-            m_interpolNextKey(FALSE),
-            m_interpolMemSize(0),
-            m_flags(flags),
-            m_pInterpolMem(0),
-            m_pBuffSlot(0)
+                         RwUInt32 commandID, const RwChar *typeName, RwUInt32 addTime,
+                         CSeqStack &rSeqStack, RwUInt32 flags) :
+         m_startTime(0),
+         m_lastUpdateTime(0),
+         m_isActive(FALSE),
+         m_pInterpolReg(0),
+         m_pInterpol(0),
+         m_interpolNextKey(FALSE),
+         m_interpolMemSize(0),
+         m_flags(flags),
+         m_pInterpolMem(0),
+         m_pBuffSlot(0)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::CSeqItem");
          RWS_ASSERT(pClassName, "No class name provided.");
@@ -1261,7 +1249,7 @@ namespace RWS
          m_pEndKeyData = RWS_NEW_TYPE(rSeqStack.MemType())
             CSeqCtrlKeyData(0, rSeqStack.MemType(), m_flags);
          RWS_ASSERT(m_pEndKeyData, "Failed to allocate keyframe data object for 'cur'.");
-         
+
          m_pInterpolData = RWS_NEW_TYPE(rSeqStack.MemType())
             CSeqCtrlInterpolData(0, rSeqStack.MemType(), m_flags);
          RWS_ASSERT(m_pInterpolData, "Failed to allocate interpolator data object.");
@@ -1277,8 +1265,7 @@ namespace RWS
          // Find an interpolator group for the data type in question. Built-in types first...
 
          m_pInterpolRegGroup = CSeqInterpolRegister::FindGroup(typeName, FALSE);
-         RWS_ASSERT(m_pInterpolRegGroup, "Failed to find interpolator group for type [" <<
-            typeName << "].");
+         RWS_ASSERT(m_pInterpolRegGroup, "Failed to find interpolator group for type [" << typeName << "].");
 
          // Create the slot for this item within the buffer manager.
 
@@ -1289,8 +1276,7 @@ namespace RWS
 
          SetInterpol(0, TRUE);
 
-         RWS_ASSERT(m_pInterpol, "Failed to find interpolator for type [" <<
-            typeName << "].");
+         RWS_ASSERT(m_pInterpol, "Failed to find interpolator for type [" << typeName << "].");
 
          RWS_RETURNVOID();
       }
@@ -1351,21 +1337,21 @@ namespace RWS
          // Swap the (last = end) and get new keyframe data from iterator.
 
          CSeqCtrlKeyData *pTempKey = m_pLastKeyData;
-         
+
          m_pLastKeyData = m_pEndKeyData;
          m_pEndKeyData = pTempKey;
 
          rIttr.GetKeyframe(*m_pEndKeyData, m_pSeqStack->MemType());
          RWS_ASSERT(m_pEndKeyData->Name(), "No keyframe data type");
          RWS_ASSERT(m_pEndKeyData->Data() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "No keyframe data to use - illegal for none message link name types.");
+                                                       MSG_LINK_NAME_TYPE),
+                    "No keyframe data to use - illegal for none message link name types.");
          RWS_ASSERT(m_pEndKeyData->DataSize() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "Keyframe data zero size - illegal for none message link name types.");
+                                                           MSG_LINK_NAME_TYPE),
+                    "Keyframe data zero size - illegal for none message link name types.");
 
          m_lastUpdateTime = nowTime;
-         
+
          // Doing keyframe set or interpolating to it?
 
          if (m_interpolNextKey)
@@ -1429,13 +1415,13 @@ namespace RWS
 
          rIttr.GetInterpol(*m_pInterpolData, m_pSeqStack->MemType());
          RWS_ASSERT(m_pInterpolData->LengthTime(),
-            "Zero time interpolator (includes dynamic interpolators).");
+                    "Zero time interpolator (includes dynamic interpolators).");
          RWS_ASSERT(m_pInterpolData->Name(), "Invalid interpolator name.");
 
 #ifdef RWS_DESIGN
 
          RWS_ASSERT(m_pInterpolData->GetDelta() >= 0.0f && m_pInterpolData->GetDelta() <= 1.0f,
-            "Invalid delta value in dynamic interpolator.");
+                    "Invalid delta value in dynamic interpolator.");
 #endif
 
          // Check to see if new interpolator is the same as the currently selected one.
@@ -1450,7 +1436,7 @@ namespace RWS
          // Setup data ready for when 'end keyframe' is added...
 
          m_interpolNextKey = TRUE;
-         
+
          RWS_RETURNVOID();
       }
 
@@ -1477,7 +1463,7 @@ namespace RWS
          // Has interpolator changed or is it being forced.
 
          if (pNewReg != m_pInterpolReg || forceSet)
-         {            
+         {
             // Yep, delete old one and create new one...
 
             if (m_pInterpol)
@@ -1536,10 +1522,7 @@ namespace RWS
 
             if ((m_flags & SEQ_FLAG_BUFFER_WARNINGS) != 0)
             {
-               RWS_DEBUGSTREAM_WARN("Resizing sequence item's interpolator memory for guid [" <<
-                  m_guid << " class [" << m_pClassName <<
-                  "] command [" << m_commandID << "]. This is likely to cause memory fragmentation." <<
-                  std::endl);
+               RWS_DEBUGSTREAM_WARN("Resizing sequence item's interpolator memory for guid [" << m_guid << " class [" << m_pClassName << "] command [" << m_commandID << "]. This is likely to cause memory fragmentation." << std::endl);
             }
          }
 
@@ -1580,8 +1563,8 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::Process");
          RWS_ASSERT(m_pInterpol, "No interpolator object setup.");
          RWS_ASSERT(m_pInterpolData->LengthTime(),
-            "Zero time interpolator in non-design build are illegal. "
-            "This includes dynamic interpolators.");
+                    "Zero time interpolator in non-design build are illegal. "
+                    "This includes dynamic interpolators.");
 
 #ifdef RWS_DESIGN
 
@@ -1616,7 +1599,6 @@ namespace RWS
             }
 
 #ifdef RWS_DESIGN
-
          }
 #endif
          m_lastUpdateTime = nowTime;
@@ -1660,11 +1642,11 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::LastKey");
          RWS_ASSERT(m_pLastKeyData->Name(), "Last keyframe type name is invalid.");
          RWS_ASSERT(m_pLastKeyData->DataSize() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "Last keyframe datasize is invalid - can only be zero for message link names.");
+                                                            MSG_LINK_NAME_TYPE),
+                    "Last keyframe datasize is invalid - can only be zero for message link names.");
          RWS_ASSERT(m_pLastKeyData->Data() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "Last keyframe data pointer is invalid - can only be zero for message link names.");
+                                                        MSG_LINK_NAME_TYPE),
+                    "Last keyframe data pointer is invalid - can only be zero for message link names.");
          RWS_RETURN(m_pLastKeyData);
       }
 
@@ -1680,11 +1662,11 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::EndKey");
          RWS_ASSERT(m_pEndKeyData->Name(), "end keyframe type name is invalid.");
          RWS_ASSERT(m_pEndKeyData->DataSize() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "End keyframe datasize is invalid - can only be zero for message link names.");
+                                                           MSG_LINK_NAME_TYPE),
+                    "End keyframe datasize is invalid - can only be zero for message link names.");
          RWS_ASSERT(m_pEndKeyData->Data() || !rwstrcmp(m_pEndKeyData->Name(),
-            MSG_LINK_NAME_TYPE),
-            "End keyframe data pointer is invalid - can only be zero for message link names.");
+                                                       MSG_LINK_NAME_TYPE),
+                    "End keyframe data pointer is invalid - can only be zero for message link names.");
          RWS_RETURN(m_pEndKeyData);
       }
 
@@ -1695,7 +1677,7 @@ namespace RWS
       */
 
       void CSeqItem::Guid(RwUInt32 &rGuidData0, RwUInt32 &rGuidData1, RwUInt32 &rGuidData2,
-         RwUInt32 &rGuidData3)
+                          RwUInt32 &rGuidData3)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::Guid");
 
@@ -1922,7 +1904,7 @@ namespace RWS
          while (pCur)
          {
             CSeqNode *pDel = pCur;
-            
+
             pCur = pCur->m_ptrs.Next();
             delete pDel;
          }
@@ -1937,7 +1919,7 @@ namespace RWS
       */
 
       CSeqNode *CSeqStack::AddItem(RWSGUID &rGuid, const RwChar *pClassName, RwUInt32 commandID,
-         const RwChar *typeName, RwUInt32 addTime)
+                                   const RwChar *typeName, RwUInt32 addTime)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStack::AddItem");
 
@@ -1946,7 +1928,7 @@ namespace RWS
          // Allocate new item.
 
          pNode = RWS_NEW_TYPE(m_memType) CSeqNode(rGuid, pClassName, commandID,
-            typeName, addTime, *this, m_flags);
+                                                  typeName, addTime, *this, m_flags);
          RWS_ASSERT(pNode, "Failed to allocate memory for node.");
 
          // Insert into the list.
@@ -1964,7 +1946,7 @@ namespace RWS
       */
 
       CSeqNode *CSeqStack::FindItem(RWSGUID &rGuid, const RwChar *pClassName,
-         RwUInt32 commandID)
+                                    RwUInt32 commandID)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStack::FindItem");
 
@@ -1990,7 +1972,7 @@ namespace RWS
       */
 
       CSeqNode *CSeqStack::FindItemInList(RWSGUID &rGuid, const RwChar *pClassName,
-         RwUInt32 commandID, CSeqNode *pRoot)
+                                          RwUInt32 commandID, CSeqNode *pRoot)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStack::FindItemInList");
 
@@ -1999,7 +1981,7 @@ namespace RWS
          while (pCur)
          {
             if (pCur->IsSameGuid(rGuid) && !rwstrcmp(pClassName, pCur->ClassName()) &&
-               commandID == pCur->CommandID())
+                commandID == pCur->CommandID())
             {
                break;
             }
@@ -2119,9 +2101,8 @@ namespace RWS
                   rToken.m_pSeqNode = m_pInactiveRoot;
                }
             }
-         }
-         while(rToken.m_pSeqNode && rToken.m_pSeqNode->m_guid != rToken.m_guid);
-         	
+         } while (rToken.m_pSeqNode && rToken.m_pSeqNode->m_guid != rToken.m_guid);
+
          RWS_RETURNVOID();
       }
 
@@ -2141,7 +2122,7 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStack::ProcessItems");
 
          CSeqNode *pCur = m_pActiveRoot,
-            *pNext;
+                  *pNext;
 
          // Process all the sequence items...
 
@@ -2161,7 +2142,7 @@ namespace RWS
 
             // May have become (or originally been) inactive, so
             // check and remove from list.
-            
+
             if (!pCur->IsActive())
             {
                // No longer active, move to inactive list.
@@ -2234,7 +2215,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-         
+
       /**
       *
       * Causes the transmission managers to be called to send the data built
@@ -2294,8 +2275,8 @@ namespace RWS
       */
 
       CSeqNode::CSeqNode(RWSGUID &rGuid, const RwChar *pClassName,
-            RwUInt32 commandID, const RwChar *typeName, RwUInt32 addTime,
-            CSeqStack &rSeqStack, RwUInt32 flags) :
+                         RwUInt32 commandID, const RwChar *typeName, RwUInt32 addTime,
+                         CSeqStack &rSeqStack, RwUInt32 flags) :
          CSeqItem(rGuid, pClassName, commandID, typeName, addTime, rSeqStack, flags)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqStack::CSeqNode::CSeqNode");

@@ -165,8 +165,7 @@ namespace RWS
 
                   ReplaceLinkedMsg(m_waitMsg, pEventName, 0);
                }
-            }
-            while (state < CSeqProcessor::SS_KEEP_CALLING);
+            } while (state < CSeqProcessor::SS_KEEP_CALLING);
 
             // Sequence ended ?
 
@@ -226,7 +225,7 @@ namespace RWS
             {
             case CSystemCommands::CMD_AttachResource:
                {
-                  const RWSGUID * pResourceId;
+                  const RWSGUID *pResourceId;
                   attrIt->GetCommandData(&pResourceId);
                   AddResource(pResourceId);
                }
@@ -255,8 +254,8 @@ namespace RWS
 
          const RwChar *ResourceType;
          const RwChar *ResourceName;
-         const void *pObject = RWS::CResourceManager::FindById (pResourceID, 
-            &ResourceType, 0, &ResourceName);
+         const void *pObject = RWS::CResourceManager::FindById(pResourceID,
+                                                               &ResourceType, 0, &ResourceName);
 
          if (pObject)
          {
@@ -271,7 +270,7 @@ namespace RWS
             }
             else
             {
-               if (!rwstrcmp (SEQUENCE_DATA_RESOURCE_STRING, ResourceType))
+               if (!rwstrcmp(SEQUENCE_DATA_RESOURCE_STRING, ResourceType))
                {
                   const CSeqCtrlData *pSeqCtrlData = static_cast<const CSeqCtrlData *>(pObject);
 

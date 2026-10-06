@@ -42,29 +42,29 @@ namespace RWS
       *  \param pStream A pointer to the RenderWare Gfx Stream object.
       *
       */
-      void SendTestEvent (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+      void SendTestEvent(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
       {
          RWS_FUNCTION("RWS::NULL::SendTestEvent");
-      
-         RwChar *buffer = static_cast<char*>(::RWS_OP_NEW(rChunkHeader.length) );
-      
+
+         RwChar *buffer = static_cast<char *>(::RWS_OP_NEW(rChunkHeader.length));
+
          RwStreamRead(pStream, buffer, rChunkHeader.length);
-      
+
          // Create event/message to fire into system.
          //
          CEventId testevent;
-      
-         // All event/messages should be capable of taking NULL as a parameter, so that 
+
+         // All event/messages should be capable of taking NULL as a parameter, so that
          // they can always be used as an event rather than to transfer data.
          //
-         CEventHandler::RegisterMsg( testevent, reinterpret_cast<RwChar*>(buffer), 0);   
-      
+         CEventHandler::RegisterMsg(testevent, reinterpret_cast<RwChar *>(buffer), 0);
+
          SendMsg(testevent);
-      
-         CEventHandler::UnRegisterMsg(testevent); 
-      
-         operator delete (buffer);
-      
+
+         CEventHandler::UnRegisterMsg(testevent);
+
+         operator delete(buffer);
+
          RWS_RETURNVOID();
       }
    }
@@ -80,8 +80,9 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CEventHandler::RegisterStreamChunkHandlers");
 
-      CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-         strfunc_SendTestEvent), SendTestEvent);
+      CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                       strfunc_SendTestEvent),
+                                           SendTestEvent);
 
       RWS_RETURNVOID();
    }
@@ -95,7 +96,7 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CEventHandler::UnRegisterStreamChunkHandlers");
 
-      CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_SendTestEvent));
+      CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_SendTestEvent));
 
       RWS_RETURNVOID();
    }

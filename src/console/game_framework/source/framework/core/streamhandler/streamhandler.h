@@ -25,7 +25,7 @@
 #define _STREAMHANDLER_H_
 
 #ifdef _MSC_VER
-#pragma warning (disable: 4786)
+#pragma warning(disable : 4786)
 #endif
 
 #include <rwcore.h>
@@ -34,7 +34,7 @@
 namespace RWS
 {
    typedef void (*StreamChunkHandler)(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream);
-   
+
    /**
    *
    *  \ingroup Stream
@@ -59,31 +59,31 @@ namespace RWS
    */
    class CStreamHandler
    {
-      public:
+   public:
 
-         static void ProcessStream(RwStream *pStream);
+      static void ProcessStream(RwStream *pStream);
 
-         static void RegisterChunkHandler(RwUInt32 ChunkType, StreamChunkHandler ChunkHandler);
+      static void RegisterChunkHandler(RwUInt32 ChunkType, StreamChunkHandler ChunkHandler);
 
-         static void UnRegisterChunkHandler(RwUInt32 ChunkType);
+      static void UnRegisterChunkHandler(RwUInt32 ChunkType);
 
-         static CStreamHandler *Instance(void);
+      static CStreamHandler *Instance(void);
 
-         static void RegisterStreamChunkHandlers(void);
+      static void RegisterStreamChunkHandlers(void);
 
-         static void UnRegisterStreamChunkHandlers(void);
+      static void UnRegisterStreamChunkHandlers(void);
 
-      protected:      
-         
-         static bool RwStreamEOF(RwStream *pStream);
+   protected:
 
-      private:
+      static bool RwStreamEOF(RwStream *pStream);
 
-         typedef std::map< RwUInt32, StreamChunkHandler > StreamChunkHandlerMap;
+   private:
 
-         StreamChunkHandlerMap m_StreamChunkHandlerMap;
+      typedef std::map<RwUInt32, StreamChunkHandler> StreamChunkHandlerMap;
 
-         RwChunkHeaderInfo m_RwChunkHeaderInfo;     /**< Chunk header of currently processed chunk */
+      StreamChunkHandlerMap m_StreamChunkHandlerMap;
+
+      RwChunkHeaderInfo m_RwChunkHeaderInfo;     /**< Chunk header of currently processed chunk */
    };
 }
 

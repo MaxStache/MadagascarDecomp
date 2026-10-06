@@ -61,7 +61,7 @@ namespace RWS
             *  Close network connection, note creates a new network connection.
             *
             */
-            void CloseConnection (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+            void CloseConnection(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
             {
                RWS_FUNCTION("RWS::CDefaultStreamHandler::CloseConnection");
 
@@ -71,14 +71,14 @@ namespace RWS
                // without all the data therefore we disable profiling.
                //
                RWS::MemoryProfile::ConnectionLost();
-      
-         #ifdef RWS_DESIGN
-               RWS::MainLoop::Network::Close ();
-               RWS::MainLoop::Network::Open ();
-         #else
+
+#ifdef RWS_DESIGN
+               RWS::MainLoop::Network::Close();
+               RWS::MainLoop::Network::Open();
+#else
                RWS_TRACE("IGNORED");
-         #endif
-      
+#endif
+
                RWS_RETURNVOID();
             }
          }
@@ -94,8 +94,9 @@ namespace RWS
          */
          void RegisterStreamChunkHandlers(void)
          {
-            CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
-               strfunc_CloseConnection), CloseConnection);
+            CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
+                                                             strfunc_CloseConnection),
+                                                 CloseConnection);
          }
 
 
@@ -105,7 +106,7 @@ namespace RWS
          */
          void UnRegisterStreamChunkHandlers(void)
          {
-            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM, strfunc_CloseConnection));
+            CStreamHandler::UnRegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM, strfunc_CloseConnection));
          }
 
          /**
@@ -118,22 +119,22 @@ namespace RWS
          void Poll()
          {
             RWS_FUNCTION("DoNetWorkMessage");
-            
+
             // Ensure Open has been called before calling Poll
             //
             RWS_PRE(s_bNetworkIsOpen);
-            
+
             // Receive command packets from RenderWare Studio Workspace
             //
-            while (RwStream *pNetStream = NetStream::OpenForRead ())
+            while (RwStream *pNetStream = NetStream::OpenForRead())
             {
-               CStreamHandler::ProcessStream (pNetStream);
-               RwStreamClose (pNetStream, 0);
+               CStreamHandler::ProcessStream(pNetStream);
+               RwStreamClose(pNetStream, 0);
             }
-            
+
             RWS_RETURNVOID();
          }
-         
+
          /**
          *
          *  \ingroup Network
@@ -152,38 +153,38 @@ namespace RWS
 
             // Initialize network streams
             //
-#if defined (_XBOX)
+#if defined(_XBOX)
             const RwUInt32 port_number = 5610;
-#elif defined (SKY)
+#elif defined(SKY)
             const RwUInt32 port_number = 5609;
-#elif defined (DOLPHIN)
+#elif defined(DOLPHIN)
             const RwUInt32 port_number = 5611;
-#elif defined (D3D8_DRVMODEL_H) || defined (D3D9_DRVMODEL_H)
+#elif defined(D3D8_DRVMODEL_H) || defined(D3D9_DRVMODEL_H)
             const RwUInt32 port_number = 5607;
 #else
             const RwUInt32 port_number = 5608;
 #endif
-            RwBool bOK = NetStream::Init (port_number, RWS::Time::GetTime);
+            RwBool bOK = NetStream::Init(port_number, RWS::Time::GetTime);
 
             bOK = bOK;  // Used to prevent unused warning in release
 
-            RWS_ASSERT (bOK, "MainLoop::NetWork::Open () Failed");
+            RWS_ASSERT(bOK, "MainLoop::NetWork::Open () Failed");
 
             // Get the IP address we're listening on
-            if (RwUInt32 nAddrLen = NetStream::GetAddress (ipAddress, 128))
+            if (RwUInt32 nAddrLen = NetStream::GetAddress(ipAddress, 128))
             {
                sprintf(g_szWaitingMessage, "Listening On %s : %d ", ipAddress, port_number);
             }
             else
             {
-               rwstrcpy (g_szWaitingMessage,
-                         RWSTRING ("Error unable to establish IP address."));
+               rwstrcpy(g_szWaitingMessage,
+                        RWSTRING("Error unable to establish IP address."));
             }
 
 #ifndef NDEBUG
             s_bNetworkIsOpen = bOK ? true : false;
 #endif
-            
+
 #if !defined(NDEBUG)
             // Register the debug message callback to echo debug messages to the workspace
             RWS::cdbg().rdbuf()->AddOutputCallback(RWS::NetTools::SendDebugMessage);
@@ -191,7 +192,7 @@ namespace RWS
 
             RWS_RETURNVOID();
          }
-         
+
          /**
          *
          *  \ingroup Network
@@ -210,7 +211,7 @@ namespace RWS
             RWS::cdbg().rdbuf()->RemoveOutputCallback(RWS::NetTools::SendDebugMessage);
 #endif
 
-            NetStream::Shutdown ();
+            NetStream::Shutdown();
 
 #ifndef NDEBUG
             s_bNetworkIsOpen = false;
@@ -226,8 +227,8 @@ namespace RWS
          */
          char *GetIPAddress()
          {
-             RWS_FUNCTION("GetIPAddress");
-             RWS_RETURN(ipAddress);
+            RWS_FUNCTION("GetIPAddress");
+            RWS_RETURN(ipAddress);
          }
       }
    }

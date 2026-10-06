@@ -3,8 +3,8 @@
 //	===========================================================================
 //
 
-#define	SKY
-#define	PS2
+#define SKY
+#define PS2
 
 
 
@@ -17,9 +17,9 @@
 // generates compile warnings complaining about the redefinition of 'offsetof'. GCC
 // <stddef.h> has already been fixed (see http://gcc.gnu.org/ml/gcc-patches/2001-04/msg01412.html).
 // However, it's a very recent fix and we're unlikely to see it in our GCC source for
-// some time, hence this (hopefully temporary) workaround... 
+// some time, hence this (hopefully temporary) workaround...
 //
-#ifdef __need_size_t 
+#ifdef __need_size_t
 #undef __need_size_t
 #endif
 #ifdef __need_ptrdiff_t

@@ -26,7 +26,7 @@
 *
 *****************************************************************************/
 
-#ifdef RWS_DESIGN  
+#ifdef RWS_DESIGN
 
 #include "framework/core/eventhandler/ceventhandler.h"
 
@@ -45,10 +45,10 @@ namespace RWS
       class CRenderConnectionScreen : public CEventHandler
       {
       public:
-         
+
          CRenderConnectionScreen();
          ~CRenderConnectionScreen();
-         
+
          virtual void HandleEvents(CMsg &pMsg);
 
       private:

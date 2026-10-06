@@ -39,7 +39,7 @@
 namespace RWS
 {
    namespace FPS
-   { 
+   {
       /**
       *
       * \ingroup Mod_FPS
@@ -57,22 +57,22 @@ namespace RWS
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Push Button", "Generic sliding push button.");
 
-         FPSButton(const CAttributePacket&); 
+         FPSButton(const CAttributePacket&);
 
          virtual void HandleAttributes(const CAttributePacket& attr);
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
 
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE( CMD_targetname, "Target name", "Trigger button event", RECEIVE, 0, "ACTN_PLAYERTOUCH")
-            RWS_MESSAGE( CMD_target, "Target", "Button triggered event", TRANSMIT, 0, 0)
-            RWS_ATTRIBUTE( CMD_angle, "Angle", "Determines the opening direction. "
-                           "Note: There are two special values, -1 opens the door up and -2 opens down.", 
-                           SLIDER, RwReal, RANGE(-2,0,360))
-            RWS_ATTRIBUTE( CMD_wait, "Wait", "Wait before returning (3 default, -1 = never return)", 
-                           SLIDER, RwReal, RANGE(-1,3,60))
-            RWS_ATTRIBUTE( CMD_speed, "Speed", "Movement speed (40 default) units per second", 
-                           SLIDER, RwUInt32, RANGE(1,40,999))
-            RWS_ATTRIBUTE( CMD_lip, "Lip", "Lip remaining at end of move (4 default)", SLIDER, RwUInt32, RANGE(0,4,32))
+         RWS_MESSAGE(CMD_targetname, "Target name", "Trigger button event", RECEIVE, 0, "ACTN_PLAYERTOUCH")
+         RWS_MESSAGE(CMD_target, "Target", "Button triggered event", TRANSMIT, 0, 0)
+         RWS_ATTRIBUTE(CMD_angle, "Angle", "Determines the opening direction. "
+                                           "Note: There are two special values, -1 opens the door up and -2 opens down.",
+                       SLIDER, RwReal, RANGE(-2, 0, 360))
+         RWS_ATTRIBUTE(CMD_wait, "Wait", "Wait before returning (3 default, -1 = never return)",
+                       SLIDER, RwReal, RANGE(-1, 3, 60))
+         RWS_ATTRIBUTE(CMD_speed, "Speed", "Movement speed (40 default) units per second",
+                       SLIDER, RwUInt32, RANGE(1, 40, 999))
+         RWS_ATTRIBUTE(CMD_lip, "Lip", "Lip remaining at end of move (4 default)", SLIDER, RwUInt32, RANGE(0, 4, 32))
          RWS_END_COMMANDS;
       };
    }

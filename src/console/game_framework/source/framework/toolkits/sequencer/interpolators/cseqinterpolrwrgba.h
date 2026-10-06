@@ -66,7 +66,7 @@ namespace RWS
 
       private:
 
-         Data m_data;         
+         Data m_data;
       };
    }     // namespace SEQUENCE
 }        // namespace RWS

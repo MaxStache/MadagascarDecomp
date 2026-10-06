@@ -79,7 +79,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
 
       /**
       *
@@ -94,27 +94,27 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-   
+
 
       /**
       *
       * Handle events for CLinkPriority. Displays a debug message every time the iMsgRunningTick is received (debug mode).
       *
       */
-      void CLinkPriority::HandleEvents(CMsg &pMsg)
+      void CLinkPriority::HandleEvents(CMsg& pMsg)
       {
          RWS_FUNCTION("RWS::Examples::CLinkPriority::HandleEvents");
 
          if (pMsg.Id == iMsgRunningTick)
          {
-   #ifdef RWS_DEBUGTOOLS
+#ifdef RWS_DEBUGTOOLS
             DebugTools::Printf("CLinkPriority::HandleEvents 0x%x Priority 0x%x\n", this, m_priority);
-   #endif
+#endif
          }
 
          RWS_RETURNVOID();
       }
-   
+
 
       /**
       *
@@ -136,17 +136,17 @@ namespace RWS
          // Find the parameters for this class "CLinkPriority" if any
          //
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CLinkPriority));
-      
+
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
                //////////////////////////////////////////////////////////////////
-               case CMD_priority:
+            case CMD_priority:
                //////////////////////////////////////////////////////////////////
                {
                   attrIt->GetCommandData(m_priority);
-               
+
                   UnLinkMsg(iMsgRunningTick);
                   LinkMsg(iMsgRunningTick, 0, m_priority);
                }

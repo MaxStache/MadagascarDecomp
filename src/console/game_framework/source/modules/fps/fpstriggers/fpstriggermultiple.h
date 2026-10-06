@@ -59,50 +59,50 @@ namespace RWS
       * wait, goes back to the beginning and waits for another event.
       *
       */
-      class FPSTriggerMultiple: public CEventHandler, public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
+      class FPSTriggerMultiple : public CEventHandler, public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(FPSTriggerMultiple);
          RWS_DECLARE_CLASSID(FPSTriggerMultiple);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Multiple Delay Trigger", "Delays before sending transmit event");
-         
+
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE  ( CMD_targetname, "Target name", "Receive Event"            , RECEIVE , 0, "ACTN_PLAYERTOUCH")
-            RWS_MESSAGE  ( CMD_target    , "Target"    , "Send Event"               , TRANSMIT, 0, 0)
-            RWS_MESSAGE  ( CMD_killtarget, "Kill target", "Removes CEventHandlers linked to this event", TRANSMIT, 0, 0)
-            RWS_ATTRIBUTE( CMD_delay     , "Delay"     , "Delay in seconds before sending event (target, killtarget)",   SLIDER, RwReal, RANGE(0, 0, 60))
-            RWS_ATTRIBUTE( CMD_wait      , "Wait"      , "Delay in seconds before resetting", SLIDER, RwReal, RANGE(-1, 0, 99))
-            RWS_END_COMMANDS;
-         
+         RWS_MESSAGE(CMD_targetname, "Target name", "Receive Event", RECEIVE, 0, "ACTN_PLAYERTOUCH")
+         RWS_MESSAGE(CMD_target, "Target", "Send Event", TRANSMIT, 0, 0)
+         RWS_MESSAGE(CMD_killtarget, "Kill target", "Removes CEventHandlers linked to this event", TRANSMIT, 0, 0)
+         RWS_ATTRIBUTE(CMD_delay, "Delay", "Delay in seconds before sending event (target, killtarget)", SLIDER, RwReal, RANGE(0, 0, 60))
+         RWS_ATTRIBUTE(CMD_wait, "Wait", "Delay in seconds before resetting", SLIDER, RwReal, RANGE(-1, 0, 99))
+         RWS_END_COMMANDS;
+
          FPSTriggerMultiple(const CAttributePacket&);
          ~FPSTriggerMultiple(void);
-         
-         virtual void HandleEvents(CMsg &pMsg);
+
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-         void WaitThenSend( void );
-         void Delayed( void );
-         void WaitToReset( void );
-         
+         void WaitThenSend(void);
+         void Delayed(void);
+         void WaitToReset(void);
+
       protected:
          // Define entity states
          enum State
          {
             State_Waiting,
-               State_Delayed,
-               State_Waiting_To_Reset
+            State_Delayed,
+            State_Waiting_To_Reset
          };
-         
+
          RwUInt32 m_state;
-         
+
          CEventId m_target;      /**< Sent when m_targetname received */
          CEventId m_targetname;  /**< Received to triggers this FPSTriggerOnce */
          CEventId m_killtarget;  /**< Send to kill all CEventHandlers linked to m_killtarget */
-         
+
          RwUInt32 m_delay;       /**< Required delay */
          RwUInt32 m_delay_count; /**< Temp, delay counter, starts at 0 when reaches m_delay trigger is fired */
          RwUInt32 m_wait;        /**< Required wait, re-uses m_delay_count */
-         
+
          CAtomicPtr m_pAtomic;
       };
    }

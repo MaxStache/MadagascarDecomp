@@ -54,20 +54,20 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSExampleMonster);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Example Monster", "A generic path following monster");
-         
+
          void HandleAttributes(const CAttributePacket& attr);
-         
+
          FPSExampleMonster(const CAttributePacket&);
-         
-         RWS_BEGIN_COMMANDS                
-            RWS_ATTRIBUTE(CMD_m_height, "Height", "Height of monster", SLIDER, RwReal,RANGE(0, 40, 40))
-            RWS_ATTRIBUTE(CMD_m_height_on_ground, "Height On Ground","", SLIDER, RwReal,RANGE(0, 20, 40))
-            RWS_ATTRIBUTE(CMD_m_width, "Width", "Width of Monster", SLIDER, RwReal,RANGE(0, 20, 40))                
-            RWS_END_COMMANDS;
-         
+
+         RWS_BEGIN_COMMANDS
+         RWS_ATTRIBUTE(CMD_m_height, "Height", "Height of monster", SLIDER, RwReal, RANGE(0, 40, 40))
+         RWS_ATTRIBUTE(CMD_m_height_on_ground, "Height On Ground", "", SLIDER, RwReal, RANGE(0, 20, 40))
+         RWS_ATTRIBUTE(CMD_m_width, "Width", "Width of Monster", SLIDER, RwReal, RANGE(0, 20, 40))
+         RWS_END_COMMANDS;
+
       protected:
       };
-      
+
    } // namespace FPS
 }// namespace RWS
 

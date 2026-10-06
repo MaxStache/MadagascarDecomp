@@ -118,7 +118,7 @@ namespace RWS
    *
    */
 
-   #define RWS_DECLARE_CLASSID(className) static const RwChar* p##className##ClassID
+#define RWS_DECLARE_CLASSID(className) static const RwChar *p##className##ClassID
 
    /**
    *
@@ -128,7 +128,7 @@ namespace RWS
    *  placed at global scope in your class's CPP file.
    *
    */
-   #define RWS_IMPLEMENT_CLASSID(className) const RwChar* className::p##className##ClassID = #className
+#define RWS_IMPLEMENT_CLASSID(className) const RwChar *className::p##className##ClassID = #className
 
    /**
    *
@@ -138,7 +138,7 @@ namespace RWS
    *
    */
 
-   #define RWS_CLASSID_OF(className) (className::p##className##ClassID)
+#define RWS_CLASSID_OF(className) (className::p##className##ClassID)
 
    // Definition of RWS_DWORD and RWS_FLOAT which are used within the workspace comms
    // code to build up attribute data packets.
@@ -177,12 +177,12 @@ namespace RWS
 
       bool IsEndChunk() const;
 
-      const CAttributeDataChunk* pNextChunk() const;
+      const CAttributeDataChunk *pNextChunk() const;
 
       // Revoked ctor/copy/assign - not a 'normal' constructable class
       CAttributeDataChunk();
-      CAttributeDataChunk( const CAttributeDataChunk& );
-      CAttributeDataChunk& operator = ( const CAttributeDataChunk& );
+      CAttributeDataChunk(const CAttributeDataChunk &);
+      CAttributeDataChunk &operator=(const CAttributeDataChunk &);
    };
 
    /**
@@ -202,29 +202,29 @@ namespace RWS
 
       bool IsInstanceCreationPacket() const;
 
-      const char* GetNameOfClassToCreate() const;
+      const char *GetNameOfClassToCreate() const;
 
       RWSGUID GetInstanceId() const;
 
       CAttributePacket *Clone(void) const;
 
       CAttributePacket *Update(const CAttributePacket &rAttr);
-      
+
       CAttributeHandler *CreateEntity(void) const;
 
       static RwUInt32 BuildInstanceIdChunk(const RWSGUID &rGuid, void *pBuffer);
       static RwUInt32 BuildClassIdChunk(const RwChar *pClassID, void *pBuffer);
       static RwUInt32 BuildCreateClassIdChunk(const RwChar *pClassID, void *pBuffer);
       static RwUInt32 BuildCommandDataChunk(RwUInt32 commandID, const void *pData,
-         RwUInt32 dataSize, void *pBuffer, RwUInt32 *pDataOffset);
+                                            RwUInt32 dataSize, void *pBuffer, RwUInt32 *pDataOffset);
       static RwUInt32 BuildTerminatorChunk(void *pBuffer);
 
    private:
 
       // Revoked ctor/copy/assign - not a 'normal' constructable class
       CAttributePacket();
-      CAttributePacket( const CAttributePacket& );
-      CAttributePacket& operator = ( const CAttributePacket& );
+      CAttributePacket(const CAttributePacket &);
+      CAttributePacket &operator=(const CAttributePacket &);
 
       // Implementation
       friend class CAttributeCommandIterator;
@@ -265,8 +265,11 @@ namespace RWS
       *
       */
 
-      template<class T> void GetCommandData(T &dest) const
-      { dest = *(reinterpret_cast<const T*>(&chunk_.data_)); }
+      template <class T>
+      void GetCommandData(T &dest) const
+      {
+         dest = *(reinterpret_cast<const T *>(&chunk_.data_));
+      }
 
       /*
       *  Specialization of the above template to workaround a flaw when
@@ -277,7 +280,7 @@ namespace RWS
       */
       void GetCommandData(bool &dest) const
       {
-         const RwUInt32 temp = *(reinterpret_cast<const RwUInt32*>(&chunk_.data_));
+         const RwUInt32 temp = *(reinterpret_cast<const RwUInt32 *>(&chunk_.data_));
          if (temp)
          {
             dest = true;
@@ -307,8 +310,11 @@ namespace RWS
       *
       */
 
-      template<class T> void GetCommandData(T* dest) const
-      { *dest = reinterpret_cast<T>(&chunk_.data_); }
+      template <class T>
+      void GetCommandData(T *dest) const
+      {
+         *dest = reinterpret_cast<T>(&chunk_.data_);
+      }
 
       /*
       *  Specialization of the above template to workaround a flaw when
@@ -317,9 +323,9 @@ namespace RWS
       *  the MSB of chunk_.data_, rather than the LSB. So dest is set to the 
       *  wrong value.
       */
-      void GetCommandData(bool* dest) const
+      void GetCommandData(bool *dest) const
       {
-         const RwUInt32 temp = *(reinterpret_cast<const RwUInt32*>(&chunk_.data_));
+         const RwUInt32 temp = *(reinterpret_cast<const RwUInt32 *>(&chunk_.data_));
          if (temp)
          {
             *dest = true;
@@ -329,196 +335,252 @@ namespace RWS
             *dest = false;
          }
       }
-      
+
 
       /**   Used to return void pointer to data */
 
-      const void *GetAs_void_ptr(void) const {return reinterpret_cast<const void *>(&chunk_.data_);}
+      const void *GetAs_void_ptr(void) const { return reinterpret_cast<const void *>(&chunk_.data_); }
 
       /**   Used to return unsigned char pointer to data */
 
       const unsigned char *GetAs_unsigned_char_ptr(void) const
-         {return reinterpret_cast<const unsigned char *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const unsigned char *>(&chunk_.data_);
+      }
 
       /**   Used to return char pointer to data */
 
-      const char *GetAs_char_ptr(void) const {return reinterpret_cast<const char *>(&chunk_.data_);}
+      const char *GetAs_char_ptr(void) const { return reinterpret_cast<const char *>(&chunk_.data_); }
 
       /**   Used to return unsigned short pointer to data */
 
       const unsigned short *GetAs_unsigned_short_ptr(void) const
-         {return reinterpret_cast<const unsigned short *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const unsigned short *>(&chunk_.data_);
+      }
 
       /**   Used to return short pointer to data */
 
-      const short *GetAs_short_ptr(void) const {return reinterpret_cast<const short *>(&chunk_.data_);}
+      const short *GetAs_short_ptr(void) const { return reinterpret_cast<const short *>(&chunk_.data_); }
 
       /**   Used to return unsigned int pointer to data */
 
       const unsigned int *GetAs_unsigned_int_ptr(void) const
-         {return reinterpret_cast<const unsigned int *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const unsigned int *>(&chunk_.data_);
+      }
 
       /**   Used to return int pointer to data */
 
-      const int *GetAs_int_ptr(void) const {return reinterpret_cast<const int *>(&chunk_.data_);}
+      const int *GetAs_int_ptr(void) const { return reinterpret_cast<const int *>(&chunk_.data_); }
 
       /**   Used to return unsigned long pointer to data */
 
       const unsigned long *GetAs_unsigned_long_ptr(void) const
-         {return reinterpret_cast<const unsigned long *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const unsigned long *>(&chunk_.data_);
+      }
 
       /**   Used to return long pointer to data */
 
-      const long *GetAs_long_ptr(void) const {return reinterpret_cast<const long *>(&chunk_.data_);}
+      const long *GetAs_long_ptr(void) const { return reinterpret_cast<const long *>(&chunk_.data_); }
 
       /**   Used to return float pointer to data */
 
-      const float *GetAs_float_ptr(void) const {return reinterpret_cast<const float *>(&chunk_.data_);}
+      const float *GetAs_float_ptr(void) const { return reinterpret_cast<const float *>(&chunk_.data_); }
 
       /**   Used to return double pointer to data */
 
-      const double *GetAs_double_ptr(void) const {return reinterpret_cast<const double *>(&chunk_.data_);}
+      const double *GetAs_double_ptr(void) const { return reinterpret_cast<const double *>(&chunk_.data_); }
 
       /**   Used to return data as unsigned char */
 
       const unsigned char GetAs_unsigned_char(void) const
-         {return *(reinterpret_cast<const unsigned char *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const unsigned char *>(&chunk_.data_));
+      }
 
       /**   Used to return data as char */
 
-      const char GetAs_char(void) const {return *(reinterpret_cast<const char *>(&chunk_.data_));}
+      const char GetAs_char(void) const { return *(reinterpret_cast<const char *>(&chunk_.data_)); }
 
       /**   Used to return data as unsigned short */
 
       const unsigned short GetAs_unsigned_short(void) const
-         {return *(reinterpret_cast<const unsigned short *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const unsigned short *>(&chunk_.data_));
+      }
 
       /**   Used to return data as short */
 
-      const short GetAs_short(void) const {return *(reinterpret_cast<const short *>(&chunk_.data_));}
+      const short GetAs_short(void) const { return *(reinterpret_cast<const short *>(&chunk_.data_)); }
 
       /**   Used to return data as unsigned int */
 
       const unsigned int GetAs_unsigned_int(void) const
-         {return *(reinterpret_cast<const unsigned int *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const unsigned int *>(&chunk_.data_));
+      }
 
       /**   Used to return data as int */
 
-      const int GetAs_int(void) const {return *(reinterpret_cast<const int *>(&chunk_.data_));}
+      const int GetAs_int(void) const { return *(reinterpret_cast<const int *>(&chunk_.data_)); }
 
       /**   Used to return data as unsigned long */
 
       const unsigned long GetAs_unsigned_long(void) const
-         {return *(reinterpret_cast<const unsigned long *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const unsigned long *>(&chunk_.data_));
+      }
 
       /**   Used to return data as long */
 
       const long GetAs_long(void) const
-         {return *(reinterpret_cast<const long *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const long *>(&chunk_.data_));
+      }
 
       /**   Used to return data as float */
 
       const float GetAs_float(void) const
-         {return *(reinterpret_cast<const float *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const float *>(&chunk_.data_));
+      }
 
       /**   Used to return data as double */
 
       const double GetAs_double(void) const
-         {return *(reinterpret_cast<const double *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const double *>(&chunk_.data_));
+      }
 
       /**   Used to return RwReal pointer to data */
 
       const RwReal *GetAs_RwReal_ptr(void) const
-         {return reinterpret_cast<const RwReal *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwReal *>(&chunk_.data_);
+      }
 
       /**   Used to return RwChar pointer to data */
 
       const RwChar *GetAs_RwChar_ptr(void) const
-         {return reinterpret_cast<const RwChar *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwChar *>(&chunk_.data_);
+      }
 
       /**   Used to return RwUInt8 pointer to data */
 
       const RwUInt8 *GetAs_RwUInt8_ptr(void) const
-         {return reinterpret_cast<const RwUInt8 *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwUInt8 *>(&chunk_.data_);
+      }
 
       /**   Used to return RwUInt16 pointer to data */
 
       const RwUInt16 *GetAs_RwUInt16_ptr(void) const
-         {return reinterpret_cast<const RwUInt16 *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwUInt16 *>(&chunk_.data_);
+      }
 
       /**   Used to return RwUInt32 pointer to data */
 
       const RwUInt32 *GetAs_RwUInt32_ptr(void) const
-         {return reinterpret_cast<const RwUInt32 *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwUInt32 *>(&chunk_.data_);
+      }
 
       /**   Used to return RwInt8 pointer to data */
 
       const RwInt8 *GetAs_RwInt8_ptr(void) const
-         {return reinterpret_cast<const RwInt8 *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwInt8 *>(&chunk_.data_);
+      }
 
       /**   Used to return RwInt16 pointer to data */
 
       const RwInt16 *GetAs_RwInt16_ptr(void) const
-         {return reinterpret_cast<const RwInt16 *>(&chunk_.data_);}
+      {
+         return reinterpret_cast<const RwInt16 *>(&chunk_.data_);
+      }
 
       /**   Used to return RwInt32 pointer to data */
 
       const RwInt32 *GetAs_RwInt32_ptr(void) const
-         {return reinterpret_cast<const RwInt32 *>(&chunk_.data_);}
-    
+      {
+         return reinterpret_cast<const RwInt32 *>(&chunk_.data_);
+      }
+
       /**   Used to return data as RwReal */
 
       const RwReal GetAs_RwReal(void) const
-         {return *(reinterpret_cast<const RwReal *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwReal *>(&chunk_.data_));
+      }
 
       /**   Used to return data as RwChar */
 
       const RwChar GetAs_RwChar(void) const
-         {return *(reinterpret_cast<const RwChar *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwChar *>(&chunk_.data_));
+      }
 
       /**   Used to return data as RwUInt8 */
 
       const RwUInt8 GetAs_RwUInt8(void) const
-         {return *(reinterpret_cast<const RwUInt8 *>(&chunk_.data_));}
-      
+      {
+         return *(reinterpret_cast<const RwUInt8 *>(&chunk_.data_));
+      }
+
       /**   Used to return data as RwUInt16 */
 
       const RwUInt16 GetAs_RwUInt16(void) const
-         {return *(reinterpret_cast<const RwUInt16 *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwUInt16 *>(&chunk_.data_));
+      }
 
       /**   Used to return data as RwUInt32 */
 
       const RwUInt32 GetAs_RwUInt32(void) const
-         {return *(reinterpret_cast<const RwUInt32 *>(&chunk_.data_));}
- 
+      {
+         return *(reinterpret_cast<const RwUInt32 *>(&chunk_.data_));
+      }
+
       /**   Used to return data as RwInt8 */
 
       const RwInt8 GetAs_RwInt8(void) const
-         {return *(reinterpret_cast<const RwInt8 *>(&chunk_.data_));}
-      
+      {
+         return *(reinterpret_cast<const RwInt8 *>(&chunk_.data_));
+      }
+
       /**   Used to return data as RwInt16 */
 
       const RwInt16 GetAs_RwInt16(void) const
-         {return *(reinterpret_cast<const RwInt16 *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwInt16 *>(&chunk_.data_));
+      }
 
       /**   Used to return data as RwInt32 */
 
       const RwInt32 GetAs_RwInt32(void) const
-         {return *(reinterpret_cast<const RwInt32 *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwInt32 *>(&chunk_.data_));
+      }
 
       /**   Used to return data as RwRGBA */
 
       const RwRGBA GetAs_RwRGBA(void) const
-         {return *(reinterpret_cast<const RwRGBA *>(&chunk_.data_));}
+      {
+         return *(reinterpret_cast<const RwRGBA *>(&chunk_.data_));
+      }
 
-    protected:
+   protected:
 
       // Revoked ctor/copy/assign - not a 'normal' constructable class
       CAttributeCommand();
-      CAttributeCommand( const CAttributeCommand& );
-      CAttributeCommand& operator = ( const CAttributeCommand& );
+      CAttributeCommand(const CAttributeCommand &);
+      CAttributeCommand &operator=(const CAttributeCommand &);
 
-    private:
+   private:
 
       // Implementation
       const CAttributeDataChunk chunk_;
@@ -535,25 +597,25 @@ namespace RWS
    {
    public:
 
-      CAttributeDataChunkIterator(const CAttributeDataChunk& begin); 
+      CAttributeDataChunkIterator(const CAttributeDataChunk &begin);
 
       bool IsFinished() const;
-      
-      // RWS_PRE(!IsFinished())
-      CAttributeDataChunkIterator& operator++();
 
       // RWS_PRE(!IsFinished())
-      const CAttributeDataChunk& operator*() const;
+      CAttributeDataChunkIterator &operator++();
 
       // RWS_PRE(!IsFinished())
-      const CAttributeDataChunk* operator->() const;
+      const CAttributeDataChunk &operator*() const;
 
-      const CAttributeDataChunk *GetDataChunk(void) {return pCurrChunk_;}
+      // RWS_PRE(!IsFinished())
+      const CAttributeDataChunk *operator->() const;
+
+      const CAttributeDataChunk *GetDataChunk(void) { return pCurrChunk_; }
 
    private:
 
       // Implementation
-      const CAttributeDataChunk* pCurrChunk_;
+      const CAttributeDataChunk *pCurrChunk_;
    };
 
    /**
@@ -569,29 +631,28 @@ namespace RWS
    public:
 
       CAttributeCommandIterator(
-         const CAttributePacket& packet,
-         const RwChar *targetClass
-         ); 
+         const CAttributePacket &packet,
+         const RwChar *targetClass);
 
       bool IsFinished() const;
-      
-      // RWS_PRE(!IsFinished())
-      CAttributeCommandIterator& operator++();
 
       // RWS_PRE(!IsFinished())
-      const CAttributeCommand& operator*() const;
+      CAttributeCommandIterator &operator++();
 
       // RWS_PRE(!IsFinished())
-      const CAttributeCommand* operator->() const;
+      const CAttributeCommand &operator*() const;
 
-      const CAttributeDataChunk *GetDataChunk(void) {return chunkIt_.GetDataChunk();}
+      // RWS_PRE(!IsFinished())
+      const CAttributeCommand *operator->() const;
+
+      const CAttributeDataChunk *GetDataChunk(void) { return chunkIt_.GetDataChunk(); }
 
    private:
 
       // Implementation
-      void SkipToNextAttributeCommand( bool lastClassIdChunkWasForTargetClass );
+      void SkipToNextAttributeCommand(bool lastClassIdChunkWasForTargetClass);
       CAttributeDataChunkIterator chunkIt_;
-      const RwChar* pTargetClass_;
+      const RwChar *pTargetClass_;
    };
 
    /**
@@ -616,15 +677,15 @@ namespace RWS
 
       RWS_BEGIN_COMMANDS
 
-           RWS_ATTRIBUTE(CMD_SetDebug,
-            "Debug",
-            "Enable/Disable debugging, each attribute handler has a Debug flag"
-            " which is available for use by any derived class to enable/disable behavior"
-            " specific per instance debugging (Programmers should look at "
-            " uATTRIBUTEHANDLER_FLAG_DEBUG in CAttributeHandler.h)",
-            BOOLEAN,
-            RwUInt32,
-            DEFAULT(0))
+      RWS_ATTRIBUTE(CMD_SetDebug,
+                    "Debug",
+                    "Enable/Disable debugging, each attribute handler has a Debug flag"
+                    " which is available for use by any derived class to enable/disable behavior"
+                    " specific per instance debugging (Programmers should look at "
+                    " uATTRIBUTEHANDLER_FLAG_DEBUG in CAttributeHandler.h)",
+                    BOOLEAN,
+                    RwUInt32,
+                    DEFAULT(0))
 
       RWS_END_COMMANDS;
 #endif
@@ -637,7 +698,7 @@ namespace RWS
       *
       */
 
-      virtual void HandleAttributes(const CAttributePacket& attr);
+      virtual void HandleAttributes(const CAttributePacket &attr);
 
       /**
       *
@@ -655,11 +716,11 @@ namespace RWS
       *                       the most base class) instead. The default is to check the top level.
       */
       virtual CAttributeTableEntry *GetAttributeTable(const char *classID,
-         RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel = FALSE)
+                                                      RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel = FALSE)
       {
          rNumEntries = 0;
          rpThis = 0;
-         return(0);
+         return (0);
       }
 
       /**
@@ -681,14 +742,14 @@ namespace RWS
       virtual CAttributeTablePostUpdateFunction GetAttrPostUpdateFunc(void *&rpThis)
       {
          rpThis = 0;
-         return(0);
+         return (0);
       }
 
-      void Add(const RWSGUID & instanceId);
+      void Add(const RWSGUID &instanceId);
 
-      static void Remove(const RWSGUID & instanceId);
+      static void Remove(const RWSGUID &instanceId);
 
-      static CAttributeHandler* Find(const RWSGUID & instanceId);
+      static CAttributeHandler *Find(const RWSGUID &instanceId);
 
       static void Purge();
 
@@ -711,7 +772,11 @@ namespace RWS
       *
       */
 
-      static void Close() { Purge(); sm_pNewAttributeHandlerCallBack = 0;}
+      static void Close()
+      {
+         Purge();
+         sm_pNewAttributeHandlerCallBack = 0;
+      }
 
       static void RegisterStreamChunkHandlers(void);
 
@@ -730,8 +795,8 @@ namespace RWS
       *  Bit field values for various flags that are stored in m_Flags.
       *
       */
-      #define uATTRIBUTEHANDLER_FLAG_DEBUG    (static_cast<RwUInt32>(0x1 << 0))
-      #define uATTRIBUTEHANDLER_FLAG_LOCKED   (static_cast<RwUInt32>(0x1 << 1))
+#define uATTRIBUTEHANDLER_FLAG_DEBUG (static_cast<RwUInt32>(0x1 << 0))
+#define uATTRIBUTEHANDLER_FLAG_LOCKED (static_cast<RwUInt32>(0x1 << 1))
 
       /**
       *
@@ -785,7 +850,7 @@ namespace RWS
             return FALSE;
          }
       }
-      
+
       /*
       *  \return Returns the unique Id, of this instance, of this class which corresponds to the GUID
       *  used by the workspace to identify the instance of the behavior.
@@ -804,7 +869,8 @@ namespace RWS
       *  Construct a CAttributeHandler object.
       *
       */
-      CAttributeHandler() : m_Flags(0)
+      CAttributeHandler() :
+         m_Flags(0)
       {
          m_InstanceId.Clear();
       }
@@ -813,8 +879,8 @@ namespace RWS
 
       // Revoked ops
       //
-      CAttributeHandler( const CAttributeHandler& );
-      CAttributeHandler& operator = ( const CAttributeHandler& );
+      CAttributeHandler(const CAttributeHandler &);
+      CAttributeHandler &operator=(const CAttributeHandler &);
 
       static NewAttributeHandlerCallBack sm_pNewAttributeHandlerCallBack;
 

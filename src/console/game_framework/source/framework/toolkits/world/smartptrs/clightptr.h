@@ -43,26 +43,36 @@ namespace RWS
    */
    class CLightPtr : public CRwObjectPtr<RpLight>
 #ifdef RWS_EVENTVISUALIZATION
-   , public CEventVisualization
+      ,
+                     public CEventVisualization
 #endif
    {
    public:
       /**
       * Default constructor, constructs a NULL CLightPtr pointer
       */
-      CLightPtr() : CRwObjectPtr<RpLight>() {}
+      CLightPtr() :
+         CRwObjectPtr<RpLight>()
+      {
+      }
 
       /**
       * Constructor, constructs a CLightPtr pointer that points to \a p;
       *
       * \param p Pointer to an RpLight object.
       */
-      CLightPtr(RpLight* p) : CRwObjectPtr<RpLight>(p) {}
+      CLightPtr(RpLight* p) :
+         CRwObjectPtr<RpLight>(p)
+      {
+      }
 
       /**
       * Destructor for CLightPtr object, if this CLightPtr is still assigned to an RpLight calls CLightPtr::Destroy.
       */
-      ~CLightPtr() { if (p_) LightHelper::Destroy(p_); }
+      ~CLightPtr()
+      {
+         if (p_) LightHelper::Destroy(p_);
+      }
 
       /**
       *
@@ -72,7 +82,7 @@ namespace RWS
       *
       * \param p Pointer to an RpLight object.
       */
-      CLightPtr& operator = (RpLight* p)
+      CLightPtr& operator=(RpLight* p)
       {
          if (p_ != p)
          {
@@ -83,7 +93,7 @@ namespace RWS
 
          return *this;
       }
-      
+
       /**
       *
       * Mandatory CEventVisualization interface
@@ -94,20 +104,20 @@ namespace RWS
       *
       */
 #ifdef RWS_EVENTVISUALIZATION
-      virtual RwV3d *GetWorldPos(void) 
+      virtual RwV3d* GetWorldPos(void)
       {
          if (p_)
          {
-            RwFrame *pFrame = RpLightGetFrame(p_);
+            RwFrame* pFrame = RpLightGetFrame(p_);
 
             if (pFrame)
             {
-               RwMatrix *pMatrix = RwFrameGetLTM(pFrame);
+               RwMatrix* pMatrix = RwFrameGetLTM(pFrame);
 
-               return(RwMatrixGetPos(pMatrix));
+               return (RwMatrixGetPos(pMatrix));
             }
          }
-         return(0);
+         return (0);
       }
 #endif
 
@@ -129,10 +139,10 @@ namespace RWS
 
       // Revoked ops
       CLightPtr(const CLightPtr&);
-      CLightPtr& operator = (const CLightPtr&);
+      CLightPtr& operator=(const CLightPtr&);
    };
 }
 
-extern RwBool RpLightDestroy(RWS::CLightPtr &rCLightPtr);
+extern RwBool RpLightDestroy(RWS::CLightPtr& rCLightPtr);
 
 #endif

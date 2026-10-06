@@ -35,7 +35,7 @@
 #include <rpspline.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rpspline.lib")
+#pragma comment(lib, "rpspline.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -69,14 +69,14 @@ namespace RWS
    void *CRwSplineResource::Load(const RwChar *psName,
                                  const RwChar *psType,
                                  const RwChar *psResourcePath,
-                                 RwStream* pStream,
+                                 RwStream *pStream,
                                  RwUInt32 uiStreamSize,
                                  RwUInt32 &uiResourceSize)
    {
       RWS_FUNCTION("RWS::CRwSplineResource::Load");
       RWS_PRE(pStream);
 
-      void * pBuffer = 0;
+      void *pBuffer = 0;
 
       if (uiStreamSize > 0)
       {
@@ -91,15 +91,15 @@ namespace RWS
 
          switch (_RwChunkHeaderInfo.type)
          {
-            case rwID_SPLINE:
-               pBuffer = RpSplineStreamRead(pStream);
-               break;
+         case rwID_SPLINE:
+            pBuffer = RpSplineStreamRead(pStream);
+            break;
          }
       }
       else
       {
          pBuffer = ::RWS_NEW RwInt32;
-         
+
          *reinterpret_cast<RwInt32 *>(pBuffer) = -1;
 
          RWS_WARNING(uiStreamSize > 0, psName << " : Spline asset has no data");
@@ -129,7 +129,7 @@ namespace RWS
 
       if (*reinterpret_cast<RwInt32 *>(pResource) == -1)
       {
-         delete(reinterpret_cast<RwInt32 *>(pResource));
+         delete (reinterpret_cast<RwInt32 *>(pResource));
          ret = TRUE;
       }
       else
@@ -172,5 +172,8 @@ namespace RWS
    * this is required in order to register the handler.
    *
    */
-   namespace { CRwSplineResource gCRwSplineResource; }
+   namespace
+   {
+      CRwSplineResource gCRwSplineResource;
+   }
 }

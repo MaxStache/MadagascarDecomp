@@ -43,17 +43,17 @@
 * See RWS::CLightPtr::Destroy for details.
 *
 */
-RwBool RpLightDestroy(RWS::CLightPtr &rCLightPtr)
+RwBool RpLightDestroy(RWS::CLightPtr& rCLightPtr)
 {
    RWS_FUNCTION("RWS::RpLightDestroy");
-   
+
    RpLight* pLight = rCLightPtr;
-   
+
    RwBool ret = RWS::LightHelper::Destroy(pLight);
-   
+
    // Update the smart pointer
    //
    rCLightPtr.setptr(0);
-   
+
    RWS_RETURN(ret);
 }

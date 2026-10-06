@@ -27,7 +27,7 @@
 #ifndef __CG3PIPESELECT_H__
 #define __CG3PIPESELECT_H__
 
-#if defined (SKY)
+#if defined(SKY)
 
 //////////////////////////////////////////////////////////////////
 //
@@ -45,24 +45,24 @@ namespace RWS
          RpLight *ambient;
          RpLight *directional;
       };
-      
+
       struct APL_LightingSetupCB_data
       {
          RpLight *ambient;
          RpLight *point;
       };
-      
+
       struct A4D_LightingSetupCB_data
       {
          RpLight *ambient;
          RpLight *directional[4];
          RwUInt32 uiIndex;
       };
-      
+
       RpLight *ADL_LightingSetupCB(RpLight *pLight, void *pData);   // for pData use ADL_LightingSetupCB_data
       RpLight *APL_LightingSetupCB(RpLight *pLight, void *pData);   // for pData use APL_LightingSetupCB_data
       RpLight *A4D_LightingSetupCB(RpLight *pLight, void *pData);   // for pData use A4D_LightingSetupCB_data
-      
+
       RpAtomic *G3x_ADL_DefaultLightingCB(RpAtomic *);
       RpAtomic *G3x_APL_DefaultLightingCB(RpAtomic *);
       RpAtomic *G3x_A4D_DefaultLightingCB(RpAtomic *);
@@ -112,11 +112,11 @@ namespace RWS
       *  the behavior which attaches the 
       *  rwPDS_G3_Generic_MatPipeID pipe is called CG3_Generic_MatPipeID.
       */
-      
+
       //-------------------------------------------------------------------------------------
       // Material Pipelines
       //-------------------------------------------------------------------------------------
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -127,21 +127,21 @@ namespace RWS
       class CG3x_APL_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APL_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APL_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light Generic rendering.",
-            "Attaches the rwPDS_G3x_APL_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APL_MatPipeID pipeline to each asset.");
+
          CG3x_APL_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APL_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APL_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -152,21 +152,21 @@ namespace RWS
       class CG3x_ADL_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADL_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADL_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light Generic rendering.",
-            "Attaches the rwPDS_G3x_ADL_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_ADL_MatPipeID pipeline to each asset.");
+
          CG3x_ADL_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADL_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADL_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -177,21 +177,21 @@ namespace RWS
       class CG3x_A4D_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4D_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4D_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights Generic rendering.",
-            "Attaches the rwPDS_G3x_A4D_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4D_MatPipeID pipeline to each asset.");
+
          CG3x_A4D_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4D_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4D_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -202,21 +202,21 @@ namespace RWS
       class CG3x_APLDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APLDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APLDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light DUal Pass rendering.",
-            "Attaches the rwPDS_G3x_APLDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APLDup_MatPipeID pipeline to each asset.");
+
          CG3x_APLDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APLDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APLDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -227,21 +227,21 @@ namespace RWS
       class CG3x_ADLDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADLDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADLDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light DUal Pass rendering.",
-            "Attaches the rwPDS_G3x_ADLDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_ADLDup_MatPipeID pipeline to each asset.");
+
          CG3x_ADLDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADLDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADLDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -252,21 +252,21 @@ namespace RWS
       class CG3x_A4DDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4DDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4DDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights DUal Pass rendering",
-            "Attaches the rwPDS_G3x_A4DDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4DDup_MatPipeID pipeline to each asset.");
+
          CG3x_A4DDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4DDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4DDup_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -277,21 +277,21 @@ namespace RWS
       class CG3x_APLGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APLGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APLGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light Gloss Environment Map rendering.",
-            "Attaches the rwPDS_G3x_APLGem_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APLGem_MatPipeID pipeline to each asset.");
+
          CG3x_APLGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APLGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APLGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -302,21 +302,21 @@ namespace RWS
       class CG3x_ADLGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADLGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADLGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light Gloss Environment Map rendering.",
-            "Attaches the rwPDS_G3x_ADLGem_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_ADLGem_MatPipeID pipeline to each asset.");
+
          CG3x_ADLGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADLGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADLGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -327,21 +327,21 @@ namespace RWS
       class CG3x_A4DGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4DGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4DGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights Gloss Environment Map rendering.",
-            "Attaches the rwPDS_G3x_A4DGem_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4DGem_MatPipeID pipeline to each asset.");
+
          CG3x_A4DGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4DGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4DGem_MatPipeID, rwPDS_G3x_Generic_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -352,21 +352,21 @@ namespace RWS
       class CG3x_APLSkin_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APLSkin_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APLSkin_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light Skin Generic rendering.",
-            "Attaches the rwPDS_G3x_APLSkin_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APLSkin_MatPipeID pipeline to each asset.");
+
          CG3x_APLSkin_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APLSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APLSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -377,21 +377,21 @@ namespace RWS
       class CG3x_ADLSkin_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADLSkin_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADLSkin_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light Skin Generic rendering.",
-            "Attaches the rwPDS_G3x_ADLSkin_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_ADLSkin_MatPipeID pipeline to each asset.");
+
          CG3x_ADLSkin_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -402,21 +402,21 @@ namespace RWS
       class CG3x_A4DSkin_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4DSkin_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4DSkin_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights Skin Generic rendering.",
-            "Attaches the rwPDS_G3x_A4DSkin_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4DSkin_MatPipeID pipeline to each asset.");
+
          CG3x_A4DSkin_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkin_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -427,21 +427,21 @@ namespace RWS
       class CG3x_APLSkinDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APLSkinDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APLSkinDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light Skin DUal Pass rendering",
-            "Attaches the rwPDS_G3x_APLSkinDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APLSkinDup_MatPipeID pipeline to each asset.");
+
          CG3x_APLSkinDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APLSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APLSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -452,21 +452,21 @@ namespace RWS
       class CG3x_ADLSkinDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADLSkinDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADLSkinDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light Skin DUal Pass rendering.",
-            "Attaches the rwPDS_G3x_ADLSkinDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_ADLSkinDup_MatPipeID pipeline to each asset.");
+
          CG3x_ADLSkinDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -477,21 +477,21 @@ namespace RWS
       class CG3x_A4DSkinDup_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4DSkinDup_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4DSkinDup_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights Skin DUal Pass rendering",
-            "Attaches the rwPDS_G3x_A4DSkinDup_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4DSkinDup_MatPipeID pipeline to each asset.");
+
          CG3x_A4DSkinDup_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkinDup_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -502,21 +502,21 @@ namespace RWS
       class CG3x_APLSkinGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_APLSkinGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_APLSkinGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Point Light Skin Gloss Environment Map rendering.",
-            "Attaches the rwPDS_G3x_APLSkinGem_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_APLSkinGem_MatPipeID pipeline to each asset.");
+
          CG3x_APLSkinGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_APLSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_APLSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_APL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -527,21 +527,21 @@ namespace RWS
       class CG3x_ADLSkinGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_ADLSkinGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_ADLSkinGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and Direction Light Skin Gloss Environment Map rendering.",
-            "Attaches the specified pipeline to each asset.");
-         
+                         "Attaches the specified pipeline to each asset.");
+
          CG3x_ADLSkinGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_ADLSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_ADL_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };
-      
+
       /**
       *
       *  \ingroup Mod_Pipelines
@@ -552,17 +552,17 @@ namespace RWS
       class CG3x_A4DSkinGem_MatPipeID : public CPipeSelectBase
       {
       public:
-         
+
          RWS_MAKENEWCLASS(CG3x_A4DSkinGem_MatPipeID);
          RWS_DECLARE_CLASSID(CG3x_A4DSkinGem_MatPipeID);
-         
+
          RWS_CATEGORY("Material Pipeline");
-         
+
          RWS_DESCRIPTION("Ambient and 4 Direction Lights Skin Gloss Environment Map rendering.",
-            "Attaches the rwPDS_G3x_A4DSkinGem_MatPipeID pipeline to each asset.");
-         
+                         "Attaches the rwPDS_G3x_A4DSkinGem_MatPipeID pipeline to each asset.");
+
          CG3x_A4DSkinGem_MatPipeID(const CAttributePacket &rAttr) :
-         CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
+            CPipeSelectBase(rAttr, rwPDS_G3x_A4DSkinGem_MatPipeID, rwPDS_G3x_Skin_AtmPipeID, G3x_A4D_DefaultLightingCB, (RpPDSPipeID)0, 0)
          {
          }
       };

@@ -48,7 +48,7 @@ namespace RWS
 
       // See Singleton pattern,
       //
-      CGCNStandardControlDevice* CGCNStandardControlDevice::_instance;
+      CGCNStandardControlDevice *CGCNStandardControlDevice::_instance;
 
       // Storage of raw game pad data, also maintains a handle to each device
       //
@@ -70,7 +70,7 @@ namespace RWS
          m_value = ((float)var) / 128.0f;
 
          if ((m_value > -0.15f) && (m_value < 0.15f)) m_value = 0.0f; // Hysteresis in center area
-         m_value = (m_value < 0.0) ? (-(m_value * m_value)):(m_value * m_value); // asymmetric paraboloid
+         m_value = (m_value < 0.0) ? (-(m_value * m_value)) : (m_value * m_value); // asymmetric paraboloid
       }
 
       //////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ namespace RWS
       //
       //
       //
-      CGCNStandardControlDevice* CGCNStandardControlDevice::new_Instance(void)
+      CGCNStandardControlDevice *CGCNStandardControlDevice::new_Instance(void)
       {
          if (_instance == 0)
          {
@@ -142,7 +142,8 @@ namespace RWS
       //
       //
       //
-      CGCNStandardControlDevice::CGCNStandardControlDevice(void) : InitCEventHandler(0)
+      CGCNStandardControlDevice::CGCNStandardControlDevice(void) :
+         InitCEventHandler(0)
       {
          GCNInput_CreateGamepads();
 
@@ -174,7 +175,7 @@ namespace RWS
       // Name: GCNInput_CreateGamepads()
       // Desc: Creates the gamepad devices
       //-----------------------------------------------------------------------------
-      BOOL CGCNStandardControlDevice::GCNInput_CreateGamepads( void )
+      BOOL CGCNStandardControlDevice::GCNInput_CreateGamepads(void)
       {
          RWS_FUNCTION("CGCNStandardControlDevice::GCNInput_CreateGamepads");
 
@@ -192,7 +193,7 @@ namespace RWS
              * data sampling. PADInit must go after RwEngineStart.
              */
             BOOL success = PADInit();
-            RWS_ASSERT(success,"CGCNStandardControlDevice::GCNInput_CreateGamepads PADInit() failed");
+            RWS_ASSERT(success, "CGCNStandardControlDevice::GCNInput_CreateGamepads PADInit() failed");
             initialized = success;
          }
 
@@ -210,7 +211,7 @@ namespace RWS
       // Name: GCNInput_GetInput()
       // Desc: Processes input from the gamepads
       //-----------------------------------------------------------------------------
-      void CGCNStandardControlDevice::GCNInput_GetInput( void)
+      void CGCNStandardControlDevice::GCNInput_GetInput(void)
       {
          RWS_FUNCTION("CGCNStandardControlDevice::GCNInput_GetInput");
 
@@ -231,7 +232,7 @@ namespace RWS
       {
          if (!_instance) return 0;
 
-         if (device_num<NUM_GAME_CONTROLLERS)
+         if (device_num < NUM_GAME_CONTROLLERS)
          {
             return &g_Gamepads[device_num];
          }
@@ -260,30 +261,31 @@ namespace RWS
       //
       //
       //
-      CGCNStandardController::CGCNStandardController(const CAttributePacket&) : InitCEventHandler(0), m_PortSelect(0)
+      CGCNStandardController::CGCNStandardController(const CAttributePacket &) :
+         InitCEventHandler(0),
+         m_PortSelect(0)
       {
          pCGCNStandardControlDevice = CGCNStandardControlDevice::new_Instance();
 
          // Link to the running tick in order to poll controller devices
          //
-         LinkMsg(iMsgRunningTick,0);
+         LinkMsg(iMsgRunningTick, 0);
 
          // Setup button masks
          //
-         static unsigned int mask_table[]=
-         {
-            PAD_BUTTON_DOWN,
-            PAD_BUTTON_LEFT,
-            PAD_BUTTON_RIGHT,
-            PAD_BUTTON_UP,
-            PAD_BUTTON_A,
-            PAD_BUTTON_B,
-            PAD_BUTTON_X,
-            PAD_BUTTON_Y,
-            PAD_TRIGGER_Z
-         };
+         static unsigned int mask_table[] =
+            {
+               PAD_BUTTON_DOWN,
+               PAD_BUTTON_LEFT,
+               PAD_BUTTON_RIGHT,
+               PAD_BUTTON_UP,
+               PAD_BUTTON_A,
+               PAD_BUTTON_B,
+               PAD_BUTTON_X,
+               PAD_BUTTON_Y,
+               PAD_TRIGGER_Z};
 
-         for(unsigned int item = 0; item < GCN_DBUTTON_MAX; item++)
+         for (unsigned int item = 0; item < GCN_DBUTTON_MAX; item++)
          {
             m_dButtons[item].m_mask = mask_table[item];
          }
@@ -313,19 +315,19 @@ namespace RWS
          UnLinkMsg(m_dStart.m_Inq);
          UnRegisterMsg(m_dStart.m_Inq);
 
-         for(item = 0; item < GCN_AJOYSTICK_MAX; item++)
+         for (item = 0; item < GCN_AJOYSTICK_MAX; item++)
          {
             UnLinkMsg(m_aJoystick[item].m_Inq);
             UnRegisterMsg(m_aJoystick[item].m_Inq);
          }
 
-         for(item = 0; item < GCN_DBUTTON_MAX; item++)
+         for (item = 0; item < GCN_DBUTTON_MAX; item++)
          {
             UnLinkMsg(m_dButtons[item].m_Inq);
             UnRegisterMsg(m_dButtons[item].m_Inq);
          }
 
-         for(item = 0; item < GCN_ABUTTON_MAX; item++)
+         for (item = 0; item < GCN_ABUTTON_MAX; item++)
          {
             UnLinkMsg(m_aButtons[item].m_Inq);
             UnRegisterMsg(m_aButtons[item].m_Inq);
@@ -345,78 +347,78 @@ namespace RWS
       //
       //
       //
-      void CGCNStandardController::HandleAttributes(const CAttributePacket& attr)
+      void CGCNStandardController::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("CGCNStandardController::HandleAttributes");
 
          CAttributeHandler::HandleAttributes(attr);
 
-         CAttributeCommandIterator attrIt(attr,RWS_CLASSID_OF(CGCNStandardController));
+         CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CGCNStandardController));
 
-         while(!attrIt.IsFinished())
+         while (!attrIt.IsFinished())
          {
-            switch(attrIt->GetCommandId())
+            switch (attrIt->GetCommandId())
             {
                //////////////////////////////////////////////////////////////////
-               case CMD_m_PortSelect:
-                  attrIt->GetCommandData(m_PortSelect);
-                  break;
+            case CMD_m_PortSelect:
+               attrIt->GetCommandData(m_PortSelect);
+               break;
 
                //////////////////////////////////////////////////////////////////
-               case CMD_m_Inq_Start:
-                  ReplaceLinkedMsg(m_dStart.m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
+            case CMD_m_Inq_Start:
+               ReplaceLinkedMsg(m_dStart.m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
 
                //////////////////////////////////////////////////////////////////
-               case CMD_m_Inq_LeftX:
-                  ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_LeftX].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_LeftY:
-                  ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_LeftY].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_CX:
-                  ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_CX].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_CY:
-                  ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_CY].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
+            case CMD_m_Inq_LeftX:
+               ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_LeftX].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_LeftY:
+               ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_LeftY].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_CX:
+               ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_CX].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_CY:
+               ReplaceLinkedMsg(m_aJoystick[GCN_AJOYSTICK_CY].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
 
                //////////////////////////////////////////////////////////////////
-               case CMD_m_Inq_DPadUp:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadUp].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_DPadDown:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadDown].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_DPadLeft:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadLeft].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_DPadRight:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadRight].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_A:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_A].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_B:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_B].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_X:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_X].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_Y:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_Y].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_Z:
-                  ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_Z].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
+            case CMD_m_Inq_DPadUp:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadUp].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_DPadDown:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadDown].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_DPadLeft:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadLeft].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_DPadRight:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_DPadRight].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_A:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_A].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_B:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_B].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_X:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_X].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_Y:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_Y].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_Z:
+               ReplaceLinkedMsg(m_dButtons[GCN_DBUTTON_Z].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
 
                //////////////////////////////////////////////////////////////////
-               case CMD_m_Inq_L:
-                  ReplaceLinkedMsg(m_aButtons[GCN_ABUTTON_L].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
-               case CMD_m_Inq_R:
-                  ReplaceLinkedMsg(m_aButtons[GCN_ABUTTON_R].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-                  break;
+            case CMD_m_Inq_L:
+               ReplaceLinkedMsg(m_aButtons[GCN_ABUTTON_L].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
+            case CMD_m_Inq_R:
+               ReplaceLinkedMsg(m_aButtons[GCN_ABUTTON_R].m_Inq, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               break;
             }
             ++attrIt;
          }
@@ -449,7 +451,7 @@ namespace RWS
             m_aButtons[GCN_ABUTTON_L].CalcAnalogueButtonValue(pGCNPad->triggerLeft);
             m_aButtons[GCN_ABUTTON_R].CalcAnalogueButtonValue(pGCNPad->triggerRight);
 
-            for(unsigned int item = 0; item < GCN_DBUTTON_MAX; item++)
+            for (unsigned int item = 0; item < GCN_DBUTTON_MAX; item++)
             {
                m_dButtons[item].CalcDigitalButtonValue(pGCNPad->button);
             }
@@ -463,7 +465,7 @@ namespace RWS
 
             //Analogue Joystick
             //
-            for(item = 0; search && (item < GCN_AJOYSTICK_MAX); item++)
+            for (item = 0; search && (item < GCN_AJOYSTICK_MAX); item++)
             {
                if (pMsg.Id == m_aJoystick[item].m_Inq)
                {
@@ -474,7 +476,7 @@ namespace RWS
 
             //Digital Buttons
             //
-            for(item = 0; search && (item < GCN_DBUTTON_MAX); item++)
+            for (item = 0; search && (item < GCN_DBUTTON_MAX); item++)
             {
                if (pMsg.Id == m_dButtons[item].m_Inq)
                {
@@ -485,7 +487,7 @@ namespace RWS
 
             //Analogue Buttons
             //
-            for(item = 0; search && (item < GCN_ABUTTON_MAX); item++)
+            for (item = 0; search && (item < GCN_ABUTTON_MAX); item++)
             {
                if (pMsg.Id == m_aButtons[item].m_Inq)
                {

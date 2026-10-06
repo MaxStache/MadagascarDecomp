@@ -22,7 +22,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined (_XBOX))
+#if (defined(_XBOX))
 
 #ifndef __CFXXBOXMOTIONBLUR_H__
 #define __CFXXBOXMOTIONBLUR_H__
@@ -36,8 +36,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -77,30 +77,29 @@ namespace RWS
          */
          typedef struct s_FullScreenVert
          {
-            RwV3d    Pos;   /**< Position of the vertex.*/
-            RwReal   u;     /**< u coordinate for the vertex.*/
-            RwReal   v;     /**< v coordinate for the vertex.*/
-         }t_FullScreenVert;
+            RwV3d Pos;   /**< Position of the vertex.*/
+            RwReal u;     /**< u coordinate for the vertex.*/
+            RwReal v;     /**< v coordinate for the vertex.*/
+         } t_FullScreenVert;
 
          CFXXBOXMotionBlur();
          ~CFXXBOXMotionBlur();
 
-         void CreateSavedRenderState      (DWORD *SB);
-         void RestoreRenderState          (DWORD SB);
-         void DeleteSavedRenderState      (DWORD SB);
-         void CreateBlendPoly             (RwCamera *pCamera);
-         void ApplyMotionBlurRenderStates ();
-         void BlendFrontBuffer            (RwCamera *pCamera);
+         void CreateSavedRenderState(DWORD *SB);
+         void RestoreRenderState(DWORD SB);
+         void DeleteSavedRenderState(DWORD SB);
+         void CreateBlendPoly(RwCamera *pCamera);
+         void ApplyMotionBlurRenderStates();
+         void BlendFrontBuffer(RwCamera *pCamera);
 
       protected:
-         DWORD             m_RenderState; /**< Handle of state block used to preserve the render state. */
+         DWORD m_RenderState; /**< Handle of state block used to preserve the render state. */
          LPDIRECT3DDEVICE8 m_Dev;         /**< D3D device. */
-         t_FullScreenVert  m_Verts[4];    /**< The four vertices used to describe the blend polygon. */
-
+         t_FullScreenVert m_Verts[4];    /**< The four vertices used to describe the blend polygon. */
       };
 
    } // namespace FX
-      
+
 } // namespace RWS
 
 #endif

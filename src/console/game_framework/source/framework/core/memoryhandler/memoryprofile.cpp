@@ -30,14 +30,14 @@
 //#define VERBOSE
 
 //////////////////////////////////////////////////////////////////
-// 
+//
 // System Includes
 //
 #include <string.h>
 #include <stdio.h>
 
 //////////////////////////////////////////////////////////////////
-// 
+//
 //  RenderWare Studio Includes
 //
 #include "memoryprofile.h"
@@ -48,13 +48,13 @@
 #ifdef SKY
 extern "C"
 {
-#if defined (SN_TARGET_PS2)
+#if defined(SN_TARGET_PS2)
    extern void *_start;
    extern void *_fbss;
    extern void *_end;
 #endif
 
-#if defined (__MWERKS__)
+#if defined(__MWERKS__)
    extern void *_start;
    extern void *__data_start;
    extern void *__static_init;
@@ -66,13 +66,13 @@ extern "C"
 }
 #endif
 
-namespace 
+namespace
 {
    using namespace RWS;
    using namespace MemoryProfile;
 
    RwBool bIsOpen = FALSE; // Memory profiling is open
-   
+
    RwBool bIsEnabled = FALSE; // Memory profiling is enabled
 
    RwBool bRecursionGuard = FALSE;  // Guard against unwanted recursion
@@ -105,8 +105,9 @@ namespace
    */
    void ModifyString(char *ptr)
    {
-      while (*ptr != 0){
-         if (*ptr == ' ' || *ptr == '\t'|| *ptr == '\n') *ptr = '#';
+      while (*ptr != 0)
+      {
+         if (*ptr == ' ' || *ptr == '\t' || *ptr == '\n') *ptr = '#';
          ptr++;
       }
    }
@@ -122,47 +123,43 @@ namespace
 
       if (outputbuffer && uiIndex > 0)
       {
-         const char * const strProfile = "RWS::MemoryProfileData";
-         const RwUInt32 uiProfile = (strlen (strProfile) + 1) * sizeof (char);
+         const char *const strProfile = "RWS::MemoryProfileData";
+         const RwUInt32 uiProfile = (strlen(strProfile) + 1) * sizeof(char);
 
 #ifdef _DEBUG
          // Check we don't modify uiIndex while sending the data
          //
-         RwUInt32 uiIndexCheck = uiIndex + 1 ;
+         RwUInt32 uiIndexCheck = uiIndex + 1;
 #endif
 
          // Note, NetStream::OpenForWrite can cause a malloc, this is ok as it will be
          // freed by the RwStreamClose as long as another stream isn't opened and left open
          // in between.
          //
-         if (RwStream *pStream = NetStream::OpenForWrite (  
-              uiProfile
-            + sizeof(RwInt32)
-            + uiIndex
-            + 1
-            + ChunkHeaderSize))
+         if (RwStream *pStream = NetStream::OpenForWrite(
+                uiProfile + sizeof(RwInt32) + uiIndex + 1 + ChunkHeaderSize))
          {
-            RwStreamWriteChunkHeader (pStream, strfuncsend_NamedData,
-               uiProfile + sizeof(RwInt32) + uiIndex + 1);
+            RwStreamWriteChunkHeader(pStream, strfuncsend_NamedData,
+                                     uiProfile + sizeof(RwInt32) + uiIndex + 1);
 
             outputbuffer[uiIndex] = 0;   // Terminate packet with 0,0
             uiIndex++;
 
-            RwStreamWrite (pStream, strProfile, uiProfile);
+            RwStreamWrite(pStream, strProfile, uiProfile);
 
             // Packet Id, useful for debugging, note we use RwStreamWriteInt32 as there is
             // no RwStreamWriteUInt32
             //
-            RwStreamWriteInt32 ( pStream,
-               reinterpret_cast<const RwInt32 *>(&PacketNumber),
-               sizeof(RwInt32));
+            RwStreamWriteInt32(pStream,
+                               reinterpret_cast<const RwInt32 *>(&PacketNumber),
+                               sizeof(RwInt32));
 
             PacketNumber++;
 
             RWS_ASSERT(uiIndex == uiIndexCheck, "Error uiIndex modified during stream write");
 
-            RwStreamWrite (pStream, outputbuffer, uiIndex);
-            RwStreamClose (pStream, 0);
+            RwStreamWrite(pStream, outputbuffer, uiIndex);
+            RwStreamClose(pStream, 0);
 
             uiIndex = 0;
 
@@ -195,8 +192,8 @@ namespace
       TimeNow = g_TimeCallBackFunc();
 
       // Check for buffer overflow
-      // 
-      if ( (uiIndex + (strlen(buffer) + 1)) >= OUTPUT_BUFFER_SIZE)
+      //
+      if ((uiIndex + (strlen(buffer) + 1)) >= OUTPUT_BUFFER_SIZE)
       {
          LastTimeDataSent = TimeNow;
 
@@ -206,10 +203,10 @@ namespace
             // MemoryProfile::Comment
             //
             bIsConnectionLost = TRUE;
-            RWS_WARNING(FALSE, 
-               "Buffer overrun, Memory Profile data will be lost, either increase "
-               "the Size of OUTPUT_BUFFER_SIZE until this warning is removed or disable"
-               " memory profiling. Profiler now being disabled for this run.");
+            RWS_WARNING(FALSE,
+                        "Buffer overrun, Memory Profile data will be lost, either increase "
+                        "the Size of OUTPUT_BUFFER_SIZE until this warning is removed or disable"
+                        " memory profiling. Profiler now being disabled for this run.");
             return;
          }
       }
@@ -220,7 +217,7 @@ namespace
 
       // If its been a while since we sent back profile data, send it back now.
       //
-      if ( (TimeNow - LastTimeDataSent) > TimeOut)
+      if ((TimeNow - LastTimeDataSent) > TimeOut)
       {
          LastTimeDataSent = TimeNow;
 
@@ -303,7 +300,7 @@ namespace RWS
 
          // If its been a while since we sent back profile data, send it back now.
          //
-         if ( (TimeNow - LastTimeDataSent) > TimeOut)
+         if ((TimeNow - LastTimeDataSent) > TimeOut)
          {
             LastTimeDataSent = TimeNow;
 
@@ -319,40 +316,40 @@ namespace RWS
       void ReportCodeMetrics()
       {
 #ifdef SKY
-#if defined (SN_TARGET_PS2)
-         Malloc(reinterpret_cast<void*>(&_start),
-            reinterpret_cast<RwUInt32>(&_fbss) - reinterpret_cast<RwUInt32>(&_start),
-            "ReportCodeMetrics _start", 0, RWS_MEMORY_TYPE_USER);
+#if defined(SN_TARGET_PS2)
+         Malloc(reinterpret_cast<void *>(&_start),
+                reinterpret_cast<RwUInt32>(&_fbss) - reinterpret_cast<RwUInt32>(&_start),
+                "ReportCodeMetrics _start", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&_fbss),
-            reinterpret_cast<RwUInt32>(&_end) - reinterpret_cast<RwUInt32>(&_fbss),
-            "ReportCodeMetrics _fbss", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&_fbss),
+                reinterpret_cast<RwUInt32>(&_end) - reinterpret_cast<RwUInt32>(&_fbss),
+                "ReportCodeMetrics _fbss", 0, RWS_MEMORY_TYPE_USER);
 #endif
 
-#if defined (__MWERKS__)
-         Malloc(reinterpret_cast<void*>(&_start),
-            reinterpret_cast<RwUInt32>(&__data_start) - reinterpret_cast<RwUInt32>(&_start),
-            "_start to __data_start", 0, RWS_MEMORY_TYPE_USER);
+#if defined(__MWERKS__)
+         Malloc(reinterpret_cast<void *>(&_start),
+                reinterpret_cast<RwUInt32>(&__data_start) - reinterpret_cast<RwUInt32>(&_start),
+                "_start to __data_start", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&__data_start),
-            reinterpret_cast<RwUInt32>(&__static_init) - reinterpret_cast<RwUInt32>(&__data_start),
-            "__data_start to __static_init", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&__data_start),
+                reinterpret_cast<RwUInt32>(&__static_init) - reinterpret_cast<RwUInt32>(&__data_start),
+                "__data_start to __static_init", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&__static_init),
-            reinterpret_cast<RwUInt32>(&__static_init_end) - reinterpret_cast<RwUInt32>(&__static_init),
-            "__static_init to __static_init_end", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&__static_init),
+                reinterpret_cast<RwUInt32>(&__static_init_end) - reinterpret_cast<RwUInt32>(&__static_init),
+                "__static_init to __static_init_end", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&__static_init_end),
-            reinterpret_cast<RwUInt32>(&_fbss) - reinterpret_cast<RwUInt32>(&__static_init_end),
-            "__static_init_end to _fbss", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&__static_init_end),
+                reinterpret_cast<RwUInt32>(&_fbss) - reinterpret_cast<RwUInt32>(&__static_init_end),
+                "__static_init_end to _fbss", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&_fbss),
-            reinterpret_cast<RwUInt32>(&__bss_start) - reinterpret_cast<RwUInt32>(&_fbss),
-            "_fbss to __bss_start", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&_fbss),
+                reinterpret_cast<RwUInt32>(&__bss_start) - reinterpret_cast<RwUInt32>(&_fbss),
+                "_fbss to __bss_start", 0, RWS_MEMORY_TYPE_USER);
 
-         Malloc(reinterpret_cast<void*>(&__bss_start),
-            reinterpret_cast<RwUInt32>(&_end) - reinterpret_cast<RwUInt32>(&__bss_start),
-            "__bss_start to _end", 0, RWS_MEMORY_TYPE_USER);
+         Malloc(reinterpret_cast<void *>(&__bss_start),
+                reinterpret_cast<RwUInt32>(&_end) - reinterpret_cast<RwUInt32>(&__bss_start),
+                "__bss_start to _end", 0, RWS_MEMORY_TYPE_USER);
 #endif
 #endif
       }
@@ -383,7 +380,7 @@ namespace RWS
          // this malloc fakes a report for the RWS_NEW above, see *TRUE ALLOC*
          //
          Malloc(outputbuffer,
-            OUTPUT_BUFFER_SIZE + 1, __FILE__, __LINE__, RWS_MEMORY_TYPE_RWS);
+                OUTPUT_BUFFER_SIZE + 1, __FILE__, __LINE__, RWS_MEMORY_TYPE_RWS);
       }
 
       /**
@@ -395,7 +392,7 @@ namespace RWS
       {
          RWS_PRE(bIsOpen)
 
-         delete [] outputbuffer;
+         delete[] outputbuffer;
 
          bIsEnabled = FALSE;
 
@@ -455,11 +452,11 @@ namespace RWS
       *
       */
       void Malloc(const void *Address,
-         RwUInt32 Size,
-         const char *Filename,
-         RwUInt32 LineNumber,
-         RwUInt32 userTypeNum)
-      {  
+                  RwUInt32 Size,
+                  const char *Filename,
+                  RwUInt32 LineNumber,
+                  RwUInt32 userTypeNum)
+      {
          MallocCount++;
 
          if (bRecursionGuard) return;
@@ -467,24 +464,17 @@ namespace RWS
          bRecursionGuard = TRUE;
 
 #ifdef VERBOSE
-         RWS_DEBUGSTREAM(  "MALLOC  " << 
-                           RWS_HEX(Address) << 
-                           " " << 
-                           RWS_VALIDSTRING(Filename) << 
-                           " Line " << 
-                           LineNumber << 
-                           " Size " << 
-                           Size << std::endl);
+         RWS_DEBUGSTREAM("MALLOC  " << RWS_HEX(Address) << " " << RWS_VALIDSTRING(Filename) << " Line " << LineNumber << " Size " << Size << std::endl);
 #endif
 
-         if (!bIsEnabled || bIsConnectionLost) 
+         if (!bIsEnabled || bIsConnectionLost)
          {
             bRecursionGuard = FALSE;
 
             return;
          }
 
-         if (!bIsOpen) 
+         if (!bIsOpen)
          {
             bRecursionGuard = FALSE;
 
@@ -493,7 +483,7 @@ namespace RWS
 
          char tbuffer[MaxStringLength];
 
-         if (Filename) 
+         if (Filename)
          {
             strcpy(tbuffer, Filename);
 
@@ -506,15 +496,15 @@ namespace RWS
 
          char buffer[MaxStringLength];
 
-         sprintf( buffer,
-            "A %x %x %s %u %u",
-            reinterpret_cast<RwUInt32>(Address),
-            Size, tbuffer, LineNumber, userTypeNum);
+         sprintf(buffer,
+                 "A %x %x %s %u %u",
+                 reinterpret_cast<RwUInt32>(Address),
+                 Size, tbuffer, LineNumber, userTypeNum);
 
          RWS_ASSERT(strlen(buffer) < (MaxStringLength - 1), "Error increase size of MaxStringLength");
 
          _TransmitMemoryProfileData(buffer);
-   
+
          bRecursionGuard = FALSE;
       }
 
@@ -536,11 +526,11 @@ namespace RWS
       *  see RWS_MEMORY_TYPE in memoryhandler.h
       *
       */
-      void Calloc(   const void *Address,
-         const RwUInt32 Size,
-         const char *Filename,
-         const RwUInt32 LineNumber,
-         const RwUInt32 UserTypeNum)
+      void Calloc(const void *Address,
+                  const RwUInt32 Size,
+                  const char *Filename,
+                  const RwUInt32 LineNumber,
+                  const RwUInt32 UserTypeNum)
       {
          CallocCount++;
 
@@ -549,23 +539,16 @@ namespace RWS
          bRecursionGuard = TRUE;
 
 #ifdef VERBOSE
-         RWS_DEBUGSTREAM(  "CALLOC  " << 
-                           RWS_HEX(Address) << 
-                           " " << 
-                           RWS_VALIDSTRING(Filename) << 
-                           " Line " << 
-                           LineNumber << 
-                           " Size " << 
-                           Size << std::endl);
+         RWS_DEBUGSTREAM("CALLOC  " << RWS_HEX(Address) << " " << RWS_VALIDSTRING(Filename) << " Line " << LineNumber << " Size " << Size << std::endl);
 #endif
 
-         if (!bIsEnabled || bIsConnectionLost) 
+         if (!bIsEnabled || bIsConnectionLost)
          {
             bRecursionGuard = FALSE;
             return;
          }
 
-         if (!bIsOpen) 
+         if (!bIsOpen)
          {
             bRecursionGuard = FALSE;
             return;
@@ -573,7 +556,7 @@ namespace RWS
 
          char tbuffer[MaxStringLength];
 
-         if (Filename) 
+         if (Filename)
          {
             strcpy(tbuffer, Filename);
 
@@ -586,10 +569,10 @@ namespace RWS
 
          char buffer[MaxStringLength];
 
-         sprintf( buffer,
-            "C %x %x %s %u %u",
-            reinterpret_cast<RwUInt32>(Address),
-            Size, tbuffer, LineNumber, UserTypeNum);
+         sprintf(buffer,
+                 "C %x %x %s %u %u",
+                 reinterpret_cast<RwUInt32>(Address),
+                 Size, tbuffer, LineNumber, UserTypeNum);
 
          RWS_ASSERT(strlen(buffer) < (MaxStringLength - 1), "Error increase size of MaxStringLength");
 
@@ -617,12 +600,12 @@ namespace RWS
       *  function see RWS_MEMORY_TYPE in memoryhandler.h
       *
       */
-      void Realloc(  const void *OrgAddress,
-         const void *Address,
-         const RwUInt32 Size,
-         const char *Filename,
-         const RwUInt32 LineNumber,
-         const RwUInt32 UserTypeNum)
+      void Realloc(const void *OrgAddress,
+                   const void *Address,
+                   const RwUInt32 Size,
+                   const char *Filename,
+                   const RwUInt32 LineNumber,
+                   const RwUInt32 UserTypeNum)
       {
          ReAllocCount++;
 
@@ -631,16 +614,8 @@ namespace RWS
          bRecursionGuard = TRUE;
 
 #ifdef VERBOSE
-         RWS_DEBUGSTREAM(  "REALLOC " << 
-                           RWS_HEX(OrgAddress) << 
-                           " " << 
-                           RWS_HEX(Address) << 
-                           " " << 
-                           RWS_VALIDSTRING(Filename) << 
-                           " Line " << 
-                           LineNumber << 
-                           " Size" 
-                           << Size << std::endl);
+         RWS_DEBUGSTREAM("REALLOC " << RWS_HEX(OrgAddress) << " " << RWS_HEX(Address) << " " << RWS_VALIDSTRING(Filename) << " Line " << LineNumber << " Size"
+                                    << Size << std::endl);
 #endif
 
          if (!bIsEnabled || bIsConnectionLost)
@@ -657,7 +632,7 @@ namespace RWS
 
          char tbuffer[MaxStringLength];
 
-         if (Filename) 
+         if (Filename)
          {
             strcpy(tbuffer, Filename);
 
@@ -672,11 +647,11 @@ namespace RWS
 
          char buffer[MaxStringLength];
 
-         sprintf( buffer,
-            "R %x %x %x %s %u %u",
-            reinterpret_cast<RwUInt32>(OrgAddress),
-            reinterpret_cast<RwUInt32>(Address),
-            Size, tbuffer, LineNumber, UserTypeNum);
+         sprintf(buffer,
+                 "R %x %x %x %s %u %u",
+                 reinterpret_cast<RwUInt32>(OrgAddress),
+                 reinterpret_cast<RwUInt32>(Address),
+                 Size, tbuffer, LineNumber, UserTypeNum);
 
          RWS_ASSERT(strlen(buffer) < (MaxStringLength - 1), "Error increase size of MaxStringLength");
 
@@ -703,9 +678,7 @@ namespace RWS
          bRecursionGuard = TRUE;
 
 #ifdef VERBOSE
-         RWS_DEBUGSTREAM(  "FREE    " << 
-                           RWS_HEX(Address) << 
-                           " " << std::endl);
+         RWS_DEBUGSTREAM("FREE    " << RWS_HEX(Address) << " " << std::endl);
 #endif
 
          if (!bIsEnabled || bIsConnectionLost)
@@ -714,7 +687,7 @@ namespace RWS
             return;
          }
 
-         if (!bIsOpen) 
+         if (!bIsOpen)
          {
             bRecursionGuard = FALSE;
             return;
@@ -744,14 +717,14 @@ namespace RWS
 
          bRecursionGuard = TRUE;
 
-         if (!bIsEnabled || bIsConnectionLost) 
+         if (!bIsEnabled || bIsConnectionLost)
          {
             bRecursionGuard = FALSE;
 
             return;
          }
 
-         if (!bIsOpen) 
+         if (!bIsOpen)
          {
             bRecursionGuard = FALSE;
 
@@ -760,7 +733,7 @@ namespace RWS
 
          char buffer[MaxStringLength];
 
-         sprintf(buffer, "# %s",CommentText);
+         sprintf(buffer, "# %s", CommentText);
 
          RWS_ASSERT(strlen(buffer) < (MaxStringLength - 1), "Error increase size of MaxStringLength");
 

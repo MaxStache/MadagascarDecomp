@@ -56,8 +56,7 @@ namespace RWS
          RwUInt32 ArenaSize,
          RwVideoMode &rVideoMode,
          const RwUInt32 ZBufferDepth,
-         void* pDisplayID
-         );
+         void *pDisplayID);
 
       void Close();
    }

@@ -54,7 +54,7 @@ namespace RWS
       {
          const RwReal kFrameTime = (1.0f / RWS::MainLoop::Logic::Rate) * 1000.0f;
          const RwInt32 uiMinControlPoints = 4;
-         const RwUInt32 uiOrthoLimit = 128;         
+         const RwUInt32 uiOrthoLimit = 128;
       }
 
       RWS_IMPLEMENT_CLASSID(CCameraSpline);
@@ -67,7 +67,7 @@ namespace RWS
       * \param attr the standard attribute packets used for setup.
       *
       */
-      CCameraSpline::CCameraSpline(const CAttributePacket& attr) : 
+      CCameraSpline::CCameraSpline(const CAttributePacket &attr) :
          InitCEventHandler(0),
          m_pSpline(0),
          m_bDirectorsCam(FALSE),
@@ -138,7 +138,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Examples::CCameraSpline::Proc_m_RxEnableCameraEvent");
 
-         SendMsg(m_TxEnableCameraEvent); 
+         SendMsg(m_TxEnableCameraEvent);
 
          m_bThisCameraActive = TRUE;
 
@@ -221,7 +221,7 @@ namespace RWS
          {
             Proc_iMsg_SetEnableDirectorsCamera();
          }
-   
+
          // Disable the directors camera
          //
          if (pMsg.Id == iMsg_SetDisableDirectorsCamera)
@@ -265,11 +265,11 @@ namespace RWS
                if (m_iCurrentControlPoint < rNumPoints)
                {
                   // We are somewhere on the spline between
-                  // m_iCurrentControlPoint and m_iCurrentControlPoint + 1                     
+                  // m_iCurrentControlPoint and m_iCurrentControlPoint + 1
 
                   RwReal rCurrentNodeRatio = m_iCurrentControlPoint * m_rControlPointRatio;
 
-                  RwReal rSplinePos = rCurrentNodeRatio + 
+                  RwReal rSplinePos = rCurrentNodeRatio +
                                       (m_rControlPointRatio * m_rFrameTimeDelta);
 
                   static const RwV3d vUp = {0.0f, 1.0f, 0.0f};
@@ -318,7 +318,7 @@ namespace RWS
             if (!m_bDirectorsCam)
             {
                RwMatrixCopy(RwFrameGetMatrix(RwCameraGetFrame(pOutCam)), pOutMat);
-            }            
+            }
 
             RwMatrixDestroy(pOutMat);
 
@@ -329,7 +329,7 @@ namespace RWS
             SendMsg(msg);
 
 #ifdef RWS_DESIGN
-            RwMatrix *cameraMatrix = RwFrameGetLTM( RwCameraGetFrame(pOutCam) );
+            RwMatrix *cameraMatrix = RwFrameGetLTM(RwCameraGetFrame(pOutCam));
             RwFrameTransform(m_cameraFrame, cameraMatrix, rwCOMBINEREPLACE);
 #endif
 
@@ -363,7 +363,7 @@ namespace RWS
          // Look up the object in the global store
          const RwChar *ResourceType;
          const RwChar *ResourceName;
-         const void *pObject = RWS::CResourceManager::FindById (pResourceID, &ResourceType, 0, &ResourceName);
+         const void *pObject = RWS::CResourceManager::FindById(pResourceID, &ResourceType, 0, &ResourceName);
 
          if (pObject)
          {
@@ -373,10 +373,10 @@ namespace RWS
             }
             else
             {
-               if (!rwstrcmp ("rwID_SPLINE", ResourceType))
+               if (!rwstrcmp("rwID_SPLINE", ResourceType))
                {
                   // Store RenderWare Graphics spline data.
-                  m_pSpline = static_cast<RpSpline*>(const_cast<void *>(pObject));
+                  m_pSpline = static_cast<RpSpline *>(const_cast<void *>(pObject));
 
                   if (m_pSpline)
                   {
@@ -417,12 +417,12 @@ namespace RWS
          {
             switch (attrIt->GetCommandId())
             {
-               case CMD_AttachResource:
-                  const RWSGUID * pResourceId;
-                  attrIt->GetCommandData(&pResourceId);
+            case CMD_AttachResource:
+               const RWSGUID *pResourceId;
+               attrIt->GetCommandData(&pResourceId);
 
-                  AddResource(pResourceId);
-                  break;
+               AddResource(pResourceId);
+               break;
             }
 
             ++attrIt;
@@ -438,99 +438,99 @@ namespace RWS
       *  \param attr standard attribute packets sent from the workspace / stream.
       *
       */
-      void CCameraSpline::HandleAttributes(const CAttributePacket& attr)
+      void CCameraSpline::HandleAttributes(const CAttributePacket &attr)
       {
          RWS_FUNCTION("RWS::Examples::CCameraSpline::HandleAttributes");
 
          CAttributeHandler::HandleAttributes(attr);
 
          HandleSystemCommands(attr);
-      
+
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CCameraSpline));
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
                   // Set incoming event to enable the camera
-               case CMD_Set_m_RxEnableCameraEvent:
-                  ReplaceLinkedMsg(m_RxEnableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
-                  break;
+            case CMD_Set_m_RxEnableCameraEvent:
+               ReplaceLinkedMsg(m_RxEnableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
                   // Set outgoing event to tell camera has been enabled
-               case CMD_Set_m_TxEnableCameraEvent:
-                  ReplaceRegisteredMsg(m_TxEnableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
-                  break;
+            case CMD_Set_m_TxEnableCameraEvent:
+               ReplaceRegisteredMsg(m_TxEnableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
                   // Set incoming event to disable the camera
-               case CMD_Set_m_RxDisableCameraEvent:
-                  ReplaceLinkedMsg(m_RxDisableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
-                  break;
+            case CMD_Set_m_RxDisableCameraEvent:
+               ReplaceLinkedMsg(m_RxDisableCameraEvent, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
                   // Set incoming render message.
-               case CMD_Set_m_InRender:
-                  ReplaceLinkedMsg(m_RenderInMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-                  break;
+            case CMD_Set_m_InRender:
+               ReplaceLinkedMsg(m_RenderInMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+               break;
 
                   // Set priority of the rendering message.
-               case CMD_priority:
+            case CMD_priority:
 
-                  attrIt->GetCommandData(m_RenderInPriority);
-                  UnLinkMsg(m_RenderInMsg);
-                  LinkMsg(m_RenderInMsg, "RwCamera*", m_RenderInPriority);
-                  break;
+               attrIt->GetCommandData(m_RenderInPriority);
+               UnLinkMsg(m_RenderInMsg);
+               LinkMsg(m_RenderInMsg, "RwCamera*", m_RenderInPriority);
+               break;
 
                   // Set outgoing render message.
-               case CMD_Set_m_OutRender:
-                  ReplaceRegisteredMsg(m_RenderOutMsg, attrIt->GetAs_RwChar_ptr(), 0);
-                  break;
+            case CMD_Set_m_OutRender:
+               ReplaceRegisteredMsg(m_RenderOutMsg, attrIt->GetAs_RwChar_ptr(), 0);
+               break;
 
                   // Set speed to move camera along the spline
-               case CMD_Speed:
-                  attrIt->GetCommandData(m_rSpeed);
-                  break;
+            case CMD_Speed:
+               attrIt->GetCommandData(m_rSpeed);
+               break;
 
                   // Play/ pause the movement along the spline
-               case CMD_Move_Camera:                  
-                  if (attrIt->GetAs_RwUInt32())
-                  {
-                     m_bMoving = TRUE;
-                  }
-                  else
-                  {
-                     m_bMoving = FALSE;
-                  }
-                  break;
+            case CMD_Move_Camera:
+               if (attrIt->GetAs_RwUInt32())
+               {
+                  m_bMoving = TRUE;
+               }
+               else
+               {
+                  m_bMoving = FALSE;
+               }
+               break;
 
                   // Set camera movement looping on or off
-               case CMD_Loop:
-                  if (attrIt->GetAs_RwUInt32())
+            case CMD_Loop:
+               if (attrIt->GetAs_RwUInt32())
+               {
+                  m_bLoop = TRUE;
+               }
+               else
+               {
+                  m_bLoop = FALSE;
+               }
+               break;
+
+                  // Move to the next control point on the spline
+            case CMD_Set_Next_Control_Point:
+               if (!m_bMoving && m_pSpline)
+               {
+                  if (m_iCurrentControlPoint < RpSplineGetNumControlPoints(m_pSpline))
                   {
-                     m_bLoop = TRUE;
+                     m_iCurrentControlPoint++;
                   }
                   else
                   {
-                     m_bLoop = FALSE;
+                     m_iCurrentControlPoint = 0;
                   }
-                  break;               
-
-                  // Move to the next control point on the spline
-               case CMD_Set_Next_Control_Point:
-                  if (!m_bMoving && m_pSpline)
-                  {
-                     if (m_iCurrentControlPoint < RpSplineGetNumControlPoints(m_pSpline))
-                     {
-                        m_iCurrentControlPoint++;
-                     }
-                     else
-                     {
-                        m_iCurrentControlPoint = 0;
-                     }
-                  }
-                  break;
+               }
+               break;
 #ifdef RWS_DESIGN
-               case CMD_Set_m_respondtocamerarequest:
-                  attrIt->GetCommandData(m_respondtocamerarequest);
-                  break;
+            case CMD_Set_m_respondtocamerarequest:
+               attrIt->GetCommandData(m_respondtocamerarequest);
+               break;
 #endif
             }
             ++attrIt;

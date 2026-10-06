@@ -68,7 +68,7 @@ namespace RWS
          iCMaestro();
          ~iCMaestro();
 
-         void HandleSystemCommands( const CAttributePacket& attr );
+         void HandleSystemCommands(const CAttributePacket &attr);
          void Controller_Input(CMsg *pMsg, const char *pMsgName);
          void Update(RwReal rDeltaTime);
          void Render(CMsg *pMsg);
@@ -95,13 +95,13 @@ namespace RWS
          RwBool GetButtonLabelIndexFromEventName(const char *pMsgName, RwInt32 *pButIndex);
          void Calculate_Button_IDs(void);
          void Add(const void *pObject);
-         void AddResource(const RWSGUID * pResourceId);
+         void AddResource(const RWSGUID *pResourceId);
          void Clean(void);
          RwBool SetInterpolate(void);
 
          // Revoked ops
-         iCMaestro( const iCMaestro& );
-         iCMaestro& operator = ( const iCMaestro& );
+         iCMaestro(const iCMaestro &);
+         iCMaestro &operator=(const iCMaestro &);
 
          RwMatrix *m_pMatrix;                      /**< Matrix to store original position of Maestro object*/
          RwMatrix *m_pBBoxMatrix;                  /**< Matrix to store original position of Maestro object's bounding box*/
@@ -121,14 +121,14 @@ namespace RWS
          Rt2dObject *m_pBBox;                      /**< Maestro bounding box object*/
          RwCamera *m_pCamera;                      /**< Camera used to render Maestro object*/
 
-         enum Controller_State                     
+         enum Controller_State
          {
-            eController_Up=0x01,
-            eController_Down=0x02,
-            eController_Left=0x04,
-            eController_Right=0x08,
-            eController_Select=0x10,
-            eController_Cancel=0x12
+            eController_Up = 0x01,
+            eController_Down = 0x02,
+            eController_Left = 0x04,
+            eController_Right = 0x08,
+            eController_Select = 0x10,
+            eController_Cancel = 0x12
          };                                        /**< State enumeration for buttons*/
 
          RwUInt32 m_iController_State_Reset_Timer;  /**< Used to determine the delay for repeat input*/

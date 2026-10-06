@@ -49,41 +49,41 @@ namespace RWS
       *
       */
 
-      class CSubRasterCamera : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
+      class CSubRasterCamera : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CSubRasterCamera);
          RWS_DECLARE_CLASSID(CSubRasterCamera);
          RWS_CATEGORY("Generic");
          RWS_DESCRIPTION("Specify A SubRaster Camera", "received Camera is used to update the Transmit camera, the Transmit camera specifies a sub-raster of the main display raster.");
-         
+
          CSubRasterCamera(const CAttributePacket& attr);
          ~CSubRasterCamera(void);
-         
-         virtual void HandleEvents(CMsg &pMsg);
+
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-         
+
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE  (CMD_In,  "Receive Render Camera Event","When this event is received the transmit render event is sent with the RwCamera owned by this behavior.",RECEIVE , RwCamera*,"iMsgDoRender")
+         RWS_MESSAGE(CMD_In, "Receive Render Camera Event", "When this event is received the transmit render event is sent with the RwCamera owned by this behavior.", RECEIVE, RwCamera*, "iMsgDoRender")
 
-            RWS_ATTRIBUTE(CMD_priority,  "Render Priority",   "Specify the render priority",   SLIDER,  RwUInt32,   RANGE(0,65535,65535))
+         RWS_ATTRIBUTE(CMD_priority, "Render Priority", "Specify the render priority", SLIDER, RwUInt32, RANGE(0, 65535, 65535))
 
-            RWS_MESSAGE  (CMD_Out, "Transmit Render Camera Event","When this event is received the transmit render event is sent with the RwCamera owned by this behavior.",TRANSMIT , RwCamera*,0)
+         RWS_MESSAGE(CMD_Out, "Transmit Render Camera Event", "When this event is received the transmit render event is sent with the RwCamera owned by this behavior.", TRANSMIT, RwCamera*, 0)
 
-            RWS_ATTRIBUTE( CMD_Left,      "Left - Pos","Set left raster position", SLIDER, RwReal, RANGE(0,0.25,1))
-            RWS_ATTRIBUTE( CMD_Right,     "Right - Pos","Set right raster position", SLIDER, RwReal, RANGE(0,0.75,1))
+         RWS_ATTRIBUTE(CMD_Left, "Left - Pos", "Set left raster position", SLIDER, RwReal, RANGE(0, 0.25, 1))
+         RWS_ATTRIBUTE(CMD_Right, "Right - Pos", "Set right raster position", SLIDER, RwReal, RANGE(0, 0.75, 1))
 
-            RWS_ATTRIBUTE( CMD_Top,       "Top - Pos","Set top raster position", SLIDER, RwReal, RANGE(0,0.25,1))
-            RWS_ATTRIBUTE( CMD_Bottom,    "Bottom - Pos","Set bottom raster position", SLIDER, RwReal, RANGE(0,0.75,1))
+         RWS_ATTRIBUTE(CMD_Top, "Top - Pos", "Set top raster position", SLIDER, RwReal, RANGE(0, 0.25, 1))
+         RWS_ATTRIBUTE(CMD_Bottom, "Bottom - Pos", "Set bottom raster position", SLIDER, RwReal, RANGE(0, 0.75, 1))
 
          RWS_END_COMMANDS;
-            
+
       protected:
 
          void CreateCamera(void);
-         
+
          CCameraPtr m_pCamera;         /**< Sub-Raster Camera, smart pointer for a RwCamera.*/
-         
+
          CEventId m_Render_In;         /**< Receive Render Event.*/
          CEventId m_Render_Out;        /**< Send Render Event.*/
 

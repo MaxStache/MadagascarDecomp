@@ -75,45 +75,45 @@ namespace RWS
          RWS_BEGIN_COMMANDS
 
          RWS_SEPARATOR("Rendering", 1)
-            RWS_MESSAGE( CMD_Start_Render, "Render Event", 
-                         "Render the RpClump with the RwCamera passed in the message.", 
-                         RECEIVE , RwCamera*, 0)
-            RWS_ATTRIBUTE( CMD_RenderPriority, "Render Priority", 
-                           "Set the priority of this entity in the rendering event",
-                           SLIDER, RwUInt32, RANGE(0,65535,65535))
-            RWS_ATTRIBUTE( CMD_MeshShow, "Display Meshes", 
-                           "Toggle display of the tristripped RpMesh(es) of the RpClump flat-shaded and untextured.", 
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_WireShow, "Display WireMeshes", 
-                           "Toggle display of the RpMesh(es) of the RpClump in wire-frame.", 
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_StripShow, "Display TriStrips",
-                           "Toggle display of the tristrips of the RpClump.", 
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_StripShowLength, "Display TriStrip Length", 
-                           "Toggle display of tristrips shorter than the current tristrip length. ",
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_StripSize, "TriStrip Length", "Tristrips shorter than the given length "
-                           "are drawn in red, if 'Display TriStrip Length' is checked.",
-                           SLIDER, RwInt32, RANGE(0,1,300))
-            RWS_ATTRIBUTE( CMD_NormalShow, "Display Normals", "Toggle display of the vertex normals of the RpClump.", 
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_ScaleFactor, "Normal Size", "Length of the lines used to draw the vertex normals.", 
-                           SLIDER, RwReal, RANGE(0,1,300))
+         RWS_MESSAGE(CMD_Start_Render, "Render Event",
+                     "Render the RpClump with the RwCamera passed in the message.",
+                     RECEIVE, RwCamera*, 0)
+         RWS_ATTRIBUTE(CMD_RenderPriority, "Render Priority",
+                       "Set the priority of this entity in the rendering event",
+                       SLIDER, RwUInt32, RANGE(0, 65535, 65535))
+         RWS_ATTRIBUTE(CMD_MeshShow, "Display Meshes",
+                       "Toggle display of the tristripped RpMesh(es) of the RpClump flat-shaded and untextured.",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_WireShow, "Display WireMeshes",
+                       "Toggle display of the RpMesh(es) of the RpClump in wire-frame.",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_StripShow, "Display TriStrips",
+                       "Toggle display of the tristrips of the RpClump.",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_StripShowLength, "Display TriStrip Length",
+                       "Toggle display of tristrips shorter than the current tristrip length. ",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_StripSize, "TriStrip Length", "Tristrips shorter than the given length "
+                                                         "are drawn in red, if 'Display TriStrip Length' is checked.",
+                       SLIDER, RwInt32, RANGE(0, 1, 300))
+         RWS_ATTRIBUTE(CMD_NormalShow, "Display Normals", "Toggle display of the vertex normals of the RpClump.",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_ScaleFactor, "Normal Size", "Length of the lines used to draw the vertex normals.",
+                       SLIDER, RwReal, RANGE(0, 1, 300))
 
          RWS_SEPARATOR("Rotation", 0)
-            RWS_ATTRIBUTE( CMD_SpinToggle, "Spin", "Toggle automatic spinning on / off.", 
-                           BOOLEAN, RwUInt32, DEFAULT(0))
-            RWS_ATTRIBUTE( CMD_rot_x, "X Rotation", "Specify the x axis rotation", 
-                           SLIDER, RwReal, RANGE(0,0,360))
-            RWS_ATTRIBUTE( CMD_rot_y, "Y Rotation", "Specify the y axis rotation", 
-                           SLIDER, RwReal, RANGE(0,0,360))
-            RWS_ATTRIBUTE( CMD_rot_z, "Z Rotation", "Specify the z axis rotation", 
-                           SLIDER, RwReal, RANGE(0,0,360))
+         RWS_ATTRIBUTE(CMD_SpinToggle, "Spin", "Toggle automatic spinning on / off.",
+                       BOOLEAN, RwUInt32, DEFAULT(0))
+         RWS_ATTRIBUTE(CMD_rot_x, "X Rotation", "Specify the x axis rotation",
+                       SLIDER, RwReal, RANGE(0, 0, 360))
+         RWS_ATTRIBUTE(CMD_rot_y, "Y Rotation", "Specify the y axis rotation",
+                       SLIDER, RwReal, RANGE(0, 0, 360))
+         RWS_ATTRIBUTE(CMD_rot_z, "Z Rotation", "Specify the z axis rotation",
+                       SLIDER, RwReal, RANGE(0, 0, 360))
 
          RWS_END_COMMANDS;
 
-         virtual void HandleEvents(CMsg &pMsg);
+         virtual void HandleEvents(CMsg& pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
          ATBClumpView(const CAttributePacket& attr);
@@ -127,11 +127,11 @@ namespace RWS
          CEventId m_StartRender; /**< Event used to specify when rendering should begin with the specified RwCamera. */
          RwUInt32 m_RenderPriority; /**< Priority of this eventhandler in the rendering event. */
 
-         RwUInt32	m_bStripShow;  /**< Flag to toggle  rendering tristrips on / off. */
-         RwUInt32	m_bSpinToggle; /**< Flag to toggle  automatic spinning on / off. */
-         RwUInt32	m_bMeshShow;   /**< Flag to toggle  rendering flat-shaded mesh on / off. */
-         RwUInt32	m_bWireShow;   /**< Flag to toggle  rendering wire-frame mesh on / off. */
-         RwUInt32	m_bNormalShow; /**< Flag to toggle  rendering vertex normals on / off. */
+         RwUInt32 m_bStripShow;  /**< Flag to toggle  rendering tristrips on / off. */
+         RwUInt32 m_bSpinToggle; /**< Flag to toggle  automatic spinning on / off. */
+         RwUInt32 m_bMeshShow;   /**< Flag to toggle  rendering flat-shaded mesh on / off. */
+         RwUInt32 m_bWireShow;   /**< Flag to toggle  rendering wire-frame mesh on / off. */
+         RwUInt32 m_bNormalShow; /**< Flag to toggle  rendering vertex normals on / off. */
          RwReal m_NormalsScaleFactor;  /**< Length of lines used to represent vertex normals. */
          RwUInt32 m_bStripShowLength;  /**< Flag to toggle rendering tristrips based on their length. */
          RwInt32 m_NumTriStripTriangles;  /**< Number of triangles to highlight in a strip, 

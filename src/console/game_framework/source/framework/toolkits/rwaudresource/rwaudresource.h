@@ -43,10 +43,10 @@
 namespace RWS
 {
    RWS_DEFINE_EVENT(iMsgAudioDictionaryDelete,
-      "RwUInt32 GroupIndex",
-      "Sent when the audio resource handler tries to delete a dictionary from the group table."
-      " AudioSound3D behaviors needs to be notified of the deletion so they can detach them selves"
-      " from the dictionary.");
+                    "RwUInt32 GroupIndex",
+                    "Sent when the audio resource handler tries to delete a dictionary from the group table."
+                    " AudioSound3D behaviors needs to be notified of the deletion so they can detach them selves"
+                    " from the dictionary.");
 
    /**
    *
@@ -55,26 +55,26 @@ namespace RWS
    *  Resource handler for handling RenderWare Audio Resources.
    *
    */
-   class CAudioResource: public CResourceHandler
+   class CAudioResource : public CResourceHandler
    {
-      public:
+   public:
 
-         virtual void Open(void);
+      virtual void Open(void);
 
-         virtual void Close(void);
+      virtual void Close(void);
 
-         virtual void *Load(  const RwChar *psName,
-                              const RwChar *psType,
-                              const RwChar *psResourcePath,
-                              RwStream* pStream,
-                              RwUInt32 uiStreamSize,
-                              RwUInt32 &uiResourceSize);
+      virtual void *Load(const RwChar *psName,
+                         const RwChar *psType,
+                         const RwChar *psResourcePath,
+                         RwStream *pStream,
+                         RwUInt32 uiStreamSize,
+                         RwUInt32 &uiResourceSize);
 
-         virtual RwBool UnLoad(const RwChar *pStrType, void *pResource);
+      virtual RwBool UnLoad(const RwChar *pStrType, void *pResource);
 
-         virtual RwBool IsHandled(const RwChar *psType);
-      private:
-         RwaWaveDict* WaveDictStreamRead(const RwStream* const pRwStream);
+      virtual RwBool IsHandled(const RwChar *psType);
+   private:
+      RwaWaveDict *WaveDictStreamRead(const RwStream *const pRwStream);
    };
 }
 

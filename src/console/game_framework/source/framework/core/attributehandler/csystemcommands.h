@@ -72,27 +72,27 @@ namespace RWS
 
       RWS_BEGIN_COMMANDS
 
-           RWS_ATTRIBUTE(CMD_AttachResource,    "Resource",             "Specify a resource attached to this entity",   NULL,    RwUInt32,   DEFAULT(0))
-           RWS_ATTRIBUTE(CMD_LoadMatrix,        "Matrix",               "Specify a transformation matrix associated with this entity",   MATRIX,  RwMatrix,   DEFAULT(0))
-           RWS_ATTRIBUTE(CMD_SetSolidFlag,      "Solid Collisions",     "Collisions repel intersecting objects. (If Enable Collisions is true)",   BOOLEAN, RwUInt32,   DEFAULT(1))
-           RWS_ATTRIBUTE(CMD_SetCollisionFlag,  "Enable Collisions",    "Enable/Disable Collisions. If collisions are enabled but solid collisions is disabled then the object will be sent collision events",    BOOLEAN, RwUInt32,   DEFAULT(1))
-           RWS_ATTRIBUTE(CMD_SetInvisibleFlag,  "Invisible",            "Set visible/invisible flag, invisible objects are not rendered but may be used to generate collisions.",   BOOLEAN, RwUInt32,   DEFAULT(0))
+      RWS_ATTRIBUTE(CMD_AttachResource, "Resource", "Specify a resource attached to this entity", NULL, RwUInt32, DEFAULT(0))
+      RWS_ATTRIBUTE(CMD_LoadMatrix, "Matrix", "Specify a transformation matrix associated with this entity", MATRIX, RwMatrix, DEFAULT(0))
+      RWS_ATTRIBUTE(CMD_SetSolidFlag, "Solid Collisions", "Collisions repel intersecting objects. (If Enable Collisions is true)", BOOLEAN, RwUInt32, DEFAULT(1))
+      RWS_ATTRIBUTE(CMD_SetCollisionFlag, "Enable Collisions", "Enable/Disable Collisions. If collisions are enabled but solid collisions is disabled then the object will be sent collision events", BOOLEAN, RwUInt32, DEFAULT(1))
+      RWS_ATTRIBUTE(CMD_SetInvisibleFlag, "Invisible", "Set visible/invisible flag, invisible objects are not rendered but may be used to generate collisions.", BOOLEAN, RwUInt32, DEFAULT(0))
 
       RWS_END_COMMANDS;
 
-      static const RWSGUID * FindFirstResource( const CAttributePacket& attr );
-      static const void* FindFirstResourceOfType( const CAttributePacket& attr, const RwChar* pType );
+      static const RWSGUID* FindFirstResource(const CAttributePacket& attr);
+      static const void* FindFirstResourceOfType(const CAttributePacket& attr, const RwChar* pType);
 
       // RWS_PRE( CMD_LoadMatrix == attrCmd.GetCommandId() )
-      static void UpdateFrame( RwFrame& frame, const CAttributeCommand& attrCmd );
-      static void UpdateFrame( RwFrame& frame, const RwMatrix *pUnalignedMat);
+      static void UpdateFrame(RwFrame& frame, const CAttributeCommand& attrCmd);
+      static void UpdateFrame(RwFrame& frame, const RwMatrix* pUnalignedMat);
 
    private:
 
       // Revoked ops
-      CSystemCommands& operator = ( const CSystemCommands& );
+      CSystemCommands& operator=(const CSystemCommands&);
    };
-   
+
    /**
    *
    *  Functions relating to RpAtomic Collision Properties plugin.
@@ -108,13 +108,13 @@ namespace RWS
       */
       RwBool PluginAttach();
 
-      void SetIsSolid( RpAtomic& atomic, bool isSolid );
+      void SetIsSolid(RpAtomic& atomic, bool isSolid);
 
-      bool GetIsSolid( const RpAtomic& atomic );
+      bool GetIsSolid(const RpAtomic& atomic);
 
-      void SetIsSolid( RpClump& clump, bool isSolid );
+      void SetIsSolid(RpClump& clump, bool isSolid);
 
-      bool GetIsSolid( const RpClump& atomic );
+      bool GetIsSolid(const RpClump& atomic);
    }
 }
 

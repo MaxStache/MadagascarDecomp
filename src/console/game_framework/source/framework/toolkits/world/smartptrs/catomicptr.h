@@ -32,8 +32,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -53,31 +53,41 @@ namespace RWS
    *  and handling CSystemCommands.        
    *
    */
-   
+
    class CAtomicPtr : public CRwObjectPtr<RpAtomic>
 #ifdef RWS_EVENTVISUALIZATION
-      , public CEventVisualization
+      ,
+                      public CEventVisualization
 #endif
    {
    public:
       /**
       * Default constructor, constructs a NULL CAtomicPtr pointer
       */
-      CAtomicPtr() : CRwObjectPtr<RpAtomic>() {}
+      CAtomicPtr() :
+         CRwObjectPtr<RpAtomic>()
+      {
+      }
 
       /**
       * Constructor, constructs a CAtomicPtr pointer that points to \a p;
       *
       * \param p Pointer to an RpAtomic object.
       */
-      CAtomicPtr(RpAtomic* p) : CRwObjectPtr<RpAtomic>(p) {}
+      CAtomicPtr(RpAtomic* p) :
+         CRwObjectPtr<RpAtomic>(p)
+      {
+      }
 
       /**
       * Destructor for CAtomicPtr object, if this CAtomicPtr is still assigned to an
       * RpAtomic calls CAtomicPtr::Destroy.
       */
-      ~CAtomicPtr() { if (p_) AtomicHelper::Destroy( p_ ); }
-      
+      ~CAtomicPtr()
+      {
+         if (p_) AtomicHelper::Destroy(p_);
+      }
+
       /**
       *
       * Copy operator, if the pointer is already assigned to an RpAtomic, calls Destroy
@@ -86,19 +96,19 @@ namespace RWS
       *
       * \param p Pointer to an RpAtomic object.
       */
-      CAtomicPtr& operator = (RpAtomic* p)
+      CAtomicPtr& operator=(RpAtomic* p)
       {
          if (p_ != p)
          {
-            if (p_) AtomicHelper::Destroy( p_ );
-            
+            if (p_) AtomicHelper::Destroy(p_);
+
             p_ = p;
          }
-         
+
          return *this;
       }
 
-#ifdef RWS_EVENTVISUALIZATION      
+#ifdef RWS_EVENTVISUALIZATION
       /**
       *
       * Mandatory CEventVisualization interface.
@@ -109,23 +119,23 @@ namespace RWS
       * only intended to be used during development by the event Visualization system.
       *
       */
-      virtual RwV3d *GetWorldPos(void) 
+      virtual RwV3d* GetWorldPos(void)
       {
          if (p_)
          {
-            RwFrame *pFrame = RpAtomicGetFrame(p_);
+            RwFrame* pFrame = RpAtomicGetFrame(p_);
 
             if (pFrame)
             {
-               RwMatrix *pMatrix = RwFrameGetLTM(pFrame);
+               RwMatrix* pMatrix = RwFrameGetLTM(pFrame);
 
-               return(RwMatrixGetPos(pMatrix));
+               return (RwMatrixGetPos(pMatrix));
             }
          }
-         return(0);
+         return (0);
       }
 #endif
-      
+
       /**
       *
       * Handles system commands, CMD_LoadMatrix, CMD_SetSolidFlag, CMD_SetInvisibleFlag, CMD_SetCollisionFlag
@@ -139,15 +149,15 @@ namespace RWS
             AtomicHelper::HandleSystemCommands(*p_, rAttr);
          }
       }
-      
+
    private:
-      
+
       // Revoked ops
       CAtomicPtr(const CAtomicPtr&);
-      CAtomicPtr& operator = (const CAtomicPtr&);
+      CAtomicPtr& operator=(const CAtomicPtr&);
    };
 }
 
-extern RwBool RpAtomicDestroy( RWS::CAtomicPtr &rCAtomicPtr );
+extern RwBool RpAtomicDestroy(RWS::CAtomicPtr& rCAtomicPtr);
 
 #endif

@@ -41,11 +41,11 @@ namespace RWS
       class CTimeSpace
       {
       public:
-         
+
          CTimeSpace(RwReal relativeSpeed = 1.0f, RwBool running = TRUE);
          CTimeSpace(RwUInt32 globalNowTime, RwReal relativeSpeed = 1.0f,
-            RwBool running = TRUE);
-         
+                    RwBool running = TRUE);
+
          void Update(RwUInt32 globalNowTime);
          void UpdateUsingGlobalNow(void);
          void SetRelativeSpeed(RwReal relativeSpeed = 1.0f);
@@ -59,7 +59,7 @@ namespace RWS
          *
          */
 
-         RwUInt32 GetNow(void) { return(m_spaceNowTime); }
+         RwUInt32 GetNow(void) { return (m_spaceNowTime); }
 
          /**
          *
@@ -76,7 +76,7 @@ namespace RWS
          */
 
 
-         RwBool IsRunning(void) { return(m_runningFlag); }
+         RwBool IsRunning(void) { return (m_runningFlag); }
 
          /**
          *
@@ -84,7 +84,7 @@ namespace RWS
          *
          */
 
-         RwReal GetRelativeSpeed(void) { return(m_relativeSpeed); }
+         RwReal GetRelativeSpeed(void) { return (m_relativeSpeed); }
 
       private:
 

@@ -36,8 +36,8 @@
 #include "rpworld.h"
 
 #ifdef _MSC_VER
-#pragma comment (lib, "rwcore.lib")
-#pragma comment (lib, "rpworld.lib")
+#pragma comment(lib, "rwcore.lib")
+#pragma comment(lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -58,23 +58,22 @@ namespace RWS
       *  to restrict environment map to a small part of the back buffer. 
       *
       */
-      const RwReal ENV_MAP_WIDTH  = 256.0f;
+      const RwReal ENV_MAP_WIDTH = 256.0f;
       const RwReal ENV_MAP_HEIGHT = 256.0f;
 
       class CFXReflectEnvironmentSky
       {
-         public:
+      public:
 
          CFXReflectEnvironmentSky();
          ~CFXReflectEnvironmentSky();
 
-         protected:
+      protected:
 
-         void      UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
+         void UpdateTextureFromDisplay(const RwV2d &TopLeftUV, const RwV2d &BottomRightUV, const RwRaster *pRaster);
 
-         private:
+      private:
          RwRaster *m_RasterZ;
-   
       };
 
    };

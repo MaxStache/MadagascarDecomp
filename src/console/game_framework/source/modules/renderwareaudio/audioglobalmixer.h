@@ -90,8 +90,7 @@ namespace RWS
       * \see CSystemCommands
       *
       */
-      class AudioGlobalMixer: public CSystemCommands, public CAttributeHandler, public CEventHandler, 
-                              public LinearAllocationPolicy
+      class AudioGlobalMixer : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(AudioGlobalMixer);
@@ -99,138 +98,138 @@ namespace RWS
          RWS_CATEGORY("Audio");
          RWS_DESCRIPTION("Global Audio Mixer", "Global audio mixer and listener.");
 
-         AudioGlobalMixer(const CAttributePacket&);
-         ~AudioGlobalMixer      ();
-            
+         AudioGlobalMixer(const CAttributePacket &);
+         ~AudioGlobalMixer();
+
          RWS_BEGIN_COMMANDS
-            RWS_MESSAGE  (CMD_In,
-                         "Receive Render Camera Event",
-                         "Updates the listener position.",
-                         RECEIVE,
-                         RwCamera*,
-                         "iMsgDoRender")
+         RWS_MESSAGE(CMD_In,
+                     "Receive Render Camera Event",
+                     "Updates the listener position.",
+                     RECEIVE,
+                     RwCamera *,
+                     "iMsgDoRender")
 
-            RWS_MESSAGE  (CMD_StopAll,
-                         "Stop All Voices",
-                         "Stop all voices from playing.",
-                         RECEIVE,
-                         0,
-                         0)
+         RWS_MESSAGE(CMD_StopAll,
+                     "Stop All Voices",
+                     "Stop all voices from playing.",
+                     RECEIVE,
+                     0,
+                     0)
 
-            RWS_SEPARATOR("Global Voice Fade", 0)  
-            RWS_MESSAGE  (CMD_FadeUp,
-                         "Fade Voices Up",
-                         "Fade all voices up to the level of the output gain.",
-                         RECEIVE ,
-                         0,
-                         0)
+         RWS_SEPARATOR("Global Voice Fade", 0)
+         RWS_MESSAGE(CMD_FadeUp,
+                     "Fade Voices Up",
+                     "Fade all voices up to the level of the output gain.",
+                     RECEIVE,
+                     0,
+                     0)
 
-            RWS_MESSAGE  (CMD_FadeDown,
-                         "Fade Voices Down",
-                         "Fade All voices down.",
-                         RECEIVE,
-                         0,
-                         0)
+         RWS_MESSAGE(CMD_FadeDown,
+                     "Fade Voices Down",
+                     "Fade All voices down.",
+                     RECEIVE,
+                     0,
+                     0)
 
-            RWS_MESSAGE  (CMD_FadeEnd,
-                         "Fade Ended Msg",
-                         "Message sent out when a fade operation has completed.",
-                         TRANSMIT,
-                         0,
-                         0)
+         RWS_MESSAGE(CMD_FadeEnd,
+                     "Fade Ended Msg",
+                     "Message sent out when a fade operation has completed.",
+                     TRANSMIT,
+                     0,
+                     0)
 
-            RWS_ATTRIBUTE(CMD_FadeStep,
-                         "Fade Step",
-                         "Specify the step for each fade increment.",
-                         SLIDER,
-                         RwReal,
-                         RANGE(0.0, 0.03, 0.5))
+         RWS_ATTRIBUTE(CMD_FadeStep,
+                       "Fade Step",
+                       "Specify the step for each fade increment.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 0.03, 0.5))
 
-            RWS_SEPARATOR("Audio Output Parameters", 0)  
-            RWS_ATTRIBUTE(CMD_gain,
-                         "Output Gain",
-                         "Change Output gain",
-                         SLIDER,    
-                         RwReal, 
-                         RANGE(0.0, 0.5, 1.0))
+         RWS_SEPARATOR("Audio Output Parameters", 0)
+         RWS_ATTRIBUTE(CMD_gain,
+                       "Output Gain",
+                       "Change Output gain",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 0.5, 1.0))
 
-            RWS_ATTRIBUTE(CMD_dopplerScale,
-                          "Change Doppler scale",
-                          "Set the Doppler scale or Doppler factor on the Listener object. The Doppler scale is a " 
-                          "scale of how much the Doppler effect is exaggerated. A large Doppler scale will cause " 
-                          "larger change in frequency with relation to relative speed of a listener to a source. " 
-                          "A smaller Doppler scale will cause smaller change in frequency with relation to relative "
-                          "speed of a listener to a source.",
-                          SLIDER,
-                          RwReal,
-                          RANGE(0.0, 1.0, 10.0))
+         RWS_ATTRIBUTE(CMD_dopplerScale,
+                       "Change Doppler scale",
+                       "Set the Doppler scale or Doppler factor on the Listener object. The Doppler scale is a "
+                       "scale of how much the Doppler effect is exaggerated. A large Doppler scale will cause "
+                       "larger change in frequency with relation to relative speed of a listener to a source. "
+                       "A smaller Doppler scale will cause smaller change in frequency with relation to relative "
+                       "speed of a listener to a source.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 1.0, 10.0))
 
-            RWS_ATTRIBUTE(CMD_distanceFactor,
-                          "Distance Factor",
-                          "Sets the 3d distance factor for the user's coordinate system.",
-                          SLIDER,
-                          RwReal,
-                          RANGE(0.0, 1.0, 100.0))
+         RWS_ATTRIBUTE(CMD_distanceFactor,
+                       "Distance Factor",
+                       "Sets the 3d distance factor for the user's coordinate system.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.0, 1.0, 100.0))
 
-            RWS_ATTRIBUTE(CMD_rolloffFactor,
-                          "Roll-off Factor",
-                          "Sets the global 3d roll-off factor for each sound. A higher roll-off factor makes the "
-                          "sounds approach zero gain as they depart, quicker than if it was left at 1.0f.",
-                          SLIDER,
-                          RwReal,
-                          RANGE(0.1, 1.0, 10.0))
+         RWS_ATTRIBUTE(CMD_rolloffFactor,
+                       "Roll-off Factor",
+                       "Sets the global 3d roll-off factor for each sound. A higher roll-off factor makes the "
+                       "sounds approach zero gain as they depart, quicker than if it was left at 1.0f.",
+                       SLIDER,
+                       RwReal,
+                       RANGE(0.1, 1.0, 10.0))
 
-            RWS_ATTRIBUTE(CMD_speakerConfig,
-                          "Speaker Configuration",
-                          "Change Speaker Configuration",
-                          LIST,
-                          RwUInt32,
-                          LIST("rwaSPEAKERCONFIG_STEREO|rwaSPEAKERCONFIG_MONO|rwaSPEAKERCONFIG_HEADPHONES| "
-                               "rwaSPEAKERCONFIG_SURROUND"))
-                
-            RWS_SEPARATOR("Debugging", 0)  
-            RWS_ATTRIBUTE(CMD_Debug,
-                          "Mixer Debug Output",
-                          "If selected, display debug output in target. You need to enable print in the "
-                          "CDebugTools behavior before debug info will be displayed.",
-                          BOOLEAN,
-                          RwUInt32,
-                          DEFAULT(0))                
-            RWS_END_COMMANDS;           
-            
+         RWS_ATTRIBUTE(CMD_speakerConfig,
+                       "Speaker Configuration",
+                       "Change Speaker Configuration",
+                       LIST,
+                       RwUInt32,
+                       LIST("rwaSPEAKERCONFIG_STEREO|rwaSPEAKERCONFIG_MONO|rwaSPEAKERCONFIG_HEADPHONES| "
+                            "rwaSPEAKERCONFIG_SURROUND"))
 
-         virtual void HandleAttributes(const CAttributePacket& attr);
+         RWS_SEPARATOR("Debugging", 0)
+         RWS_ATTRIBUTE(CMD_Debug,
+                       "Mixer Debug Output",
+                       "If selected, display debug output in target. You need to enable print in the "
+                       "CDebugTools behavior before debug info will be displayed.",
+                       BOOLEAN,
+                       RwUInt32,
+                       DEFAULT(0))
+         RWS_END_COMMANDS;
+
+
+         virtual void HandleAttributes(const CAttributePacket &attr);
          virtual void HandleEvents(CMsg &pMsg);
 
       private:
 #ifdef RWS_DEBUGTOOLS
          void DisplayDebugInfo(void);
 #else
-         void DisplayDebugInfo(void){};
+         void DisplayDebugInfo(void) {};
 #endif
 
          void ProcessFade(void);
          void UpdateListener(const CMsg &pMsg);
          void SetSpeakerConfig(const RwUInt32 Config);
 
-         enum Fade_State                     
+         enum Fade_State
          {
             FadeStopped = 0,
             FadeDown = 1,
-            FadeUp = 2 
+            FadeUp = 2
          };                               /**< State enumeration output device fading */
 
-         RwReal       m_Gain;             /**< Output gain.*/
-         RwReal       m_DopplerScale;     /**< Doppler scale.*/
-         RwReal       m_DistanceFactor;   /**< Distance factor.*/
-         RwReal       m_RollOffFactor;    /**< Rolloff factor.*/
-         CEventId     m_RenderIn;         /**< Receive render event.*/
-         RwBool       m_DebugInfo;        /**< Flag to display debugging info on target.*/
-         RwReal       m_FadeInc;          /**< Step for each fade increment. */
-         CEventId     m_FadeDown;         /**< Fade down event. */ 
-         CEventId     m_FadeUp;           /**< Fade up event */ 
-         Fade_State   m_FadeState;        /**< Fade state.*/
-         CEventId     m_EndFade;          /**< Message sent out when fade has ended.*/
+         RwReal m_Gain;             /**< Output gain.*/
+         RwReal m_DopplerScale;     /**< Doppler scale.*/
+         RwReal m_DistanceFactor;   /**< Distance factor.*/
+         RwReal m_RollOffFactor;    /**< Rolloff factor.*/
+         CEventId m_RenderIn;         /**< Receive render event.*/
+         RwBool m_DebugInfo;        /**< Flag to display debugging info on target.*/
+         RwReal m_FadeInc;          /**< Step for each fade increment. */
+         CEventId m_FadeDown;         /**< Fade down event. */
+         CEventId m_FadeUp;           /**< Fade up event */
+         Fade_State m_FadeState;        /**< Fade state.*/
+         CEventId m_EndFade;          /**< Message sent out when fade has ended.*/
       };
    }
 }
