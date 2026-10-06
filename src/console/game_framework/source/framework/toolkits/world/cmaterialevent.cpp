@@ -40,8 +40,8 @@ namespace RWS
 
       struct CMaterialEventPlugin
       {
-         CMaterialEvent *m_ObjectToReceiveEvent;
-      };
+         CMaterialEvent  *m_ObjectToReceiveEvent;
+      };            
 
       /**
       *
@@ -53,10 +53,10 @@ namespace RWS
       */
       typedef struct s_ClumpCallForAllBaseMaterials_Info
       {
-         void *pCallBackData;   /**< Stores pointer to callback data used by AtomicCallForAllGeometry */
+         void               *pCallBackData;   /**< Stores pointer to callback data used by AtomicCallForAllGeometry */
          RpMaterialCallBack MaterialCallBack; /**< Stores pointer to the callback that will be triggered from
                                                    AtomicCallForAllGeometry */
-      } t_ClumpCallForAllBaseMaterials_Info;
+      }t_ClumpCallForAllBaseMaterials_Info;
 
 
       const RwUInt32 CMaterialEventPluginID = 0x1FE;
@@ -74,28 +74,28 @@ namespace RWS
       */
       class CMaterialListNode
       {
-      private:
+         private:
 
          // set CMaterialList to be a friend of CMaterialListNode
          friend class CMaterialList;
 
-         CMaterialListNode *m_Next;
-         CMaterialListNode *m_Prev;
-         const RpMaterial *m_Material;
-         RwInt32 m_RefCount;
+         CMaterialListNode      *m_Next;      
+         CMaterialListNode      *m_Prev;
+         const RpMaterial       *m_Material;
+         RwInt32                 m_RefCount;
 
          //
-         static RwUInt32 m_FreeListRefCount;
-         static RwFreeList *sm_pFreeList;
-
-      public:
+         static RwUInt32         m_FreeListRefCount;
+         static RwFreeList      *sm_pFreeList;
+   
+         public:
          CMaterialListNode();
-         inline CMaterialListNode *GetNext() { return m_Next; };
-         inline CMaterialListNode *GetPrev() { return m_Prev; };
-         inline const RpMaterial *GetMaterial() { return m_Material; };
-         inline RwInt32 GetRefCount() { return m_RefCount; };
+         inline CMaterialListNode *GetNext()    {return m_Next;};   
+         inline CMaterialListNode *GetPrev()    {return m_Prev;};   
+         inline const RpMaterial  *GetMaterial(){return m_Material;};   
+         inline RwInt32            GetRefCount(){return m_RefCount;};   
 
-         static const RwUInt32 uiDefaultNumberOfMaterials;
+         static const RwUInt32     uiDefaultNumberOfMaterials;
 
 
          // overload new and delete to allocate from the freelist
@@ -103,7 +103,7 @@ namespace RWS
          {
             RWS_FUNCTION("RWS::MaterialHelper::CMaterialListNode::operator new");
 
-            RWS_RETURN(RwFreeListAlloc(sm_pFreeList, rwMEMHINTDUR_GLOBAL));
+            RWS_RETURN (RwFreeListAlloc(sm_pFreeList, rwMEMHINTDUR_GLOBAL));
          }
 
          void operator delete(void *pObj)
@@ -123,6 +123,7 @@ namespace RWS
             {
                sm_pFreeList = RwFreeListCreate(sizeof(CMaterialListNode), blockSize, 16, rwMEMHINTDUR_GLOBAL);
             }
+
          }
 
          // close the free list
@@ -144,7 +145,7 @@ namespace RWS
       // the number of materials nodes to be pre allocated in the free list
       const RwUInt32 CMaterialListNode::uiDefaultNumberOfMaterials = 10;
       // reference count for the free list
-      RwUInt32 CMaterialListNode::m_FreeListRefCount;
+      RwUInt32    CMaterialListNode::m_FreeListRefCount;
       // pointer to the CMaterialListNode free list
       RwFreeList *CMaterialListNode::sm_pFreeList;
 
@@ -180,7 +181,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+      
       /**
       *  Retrieves material plugin data.
       *
@@ -188,7 +189,7 @@ namespace RWS
       *
       *  \return A pointer to the CMaterialEventPlugin data.
       */
-      CMaterialEventPlugin *CMaterialEvent::GetPluginData(RpMaterial &Material)
+      CMaterialEventPlugin* CMaterialEvent::GetPluginData( RpMaterial& Material )
       {
          RWS_FUNCTION("CMaterialEvent::GetPluginData");
 
@@ -197,7 +198,7 @@ namespace RWS
          const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&Material);
          const RwUInt32 pluginAddr = baseAddr + iCMaterialEventPlugin_Offset;
 
-         RWS_RETURN(reinterpret_cast<CMaterialEventPlugin *>(pluginAddr));
+         RWS_RETURN(reinterpret_cast<CMaterialEventPlugin*>(pluginAddr));
       }
 
       /**
@@ -209,14 +210,14 @@ namespace RWS
       *
       *  \returns Returns pointer to the constructed object.
       */
-      void *CMaterialEvent::MaterialEventPlugin_Constructor(void *pObject,
-                                                            RwInt32 offsetInObject, RwInt32 sizeInObject)
+      void* CMaterialEvent::MaterialEventPlugin_Constructor(void* pObject,
+         RwInt32 offsetInObject, RwInt32 sizeInObject)
       {
          RWS_FUNCTION("CMaterialEvent::MaterialEventPlugin_Constructor");
 
          RWS_PRE(pObject);
 
-         CMaterialEventPlugin &pluginData = *GetPluginData(*(RpMaterial *)pObject);
+         CMaterialEventPlugin &pluginData = *GetPluginData(*(RpMaterial*)pObject);
 
          pluginData.m_ObjectToReceiveEvent = 0;
          RWS_RETURN(pObject);
@@ -233,24 +234,24 @@ namespace RWS
       *
       *  \return Returns pDstObject.
       */
-      void *CMaterialEvent::MaterialEventPlugin_Copy(void *pDstObject,
-                                                     const void *pSrcObject, RwInt32 offset, RwInt32 size)
+      void* CMaterialEvent::MaterialEventPlugin_Copy(void* pDstObject,
+         const void* pSrcObject, RwInt32 offset, RwInt32 size)
       {
          RWS_FUNCTION("CMaterialEvent::MaterialEventPlugin_Copy");
 
          RWS_PRE(pDstObject);
          RWS_PRE(pSrcObject);
 
-         CMaterialEventPlugin &srcData = *GetPluginData(*(RpMaterial *)pSrcObject);
-         CMaterialEventPlugin &dstData = *GetPluginData(*(RpMaterial *)pDstObject);
+         CMaterialEventPlugin& srcData = *GetPluginData(*(RpMaterial*)pSrcObject);
+         CMaterialEventPlugin& dstData = *GetPluginData(*(RpMaterial*)pDstObject);
 
          dstData = srcData;
 
          // tell the associated object that the material has been copied
          if (srcData.m_ObjectToReceiveEvent)
          {
-            srcData.m_ObjectToReceiveEvent->MaterialCopyEvent(reinterpret_cast<const RpMaterial *>(pSrcObject),
-                                                              reinterpret_cast<const RpMaterial *>(pDstObject));
+            srcData.m_ObjectToReceiveEvent->MaterialCopyEvent(reinterpret_cast<const RpMaterial*>(pSrcObject),
+               reinterpret_cast<const RpMaterial*>(pDstObject));
          }
 
          RWS_RETURN(pDstObject);
@@ -265,16 +266,16 @@ namespace RWS
       *
       *  \return Returns pObject.
       */
-      void *CMaterialEvent::MaterialEventPlugin_Destroy(void *pObject, RwInt32 offset, RwInt32 size)
+      void* CMaterialEvent::MaterialEventPlugin_Destroy(void *pObject, RwInt32 offset, RwInt32 size)
       {
          RWS_FUNCTION("CMaterialEvent::MaterialEventPlugin_Destroy");
 
-         CMaterialEventPlugin &pluginData = *GetPluginData(*(RpMaterial *)pObject);
+         CMaterialEventPlugin& pluginData = *GetPluginData(*(RpMaterial*)pObject);
 
          // tell the associated object that the material destructor has been called
          if (pluginData.m_ObjectToReceiveEvent)
          {
-            pluginData.m_ObjectToReceiveEvent->MaterialDestroyEvent(reinterpret_cast<const RpMaterial *>(pObject));
+            pluginData.m_ObjectToReceiveEvent->MaterialDestroyEvent(reinterpret_cast<const RpMaterial*>(pObject));
          }
 
          RWS_RETURN(pObject);
@@ -291,14 +292,15 @@ namespace RWS
       {
          RWS_FUNCTION("CMaterialEvent::MaterialEventPluginAttach");
 
-         RWS_PRE(!iCMaterialEventPlugin_Offset);
+         RWS_PRE( !iCMaterialEventPlugin_Offset );
 
-         iCMaterialEventPlugin_Offset = RpMaterialRegisterPlugin(
-            sizeof(CMaterialEventPlugin),
-            MAKECHUNKID(rwVENDORID_CRITERIONRM, CMaterialEventPluginID),
-            MaterialEventPlugin_Constructor,
-            MaterialEventPlugin_Destroy,
-            MaterialEventPlugin_Copy);
+         iCMaterialEventPlugin_Offset = RpMaterialRegisterPlugin (
+               sizeof(CMaterialEventPlugin),
+               MAKECHUNKID(rwVENDORID_CRITERIONRM, CMaterialEventPluginID),
+               MaterialEventPlugin_Constructor,  
+               MaterialEventPlugin_Destroy,
+               MaterialEventPlugin_Copy
+               );
 
          RWS_POST(iCMaterialEventPlugin_Offset);
 
@@ -322,8 +324,8 @@ namespace RWS
       {
          RWS_FUNCTION("CMaterialEvent::SetObjectToReceiveEvent");
 
-         CMaterialEventPlugin &pluginData = *GetPluginData(*(RpMaterial *)pMaterial);
-         pluginData.m_ObjectToReceiveEvent = pObject;
+         CMaterialEventPlugin& pluginData = *GetPluginData(*(RpMaterial*)pMaterial);
+         pluginData.m_ObjectToReceiveEvent  = pObject;
 
          RWS_RETURNVOID();
       }
@@ -339,10 +341,10 @@ namespace RWS
       {
          RWS_FUNCTION("CMaterialListNode::CMaterialListNode");
 
-         m_Next = 0;
-         m_Prev = 0;
-         m_Material = 0;
-         m_RefCount = 0;
+         m_Next      = 0;
+         m_Prev      = 0;
+         m_Material  = 0;
+         m_RefCount  = 0;
 
          RWS_RETURNVOID();
       }
@@ -367,7 +369,7 @@ namespace RWS
 
          pDeleteNode->m_RefCount--;
 
-         if (pDeleteNode->m_RefCount > 0)
+         if (pDeleteNode->m_RefCount>0)
          {
             RWS_RETURNVOID();
          }
@@ -377,7 +379,7 @@ namespace RWS
             // the list only contains one node
             m_Head = 0;
          }
-         else
+            else
          {
             if (pDeleteNode->m_Prev == 0 && pDeleteNode->m_Next != 0)
             {
@@ -385,21 +387,21 @@ namespace RWS
                (pDeleteNode->m_Next)->m_Prev = 0;
                m_Head = pDeleteNode->m_Next;
             }
-            else
+               else
             {
                if (pDeleteNode->m_Prev != 0 && pDeleteNode->m_Next == 0)
                {
                   // we are at the end of the list
                   (pDeleteNode->m_Prev)->m_Next = 0;
                }
-               else
+                  else
                {
                   // we are in the middle of the list
                   (pDeleteNode->m_Prev)->m_Next = pDeleteNode->m_Next;
                   (pDeleteNode->m_Next)->m_Prev = pDeleteNode->m_Prev;
                }
             }
-
+         
             delete NodeToDelete;
          }
 
@@ -412,8 +414,7 @@ namespace RWS
       *
       *
       */
-      CMaterialList::CMaterialList() :
-         m_Head(0)
+      CMaterialList::CMaterialList() : m_Head(0)
       {
          RWS_FUNCTION("CMaterialList::CMaterialList");
 
@@ -447,7 +448,7 @@ namespace RWS
          }
 
          m_Head = 0;
-
+      
          RWS_RETURNVOID();
       }
 
@@ -472,7 +473,7 @@ namespace RWS
          // find pMaterial in list of materials
          CMaterialListNode *MaterialNode;
 
-         if ((MaterialNode = FindNodeWithMaterial(pMaterial)))
+         if ( (MaterialNode = FindNodeWithMaterial(pMaterial)))
          {
             // we have found pMaterial in the list so we must remove the reference to the material from the list
             DeleteNodeFromList(MaterialNode);
@@ -503,7 +504,7 @@ namespace RWS
          Next = m_Head;
          while (Next)
          {
-            pCallback(const_cast<RpMaterial *>(Next->GetMaterial()), pData);
+            pCallback(const_cast<RpMaterial*>(Next->GetMaterial()), pData);
             Next = Next->GetNext();
          }
 
@@ -561,7 +562,7 @@ namespace RWS
 
          // check to see if the material already exists in the list
          CMaterialListNode *MatNode;
-         if ((MatNode = FindNodeWithMaterial(pMaterial)))
+         if ( (MatNode = FindNodeWithMaterial(pMaterial))  )
          {
             MatNode->m_RefCount++;
             RWS_RETURN(true);
@@ -577,12 +578,12 @@ namespace RWS
 
          if (m_Head)
          {
-            NewListNode->m_Next = m_Head;
-            (m_Head)->m_Prev = NewListNode;
-            m_Head = NewListNode;
-            NewListNode->m_Prev = 0;
+            NewListNode->m_Next  = m_Head;
+            (m_Head)->m_Prev     = NewListNode;
+            m_Head               = NewListNode;
+            NewListNode->m_Prev  = 0;
          }
-         else
+            else
          {
             m_Head = NewListNode;
          }
@@ -614,21 +615,21 @@ namespace RWS
 
          t_ClumpCallForAllBaseMaterials_Info *pInfo;
 
-         pInfo = static_cast<t_ClumpCallForAllBaseMaterials_Info *>(pCallBackData);
+         pInfo = static_cast<t_ClumpCallForAllBaseMaterials_Info*>(pCallBackData);
 
          RpGeometry *pGeom;
-         pGeom = RpAtomicGetGeometry(pAtomic);
+         pGeom = RpAtomicGetGeometry( pAtomic );
 
          if (pGeom)
-         {
+         { 
             RpGeometry *Res;
-            Res = RpGeometryForAllMaterials(pGeom, pInfo->MaterialCallBack, pInfo->pCallBackData);
+            Res = RpGeometryForAllMaterials (pGeom, pInfo->MaterialCallBack, pInfo->pCallBackData); 
             RWS_ASSERT(Res, "AtomicCallForAllGeometry failed");
          }
 
-         RWS_RETURN(pAtomic);
+         RWS_RETURN( pAtomic );
       }
-
+ 
 
       /**
       *
@@ -650,16 +651,17 @@ namespace RWS
 
          t_ClumpCallForAllBaseMaterials_Info Info;
 
-         Info.pCallBackData = pCallBackData;
+         Info.pCallBackData    = pCallBackData;
          Info.MaterialCallBack = pMaterialCallBack;
 
          RpClump *Res;
 
-         Res = RpClumpForAllAtomics(pClump, AtomicCallForAllGeometry, &Info);
+         Res = RpClumpForAllAtomics (pClump, AtomicCallForAllGeometry, &Info);
 
          RWS_ASSERT(Res, "ClumpCallForAllBaseMaterials failed");
 
-         RWS_RETURN(pClump);
+         RWS_RETURN( pClump );
+
       }
 
    } //namespace

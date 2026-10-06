@@ -36,9 +36,9 @@
 
 namespace RWS
 {
-
+   
    CLinearMemoryManager::LinearMemoryPools CLinearMemoryManager::m_StoragePools;
-   CLinearMemoryManager::LinearMemoryPool *CLinearMemoryManager::m_pCurrentPool = 0;
+   CLinearMemoryManager::LinearMemoryPool * CLinearMemoryManager::m_pCurrentPool = 0;
 
   /**
    *
@@ -50,13 +50,13 @@ namespace RWS
    */
    namespace
    {
-
-      void SetupPlacementNewInfo(RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
+   
+      void SetupPlacementNewInfo (RwChunkHeaderInfo &rChunkHeader, RwStream *pStream)
       {
          RWS_FUNCTION("RWS::NULL::SetupPlacementNewInfo");
 
          // Create a temporary buffer, based on the length in the chunk header
-         RwChar *buffer = static_cast<char *>(::RWS_OP_NEW(rChunkHeader.length));
+         RwChar *buffer = static_cast<char*>(::RWS_OP_NEW(rChunkHeader.length) );
          RwChar *pbuffer = buffer; // Used to walk the string
 
          // read the stream into the buffer
@@ -64,7 +64,7 @@ namespace RWS
 
          // Read through data (first element is number of entity types to expect)
          RwInt32 count = *(RwInt32 *)pbuffer;
-         // Increment the buffer pointer
+         // Increment the buffer pointer         
          pbuffer += sizeof(RwInt32);
 
          // Keep a track of the amount of memory required by the linearMemoryManager
@@ -72,7 +72,7 @@ namespace RWS
 
          // Loop through all the entity types
          for (int i = 0; i < count; i++)
-         {
+         {            
             RwChar *tString; // What is the maximum characters for a behaviour name?
             RwInt32 stringLength;
             RwInt32 entityCount;
@@ -83,9 +83,9 @@ namespace RWS
             stringLength = rwstrlen(tString) + 1;
             pbuffer += stringLength;
 
-            // Apply any padding required within the string, to align the next read on an int boundary.
+            // Apply any padding required within the string, to align the next read on an int boundary. 
             // (Mainly for the PS2 platform, but other platforms need to take the padding into account.)
-            stringLength = stringLength % 4;
+            stringLength = stringLength%4;
             if (stringLength)
                pbuffer += 4 - (stringLength);
 
@@ -106,12 +106,12 @@ namespace RWS
          CLinearMemoryManager::Instance()->CreateMemoryPool(TotalStorage);
 
          // Delete the temporary buffer
-         operator delete(buffer);
+         operator delete (buffer);
 
          RWS_RETURNVOID();
       }
    }
-
+   
 
   /**
    *
@@ -123,9 +123,8 @@ namespace RWS
       RWS_FUNCTION("RWS::CLinearMemoryManager::RegisterStreamChunkHandlers");
 
       // Register the chunk handler
-      CStreamHandler::RegisterChunkHandler(MAKECHUNKID(rwVENDORID_CRITERIONRM,
-                                                       strFunc_PlacementNew),
-                                           SetupPlacementNewInfo);
+      CStreamHandler::RegisterChunkHandler(MAKECHUNKID (rwVENDORID_CRITERIONRM,
+           strFunc_PlacementNew), SetupPlacementNewInfo);
 
       RWS_RETURNVOID();
    }
@@ -137,10 +136,10 @@ namespace RWS
    *
    *  \return Returns a pointer to the memory chunk requested
    */
-   void *CLinearMemoryManager::RequestMemory(size_t size)
+   void * CLinearMemoryManager::RequestMemory(size_t size)
    {
       RWS_FUNCTION("RWS::CLinearMemoryManager::RequestMemory");
-
+      
       if (!m_pCurrentPool)
       {
          RWS_TRACE("There is no current memory pool to allocate from, allocating from the heap instead.");
@@ -148,8 +147,8 @@ namespace RWS
       }
 
       void *ret = m_pCurrentPool->m_pStorageNext;
-
-      if ((m_pCurrentPool->m_pStorageNext + size) > m_pCurrentPool->m_pStorageEnd)
+      
+      if ((m_pCurrentPool->m_pStorageNext + size ) > m_pCurrentPool->m_pStorageEnd)   
       {
          RWS_TRACE(" Warning linear memory buffer exceeds expected size");
 
@@ -162,34 +161,35 @@ namespace RWS
       {
          RWS_RETURN(0);
       }
-
+      
       m_pCurrentPool->m_pStorageNext += size;
       m_pCurrentPool->m_uAllocCount++;
 
       RWS_TRACE(" Address " << RWS_HEX(ret));
-
+      
       RWS_RETURN(ret);
    }
-
+   
    /*
    *
    *  Free a memory block from the linear memory allocator.
    *
    */
-   RwBool CLinearMemoryManager::FreeMemory(void *pMem)
+   RwBool CLinearMemoryManager::FreeMemory(void * pMem)
    {
       RWS_FUNCTION("CLinearMemoryManager::FreeMemory");
 
       LinearMemoryPools::iterator it = m_StoragePools.begin();
       while (it != m_StoragePools.end())
       {
-         if (pMem >= (*it)->m_pStorageStart && pMem <= (*it)->m_pStorageEnd)
+         if (pMem >= (*it)->m_pStorageStart
+             && pMem <= (*it)->m_pStorageEnd)
          {
             (*it)->m_uAllocCount--;
 
             if ((*it)->m_uAllocCount == 0)
             {
-               LinearMemoryPool *pPool = (*it);
+               LinearMemoryPool * pPool = (*it);
                it = m_StoragePools.erase(it);
                DestroyMemoryPool(pPool);
 

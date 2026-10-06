@@ -33,15 +33,15 @@
 
 namespace RWS
 {
-   namespace
+   namespace 
    {
-      RpAtomic *SubstituteWorld_RpAtomicCallBack(RpAtomic *atomic, void *data)
+      RpAtomic   *SubstituteWorld_RpAtomicCallBack (RpAtomic * atomic, void *data)
       {
          RWS_FUNCTION("RWS::NULL::SubstituteWorld_RpAtomicCallBack");
 
-         RWS_TRACE("atomic [" << atomic << "]");
+         RWS_TRACE("atomic ["<<atomic<<"]");
 
-         RpWorld *_RpWorld = reinterpret_cast<RpWorld *>(data);
+         RpWorld *_RpWorld = reinterpret_cast<RpWorld*>(data);
 
          RpWorld *__RpWorld = RpAtomicGetWorld(atomic);
 
@@ -52,13 +52,13 @@ namespace RWS
          RWS_RETURN(atomic);
       }
 
-      RpClump *SubstituteWorld_RpClumpCallBack(RpClump *clump, void *data)
+      RpClump    *SubstituteWorld_RpClumpCallBack (RpClump * clump, void *data)
       {
          RWS_FUNCTION("RWS::NULL::SubstituteWorld_RpClumpCallBack");
 
-         RWS_TRACE("clump [" << clump << "]");
+         RWS_TRACE("clump ["<<clump<<"]");
 
-         RpWorld *_RpWorld = reinterpret_cast<RpWorld *>(data);
+         RpWorld *_RpWorld = reinterpret_cast<RpWorld*>(data);
 
          RpWorld *__RpWorld = RpClumpGetWorld(clump);
 
@@ -69,15 +69,15 @@ namespace RWS
          RWS_RETURN(clump);
       }
 
-      RpLight *SubstituteWorld_RpLightCallBack(RpLight *light, void *data)
+      RpLight    *SubstituteWorld_RpLightCallBack (RpLight * light, void *data)
       {
          RWS_FUNCTION("RWS::NULL::SubstituteWorld_RpLightCallBack");
 
-         RWS_TRACE("light [" << light << "]");
+         RWS_TRACE("light ["<<light<<"]");
 
-         RpWorld *_RpWorld = reinterpret_cast<RpWorld *>(data);
+         RpWorld *_RpWorld = reinterpret_cast<RpWorld*>(data);
 
-         RpWorld *__RpWorld = RpLightGetWorld(light);
+         RpWorld *__RpWorld = RpLightGetWorld (light);
 
          if (__RpWorld) RpWorldRemoveLight(__RpWorld, light);
 
@@ -86,11 +86,11 @@ namespace RWS
          RWS_RETURN(light);
       }
 
-      RpWorldSector *SubstituteWorld_RpWorldSectorCallBack(RpWorldSector *sector, void *data)
+      RpWorldSector *SubstituteWorld_RpWorldSectorCallBack (RpWorldSector *sector, void *data)
       {
          RWS_FUNCTION("RWS::NULL::SubstituteWorld_RpWorldSectorCallBack");
 
-         RWS_TRACE("sector [" << sector << "]");
+         RWS_TRACE("sector ["<<sector<<"]");
 
          RpWorldSectorForAllAtomics(sector, SubstituteWorld_RpAtomicCallBack, data);
 
@@ -108,11 +108,11 @@ namespace RWS
       *  _dst_RpWorld world.
       *
       */
-      void MoveAllObjects(RpWorld *_src_RpWorld, RpWorld *_dst_RpWorld)
+      void MoveAllObjects (RpWorld *_src_RpWorld, RpWorld *_dst_RpWorld)
       {
          RWS_FUNCTION("RWS::WorldHelper::SubstituteWorld");
 
-         RWS_TRACE("From [" << _src_RpWorld << "] to [" << _dst_RpWorld << "]");
+         RWS_TRACE("From ["<<_src_RpWorld<<"] to ["<<_dst_RpWorld<<"]");
 
          RWS_PRE(_src_RpWorld);
          RWS_PRE(_dst_RpWorld);

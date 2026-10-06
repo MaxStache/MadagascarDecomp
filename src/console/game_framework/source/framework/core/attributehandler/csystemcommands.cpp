@@ -45,22 +45,22 @@ namespace RWS
    * \return Returns a pointer to a string containing the ID of the resource.
    *
    */
-   const RWSGUID* CSystemCommands::FindFirstResource(const CAttributePacket& rAttr)
+   const RWSGUID * CSystemCommands::FindFirstResource( const CAttributePacket& rAttr )
    {
       RWS_FUNCTION("RWS::CSystemCommands::FindFirstResource");
 
-      const RWSGUID* pResult = 0;
+      const RWSGUID * pResult = 0;
 
       CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(CSystemCommands));
       while (!attrIt.IsFinished() && 0 == pResult)
       {
-         if (CSystemCommands::CMD_AttachResource == attrIt->GetCommandId())
+         if (CSystemCommands::CMD_AttachResource == attrIt->GetCommandId()) 
          {
             attrIt->GetCommandData(&pResult);
          }
          ++attrIt;
       }
-
+      
       RWS_RETURN(pResult);
    }
 
@@ -76,7 +76,7 @@ namespace RWS
    *
    * \return Returns a pointer to the resource's data.
    */
-   const void* CSystemCommands::FindFirstResourceOfType(const CAttributePacket& rAttr, const RwChar* pType)
+   const void* CSystemCommands::FindFirstResourceOfType( const CAttributePacket& rAttr, const RwChar* pType )
    {
       RWS_FUNCTION("RWS::CSystemCommands::FindFirstResourceOfType");
 
@@ -90,11 +90,11 @@ namespace RWS
       {
          if (CSystemCommands::CMD_AttachResource == attrIt->GetCommandId())
          {
-            const RWSGUID* pResourceId = 0;
+            const RWSGUID * pResourceId = 0;
             attrIt->GetCommandData(&pResourceId);
 
-            const RwChar* pObjectType = 0;
-            const void* pObject = CResourceManager::FindById(pResourceId, &pObjectType);
+            const RwChar *pObjectType = 0;
+            const void* pObject = CResourceManager::FindById (pResourceId, &pObjectType);
             if (pObject)
             {
                RWS_ASSERT(pObjectType, "Object type of found resource (id " << pResourceId << ") is invalid");
@@ -104,7 +104,7 @@ namespace RWS
 
          ++attrIt;
       }
-
+      
       RWS_RETURN(pResult);
    }
 
@@ -116,11 +116,11 @@ namespace RWS
    *  \param rAttrCmd A reference to a CAttributeCommand containing the raw matrix.
    *
    */
-   void CSystemCommands::UpdateFrame(RwFrame& rFrame, const CAttributeCommand& rAttrCmd)
+   void CSystemCommands::UpdateFrame(RwFrame &rFrame, const CAttributeCommand &rAttrCmd)
    {
       RWS_FUNCTION("RWS::CSystemCommands::UpdateFrame (CAttributeCommand &)");
 
-      RWS_PRE(CMD_LoadMatrix == rAttrCmd.GetCommandId());
+      RWS_PRE( CMD_LoadMatrix == rAttrCmd.GetCommandId() );
       const RwMatrix* pUnalignedMat = static_cast<const RwMatrix*>(rAttrCmd.GetAs_void_ptr());
 
       UpdateFrame(rFrame, pUnalignedMat);
@@ -136,14 +136,14 @@ namespace RWS
    *  \param pUnalignedMat A pointer to the (unaligned) new matrix to use.
    *
    */
-   void CSystemCommands::UpdateFrame(RwFrame& frame, const RwMatrix* pUnalignedMat)
+   void CSystemCommands::UpdateFrame( RwFrame& frame, const RwMatrix *pUnalignedMat)
    {
       RWS_FUNCTION("RWS::CSystemCommands::UpdateFrame (RwMatrix *)");
 
       // Objects may be a child in a hierarchy we need to handle this...
       //
 
-      RwMatrix* pMatrix = RwFrameGetMatrix(&frame);
+      RwMatrix *pMatrix = RwFrameGetMatrix(&frame);
       *pMatrix = *pUnalignedMat;
       RwMatrixOptimize(pMatrix, 0);
       RwFrameUpdateObjects(&frame);
@@ -152,7 +152,7 @@ namespace RWS
       // Check if the Matrix is invertible, if its not or asserts due to precision
       // problems, then look at changing RwEngineSetMatrixTolerances in startup.cpp
       //
-      RwMatrix* dst = RwMatrixCreate();
+      RwMatrix *dst = RwMatrixCreate();
       RwMatrixInvert(dst, pMatrix);
       RwMatrixDestroy(dst);
 #endif
@@ -194,7 +194,7 @@ namespace RWS
          */
          struct PluginData
          {
-            RwUInt32 m_isSolid : 1;
+            RwUInt32 m_isSolid:1;
          };
 
          /**
@@ -213,7 +213,7 @@ namespace RWS
          *
          *  \return A pointer to the RpAtomicCollisionPropertiesPluginData data.
          */
-         inline PluginData* GetPluginData(RpAtomic& atomic)
+         inline PluginData* GetPluginData( RpAtomic& atomic )
          {
             RWS_FUNCTION("RWS::RpAtomicCollisionProperties::GetPluginData");
 
@@ -222,7 +222,7 @@ namespace RWS
             const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&atomic);
             const RwUInt32 pluginAddr = baseAddr + iPlugin_Offset;
 
-            RWS_RETURN(reinterpret_cast<PluginData*>(pluginAddr));
+            RWS_RETURN( reinterpret_cast<PluginData*>(pluginAddr) );
          }
 
          /**
@@ -234,7 +234,7 @@ namespace RWS
          *
          *  \return A pointer to the RpAtomicCollisionPropertiesPluginData data.
          */
-         inline const PluginData* GetPluginData(const RpAtomic& atomic)
+         inline const PluginData *GetPluginData( const RpAtomic& atomic )
          {
             RWS_FUNCTION("RWS::RpAtomicCollisionProperties::GetPluginData");
 
@@ -243,7 +243,7 @@ namespace RWS
             const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&atomic);
             const RwUInt32 pluginAddr = baseAddr + iPlugin_Offset;
 
-            RWS_RETURN(reinterpret_cast<const PluginData*>(pluginAddr));
+            RWS_RETURN( reinterpret_cast<const PluginData*>(pluginAddr) );
          }
 
          /**
@@ -322,13 +322,14 @@ namespace RWS
          iPlugin_Offset = RpAtomicRegisterPlugin(
             sizeof(PluginData),
             MAKECHUNKID(rwVENDORID_CRITERIONRM, PluginID),
-            Plugin_Constructor,
+            Plugin_Constructor,  
             0, // NOT USED
-            Plugin_Copy);
+            Plugin_Copy
+            );
 
          RWS_POST(iPlugin_Offset);
 
-         RWS_RETURN(0 != iPlugin_Offset);
+         RWS_RETURN (0 != iPlugin_Offset);
       }
 
       /**
@@ -339,13 +340,13 @@ namespace RWS
       *  \param atomic A reference to an RpAtomic object.
       *  \param isSolid Flag that specifies the new value of the solid flag.
       */
-      void SetIsSolid(RpAtomic& atomic, bool isSolid)
+      void SetIsSolid( RpAtomic& atomic, bool isSolid )
       {
          RWS_FUNCTION("RWS::RpAtomicCollisionProperties::SetIsSolid");
 
-         RWS_PRE(iPlugin_Offset);
+         RWS_PRE( iPlugin_Offset );
 
-         GetPluginData(atomic)->m_isSolid = isSolid ? 1 : 0;
+         GetPluginData(atomic)->m_isSolid = isSolid?1:0;
 
          RWS_RETURNVOID();
       }
@@ -359,13 +360,13 @@ namespace RWS
       *
       *  \returns Returns contents of solid flag.
       */
-      bool GetIsSolid(const RpAtomic& atomic)
+      bool GetIsSolid( const RpAtomic& atomic )
       {
          RWS_FUNCTION("RWS::RpAtomicCollisionProperties::GetIsSolid");
 
-         RWS_PRE(iPlugin_Offset);
-
-         RWS_RETURN(GetPluginData(atomic)->m_isSolid ? true : false);
+         RWS_PRE( iPlugin_Offset );
+      
+         RWS_RETURN(GetPluginData(atomic)->m_isSolid?true:false);
       }
 
 
@@ -395,7 +396,7 @@ namespace RWS
       *  \param clump A reference to an RpClump object.
       *  \param isSolid Flag if true implies object is solid during collisions.
       */
-      void SetIsSolid(RpClump& clump, bool isSolid)
+      void SetIsSolid( RpClump& clump, bool isSolid )
       {
          RWS_FUNCTION("RWS::RpAtomicCollisionProperties::SetIsSolid");
 
@@ -417,7 +418,7 @@ namespace RWS
 
          RWS_PRE(pAtomic);
 
-         bool* ret = reinterpret_cast<bool*>(pData);
+         bool *ret = reinterpret_cast<bool*>(pData);
 
          if (GetIsSolid(*pAtomic))
          {
@@ -436,7 +437,7 @@ namespace RWS
       *
       *  \returns Returns true if any of the atomics within the clump are solid
       */
-      bool GetIsSolid(const RpClump& clump)
+      bool GetIsSolid( const RpClump& clump )
       {
          RWS_FUNCTION("RWS::RpAtomicCollisionProperties::GetIsSolid");
 

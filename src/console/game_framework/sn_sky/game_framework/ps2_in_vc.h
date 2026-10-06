@@ -1,5 +1,5 @@
 //
-// The purpose of this file is to, as much as possible, facilitate the
+// The purpose of this file is to, as much as possible, facilitate the 
 // compilation of the PS2 GNU files by the VC6 compiler.  Not all problems
 // can be solved via this file.  So far, a couple of hacks are required
 // directly within the headers themselves.

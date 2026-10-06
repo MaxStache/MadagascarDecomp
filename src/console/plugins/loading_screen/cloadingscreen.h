@@ -40,24 +40,24 @@ namespace RWS
     *
     */
 
-   class CLoadingScreen
-   {
-   public:
-      CLoadingScreen();
-      ~CLoadingScreen();
+    class CLoadingScreen
+    {
+        public:
+            CLoadingScreen();
+            ~CLoadingScreen();
 
-      void Render(RwCamera *pRwCamera, RwChar *message);
+            void Render(RwCamera *pRwCamera, RwChar *message);
 
-   private:
+        private:
 
 
-      RwTexDictionary *m_splashTXD;
-      RtCharset *m_Charset;
+            RwTexDictionary *m_splashTXD;
+            RtCharset *m_Charset;
 
-      void RenderOverlay(RwRaster *texRaster, RwUInt8 alpha, RwCamera *camera,
-                         RwReal minU, RwReal minV, RwReal maxU, RwReal maxV);
-      RwTexDictionary *ReadSplashTXD(void);
-   };
+            void RenderOverlay(RwRaster *texRaster, RwUInt8 alpha, RwCamera *camera,
+                               RwReal minU, RwReal minV, RwReal maxU, RwReal maxV);
+            RwTexDictionary *ReadSplashTXD(void);
+    };
 }
 
 #endif //__CLoadingScreen_H__

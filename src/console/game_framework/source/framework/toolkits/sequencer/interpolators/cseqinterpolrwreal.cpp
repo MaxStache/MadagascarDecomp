@@ -61,13 +61,13 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwRealDefaultReg(CSeqInterpolBase::MakeNew,
-                                             CSeqInterpolBase::MaxSize, RWSTRING("RwReal"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwReal"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwRealInterpolReg(CSeqInterpolLinearRwReal::MakeNew,
-                                              CSeqInterpolLinearRwReal::MaxSize, RWSTRING("RwReal"),
-                                              INTERPOL_TYPE_LINEAR_NAME, FALSE);
+         CSeqInterpolLinearRwReal::MaxSize, RWSTRING("RwReal"),
+         INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       ////////////////////////////////////////
       //
@@ -113,10 +113,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwReal::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwReal),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwReal), 
+            "Memory buffer too small");
 
-         CSeqInterpolLinearRwReal *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwReal *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwReal(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -168,8 +168,10 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->DataSize(), "End key's data size invalid.");
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
-         const RwReal *pEndVal = reinterpret_cast<const RwReal *>(rData.EndKey()->Data()),
-                      *pStartVal = reinterpret_cast<const RwReal *>(rData.LastKey()->Data());
+         const RwReal *pEndVal = reinterpret_cast<const RwReal *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwReal *>
+               (rData.LastKey()->Data());
 
          // Calculate the step value...
 
@@ -206,9 +208,9 @@ namespace RWS
       */
 
       inline RwReal CalcValue(const RwReal *pStartVal, RwUInt32 nowTime,
-                              RwUInt32 startTime, RwReal incPerMilliSec)
+         RwUInt32 startTime, RwReal incPerMilliSec)
       {
-         return (*pStartVal + static_cast<RwReal>(nowTime - startTime) * incPerMilliSec);
+         return(*pStartVal + static_cast<RwReal>(nowTime - startTime) * incPerMilliSec);
       }
 
       /**
@@ -225,7 +227,8 @@ namespace RWS
          RWS_ASSERT(rData.LastKey()->DataSize(), "Last key's data size invalid.");
          RWS_ASSERT(rData.LastKey()->Data(), "Last key's data pointer invalid.");
 
-         const RwReal *pStartVal = reinterpret_cast<const RwReal *>(rData.LastKey()->Data());
+         const RwReal *pStartVal = reinterpret_cast<const RwReal *>
+               (rData.LastKey()->Data());
          RwReal *pCalcVal;
 
          // Calculate the current value & insert into attribute data...
@@ -269,7 +272,7 @@ namespace RWS
 
       inline RwReal CalcValue(const RwReal *pStartVal, const RwReal *pEndVal, RwReal delta)
       {
-         return (*pStartVal + (*pEndVal - *pStartVal) * delta);
+         return(*pStartVal + (*pEndVal - *pStartVal) * delta);
       }
 
       /**
@@ -289,8 +292,9 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta out of range.");
 
-         const RwReal *pStartVal = reinterpret_cast<const RwReal *>(rData.LastKey()->Data()),
-                      *pEndVal = reinterpret_cast<const RwReal *>(rData.EndKey()->Data());
+         const RwReal *pStartVal = reinterpret_cast<const RwReal *>
+               (rData.LastKey()->Data()),
+            *pEndVal = reinterpret_cast<const RwReal *>(rData.EndKey()->Data());
          RwReal *pCalcVal;
 
          // Calculate the current value & insert into attribute data...

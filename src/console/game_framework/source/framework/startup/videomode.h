@@ -27,7 +27,7 @@ namespace RWS
 {
    namespace StartUp
    {
-      RwBool SelectVideoMode(RwInt32& screenWidth, RwInt32& screenHeight, RwInt32 bitDepth,
-                             RwUInt32 flags, RwUInt32 zDepth);
+      RwBool SelectVideoMode( RwInt32& screenWidth, RwInt32& screenHeight, RwInt32 bitDepth, 
+                              RwUInt32 flags, RwUInt32 zDepth);
    }
 }

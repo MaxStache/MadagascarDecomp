@@ -54,23 +54,24 @@
 namespace RWS
 {
    namespace FX
-   {
+   {                   
       static DWORD
-         g_BloomVertexShaderDeclaration[] =
-            {
-               D3DVSD_STREAM(0),
-               D3DVSD_REG(VSD_REG_POS, D3DVSDT_FLOAT3),  // POSITION  - register v0
-               D3DVSD_REG(VSD_REG_COLOR, D3DVSDT_FLOAT4),  // COLOR     - register v2
-               D3DVSD_REG(VSD_REG_TEXCOORDS, D3DVSDT_FLOAT2),  // TEXCOORDS - register v1
-               D3DVSD_END()};
+      g_BloomVertexShaderDeclaration[] =
+      {
+         D3DVSD_STREAM(0),
+         D3DVSD_REG(VSD_REG_POS,       D3DVSDT_FLOAT3),  // POSITION  - register v0
+         D3DVSD_REG(VSD_REG_COLOR,     D3DVSDT_FLOAT4),  // COLOR     - register v2
+         D3DVSD_REG(VSD_REG_TEXCOORDS, D3DVSDT_FLOAT2),  // TEXCOORDS - register v1
+         D3DVSD_END()
+      };
 
       typedef struct RenderedVertex
       {
-         RwReal x, y, z;        // The un-transformed position for the vertex
-         RwReal r, g, b, a;    // colour
-         RwReal u;              // Texture coordinate
-         RwReal v;              // Texture coordinate
-      } RenderedVertex;
+          RwReal      x, y, z;        // The un-transformed position for the vertex
+          RwReal      r, g, b , a;    // colour
+          RwReal      u;              // Texture coordinate
+          RwReal      v;              // Texture coordinate
+      }RenderedVertex;
 
       CFXCameraSpaceBloomXBox::CFXCameraSpaceBloomXBox()
       {
@@ -80,8 +81,8 @@ namespace RWS
          m_Dev = static_cast<LPDIRECT3DDEVICE8>(RwXboxGetCurrentD3DDevice());
 
          // create a vertex buffer
-         if (m_Dev->CreateVertexBuffer(4 * sizeof(RenderedVertex), D3DUSAGE_WRITEONLY, 0, D3DPOOL_MANAGED,
-                                       &m_FullScreenPolyVertexBufferLinear) != D3D_OK)
+         if (m_Dev->CreateVertexBuffer( 4 * sizeof(RenderedVertex), D3DUSAGE_WRITEONLY, 0, D3DPOOL_MANAGED,
+                                        &m_FullScreenPolyVertexBufferLinear ) != D3D_OK)
          {
             RWS_RETURNVOID();
          }
@@ -94,38 +95,38 @@ namespace RWS
             RWS_RETURNVOID();
          }
 
-         m_Dev->CreatePixelShader(reinterpret_cast<D3DPIXELSHADERDEF *>(dwExtracthighlightsPixelShader),
-                                  &m_ExtractHighLightsPixelShader);
+         m_Dev->CreatePixelShader(reinterpret_cast<D3DPIXELSHADERDEF*>(dwExtracthighlightsPixelShader),
+                                  &m_ExtractHighLightsPixelShader );
 
-         m_Dev->CreatePixelShader(reinterpret_cast<D3DPIXELSHADERDEF *>(dwBloomoutputPixelShader),
-                                  &m_BloomOutputPixelShader);
+         m_Dev->CreatePixelShader(reinterpret_cast<D3DPIXELSHADERDEF*>(dwBloomoutputPixelShader),
+                                  &m_BloomOutputPixelShader );
 
          // linear
          {
-            RenderedVertex *pVertices;
+            RenderedVertex* pVertices;
 
-            D3DVertexBuffer_Lock(m_FullScreenPolyVertexBufferLinear, 0, 0, (RwUInt8 **)&pVertices, 0);
-
-            {
-               RenderedVertex V = {-0.5f, -0.5f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 480.0f};
-               pVertices[0] = V;
-            }
+            D3DVertexBuffer_Lock( m_FullScreenPolyVertexBufferLinear, 0, 0, (RwUInt8**)&pVertices, 0 );
 
             {
-               RenderedVertex V = {0.5f, -0.5f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 640.0f, 480.0f};
-               pVertices[1] = V;
-            }
-
-            {
-               RenderedVertex V = {-0.5f, 0.5f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f};
-               pVertices[2] = V;
-            }
-
-            {
-               RenderedVertex V = {0.5f, 0.5f, 2.0f, 1.0f, 1.0f, 1.0f, 1.0f, 640.0f, 0.0f};
+               RenderedVertex V = {-0.5f, -0.5f, 2.0f,    1.0f, 1.0f, 1.0f, 1.0f  ,    0.0f, 480.0f};
+               pVertices[0] = V;                                                                 
+            }                                                                                    
+                                                                                              
+            {                                                                                    
+               RenderedVertex V = { 0.5f, -0.5f, 2.0f,    1.0f, 1.0f, 1.0f, 1.0f  ,  640.0f, 480.0f};
+               pVertices[1] = V;                                                                   
+            }                                                                                      
+                                                                                                
+            {                                                                                      
+               RenderedVertex V = {-0.5f,  0.5f, 2.0f,    1.0f, 1.0f, 1.0f, 1.0f  ,    0.0f, 0.0f};
+               pVertices[2] = V;                                                                   
+            }                                                                                      
+                                                                                                
+            {                                                                                      
+               RenderedVertex V = { 0.5f,  0.5f, 2.0f,    1.0f, 1.0f, 1.0f, 1.0f  ,  640.0f, 0.0f};
                pVertices[3] = V;
             }
-            D3DVertexBuffer_Unlock(m_FullScreenPolyVertexBufferLinear);
+            D3DVertexBuffer_Unlock( m_FullScreenPolyVertexBufferLinear );
          }
 
          // FIXME: We need to get the exact resolution of the current backbuffer here
@@ -140,37 +141,37 @@ namespace RWS
          RWS_FUNCTION("RWS::FX::CFXCameraSpaceBloomXBox::~CFXCameraSpaceBloomXBox");
 
          // destroy the highlight shader
-         if (m_ExtractHighLightsPixelShader)
+         if ( m_ExtractHighLightsPixelShader )
          {
             D3DDevice_DeletePixelShader(m_ExtractHighLightsPixelShader);
          }
 
          // destroy the bloom shader
-         if (m_BloomOutputPixelShader)
+         if ( m_BloomOutputPixelShader )
          {
             D3DDevice_DeletePixelShader(m_BloomOutputPixelShader);
          }
 
          // destroy the pixel shader
-         if (m_VertexShader)
+         if ( m_VertexShader )
          {
             D3DDevice_DeleteVertexShader(m_VertexShader);
          }
 
          // destroy the vertex buffer
-         if (m_FullScreenPolyVertexBufferLinear)
+         if ( m_FullScreenPolyVertexBufferLinear )
          {
             m_FullScreenPolyVertexBufferLinear->Release();
          }
 
          // release the temp surface
-         if (m_TempSurface)
+         if ( m_TempSurface )
          {
             m_TempSurface->Release();
          }
 
          // release the temp texture
-         if (m_TempTexture)
+         if ( m_TempTexture )
          {
             m_TempTexture->Release();
          }
@@ -182,7 +183,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXCameraSpaceBloomXBox::SaveRenderStates");
 
-         HRESULT Res;
+         HRESULT  Res;
 
          Res = m_Dev->CreateStateBlock(D3DSBT_ALL, SB);
          RWS_ASSERT(Res == D3D_OK, "Unable to create stateblock");
@@ -222,18 +223,18 @@ namespace RWS
 
          D3DXMatrixIdentity(&matView);
          D3DXMatrixIdentity(&matWorld);
-         D3DXMatrixOrthoLH(&matProj, 1.0f, 1.0f, 0.2f, 20.0f);
+         D3DXMatrixOrthoLH (&matProj, 1.0f, 1.0f, 0.2f, 20.0f);
 
-         m_Dev->SetTransform(D3DTS_VIEW, &matView);
-         m_Dev->SetTransform(D3DTS_WORLD, &matWorld);
+         m_Dev->SetTransform(D3DTS_VIEW,       &matView);
+         m_Dev->SetTransform(D3DTS_WORLD,      &matWorld);
          m_Dev->SetTransform(D3DTS_PROJECTION, &matProj);
 
 
-         D3DXMatrixMultiply(&matViewProj, &matView, &matProj);
-         D3DXMatrixMultiply(&matWorldViewProj, &matWorld, &matViewProj);
+         D3DXMatrixMultiply (&matViewProj,      &matView,   &matProj);
+         D3DXMatrixMultiply (&matWorldViewProj, &matWorld,  &matViewProj);
          D3DXMatrixTranspose(&matWorldViewProj, &matWorldViewProj);
          m_Dev->SetVertexShaderConstant(VSCONST_REG_TRANSFORM_OFFSET, &matWorldViewProj, VSCONST_REG_TRANSFORM_SIZE);
-
+         
          RWS_RETURNVOID();
       }
 
@@ -242,60 +243,60 @@ namespace RWS
          RWS_FUNCTION("RWS::FX::CFXXBOXMotionBlur::ApplyHighlightRenderStates");
 
          // setup the render states for alpha blended textured poly
-         m_Dev->SetPixelShader(m_ExtractHighLightsPixelShader);
-         m_Dev->SetVertexShader(m_VertexShader);
+         m_Dev->SetPixelShader( m_ExtractHighLightsPixelShader );
+         m_Dev->SetVertexShader( m_VertexShader );
 
-         RwV4d ShaderConstant;
+         RwV4d    ShaderConstant;
          ShaderConstant.x = m_Brightness;
          ShaderConstant.y = m_Brightness;
          ShaderConstant.z = m_Brightness;
          ShaderConstant.w = m_Brightness;
-         m_Dev->SetPixelShaderConstant(5, &ShaderConstant, 1);
+         m_Dev->SetPixelShaderConstant(5, &ShaderConstant, 1 );
 
-         for (int i = 0; i < 4; i++)
+         for ( int i = 0 ; i < 4 ; i++ )
          {
-            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
+            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAOP,         D3DTOP_SELECTARG1);
+            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAARG1,       D3DTA_DIFFUSE);
+                                                                
+            m_Dev->SetTextureStageState(i, D3DTSS_COLOROP,         D3DTOP_SELECTARG2);
+            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG1,       D3DTA_DIFFUSE);
+            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG2,       D3DTA_TEXTURE);
+            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSU,        D3DTADDRESS_CLAMPTOEDGE );
+            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSV,        D3DTADDRESS_CLAMPTOEDGE );
 
-            m_Dev->SetTextureStageState(i, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG2, D3DTA_TEXTURE);
-            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMPTOEDGE);
-            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMPTOEDGE);
-
-            m_Dev->SetTextureStageState(i, D3DTSS_MAGFILTER, D3DTEXF_GAUSSIANCUBIC);
-            m_Dev->SetTextureStageState(i, D3DTSS_MINFILTER, D3DTEXF_GAUSSIANCUBIC);
+            m_Dev->SetTextureStageState(i, D3DTSS_MAGFILTER,       D3DTEXF_GAUSSIANCUBIC );
+            m_Dev->SetTextureStageState(i, D3DTSS_MINFILTER,       D3DTEXF_GAUSSIANCUBIC );
             m_Dev->SetTextureStageState(i, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-            m_Dev->SetTextureStageState(i, D3DTSS_RESULTARG, D3DTA_CURRENT);
-            m_Dev->SetTextureStageState(i, D3DTSS_MIPMAPLODBIAS, 0);
+            m_Dev->SetTextureStageState(i, D3DTSS_RESULTARG,       D3DTA_CURRENT);
+            m_Dev->SetTextureStageState(i, D3DTSS_MIPMAPLODBIAS,   0);
             m_Dev->SetTextureStageState(i, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
             m_Dev->SetTexture(i, pTexture);
          }
 
-         m_Dev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
-
-         m_Dev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-         m_Dev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-         m_Dev->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-         m_Dev->SetRenderState(D3DRS_FOGCOLOR, FALSE);
-         m_Dev->SetRenderState(D3DRS_AMBIENT, FALSE);
-         m_Dev->SetRenderState(D3DRS_BLENDCOLOR, 0);
-         m_Dev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-         m_Dev->SetRenderState(D3DRS_SPECULARENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_LIGHTING, FALSE);
+         m_Dev->SetRenderState(D3DRS_ZWRITEENABLE,        FALSE);
+         m_Dev->SetRenderState(D3DRS_ZFUNC,               D3DCMP_ALWAYS);
+                                                          
+         m_Dev->SetRenderState(D3DRS_SRCBLEND,            D3DBLEND_SRCALPHA);
+         m_Dev->SetRenderState(D3DRS_DESTBLEND,           D3DBLEND_INVSRCALPHA);
+         m_Dev->SetRenderState(D3DRS_ALPHABLENDENABLE,    FALSE);
+         m_Dev->SetRenderState(D3DRS_ALPHATESTENABLE,     FALSE);
+         m_Dev->SetRenderState(D3DRS_CULLMODE,            D3DCULL_NONE);
+                                                          
+         m_Dev->SetRenderState(D3DRS_FOGCOLOR,            FALSE);
+         m_Dev->SetRenderState(D3DRS_AMBIENT,             FALSE);
+         m_Dev->SetRenderState(D3DRS_BLENDCOLOR,          0);
+         m_Dev->SetRenderState(D3DRS_BLENDOP,             D3DBLENDOP_ADD);
+         m_Dev->SetRenderState(D3DRS_SPECULARENABLE,      FALSE);
+         m_Dev->SetRenderState(D3DRS_LIGHTING,            FALSE);
 
          // align all four full screen stages
          {
-            RwReal stageOffset[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-            for (int i = 0; i < 4; i++)
+            RwReal stageOffset[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+            for (int i = 0; i < 4; i++ )
             {
 
-               m_Dev->SetVertexShaderConstant(VSCONST_REG_T0_OFFSET + i * VSCONST_REG_T0_SIZE, stageOffset,
-                                              VSCONST_REG_T0_SIZE);
+               m_Dev->SetVertexShaderConstant( VSCONST_REG_T0_OFFSET + i * VSCONST_REG_T0_SIZE, stageOffset,
+                                               VSCONST_REG_T0_SIZE );
             }
          }
 
@@ -314,67 +315,67 @@ namespace RWS
          RWS_FUNCTION("RWS::FX::CFXXBOXMotionBlur::ApplyHighlightRenderStates");
 
          // setup the render states for alpha blended textured poly
-         m_Dev->SetVertexShader(m_VertexShader);
+         m_Dev->SetVertexShader( m_VertexShader );
 
-         for (int i = 0; i < 4; i++)
+         for ( int i = 0 ; i < 4 ; i++ )
          {
-            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
+            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAOP,         D3DTOP_SELECTARG1);
+            m_Dev->SetTextureStageState(i, D3DTSS_ALPHAARG1,       D3DTA_DIFFUSE);
+                                                                
+            m_Dev->SetTextureStageState(i, D3DTSS_COLOROP,         D3DTOP_SELECTARG2);
+            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG1,       D3DTA_DIFFUSE);
+            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG2,       D3DTA_TEXTURE);
+            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSU,        D3DTADDRESS_CLAMPTOEDGE );
+            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSV,        D3DTADDRESS_CLAMPTOEDGE );
 
-            m_Dev->SetTextureStageState(i, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-            m_Dev->SetTextureStageState(i, D3DTSS_COLORARG2, D3DTA_TEXTURE);
-            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMPTOEDGE);
-            m_Dev->SetTextureStageState(i, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMPTOEDGE);
-
-            m_Dev->SetTextureStageState(i, D3DTSS_MAGFILTER, D3DTEXF_GAUSSIANCUBIC);
-            m_Dev->SetTextureStageState(i, D3DTSS_MINFILTER, D3DTEXF_GAUSSIANCUBIC);
+            m_Dev->SetTextureStageState(i, D3DTSS_MAGFILTER,       D3DTEXF_GAUSSIANCUBIC );
+            m_Dev->SetTextureStageState(i, D3DTSS_MINFILTER,       D3DTEXF_GAUSSIANCUBIC );
             m_Dev->SetTextureStageState(i, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-            m_Dev->SetTextureStageState(i, D3DTSS_RESULTARG, D3DTA_CURRENT);
-            m_Dev->SetTextureStageState(i, D3DTSS_MIPMAPLODBIAS, 0);
+            m_Dev->SetTextureStageState(i, D3DTSS_RESULTARG,       D3DTA_CURRENT);
+            m_Dev->SetTextureStageState(i, D3DTSS_MIPMAPLODBIAS,   0);
             m_Dev->SetTextureStageState(i, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
             m_Dev->SetTexture(i, pTexture);
          }
 
-         m_Dev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+         m_Dev->SetRenderState(D3DRS_ZWRITEENABLE,        FALSE);
+         m_Dev->SetRenderState(D3DRS_ZFUNC,               D3DCMP_ALWAYS);
+                                                          
+         m_Dev->SetRenderState(D3DRS_SRCBLEND,            D3DBLEND_SRCALPHA);
+         m_Dev->SetRenderState(D3DRS_DESTBLEND,           D3DBLEND_ONE);
 
-         m_Dev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-         m_Dev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-         m_Dev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-         m_Dev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-         m_Dev->SetRenderState(D3DRS_FOGCOLOR, FALSE);
-         m_Dev->SetRenderState(D3DRS_AMBIENT, FALSE);
-         m_Dev->SetRenderState(D3DRS_BLENDCOLOR, 0);
-         m_Dev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-         m_Dev->SetRenderState(D3DRS_SPECULARENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_LIGHTING, FALSE);
+         m_Dev->SetRenderState(D3DRS_ALPHABLENDENABLE,    TRUE);
+         m_Dev->SetRenderState(D3DRS_ALPHATESTENABLE,     FALSE);
+         m_Dev->SetRenderState(D3DRS_CULLMODE,            D3DCULL_NONE);
+                                                          
+         m_Dev->SetRenderState(D3DRS_FOGCOLOR,            FALSE);
+         m_Dev->SetRenderState(D3DRS_AMBIENT,             FALSE);
+         m_Dev->SetRenderState(D3DRS_BLENDCOLOR,          0);
+         m_Dev->SetRenderState(D3DRS_BLENDOP,             D3DBLENDOP_ADD);
+         m_Dev->SetRenderState(D3DRS_SPECULARENABLE,      FALSE);
+         m_Dev->SetRenderState(D3DRS_LIGHTING,            FALSE);
 
          // offset the uv coordinates for each texture stage
          // the offsets will form a star pattern.
          {
             {
-               RwReal stageOffset[4] = {-UVOffset, -UVOffset, 0.0f, 0.0f};
-               m_Dev->SetVertexShaderConstant(VSCONST_REG_T0_OFFSET + 0 * VSCONST_REG_T0_SIZE,
-                                              stageOffset, VSCONST_REG_T0_SIZE);
+               RwReal stageOffset[4] = { - UVOffset,  - UVOffset , 0.0f, 0.0f };
+               m_Dev->SetVertexShaderConstant(  VSCONST_REG_T0_OFFSET + 0 * VSCONST_REG_T0_SIZE,
+                                                stageOffset, VSCONST_REG_T0_SIZE );
             }
             {
-               RwReal stageOffset[4] = {UVOffset, -UVOffset, 0.0f, 0.0f};
-               m_Dev->SetVertexShaderConstant(VSCONST_REG_T1_OFFSET + 0 * VSCONST_REG_T0_SIZE,
-                                              stageOffset, VSCONST_REG_T1_SIZE);
+               RwReal stageOffset[4] = {   UVOffset,  - UVOffset, 0.0f, 0.0f };
+               m_Dev->SetVertexShaderConstant(  VSCONST_REG_T1_OFFSET + 0 * VSCONST_REG_T0_SIZE,
+                                                stageOffset, VSCONST_REG_T1_SIZE );
             }
             {
-               RwReal stageOffset[4] = {UVOffset, UVOffset, 0.0f, 0.0f};
-               m_Dev->SetVertexShaderConstant(VSCONST_REG_T2_OFFSET + 0 * VSCONST_REG_T0_SIZE,
-                                              stageOffset, VSCONST_REG_T2_SIZE);
+               RwReal stageOffset[4] = {   UVOffset,    UVOffset, 0.0f, 0.0f };
+               m_Dev->SetVertexShaderConstant(  VSCONST_REG_T2_OFFSET + 0 * VSCONST_REG_T0_SIZE,
+                                                stageOffset, VSCONST_REG_T2_SIZE );
             }
             {
-               RwReal stageOffset[4] = {-UVOffset, UVOffset, 0.0f, 0.0f};
-               m_Dev->SetVertexShaderConstant(VSCONST_REG_T3_OFFSET + 0 * VSCONST_REG_T0_SIZE,
-                                              stageOffset, VSCONST_REG_T3_SIZE);
+               RwReal stageOffset[4] = { - UVOffset,    UVOffset, 0.0f, 0.0f };
+               m_Dev->SetVertexShaderConstant(  VSCONST_REG_T3_OFFSET + 0 * VSCONST_REG_T0_SIZE,
+                                                stageOffset, VSCONST_REG_T3_SIZE );
             }
          }
 
@@ -382,7 +383,7 @@ namespace RWS
          m_Dev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
          // set the current texture to be NULL, in doing so decrement FrontBuffer Refcount
-         m_Dev->SetTexture(0, 0);
+         m_Dev->SetTexture( 0, 0 );
 
          RWS_RETURNVOID();
       }
@@ -393,8 +394,8 @@ namespace RWS
          RWS_FUNCTION("RWS::FX::CFXCameraSpaceBloomXBox::ProcessCamera");
 
 
-         DWORD EntryRenderState;
-         LPDIRECT3DSURFACE8 DxBackBuffer;
+         DWORD                EntryRenderState;
+         LPDIRECT3DSURFACE8   DxBackBuffer;
 
          SaveRenderStates(&EntryRenderState);
 
@@ -413,32 +414,32 @@ namespace RWS
          m_Dev->GetDepthStencilSurface(&Stencil);
          {
 
-            RwV4d ShaderConstant;
+            RwV4d    ShaderConstant;
 
-            for (RwUInt32 i = 0; i < m_Separation; i += m_SeparationStep)
+            for ( RwUInt32 i = 0 ; i<m_Separation ; i += m_SeparationStep)
             {
                float u;
 
-               u = static_cast<float>(1.0f / m_Separation) * i;
+               u = static_cast<float>( 1.0f / m_Separation) * i;
 
-               ShaderConstant.x = ((m_EndColor.red - m_StartColor.red) * u) + m_StartColor.red;
-               ShaderConstant.y = ((m_EndColor.green - m_StartColor.green) * u) + m_StartColor.green;
-               ShaderConstant.z = ((m_EndColor.blue - m_StartColor.blue) * u) + m_StartColor.blue;
-               ShaderConstant.w = ((m_EndColor.alpha - m_StartColor.alpha) * u) + m_StartColor.alpha;
+               ShaderConstant.x = ( (m_EndColor.red   - m_StartColor.red)   * u ) + m_StartColor.red;
+               ShaderConstant.y = ( (m_EndColor.green - m_StartColor.green) * u ) + m_StartColor.green;
+               ShaderConstant.z = ( (m_EndColor.blue  - m_StartColor.blue)  * u ) + m_StartColor.blue;
+               ShaderConstant.w = ( (m_EndColor.alpha - m_StartColor.alpha) * u ) + m_StartColor.alpha;
 
-               m_Dev->SetPixelShader(m_BloomOutputPixelShader);
-               m_Dev->SetPixelShaderConstant(1, &ShaderConstant, 1);
+               m_Dev->SetPixelShader( m_BloomOutputPixelShader );
+               m_Dev->SetPixelShaderConstant(1, &ShaderConstant, 1 );
 
                // copy back to the screen
                m_Dev->SetRenderTarget(DxBackBuffer, Stencil);
-               ApplyToOutput(static_cast<IDirect3DTexture8 *>(m_TempTexture), static_cast<float>(i));
+               ApplyToOutput(static_cast<IDirect3DTexture8*>(m_TempTexture), static_cast<float>(i) );
             }
          }
 
          Stencil->Release();
 
          DxBackBuffer->Release();
-
+   
          RestoreRenderStates(EntryRenderState);
          DeleteRenderStates(EntryRenderState);
 

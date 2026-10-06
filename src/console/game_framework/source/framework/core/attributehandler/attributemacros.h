@@ -77,9 +77,7 @@
 
 #else
 
-#define RWS_BEGIN_COMMANDS \
-   enum LoadParameterTypes \
-   {
+#define RWS_BEGIN_COMMANDS    enum LoadParameterTypes {
 
 #endif
 
@@ -97,9 +95,7 @@
 
 #else
 
-#define RWS_END_COMMANDS                               \
-   SIZE_ATTRIBUTE, LAST_ATTRIBUTE = RWFORCEENUMSIZEINT \
-   }
+#define RWS_END_COMMANDS     SIZE_ATTRIBUTE, LAST_ATTRIBUTE = RWFORCEENUMSIZEINT}
 
 #endif
 
@@ -132,7 +128,7 @@
 
 #else
 
-#define RWS_MESSAGE(x, s, t, a, b, d) x,
+#define RWS_MESSAGE(x, s, t, a, b, d)  x,
 
 #endif
 
@@ -215,7 +211,7 @@
 
 #else
 
-#define RWS_ATTRIBUTE(id, short_txt, long_txt, type, data_type, init_data) id,
+#define RWS_ATTRIBUTE(id, short_txt, long_txt, type, data_type, init_data)  id,
 
 #endif
 
@@ -231,7 +227,7 @@
 
 #else
 
-#define RWS_PRIVATE_ATTRIBUTE(id, short_txt, long_txt, type, data_type, init_data) id,
+#define RWS_PRIVATE_ATTRIBUTE(id, short_txt, long_txt, type, data_type, init_data)  id,
 
 #endif
 
@@ -256,7 +252,7 @@
 *
 */
 
-#define RWS_SEPARATOR(s, p)
+#define RWS_SEPARATOR(s, p) 
 
 /**
 *
@@ -278,11 +274,7 @@
 * the base class.
 *
 */
-#define RWS_IMPORT_COMMANDS(class_identifier)           \
-   enum                                                 \
-   {                                                    \
-      ObFuScAtE_##class_identifier = RWFORCEENUMSIZEINT \
-   }
+#define RWS_IMPORT_COMMANDS(class_identifier) enum{ObFuScAtE_##class_identifier = RWFORCEENUMSIZEINT}
 
 /**
 *
@@ -291,11 +283,7 @@
 *  Provide a category for the behavior, used by the workspace to sort behaviors into groups.
 *
 */
-#define RWS_CATEGORY(description)             \
-   enum                                       \
-   {                                          \
-      ObFuScAtE_CATEGORY = RWFORCEENUMSIZEINT \
-   }
+#define RWS_CATEGORY(description) enum{ObFuScAtE_CATEGORY = RWFORCEENUMSIZEINT}
 
 /**
 *
@@ -304,11 +292,7 @@
 *  Provide a short and long description for a behavior, used by the workspace to document behaviors.
 *
 */
-#define RWS_DESCRIPTION(short_description, long_description) \
-   enum                                                      \
-   {                                                         \
-      ObFuScAtE_DESCRIPTION = RWFORCEENUMSIZEINT             \
-   }
+#define RWS_DESCRIPTION(short_description, long_description) enum{ObFuScAtE_DESCRIPTION = RWFORCEENUMSIZEINT}
 
 /*****************************************************************************
  *
@@ -327,7 +311,7 @@
 *
 */
 
-#define RWS_CMD_DATA_BLANK 0x80000000
+#define RWS_CMD_DATA_BLANK             0x80000000
 
 /**
 *
@@ -350,7 +334,7 @@
 *
 */
 
-#define RWS_CMD_DATA(behavior, var) reinterpret_cast<RwUInt32>(&((behavior *)0)->var)
+#define RWS_CMD_DATA(behavior, var)   reinterpret_cast<RwUInt32>(&((behavior*)0)->var)
 
 /**
 *
@@ -359,7 +343,7 @@
 *
 */
 
-#define RWS_CMD_FUNC_BLANK 0
+#define RWS_CMD_FUNC_BLANK             0
 
 /**
 *
@@ -376,7 +360,7 @@
 *
 */
 
-#define RWS_CMD_FUNC(behavior, func) (behavior::func)
+#define RWS_CMD_FUNC(behavior, func)  (behavior::func)
 
 /**
 *  
@@ -438,9 +422,7 @@ public:
    CAttributeTableEntry(void) :
       m_dataOffset(RWS_CMD_DATA_BLANK),
       m_pFunc(RWS_CMD_FUNC_BLANK),
-      m_thisOffset(0)
-   {
-   }
+      m_thisOffset(0) {}
 };
 
 /**
@@ -463,9 +445,7 @@ public:
    */
 
    CAttribTableBuiltFlag(void) :
-      m_flag(FALSE)
-   {
-   }
+      m_flag(FALSE) {}
 };
 
 //-------------------------------------
@@ -517,18 +497,18 @@ public:
 *
 */
 
-#define RWS_DS_TABLE_START                \
-                                          \
-   class ObFuScAtE_AttributeTable;        \
-   friend class ObFuScAtE_AttributeTable; \
-                                          \
-   class ObFuScAtE_AttributeTable         \
-   {                                      \
-   private:                               \
-                                          \
-      static struct data_tables           \
-      {                                   \
-         CAttributeTableEntry m_thisTable[SIZE_ATTRIBUTE];
+#define RWS_DS_TABLE_START                                                                \
+                                                                                          \
+         class ObFuScAtE_AttributeTable;                                                  \
+         friend class ObFuScAtE_AttributeTable;                                           \
+                                                                                          \
+         class ObFuScAtE_AttributeTable                                                   \
+         {                                                                                \
+         private:                                                                         \
+                                                                                          \
+            static struct data_tables                                                     \
+            {                                                                             \
+               CAttributeTableEntry m_thisTable[SIZE_ATTRIBUTE];
 
 /**
 *
@@ -540,10 +520,11 @@ public:
 *
 */
 
-#define RWS_DS_ENABLE_OVERRIDE(overriddenBehavior)                                              \
-                                                                                                \
-   CAttributeTableEntry m_##overriddenBehavior##Table[##overriddenBehavior## ::SIZE_ATTRIBUTE]; \
-   CAttribTableBuiltFlag m_##overriddenBehavior##Built;
+#define RWS_DS_ENABLE_OVERRIDE(overriddenBehavior)                                        \
+                                                                                          \
+               CAttributeTableEntry m_##overriddenBehavior##Table[                        \
+                  ##overriddenBehavior##::SIZE_ATTRIBUTE];                                \
+               CAttribTableBuiltFlag m_##overriddenBehavior##Built;
 
 /**
 *
@@ -551,14 +532,15 @@ public:
 *
 */
 
-#define RWS_DS_START_CMD_SECTION  \
-   }                              \
-   sm_dataTables;                 \
-                                  \
-public:                           \
-                                  \
-   ObFuScAtE_AttributeTable(void) \
-   {
+#define RWS_DS_START_CMD_SECTION                                                          \
+                                                                                          \
+            }                                                                             \
+            sm_dataTables;                                                                \
+                                                                                          \
+         public:                                                                          \
+                                                                                          \
+            ObFuScAtE_AttributeTable(void)                                                \
+            {
 
 /**
 *
@@ -573,10 +555,10 @@ public:                           \
 *
 */
 
-#define RWS_DS_CMD(attr, dataVar, staticFunc)              \
-                                                           \
-   sm_dataTables.m_thisTable[attr].m_dataOffset = dataVar; \
-   sm_dataTables.m_thisTable[attr].m_pFunc = staticFunc;
+#define RWS_DS_CMD(attr, dataVar, staticFunc)                                             \
+                                                                                          \
+               sm_dataTables.m_thisTable[attr].m_dataOffset = dataVar;                    \
+               sm_dataTables.m_thisTable[attr].m_pFunc = staticFunc;
 
 
 /**
@@ -588,19 +570,20 @@ public:                           \
 *
 */
 
-#define RWS_DS_END_CMD_SECTION(behavior)                                             \
-   }                                                                                 \
-                                                                                     \
-   static CAttributeTableEntry *GetTable(const RwChar *classID,                      \
-                                         RwBool ignoreTopLevel, RwUInt32 &tableSize) \
-   {                                                                                 \
-      CAttributeTableEntry *pRet = 0;                                                \
-                                                                                     \
-      if (!ignoreTopLevel && !rwstrcmp(classID, #behavior))                          \
-      {                                                                              \
-         pRet = sm_dataTables.m_thisTable;                                           \
-         tableSize = SIZE_ATTRIBUTE;                                                 \
-      }
+#define RWS_DS_END_CMD_SECTION(behavior)                                                  \
+                                                                                          \
+            }                                                                             \
+                                                                                          \
+            static CAttributeTableEntry *GetTable(const RwChar *classID,                  \
+               RwBool ignoreTopLevel, RwUInt32 &tableSize)                                \
+            {                                                                             \
+               CAttributeTableEntry *pRet = 0;                                            \
+                                                                                          \
+               if (!ignoreTopLevel && !rwstrcmp(classID, #behavior))                      \
+               {                                                                          \
+                  pRet = sm_dataTables.m_thisTable;                                       \
+                  tableSize = SIZE_ATTRIBUTE;                                             \
+               }
 
 /**
 *
@@ -619,36 +602,38 @@ public:                           \
 *       set to an absolute value.
 */
 
-#define RWS_DS_START_OVERRIDE_SECTION(overriddenBehavior, behavior)                                  \
-                                                                                                     \
-   if (!pRet && !ignoreTopLevel && !rwstrcmp(classID, #overriddenBehavior))                          \
-   {                                                                                                 \
-      if (!sm_dataTables.m_##overriddenBehavior##Built.m_flag)                                       \
-      {                                                                                              \
-         CAttributeTableEntry *pSubTable;                                                            \
-         RwUInt32 void32;                                                                            \
-         void *pVoidThis;                                                                            \
-         pSubTable = GetThisAttribTable(classID,                                                     \
-                                        void32, pVoidThis, TRUE, 0);                                 \
-                                                                                                     \
-         if (pSubTable)                                                                              \
-         {                                                                                           \
-            RwUInt32 index;                                                                          \
-            overriddenBehavior *pOverridden =                                                        \
-               reinterpret_cast<##overriddenBehavior##*>(0x80000000);                                \
-            behavior *pBehavior = static_cast<##behavior##*>(pOverridden);                           \
-            RwInt32 offset = reinterpret_cast<RwInt32>(pOverridden) -                                \
-                             reinterpret_cast<RwInt32>(pBehavior);                                   \
-                                                                                                     \
-            memcpy(sm_dataTables.m_##overriddenBehavior##Table,                                      \
-                   pSubTable, overriddenBehavior## ::SIZE_ATTRIBUTE * sizeof(CAttributeTableEntry)); \
-                                                                                                     \
-            for (index = 0; index < overriddenBehavior## ::SIZE_ATTRIBUTE;                           \
-                 index++)                                                                            \
-            {                                                                                        \
-               sm_dataTables.m_##overriddenBehavior##Table[index].m_thisOffset += offset;            \
-            }                                                                                        \
-         }
+#define RWS_DS_START_OVERRIDE_SECTION(overriddenBehavior, behavior)                       \
+                                                                                          \
+               if (!pRet && !ignoreTopLevel && !rwstrcmp(classID, #overriddenBehavior))   \
+               {                                                                          \
+                  if (!sm_dataTables.m_##overriddenBehavior##Built.m_flag)                \
+                  {                                                                       \
+                     CAttributeTableEntry *pSubTable;                                     \
+                     RwUInt32 void32;                                                     \
+                     void *pVoidThis;                                                     \
+                     pSubTable = GetThisAttribTable(classID,                              \
+                        void32, pVoidThis, TRUE, 0);                                      \
+                                                                                          \
+                     if (pSubTable)                                                       \
+                     {                                                                    \
+                        RwUInt32 index;                                                   \
+                        overriddenBehavior *pOverridden =                                 \
+                           reinterpret_cast<##overriddenBehavior## *>(0x80000000);        \
+                        behavior *pBehavior = static_cast<##behavior## *>(pOverridden);   \
+                        RwInt32 offset = reinterpret_cast<RwInt32>(pOverridden) -         \
+                           reinterpret_cast<RwInt32>(pBehavior);                          \
+                                                                                          \
+                        memcpy(sm_dataTables.m_##overriddenBehavior##Table,               \
+                           pSubTable, overriddenBehavior##::SIZE_ATTRIBUTE *              \
+                           sizeof(CAttributeTableEntry));                                 \
+                                                                                          \
+                        for (index = 0; index < overriddenBehavior##::SIZE_ATTRIBUTE;     \
+                           index++)                                                       \
+                        {                                                                 \
+                           sm_dataTables.m_##overriddenBehavior##Table[index].            \
+                              m_thisOffset += offset;                                     \
+                        }                                                                 \
+                     }
 
 /**
 *
@@ -673,11 +658,14 @@ public:                           \
 *
 */
 
-#define RWS_DS_OVERRIDE_CMD(overridenBehavior, attr, dataVar, staticFunc)                           \
-                                                                                                    \
-   sm_dataTables.m_##overridenBehavior##Table[##overridenBehavior## ::attr].m_dataOffset = dataVar; \
-   sm_dataTables.m_##overridenBehavior##Table[##overridenBehavior## ::attr].m_pFunc = staticFunc;   \
-   sm_dataTables.m_##overridenBehavior##Table[##overridenBehavior## ::attr].m_thisOffset = 0;
+#define RWS_DS_OVERRIDE_CMD(overridenBehavior, attr, dataVar, staticFunc)                 \
+                                                                                          \
+                     sm_dataTables.m_##overridenBehavior##Table[                          \
+                        ##overridenBehavior##::attr].m_dataOffset = dataVar;              \
+                     sm_dataTables.m_##overridenBehavior##Table[                          \
+                        ##overridenBehavior##::attr].m_pFunc = staticFunc;                \
+                     sm_dataTables.m_##overridenBehavior##Table[                          \
+                        ##overridenBehavior##::attr].m_thisOffset = 0;
 
 /**
 *
@@ -689,14 +677,14 @@ public:                           \
 *
 */
 
-#define RWS_DS_END_OVERRIDE_SECTION(overriddenBehavior)       \
-                                                              \
-   sm_dataTables.m_##overriddenBehavior##Built.m_flag = TRUE; \
-   }                                                          \
-                                                              \
-   pRet = sm_dataTables.m_##overriddenBehavior##Table;        \
-   tableSize = ##overriddenBehavior## ::SIZE_ATTRIBUTE;       \
-   }
+#define RWS_DS_END_OVERRIDE_SECTION(overriddenBehavior)                                   \
+                                                                                          \
+                     sm_dataTables.m_##overriddenBehavior##Built.m_flag = TRUE;           \
+                  }                                                                       \
+                                                                                          \
+                  pRet = sm_dataTables.m_##overriddenBehavior##Table;                     \
+                  tableSize = ##overriddenBehavior##::SIZE_ATTRIBUTE;                     \
+               }
 
 /**
 *
@@ -704,19 +692,18 @@ public:                           \
 *
 */
 
-#define RWS_DS_TABLE_END                                                                                                 \
-                                                                                                                         \
-   return (pRet);                                                                                                        \
-   }                                                                                                                     \
-   }                                                                                                                     \
-   ;                                                                                                                     \
-                                                                                                                         \
-   virtual CAttributeTableEntry *GetAttributeTable(const RwChar *classID,                                                \
-                                                   RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel = FALSE); \
-                                                                                                                         \
-   static CAttributeTableEntry *GetThisAttribTable(const RwChar *classID,                                                \
-                                                   RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel,          \
-                                                   void *pInstance);
+#define RWS_DS_TABLE_END                                                                  \
+                                                                                          \
+               return(pRet);                                                              \
+            }                                                                             \
+         };                                                                               \
+                                                                                          \
+         virtual CAttributeTableEntry *GetAttributeTable(const RwChar *classID,           \
+            RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel = FALSE);         \
+                                                                                          \
+         static CAttributeTableEntry *GetThisAttribTable(const RwChar *classID,           \
+            RwUInt32 &rNumEntries, void *&rpThis, RwBool ignoreTopLevel,                  \
+            void *pInstance);
 
 /**
 *
@@ -732,13 +719,13 @@ public:                           \
 *
 */
 
-#define RWS_REGISTER_DS_POST_UPDATE_FUNC(behaviorName, postUpdateStaticFunc)      \
-                                                                                  \
-   virtual CAttributeTablePostUpdateFunction GetAttrPostUpdateFunc(void *&rpThis) \
-   {                                                                              \
-      rpThis = this;                                                              \
-      return (##behaviorName## ::postUpdateStaticFunc);                           \
-   }
+#define RWS_REGISTER_DS_POST_UPDATE_FUNC(behaviorName, postUpdateStaticFunc)              \
+                                                                                          \
+         virtual CAttributeTablePostUpdateFunction GetAttrPostUpdateFunc(void *&rpThis)   \
+            {                                                                             \
+            rpThis = this;                                                                \
+            return(##behaviorName##::postUpdateStaticFunc);                               \
+            }
 
 //-----------------
 // For .cpp file...
@@ -768,65 +755,66 @@ public:                           \
 
 #ifdef RWS_DS_DEBUG        // Define to get debug information set to console for direct-set.
 
-#define RWS_DS_REGISTER_START(behaviorName)                                              \
-                                                                                         \
-   behaviorName## ::ObFuScAtE_AttributeTable::data_tables behaviorName## ::              \
-      ObFuScAtE_AttributeTable::sm_dataTables;                                           \
-                                                                                         \
-   static behaviorName## ::ObFuScAtE_AttributeTable                                      \
-      g##behaviorName##ObFuScAtEattribTable;                                             \
-                                                                                         \
-   CAttributeTableEntry *behaviorName## ::GetAttributeTable(                             \
-      const RwChar *classID, RwUInt32 &rNumEntries,                                      \
-      void *&rpThis, RwBool ignoreTopLevel)                                              \
-   {                                                                                     \
-      return (GetThisAttribTable(classID, rNumEntries, rpThis,                           \
-                                 ignoreTopLevel, this));                                 \
-   }                                                                                     \
-                                                                                         \
-   CAttributeTableEntry *behaviorName## ::GetThisAttribTable(                            \
-      const RwChar *classID, RwUInt32 &rNumEntries,                                      \
-      void *&rpThis, RwBool ignoreTopLevel, void *pInstance)                             \
-   {                                                                                     \
-      CAttributeTableEntry *pRet = behaviorName## ::ObFuScAtE_AttributeTable::           \
-         GetTable(classID, ignoreTopLevel, rNumEntries);                                 \
-                                                                                         \
-      RWS_DEBUGSTREAM("Attrib table, searching [" << #behaviorName << "]" << std::endl); \
-                                                                                         \
-      if (pRet)                                                                          \
-      {                                                                                  \
-         rpThis = pInstance;                                                             \
-      }
+#define RWS_DS_REGISTER_START(behaviorName)                                               \
+                                                                                          \
+         behaviorName##::ObFuScAtE_AttributeTable::data_tables behaviorName##::           \
+            ObFuScAtE_AttributeTable::sm_dataTables;                                      \
+                                                                                          \
+         static behaviorName##::ObFuScAtE_AttributeTable                                  \
+            g##behaviorName##ObFuScAtEattribTable;                                        \
+                                                                                          \
+         CAttributeTableEntry * behaviorName##::GetAttributeTable(                        \
+            const RwChar *classID, RwUInt32 &rNumEntries,                                 \
+            void *&rpThis, RwBool ignoreTopLevel)                                         \
+         {                                                                                \
+            return(GetThisAttribTable(classID, rNumEntries, rpThis,                       \
+               ignoreTopLevel, this));                                                    \
+         }                                                                                \
+                                                                                          \
+         CAttributeTableEntry * behaviorName##::GetThisAttribTable(                       \
+            const RwChar *classID, RwUInt32 &rNumEntries,                                 \
+            void *&rpThis, RwBool ignoreTopLevel, void *pInstance)                        \
+         {                                                                                \
+            CAttributeTableEntry *pRet = behaviorName##::ObFuScAtE_AttributeTable::       \
+               GetTable(classID, ignoreTopLevel, rNumEntries);                            \
+                                                                                          \
+            RWS_DEBUGSTREAM("Attrib table, searching [" << #behaviorName <<               \
+               "]" << std::endl);                                                         \
+                                                                                          \
+            if (pRet)                                                                     \
+            {                                                                             \
+               rpThis = pInstance;                                                        \
+            }
 
 #else       // #ifdef RWS_DS_DEBUG
 
-#define RWS_DS_REGISTER_START(behaviorName)                                    \
-                                                                               \
-   behaviorName## ::ObFuScAtE_AttributeTable::data_tables behaviorName## ::    \
-      ObFuScAtE_AttributeTable::sm_dataTables;                                 \
-                                                                               \
-   static behaviorName## ::ObFuScAtE_AttributeTable                            \
-      g##behaviorName##ObFuScAtEattribTable;                                   \
-                                                                               \
-   CAttributeTableEntry *behaviorName## ::GetAttributeTable(                   \
-      const RwChar *classID, RwUInt32 &rNumEntries,                            \
-      void *&rpThis, RwBool ignoreTopLevel)                                    \
-   {                                                                           \
-      return (GetThisAttribTable(classID, rNumEntries, rpThis,                 \
-                                 ignoreTopLevel, this));                       \
-   }                                                                           \
-                                                                               \
-   CAttributeTableEntry *behaviorName## ::GetThisAttribTable(                  \
-      const RwChar *classID, RwUInt32 &rNumEntries,                            \
-      void *&rpThis, RwBool ignoreTopLevel, void *pInstance)                   \
-   {                                                                           \
-      CAttributeTableEntry *pRet = behaviorName## ::ObFuScAtE_AttributeTable:: \
-         GetTable(classID, ignoreTopLevel, rNumEntries);                       \
-                                                                               \
-      if (pRet)                                                                \
-      {                                                                        \
-         rpThis = pInstance;                                                   \
-      }
+#define RWS_DS_REGISTER_START(behaviorName)                                               \
+                                                                                          \
+         behaviorName##::ObFuScAtE_AttributeTable::data_tables behaviorName##::           \
+            ObFuScAtE_AttributeTable::sm_dataTables;                                      \
+                                                                                          \
+         static behaviorName##::ObFuScAtE_AttributeTable                                  \
+            g##behaviorName##ObFuScAtEattribTable;                                        \
+                                                                                          \
+         CAttributeTableEntry * behaviorName##::GetAttributeTable(                        \
+            const RwChar *classID, RwUInt32 &rNumEntries,                                 \
+            void *&rpThis, RwBool ignoreTopLevel)                                         \
+         {                                                                                \
+            return(GetThisAttribTable(classID, rNumEntries, rpThis,                       \
+               ignoreTopLevel, this));                                                    \
+         }                                                                                \
+                                                                                          \
+         CAttributeTableEntry * behaviorName##::GetThisAttribTable(                       \
+            const RwChar *classID, RwUInt32 &rNumEntries,                                 \
+            void *&rpThis, RwBool ignoreTopLevel, void *pInstance)                        \
+         {                                                                                \
+            CAttributeTableEntry *pRet = behaviorName##::ObFuScAtE_AttributeTable::       \
+               GetTable(classID, ignoreTopLevel, rNumEntries);                            \
+                                                                                          \
+            if (pRet)                                                                     \
+            {                                                                             \
+               rpThis = pInstance;                                                        \
+            }
 
 #endif      // #ifdef RWS_DS_DEBUG
 
@@ -840,15 +828,15 @@ public:                           \
 *
 */
 
-#define RWS_DS_REGISTER_BASE(behaviour, baseBehavior)                                            \
-                                                                                                 \
-   if (!pRet)                                                                                    \
-   {                                                                                             \
-      behaviour *pInstThis = reinterpret_cast<behaviour *>(pInstance);                           \
-                                                                                                 \
-      pRet = baseBehavior## ::GetThisAttribTable(classID, rNumEntries, rpThis,                   \
-                                                 FALSE, static_cast<baseBehavior *>(pInstThis)); \
-   }
+#define RWS_DS_REGISTER_BASE(behaviour, baseBehavior)                                     \
+                                                                                          \
+            if (!pRet)                                                                    \
+            {                                                                             \
+               behaviour *pInstThis = reinterpret_cast< behaviour *>(pInstance);          \
+                                                                                          \
+               pRet = baseBehavior##::GetThisAttribTable(classID, rNumEntries, rpThis,    \
+                  FALSE, static_cast< baseBehavior *>(pInstThis));                        \
+            }
 
 /**
 *
@@ -856,9 +844,9 @@ public:                           \
 *
 */
 
-#define RWS_DS_REGISTER_END \
-                            \
-   return (pRet);           \
-   }
+#define RWS_DS_REGISTER_END                                                               \
+                                                                                          \
+            return(pRet);                                                                 \
+         }
 
 #endif

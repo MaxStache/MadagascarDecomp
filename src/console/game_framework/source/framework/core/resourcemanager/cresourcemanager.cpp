@@ -71,60 +71,60 @@ namespace RWS
       *  \param uiStreamSize The size of the file associated with this resource, note this may
       *  be a section of a larger file.
       */
-      void *LoadResource(const RwChar *pStrName,
-                         const RWSGUID *pResId,
-                         const RwChar *pStrType,
-                         RwChar *pResourcePath,
-                         RwStream *pStream,
-                         RwUInt32 uiStreamSize)
+      void *LoadResource (const RwChar *pStrName,
+                          const RWSGUID *pResId,
+                          const RwChar *pStrType,
+                          RwChar* pResourcePath,
+                          RwStream* pStream, 
+                          RwUInt32 uiStreamSize)
       {
-         RWS_FUNCTION("RWS::NULL::LoadResource");
-
-         void *ret = 0;
+         RWS_FUNCTION("RWS::NULL::LoadResource" );
+   
+         void* ret = 0;
 
          RWS_PRE(pStrName);
          RWS_PRE(pResId);
          RWS_PRE(pStrType);
-
+   
          // Find the resource handler registered with this type
          //
          CResourceHandler *pCResourceHandler = CResourceHandler::FindHandler(pStrType);
 
-         RWS_DEBUGSTREAM("-------------------------------------------------------------------------" << std::endl);
-         RWS_DEBUGSTREAM("LOADING " << RWS_VALIDSTRING(pStrName) << " " << RWS_VALIDSTRING(pStrType) << std::endl);
-         RWS_DEBUGSTREAM("-------------------------------------------------------------------------" << std::endl);
+         RWS_DEBUGSTREAM( "-------------------------------------------------------------------------" << std::endl );
+         RWS_DEBUGSTREAM( "LOADING " << RWS_VALIDSTRING(pStrName) << " " << RWS_VALIDSTRING(pStrType) << std::endl );
+         RWS_DEBUGSTREAM( "-------------------------------------------------------------------------" << std::endl );
 
          if (pCResourceHandler)
          {
             RwUInt32 _uiResDataSize = 0;
 
-            if ((ret = pCResourceHandler->Load(pStrName,
-                                               pStrType,
-                                               pResourcePath,
-                                               pStream,
-                                               uiStreamSize,
-                                               _uiResDataSize)))
+            if ( (ret = pCResourceHandler->Load(pStrName,
+                                                pStrType,
+                                                pResourcePath,
+                                                pStream,
+                                                uiStreamSize,
+                                                _uiResDataSize)) )
             {
                CResourceManager::Add(pStrName, pResId, pStrType, ret, _uiResDataSize);
             }
             else
             {
                RWS_ASSERTFAIL("pCResourceHandler->Load failed\npStrName ["
-                              << RWS_VALIDSTRING(pStrName) << "]\npResId [" << pResId
-                              << "]\npStrType [" << RWS_VALIDSTRING(pStrType) << "]\npResourcePath ["
-                              << RWS_VALIDSTRING(pResourcePath) << "]");
+                  <<RWS_VALIDSTRING(pStrName)<<"]\npResId ["<<pResId
+                  <<"]\npStrType ["<<RWS_VALIDSTRING(pStrType)<<"]\npResourcePath ["
+                  <<RWS_VALIDSTRING(pResourcePath)<<"]");
             }
          }
          else
          {
-            RWS_ASSERTFAIL("OnLoadResource - Unable to locate resource handler for resource type\npStrName ["
-                           << RWS_VALIDSTRING(pStrName) << "]\npResId [" << pResId << "]\npStrType ["
-                           << RWS_VALIDSTRING(pStrType) << "]\npResourcePath [" << RWS_VALIDSTRING(pResourcePath) << "]");
+            RWS_ASSERTFAIL ("OnLoadResource - Unable to locate resource handler for resource type\npStrName ["
+               <<RWS_VALIDSTRING(pStrName)<<"]\npResId ["<<pResId<<"]\npStrType ["
+               <<RWS_VALIDSTRING(pStrType)<<"]\npResourcePath ["<<RWS_VALIDSTRING(pResourcePath)<<"]");
          }
 
-         RWS_DEBUGSTREAM("-------------------------------------------------------------------------" << std::endl);
-         RWS_DEBUGSTREAM("DONE " << RWS_VALIDSTRING(pStrName) << " " << RWS_VALIDSTRING(pStrType) << std::endl);
-         RWS_DEBUGSTREAM("-------------------------------------------------------------------------" << std::endl);
+         RWS_DEBUGSTREAM( "-------------------------------------------------------------------------" << std::endl );
+         RWS_DEBUGSTREAM( "DONE " << RWS_VALIDSTRING(pStrName) << " " << RWS_VALIDSTRING(pStrType) << std::endl );
+         RWS_DEBUGSTREAM( "-------------------------------------------------------------------------" << std::endl );
 
          RWS_RETURN(ret);
       }
@@ -138,10 +138,10 @@ namespace RWS
       *  \param pResource A pointer to a block of memory containing the resource.
       *
       */
-      RwBool FreeResource(const RwChar *pStrType, void *pResource)
+      RwBool FreeResource (const RwChar *pStrType, void *pResource)
       {
          RWS_FUNCTION("RWS::NULL::FreeResource");
-
+   
          RWS_PRE(pStrType);
          RWS_PRE(pResource);
 
@@ -162,9 +162,9 @@ namespace RWS
          // ---------------------------------------------------------------------------------
          else
          {
-            RWS_ASSERTFAIL("Unable to locate resource handler for resource type, pStrType [" << pStrType << "]");
+            RWS_ASSERTFAIL ("Unable to locate resource handler for resource type, pStrType [" << pStrType << "]");
          }
-
+   
          RWS_RETURN(ret);
       }
    }
@@ -176,23 +176,23 @@ namespace RWS
    *
    */
    CResource *CResource::sm_ResourceHead = 0;
-
+   
    /**
    *
    *  Construct a Resource object. 
    *
    */
-   CResource::CResource(void) :
+   CResource::CResource(void) : 
       m_pNextResource(0),
       m_pPrevResource(0),
-      m_pResName(0),
+      m_pResName (0),
       m_pResType(0),
       m_uiLockRefCount(0)
    {
       RWS_FUNCTION("RWS::CResource::Resource");
 
       m_Guid.Clear();
-
+      
       if (sm_ResourceHead == 0)
       {
          sm_ResourceHead = this;
@@ -201,13 +201,13 @@ namespace RWS
       {
          this->m_pNextResource = sm_ResourceHead;
          sm_ResourceHead->m_pPrevResource = this;
-
+         
          sm_ResourceHead = this;
       }
 
       RWS_RETURNVOID();
    }
-
+   
    /**
    *
    *  Destroy a Resource object.
@@ -216,23 +216,23 @@ namespace RWS
    CResource::~CResource(void)
    {
       RWS_FUNCTION("RWS::CResource::~CResource");
-
-      RWS_TRACE("m_pResId [" << RWS_VALIDSTRING(m_pResId) << "] m_pResName ["
-                             << RWS_VALIDSTRING(m_pResName) << "] m_pResType ["
-                             << RWS_VALIDSTRING(m_pResType) << "]");
-
+      
+      RWS_TRACE("m_pResId ["<<RWS_VALIDSTRING(m_pResId)<<"] m_pResName ["
+         <<RWS_VALIDSTRING(m_pResName)<<"] m_pResType ["
+         <<RWS_VALIDSTRING(m_pResType)<<"]");
+      
       m_pResData = 0;
 
-      operator delete(m_pResName);
-      operator delete(m_pResType);
-
+      operator delete (m_pResName);
+      operator delete (m_pResType);
+      
       CResource *_pNextResource = m_pNextResource;
       CResource *_pPrevResource = m_pPrevResource;
 
       if (m_pPrevResource == 0)  // Head of List
       {
          sm_ResourceHead = _pNextResource;
-
+         
          if (_pNextResource)
          {
             _pNextResource->m_pPrevResource = m_pPrevResource;
@@ -244,16 +244,16 @@ namespace RWS
          {
             _pPrevResource->m_pNextResource = m_pNextResource;
          }
-
+         
          if (_pNextResource)
          {
             _pNextResource->m_pPrevResource = m_pPrevResource;
          }
       }
-
+      
       RWS_RETURNVOID();
    }
-
+   
    /**
    *
    *  Add a resource to the resource manager.
@@ -276,8 +276,8 @@ namespace RWS
       RWS_PRE(_pResId);
       RWS_PRE(_pResType);
       RWS_PRE(_pResData);
-
-      RWS_TRACE("_pResId " << _pResId << " _pResType " << _pResType);
+      
+      RWS_TRACE("_pResId "<<_pResId<<" _pResType "<<_pResType);
 
       CResource *pResource = ::RWS_NEW CResource();
 
@@ -286,10 +286,10 @@ namespace RWS
       pResource->SetType(_pResType);
       pResource->SetResource(_pResData);
       pResource->SetSize(_uiResDataSize);
-
+      
       RWS_RETURNVOID();
    }
-
+   
    /**
    *
    *  Remove the specified resource from the resource manager.
@@ -307,16 +307,16 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CResourceManager::Remove");
       RWS_ASSERT(_pResData, "No resource name specified.");
-
+      
       CResourceIterator Ittr;
-
+      
       while (!Ittr.IsDone())
       {
          if (Ittr->GetResource() == _pResData)
          {
             if (PurgeItem(Ittr))
-            {
-               RWS_RETURN(_pResData);
+            {             
+               RWS_RETURN( _pResData );
             }
             else
             {
@@ -324,18 +324,18 @@ namespace RWS
 
                // It is possible for purge to fail if the resource is locked
                //
-               RWS_RETURN(0);
+               RWS_RETURN( 0 ); 
             }
-         }
-
+         }  
+         
          ++Ittr;
       }
-
+      
       RWS_ASSERTFAIL("Unable to find specified resource ( " << _pResData << " )");
-
-      RWS_RETURN(0);
+      
+      RWS_RETURN( 0 );
    }
-
+   
    /**
    *
    *  Find a specified resource and return a pointer to the data associated with that resource.
@@ -360,7 +360,7 @@ namespace RWS
                                           RwChar const **_pResName)
    {
       RWS_FUNCTION("RWS::CResourceManager::FindById");
-
+      
       CResourceIterator Ittr;
 
       while (!Ittr.IsDone())
@@ -370,16 +370,16 @@ namespace RWS
             if (_pResType) *_pResType = Ittr->GetType();
             if (_pResName) *_pResName = Ittr->GetName();
             if (_uiResDataSize) *_uiResDataSize = Ittr->GetSize();
-
-            RWS_RETURN(Ittr->GetResource());
+            
+            RWS_RETURN( Ittr->GetResource() );
          }
 
          ++Ittr;
       }
 
-      RWS_TRACE("Not found: " << _pResId);
+      RWS_TRACE("Not found: "<<_pResId);
 
-      RWS_RETURN(0);
+      RWS_RETURN( 0 );
    }
 
 #ifdef _DEBUG
@@ -395,11 +395,11 @@ namespace RWS
       CResourceIterator Ittr;
 
       RWS_TRACE("-------------------------------------------------------------------------");
-
+      
       while (!Ittr.IsDone())
       {
-         RWS_TRACE("Resource Id [" << RWS_VALIDSTRING(Ittr->GetId()) << "] Name ["
-                                   << RWS_VALIDSTRING(Ittr->GetName()) << "] Type [" << RWS_VALIDSTRING(Ittr->GetType()) << "]");
+         RWS_TRACE("Resource Id ["<<RWS_VALIDSTRING(Ittr->GetId())<<"] Name ["
+            <<RWS_VALIDSTRING(Ittr->GetName())<<"] Type ["<<RWS_VALIDSTRING(Ittr->GetType())<<"]");
 
          RwChar const *_pResType = 0;
          RWSGUID Guid;
@@ -409,15 +409,15 @@ namespace RWS
          Guid = Ittr->GetId();
          pResource = FindById(&Guid, &_pResType, &_ResDataSize);
 
-         RWS_TRACEIF(pResource,
-                     "FindById found [" << pResource << "][" << RWS_VALIDSTRING(_pResType) << "]["
-                                        << _ResDataSize << "]");
+         RWS_TRACEIF (pResource,
+            "FindById found ["<<pResource<<"]["<<RWS_VALIDSTRING(_pResType)<<"]["
+            <<_ResDataSize<<"]");
 
          pResource = FindByName(Ittr->GetName(), &Guid, &_pResType, &_ResDataSize);
 
-         RWS_TRACEIF(pResource,
-                     "FindByName found [" << pResource << "][" << RWS_VALIDSTRING(_pResType) << "]["
-                                          << _ResDataSize << "]");
+         RWS_TRACEIF (pResource,
+            "FindByName found ["<<pResource<<"]["<<RWS_VALIDSTRING(_pResType)<<"]["
+            <<_ResDataSize<<"]");
 
          ++Ittr;
       }
@@ -426,7 +426,7 @@ namespace RWS
 
       RWS_RETURNVOID();
    }
-#endif
+#endif   
    /**
    *
    *  Find a named resource and return a pointer to the data associated with that resource.
@@ -443,10 +443,10 @@ namespace RWS
    *  otherwise null.
    *
    */
-   const void *CResourceManager::FindByName(const RwChar *const _pResName,
-                                            RWSGUID *_pResId,
-                                            RwChar const **_pResType,
-                                            RwUInt32 *_uiResDataSize)
+   const void *CResourceManager::FindByName( const RwChar * const _pResName,
+                                             RWSGUID *_pResId,
+                                             RwChar const **_pResType,
+                                             RwUInt32 *_uiResDataSize)
    {
       RWS_FUNCTION("RWS::CResourceManager::FindByName");
 
@@ -462,14 +462,14 @@ namespace RWS
             if (_pResType) *_pResType = Ittr->GetType();
             if (_uiResDataSize) *_uiResDataSize = Ittr->GetSize();
 
-            RWS_RETURN(Ittr->GetResource());
+            RWS_RETURN( Ittr->GetResource() );
          }
 
          ++Ittr;
       }
 
-      RWS_TRACE("Not found: " << _pResName);
-      RWS_RETURN(0);
+      RWS_TRACE("Not found: "<<_pResName);
+      RWS_RETURN( 0 );
    }
 
    /**
@@ -487,7 +487,7 @@ namespace RWS
 
       if (Ittr->GetLockRefCount() == 0)
       {
-         if (FreeResource(Ittr->GetType(), const_cast<void *>(Ittr->GetResource())))
+         if (FreeResource (Ittr->GetType(), const_cast<void*>(Ittr->GetResource()) ))
          {
             Ittr.Remove();
 
@@ -495,11 +495,11 @@ namespace RWS
          }
          else
          {
-            RWS_TRACE("FreeResource failed [" << Ittr->GetId() << "]");
+            RWS_TRACE("FreeResource failed ["<<Ittr->GetId()<<"]");
          }
       }
-
-      RWS_TRACE("Locked [" << Ittr->GetLockRefCount() << "]");
+      
+      RWS_TRACE("Locked ["<<Ittr->GetLockRefCount()<<"]");
 
       RWS_RETURN(false);
    }
@@ -524,7 +524,7 @@ namespace RWS
 
       while (!Ittr.IsDone())
       {
-         RWS_TRACE("Id [" << RWS_VALIDSTRING(Ittr->GetId()) << "] Name" << RWS_VALIDSTRING(Ittr->GetName()) << "]");
+         RWS_TRACE("Id ["<<RWS_VALIDSTRING(Ittr->GetId())<<"] Name"<<RWS_VALIDSTRING(Ittr->GetName())<<"]");
 
          if (!PurgeItem(Ittr))
          {
@@ -533,7 +533,7 @@ namespace RWS
             ++Ittr;
          }
       }
-
+      
       RWS_RETURN(flag);
    }
 
@@ -557,7 +557,7 @@ namespace RWS
 
       while (!Ittr.IsDone())
       {
-         RWS_TRACE("Id [" << RWS_VALIDSTRING(Ittr->GetId()) << "] Name" << RWS_VALIDSTRING(Ittr->GetName()) << "]");
+         RWS_TRACE("Id ["<<RWS_VALIDSTRING(Ittr->GetId())<<"] Name"<<RWS_VALIDSTRING(Ittr->GetName())<<"]");
 
          // Force the resource to be purged by setting the lock count to zero.
          Ittr->SetLockRefCount(0);
@@ -569,7 +569,7 @@ namespace RWS
             ++Ittr;
          }
       }
-
+      
       RWS_RETURN(flag);
    }
 
@@ -585,14 +585,14 @@ namespace RWS
       RWS_FUNCTION("RWS::CResourceManager::Lock");
 
       CResourceIterator Ittr;
-
+      
       while (!Ittr.IsDone())
       {
          if (Ittr->GetResource() == ptr)
          {
             Ittr->SetLockRefCount(Ittr->GetLockRefCount() + 1);
 
-            RWS_TRACE("m_uiLockRefCount [" << Ittr->GetLockRefCount() << "]");
+            RWS_TRACE("m_uiLockRefCount ["<<Ittr->GetLockRefCount()<<"]");
 
             break;
          }
@@ -613,14 +613,14 @@ namespace RWS
       RWS_FUNCTION("RWS::CResourceManager::UnLock");
 
       CResourceIterator Ittr;
-
+      
       while (!Ittr.IsDone())
       {
          if (Ittr->GetResource() == ptr)
          {
             Ittr->SetLockRefCount(Ittr->GetLockRefCount() - 1);
 
-            RWS_TRACE("m_uiLockRefCount [" << Ittr->GetLockRefCount() << "]");
+            RWS_TRACE("m_uiLockRefCount ["<<Ittr->GetLockRefCount()<<"]");
 
             break;
          }
@@ -629,7 +629,7 @@ namespace RWS
 
       RWS_RETURNVOID();
    }
-
+   
    /**
    *
    *  Load a resource.
@@ -655,10 +655,10 @@ namespace RWS
       const RwChar *pStrLoc)
    {
       RWS_FUNCTION("RWS::CResourceManager::Load");
-
+      
       RwChar ResourcePath[255];
       RwChar FilePath[255];
-
+      
       RWS_PRE(pStrLoc);
 
       *ResourcePath = 0;
@@ -691,8 +691,8 @@ namespace RWS
       }
 #endif
 
-      RWS_TRACE("\n\n Id [" << pResId << "]\n Type [" << pStrType << "]\n FilePath [" << FilePath
-                            << "]\n ResourcePath [" << ResourcePath << "]\n\n");
+      RWS_TRACE("\n\n Id ["<<pResId<<"]\n Type ["<<pStrType<<"]\n FilePath ["<<FilePath
+         <<"]\n ResourcePath ["<<ResourcePath<<"]\n\n");
 
       /*
       *
@@ -703,7 +703,7 @@ namespace RWS
       void *In = RwFopen(FilePath, "rb");
 
       RWS_ASSERT(In,
-                 "RwFopen [" << RWS_VALIDSTRING(FilePath) << "] failed, check the resource path in the target connection.");
+         "RwFopen ["<<RWS_VALIDSTRING(FilePath)<<"] failed, check the resource path in the target connection.");
 
       RwFseek(In, 0, SEEK_END);
 
@@ -716,9 +716,9 @@ namespace RWS
       *  Open and Load the stream
       *
       */
-      RwStream *pStream = RwStreamOpen(rwSTREAMFILENAME, rwSTREAMREAD, FilePath);
+      RwStream* pStream = RwStreamOpen(rwSTREAMFILENAME, rwSTREAMREAD, FilePath);
 
-      RWS_ASSERT(pStream, "RwStreamOpen failed\nFile [" << FilePath << "]");
+      RWS_ASSERT(pStream, "RwStreamOpen failed\nFile ["<<FilePath<<"]");
 
       void *ptrRes = LoadResource(pStrName, pResId, pStrType, ResourcePath, pStream, uiStreamSize);
 
@@ -751,12 +751,12 @@ namespace RWS
       const RWSGUID *pResId,
       const RwChar *pStrType,
       const RwChar *pStrLoc,
-      RwStream *pStream,
+      RwStream* pStream,
       RwUInt32 nEmbDataSize)
    {
       RWS_FUNCTION("RWS::CResourceManager::UpLoad");
-
-      void *ptrRes = LoadResource(pStrName, pResId, pStrType, "", pStream, nEmbDataSize);
+      
+      void *ptrRes = LoadResource (pStrName, pResId, pStrType, "", pStream, nEmbDataSize);
 
       RWS_ASSERT(ptrRes, "CResourceManager::UpLoad Failed");
 
@@ -771,12 +771,12 @@ namespace RWS
    void CResourceManager::Open(void)
    {
       RWS_FUNCTION("RWS::CResourceManager::Open");
-
+      
       CResourceHandler::OpenAll();
-
+      
       RWS_RETURNVOID();
    }
-
+   
    /**
    *
    *  Shutdown the resource manager system, and each registered resource handler.
@@ -785,12 +785,12 @@ namespace RWS
    void CResourceManager::Close(void)
    {
       RWS_FUNCTION("RWS::CResourceManager::Close");
-
+      
       CResourceHandler::CloseAll();
 
       RWS_RETURNVOID();
    }
-
+   
 
    /**
    *  

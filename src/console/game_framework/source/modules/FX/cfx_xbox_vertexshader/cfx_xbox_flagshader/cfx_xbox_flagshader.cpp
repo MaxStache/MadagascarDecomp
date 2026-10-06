@@ -72,35 +72,34 @@ namespace RWS
       // structure that is filled out during the light callback
       typedef struct
       {
-         RwRGBAReal Color;
-         RwBool Found;
-         RwV3d Pos;
-      } t_LIGHTCALLBACKRESULT;
+         RwRGBAReal  Color;
+         RwBool      Found;   
+         RwV3d       Pos;
+      }t_LIGHTCALLBACKRESULT;
 
       /**
       *
       *  Construct a CFXFlagShader object.
       *
       */
-      CFXFlagShader::CFXFlagShader(const CAttributePacket &rAttr) :
-         InitCEventHandler(0),
-         m_VertexShaderTextured(0),
-         m_VertexShaderVertexColor(0),
-         m_VertexShaderTexturedVertexColor(0)
+      CFXFlagShader::CFXFlagShader(const CAttributePacket& rAttr) : InitCEventHandler(0),
+      m_VertexShaderTextured(0),
+      m_VertexShaderVertexColor(0),
+      m_VertexShaderTexturedVertexColor(0)
       {
          RWS_FUNCTION("RWS::FX::CFXFlagShader::CFXFlagShader");
 
          LinkMsg(iMsgDoRender, "RwCamera*");
 
-         m_HfreqA = 0;
-         m_HspeedA = 0;
-         m_HamplitudeA = 0;
-         m_HfreqB = 0;
-         m_HspeedB = 0;
-         m_HamplitudeB = 0;
-         m_VfreqA = 0;
-         m_VspeedA = 0;
-         m_VamplitudeA = 0;
+         m_HfreqA       = 0;
+         m_HspeedA      = 0;
+         m_HamplitudeA  = 0;
+         m_HfreqB       = 0;
+         m_HspeedB      = 0;
+         m_HamplitudeB  = 0;
+         m_VfreqA       = 0;
+         m_VspeedA      = 0;
+         m_VamplitudeA  = 0;
 
          m_WaveOffset.x = 0;
          m_WaveOffset.y = 0;
@@ -118,7 +117,7 @@ namespace RWS
       *  Destroy a CFXFlagShader object.
       *
       */
-      CFXFlagShader::~CFXFlagShader(void)
+      CFXFlagShader::~CFXFlagShader(void) 
       {
          RWS_FUNCTION("RWS::FX::CFXFlagShader::~CFXFlagShader");
 
@@ -146,7 +145,7 @@ namespace RWS
          if (D3D_OK != D3DDevice_CreateVertexShader(TexturedDeclaration, dwFlagTexturedVertexShader,
                                                     &m_VertexShaderTextured, 0))
          {
-            RWS_RETURN(FALSE);
+             RWS_RETURN(FALSE);
          }
 
          /*
@@ -155,7 +154,7 @@ namespace RWS
          if (D3D_OK != D3DDevice_CreateVertexShader(VertexColorDeclaration, dwFlagVertexColorVertexShader,
                                                     &m_VertexShaderVertexColor, 0))
          {
-            RWS_RETURN(FALSE);
+             RWS_RETURN(FALSE);
          }
 
          /*
@@ -165,7 +164,7 @@ namespace RWS
                                                     dwFlagTexturedVertexColorVertexShader,
                                                     &m_VertexShaderTexturedVertexColor, 0))
          {
-            RWS_RETURN(FALSE);
+             RWS_RETURN(FALSE);
          }
 
 
@@ -218,16 +217,16 @@ namespace RWS
 
          if (RpLightGetType(pLight) == rpLIGHTAMBIENT)
          {
-            t_LIGHTCALLBACKRESULT *Result = reinterpret_cast<t_LIGHTCALLBACKRESULT *>(pData);
-            RwFrame *LightFrame;
-            RwMatrix *LightMatrix;
+            t_LIGHTCALLBACKRESULT *Result = reinterpret_cast<t_LIGHTCALLBACKRESULT*>(pData);
+            RwFrame               *LightFrame;
+            RwMatrix              *LightMatrix;
 
-            LightFrame = RpLightGetFrame(pLight);
-            LightMatrix = RwFrameGetLTM(LightFrame);
+            LightFrame    = RpLightGetFrame(pLight);
+            LightMatrix   = RwFrameGetLTM(LightFrame);
 
 
             Result->Color = *RpLightGetColor(pLight);
-            Result->Pos = *RwMatrixGetPos(LightMatrix);
+            Result->Pos   = *RwMatrixGetPos(LightMatrix);
             Result->Found = TRUE;
 
             RWS_RETURN(0);
@@ -252,8 +251,8 @@ namespace RWS
 
          if (RpLightGetType(pLight) == rpLIGHTPOINT)
          {
-            reinterpret_cast<t_LIGHTCALLBACKRESULT *>(pData)->Color = *RpLightGetColor(pLight);
-            reinterpret_cast<t_LIGHTCALLBACKRESULT *>(pData)->Found = TRUE;
+            reinterpret_cast<t_LIGHTCALLBACKRESULT*>(pData)->Color = *RpLightGetColor(pLight);
+            reinterpret_cast<t_LIGHTCALLBACKRESULT*>(pData)->Found = TRUE;
             RWS_RETURN(0);
          }
 
@@ -279,16 +278,17 @@ namespace RWS
          const RwReal PI = 3.14f;
 
          RwMatrix invLtm;
-         RwV3d LightPos = {1.0f, 0.0f, 0.0f};
-         RwV4d TransformedLightPos = {0.0f, 0.0f, 0.0f, 0.0f};
-         RwV4d One = {1.0f, 1.0f, 1.0f, 1.0f};
-         RwV4d Zero = {0.0f, 0.0f, 0.0f, 0.0f};
-         RwV4d Half = {0.5f, 0.5f, 0.5f, 0.5f};
-         RwV4d TSeries[3] = {{PI, 1.f / 2.f, 2.f * PI, 1.f / (2.f * PI)},
-                             {1.0f, -1.f / 2.f, 1.f / 24.f, -1.f / 720.f},
-                             {1.0f, -1.f / 6.f, 1.f / 120.f, -1.f / 5040.f}};
+         RwV3d    LightPos             =  {1.0f, 0.0f, 0.0f};
+         RwV4d    TransformedLightPos  =  {0.0f, 0.0f, 0.0f, 0.0f};
+         RwV4d    One                  =  {1.0f, 1.0f, 1.0f, 1.0f};
+         RwV4d    Zero                 =  {0.0f, 0.0f, 0.0f, 0.0f};
+         RwV4d    Half                 =  {0.5f, 0.5f, 0.5f, 0.5f};
+         RwV4d    TSeries[3]           =  {{PI,    1.f / 2.f, 2.f * PI,   1.f / (2.f * PI)},
+                                          {1.0f, -1.f / 2.f, 1.f / 24.f,  -1.f / 720.f},
+                                          {1.0f, -1.f / 6.f, 1.f / 120.f, -1.f / 5040.f}
+                                          };
 
-         t_LIGHTCALLBACKRESULT LightRes;
+         t_LIGHTCALLBACKRESULT   LightRes;
 
          // get the ambient and set the light position
          LightRes.Found = FALSE;
@@ -298,7 +298,7 @@ namespace RWS
             D3DDevice_SetVertexShaderConstant(VSCONST_REG_MAT_AMB_OFFSET, (void *)&LightRes.Color,
                                               VSCONST_REG_MAT_AMB_SIZE);
          }
-         else
+            else
          {
             D3DDevice_SetVertexShaderConstant(VSCONST_REG_MAT_AMB_OFFSET, (void *)&Zero, VSCONST_REG_MAT_AMB_SIZE);
          }
@@ -309,7 +309,7 @@ namespace RWS
          if (LightRes.Found)
          {
             // transform light position into object space
-            RwMatrixInvert(&invLtm, ltm);
+            RwMatrixInvert(&invLtm, ltm); 
 
             TransformedLightPos.x = (LightRes.Pos.x * invLtm.right.x) + (LightRes.Pos.y * invLtm.up.x) + (LightRes.Pos.z * invLtm.at.x) + invLtm.pos.x;
             TransformedLightPos.y = (LightRes.Pos.x * invLtm.right.y) + (LightRes.Pos.y * invLtm.up.y) + (LightRes.Pos.z * invLtm.at.y) + invLtm.pos.y;
@@ -318,53 +318,53 @@ namespace RWS
             D3DDevice_SetVertexShaderConstant(VSCONST_REG_LIGHT_POS_OFFSET, (void *)&TransformedLightPos,
                                               VSCONST_REG_LIGHT_POS_SIZE);
          }
-         else
+            else
          {
             D3DDevice_SetVertexShaderConstant(VSCONST_REG_LIGHT_POS_OFFSET, (void *)&LightPos,
                                               VSCONST_REG_LIGHT_POS_SIZE);
          }
 
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_ONE_OFFSET, (void *)&One, VSCONST_REG_ONE_SIZE);
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_ZERO_OFFSET, (void *)&Zero, VSCONST_REG_ZERO_SIZE);
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_TSERIES_OFFSET, (void *)&TSeries, VSCONST_REG_TSERIES_SIZE);
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_TIME_OFFSET, (void *)&m_WaveOffset, VSCONST_REG_TIME_SIZE);
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_ONE_OFFSET,     (void *)&One,          VSCONST_REG_ONE_SIZE);
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_ZERO_OFFSET,    (void *)&Zero,         VSCONST_REG_ZERO_SIZE);
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_TSERIES_OFFSET, (void *)&TSeries,      VSCONST_REG_TSERIES_SIZE);
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_TIME_OFFSET,    (void *)&m_WaveOffset, VSCONST_REG_TIME_SIZE);
 
 
          RwV4d ConstVal;
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HfreqA;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HFREQA_OFFSET, (void *)&ConstVal,
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HfreqA; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HFREQA_OFFSET,      (void *)&ConstVal,
                                            VSCONST_REG_HFREQA_SIZE);
-
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HspeedA;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HSPEEDA_OFFSET, (void *)&ConstVal,
+                                                                          
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HspeedA; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HSPEEDA_OFFSET,     (void *)&ConstVal,
                                            VSCONST_REG_HSPEEDA_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HamplitudeA;
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HamplitudeA; 
          D3DDevice_SetVertexShaderConstant(VSCONST_REG_HAMPLITUDEA_OFFSET, (void *)&ConstVal,
                                            VSCONST_REG_HAMPLITUDEA_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HfreqB;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HFREQB_OFFSET, (void *)&ConstVal,
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HfreqB; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HFREQB_OFFSET,      (void *)&ConstVal,
                                            VSCONST_REG_HFREQB_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HspeedB;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HSPEEDB_OFFSET, (void *)&ConstVal,
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HspeedB; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_HSPEEDB_OFFSET,     (void *)&ConstVal,
                                            VSCONST_REG_HSPEEDB_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_HamplitudeB;
+         ConstVal.x = ConstVal.y = ConstVal.z = m_HamplitudeB; 
          D3DDevice_SetVertexShaderConstant(VSCONST_REG_HAMPLITUDEB_OFFSET, (void *)&ConstVal,
                                            VSCONST_REG_HAMPLITUDEB_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_VfreqA;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_VFREQA_OFFSET, (void *)&ConstVal,
+         ConstVal.x = ConstVal.y = ConstVal.z = m_VfreqA; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_VFREQA_OFFSET,      (void *)&ConstVal,
                                            VSCONST_REG_VFREQA_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_VspeedA;
-         D3DDevice_SetVertexShaderConstant(VSCONST_REG_VSPEEDA_OFFSET, (void *)&ConstVal,
+         ConstVal.x = ConstVal.y = ConstVal.z = m_VspeedA; 
+         D3DDevice_SetVertexShaderConstant(VSCONST_REG_VSPEEDA_OFFSET,     (void *)&ConstVal,
                                            VSCONST_REG_VSPEEDA_SIZE);
 
-         ConstVal.x = ConstVal.y = ConstVal.z = m_VamplitudeA;
+         ConstVal.x = ConstVal.y = ConstVal.z = m_VamplitudeA; 
          D3DDevice_SetVertexShaderConstant(VSCONST_REG_VAMPLITUDEA_OFFSET, (void *)&ConstVal,
                                            VSCONST_REG_VAMPLITUDEA_SIZE);
 
@@ -385,18 +385,18 @@ namespace RWS
                                                 RwUInt32 Flags)
       {
          RWS_FUNCTION("RWS::FX::CFXFlagShader::VShaderRenderCallBack");
-         RpWorld *World;
-         RpGeometry *Geom;
-         RwUInt32 GeomFlags;
-         RxXboxInstanceData *instancedMesh;
-         DWORD oldAddressU, oldAddressV,
-            oldMinFilter, oldMagFilter, oldMipFilter,
-            oldColorArg1, oldColorOp, oldColorArg2,
-            oldAlphaEnable, oldAlphaTest, oldSrcBlend, oldDestBlend, oldCullMode;
+         RpWorld              *World;
+         RpGeometry           *Geom;
+         RwUInt32             GeomFlags;
+         RxXboxInstanceData   *instancedMesh;
+         DWORD                oldAddressU,   oldAddressV,
+                              oldMinFilter,  oldMagFilter, oldMipFilter,
+                              oldColorArg1,  oldColorOp,   oldColorArg2,
+                              oldAlphaEnable, oldAlphaTest, oldSrcBlend, oldDestBlend, oldCullMode;
 
-         Geom = RpAtomicGetGeometry(reinterpret_cast<RpAtomic *>(pObject));
+         Geom      = RpAtomicGetGeometry(reinterpret_cast<RpAtomic*>(pObject));  
          GeomFlags = RpGeometryGetFlags(Geom);
-         World = RpAtomicGetWorld(reinterpret_cast<RpAtomic *>(pObject));
+         World     = RpAtomicGetWorld(reinterpret_cast<RpAtomic*>(pObject));
 
           /*
           * Set up vertex shader with required constants
@@ -408,38 +408,38 @@ namespace RWS
           * RenderWare caches renderstates for best performance and expects the hardware
           * to be in the same state as we found it.
           */
-
-         RwXboxGetCachedTextureStageState(0, D3DTSS_ADDRESSU, &oldAddressU);
-         RwXboxGetCachedTextureStageState(0, D3DTSS_ADDRESSV, &oldAddressV);
+         
+         RwXboxGetCachedTextureStageState(0, D3DTSS_ADDRESSU,  &oldAddressU );
+         RwXboxGetCachedTextureStageState(0, D3DTSS_ADDRESSV,  &oldAddressV );
          RwXboxGetCachedTextureStageState(0, D3DTSS_MINFILTER, &oldMinFilter);
          RwXboxGetCachedTextureStageState(0, D3DTSS_MAGFILTER, &oldMagFilter);
          RwXboxGetCachedTextureStageState(0, D3DTSS_MIPFILTER, &oldMipFilter);
          RwXboxGetCachedTextureStageState(0, D3DTSS_COLORARG1, &oldColorArg1);
-         RwXboxGetCachedTextureStageState(0, D3DTSS_COLOROP, &oldColorOp);
+         RwXboxGetCachedTextureStageState(0, D3DTSS_COLOROP,   &oldColorOp);
          RwXboxGetCachedTextureStageState(0, D3DTSS_COLORARG2, &oldColorArg2);
 
-         RwXboxGetCachedRenderState(D3DRS_ALPHABLENDENABLE, &oldAlphaEnable);
-         RwXboxGetCachedRenderState(D3DRS_ALPHATESTENABLE, &oldAlphaTest);
-         RwXboxGetCachedRenderState(D3DRS_SRCBLEND, &oldSrcBlend);
-         RwXboxGetCachedRenderState(D3DRS_DESTBLEND, &oldDestBlend);
-         RwXboxGetCachedRenderState(D3DRS_CULLMODE, &oldCullMode);
+         RwXboxGetCachedRenderState(D3DRS_ALPHABLENDENABLE,    &oldAlphaEnable);
+         RwXboxGetCachedRenderState(D3DRS_ALPHATESTENABLE,     &oldAlphaTest);
+         RwXboxGetCachedRenderState(D3DRS_SRCBLEND,            &oldSrcBlend);
+         RwXboxGetCachedRenderState(D3DRS_DESTBLEND,           &oldDestBlend);
+         RwXboxGetCachedRenderState(D3DRS_CULLMODE,            &oldCullMode);
 
          /*
           * Set up texture stages                      
           */
 
          RwXboxSetCachedTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-         RwXboxSetCachedTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+         RwXboxSetCachedTextureStageState(0, D3DTSS_COLOROP,   D3DTOP_MODULATE);
          RwXboxSetCachedTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TEXTURE);
-
+         
          /* turn off other texture stages */
-         RwXboxSetCachedTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+         RwXboxSetCachedTextureStageState(1, D3DTSS_COLOROP,   D3DTOP_DISABLE);
 
          /* turn off alpha blending */
-         RwXboxSetCachedRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-         RwXboxSetCachedRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-         RwXboxSetCachedRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
-         RwXboxSetCachedRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+         RwXboxSetCachedRenderState(D3DRS_ALPHABLENDENABLE,    FALSE);
+         RwXboxSetCachedRenderState(D3DRS_SRCBLEND,            D3DBLEND_ONE );
+         RwXboxSetCachedRenderState(D3DRS_DESTBLEND,           D3DBLEND_ZERO );
+         RwXboxSetCachedRenderState(D3DRS_CULLMODE,            D3DCULL_NONE );
 
 
          /*
@@ -460,10 +460,10 @@ namespace RWS
               */
             D3DCOLOR MatColor;
 
-            MatColor = D3DCOLOR_ARGB(instancedMesh->material->color.alpha,
-                                     instancedMesh->material->color.red,
-                                     instancedMesh->material->color.green,
-                                     instancedMesh->material->color.blue);
+            MatColor = D3DCOLOR_ARGB(  instancedMesh->material->color.alpha,
+                                       instancedMesh->material->color.red,
+                                       instancedMesh->material->color.green,
+                                       instancedMesh->material->color.blue);
             {
                RwV4d MatColour;
                MatColour.x = instancedMesh->material->color.red / 255.0f;
@@ -479,15 +479,15 @@ namespace RWS
             {
                RwXboxRenderStateSetTexture(instancedMesh->material->texture, 0);
             }
-            else
+              else
             {
-               RwXboxRenderStateSetTexture(0, 0);
+              RwXboxRenderStateSetTexture(0, 0);
             }
 
-            if (GeomFlags & rpGEOMETRYTEXTURED)
+            if (GeomFlags&rpGEOMETRYTEXTURED)
             {
                // textured
-               if (GeomFlags & rpGEOMETRYPRELIT)
+               if (GeomFlags&rpGEOMETRYPRELIT)
                {
                   RwXboxSetCurrentVertexShader(m_VertexShaderTexturedVertexColor);
                }
@@ -496,23 +496,23 @@ namespace RWS
                   RwXboxSetCurrentVertexShader(m_VertexShaderTextured);
                }
             }
-            else
+               else
             {
                // non textured
                // textured
-               if (GeomFlags & rpGEOMETRYPRELIT)
+               if (GeomFlags&rpGEOMETRYPRELIT)
                {
                   RwXboxSetCurrentVertexShader(m_VertexShaderVertexColor);
                }
-               else
+                  else
                {
                   RwXboxSetCurrentVertexShader(m_VertexShaderTextured);
                }
             }
 
             RwXboxDrawIndexedVertices((D3DPRIMITIVETYPE)resEntryHeader->primType,
-                                      instancedMesh->numIndices,
-                                      instancedMesh->indexBuffer);
+                                        instancedMesh->numIndices,
+                                        instancedMesh->indexBuffer);
          }
 
          /*
@@ -520,19 +520,19 @@ namespace RWS
           */
          RwXboxRenderStateSetTexture(0, 0);
          RwXboxRenderStateSetTexture(0, 1);
-         RwXboxSetCachedTextureStageState(0, D3DTSS_ADDRESSU, oldAddressU);
-         RwXboxSetCachedTextureStageState(0, D3DTSS_ADDRESSV, oldAddressV);
+         RwXboxSetCachedTextureStageState(0, D3DTSS_ADDRESSU,  oldAddressU);
+         RwXboxSetCachedTextureStageState(0, D3DTSS_ADDRESSV,  oldAddressV);
          RwXboxSetCachedTextureStageState(0, D3DTSS_MINFILTER, oldMinFilter);
          RwXboxSetCachedTextureStageState(0, D3DTSS_MAGFILTER, oldMagFilter);
          RwXboxSetCachedTextureStageState(0, D3DTSS_MIPFILTER, oldMipFilter);
          RwXboxSetCachedTextureStageState(0, D3DTSS_COLORARG1, oldColorArg1);
-         RwXboxSetCachedTextureStageState(0, D3DTSS_COLOROP, oldColorOp);
+         RwXboxSetCachedTextureStageState(0, D3DTSS_COLOROP,   oldColorOp);
          RwXboxSetCachedTextureStageState(0, D3DTSS_COLORARG2, oldColorArg2);
-         RwXboxSetCachedTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
-         RwXboxSetCachedRenderState(D3DRS_ALPHABLENDENABLE, oldAlphaEnable);
-         RwXboxSetCachedRenderState(D3DRS_SRCBLEND, oldSrcBlend);
-         RwXboxSetCachedRenderState(D3DRS_DESTBLEND, oldDestBlend);
-         RwXboxSetCachedRenderState(D3DRS_CULLMODE, oldCullMode);
+         RwXboxSetCachedTextureStageState(1, D3DTSS_COLOROP,   D3DTOP_DISABLE);
+         RwXboxSetCachedRenderState(D3DRS_ALPHABLENDENABLE,    oldAlphaEnable);
+         RwXboxSetCachedRenderState(D3DRS_SRCBLEND,            oldSrcBlend);
+         RwXboxSetCachedRenderState(D3DRS_DESTBLEND,           oldDestBlend);
+         RwXboxSetCachedRenderState(D3DRS_CULLMODE,            oldCullMode);
 
          RWS_RETURNVOID();
       }
@@ -554,22 +554,22 @@ namespace RWS
          if (pMsg.Id == iMsgDoRender)
          {
             m_WaveOffset.x += m_HspeedA;
-            if (m_WaveOffset.x * m_HfreqA > 6.28f)
+            if (m_WaveOffset.x * m_HfreqA > 6.28f)  
             {
-               m_WaveOffset.x = 0.0f;
-            }
-
+               m_WaveOffset.x = 0.0f;  
+            }               
+ 
             m_WaveOffset.y += m_HspeedB;
-            if (m_WaveOffset.y * m_HfreqB > 6.28f)
+            if (m_WaveOffset.y * m_HfreqB > 6.28f)  
             {
-               m_WaveOffset.y = 0.0f;
-            }
+               m_WaveOffset.y = 0.0f;  
+            }               
 
             m_WaveOffset.z += m_VspeedA;
-            if (m_WaveOffset.z * m_VfreqA > 6.28f)
+            if (m_WaveOffset.z * m_VfreqA > 6.28f)  
             {
-               m_WaveOffset.z = 0.0f;
-            }
+               m_WaveOffset.z = 0.0f;  
+            }               
          }
 
          RWS_RETURNVOID();
@@ -580,98 +580,98 @@ namespace RWS
       *  Update attributes.
       *
       */
-      void CFXFlagShader::HandleAttributes(const CAttributePacket &attr)
+      void CFXFlagShader::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FX::CFXFlagShader::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(attr);
-
+         
          CAttributeCommandIterator sysattrIt(attr, RWS_CLASSID_OF(CSystemCommands));
          while (!sysattrIt.IsFinished())
          {
             switch (sysattrIt->GetCommandId())
             {
-            case CSystemCommands::CMD_AttachResource:
-               {
-                  const RWSGUID *pResourceId = 0;
-                  sysattrIt->GetCommandData(&pResourceId);
-
-                  const RwChar *resourceType;
-                  const void *pObject = 0;
-                  if (pResourceId)
+               case CSystemCommands::CMD_AttachResource:
                   {
-                     pObject = CResourceManager::FindById(pResourceId, &resourceType);
-                  }
+                     const RWSGUID * pResourceId = 0;
+                     sysattrIt->GetCommandData(&pResourceId);
 
-                  RWS_ASSERT(pObject, "Resource::Find failed for id = " << pResourceId);
-
-                  if (resourceType)
-                  {
-                     if (!rwstrcmp("rwID_ATOMIC", resourceType))
+                     const RwChar *resourceType;
+                     const void *pObject = 0;
+                     if (pResourceId)
                      {
-                        SetAtomicVShaderPipeline(const_cast<RpAtomic *>(reinterpret_cast<const RpAtomic *>(pObject)),
-                                                 reinterpret_cast<void *>(this));
+                        pObject = CResourceManager::FindById(pResourceId, &resourceType);
                      }
-                     else if (!rwstrcmp("rwID_CLUMP", resourceType))
+
+                     RWS_ASSERT(pObject, "Resource::Find failed for id = " << pResourceId);
+
+                     if (resourceType)
                      {
-                        RpClumpForAllAtomics(const_cast<RpClump *>(reinterpret_cast<const RpClump *>(pObject)),
-                                             SetAtomicVShaderPipeline, reinterpret_cast<void *>(this));
+                        if (!rwstrcmp("rwID_ATOMIC", resourceType))
+                        {
+                           SetAtomicVShaderPipeline(const_cast<RpAtomic*>(reinterpret_cast<const RpAtomic *>(pObject)),
+                                                    reinterpret_cast<void *>(this));
+                        }
+                           else if (!rwstrcmp("rwID_CLUMP", resourceType))
+                        {
+                           RpClumpForAllAtomics(const_cast<RpClump*>(reinterpret_cast<const RpClump *>(pObject)),
+                                                SetAtomicVShaderPipeline, reinterpret_cast<void *>(this));
+                        }
                      }
                   }
-               }
-               break;
-            };
+                  break;
+            }; 
             ++sysattrIt;
          }
 
          // deal with the attributes related to the environment map behaviour
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXFlagShader));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
 
-            case CMD_Set_m_HfreqA:
-               attrIt->GetCommandData(m_HfreqA);
-               RWS_TRACE("CMD_Set_m_HfreqA " << m_HfreqA);
-               break;
-            case CMD_Set_m_HamplitudeA:
-               attrIt->GetCommandData(m_HamplitudeA);
-               RWS_TRACE("CMD_Set_m_HamplitudeA " << m_HamplitudeA);
-               break;
-            case CMD_Set_m_HspeedA:
-               attrIt->GetCommandData(m_HspeedA);
-               RWS_TRACE("CMD_Set_m_HspeedA " << m_HspeedA);
-               break;
+               case CMD_Set_m_HfreqA:
+                  attrIt->GetCommandData(m_HfreqA);
+                  RWS_TRACE("CMD_Set_m_HfreqA "<<m_HfreqA);
+                  break;
+               case CMD_Set_m_HamplitudeA:
+                  attrIt->GetCommandData(m_HamplitudeA);
+                  RWS_TRACE("CMD_Set_m_HamplitudeA "<<m_HamplitudeA);
+                  break;
+               case CMD_Set_m_HspeedA:
+                  attrIt->GetCommandData(m_HspeedA);
+                  RWS_TRACE("CMD_Set_m_HspeedA "<<m_HspeedA);
+                  break;
 
 
-            case CMD_Set_m_HfreqB:
-               attrIt->GetCommandData(m_HfreqB);
-               RWS_TRACE("CMD_Set_m_HfreqB " << m_HfreqB);
-               break;
-            case CMD_Set_m_HamplitudeB:
-               attrIt->GetCommandData(m_HamplitudeB);
-               RWS_TRACE("CMD_Set_m_HamplitudeB " << m_HamplitudeB);
-               break;
-            case CMD_Set_m_HspeedB:
-               attrIt->GetCommandData(m_HspeedB);
-               RWS_TRACE("CMD_Set_m_HspeedB " << m_HspeedB);
-               break;
+               case CMD_Set_m_HfreqB:
+                  attrIt->GetCommandData(m_HfreqB);
+                  RWS_TRACE("CMD_Set_m_HfreqB "<<m_HfreqB);
+                  break;
+               case CMD_Set_m_HamplitudeB:
+                  attrIt->GetCommandData(m_HamplitudeB);
+                  RWS_TRACE("CMD_Set_m_HamplitudeB "<<m_HamplitudeB);
+                  break;
+               case CMD_Set_m_HspeedB:
+                  attrIt->GetCommandData(m_HspeedB);
+                  RWS_TRACE("CMD_Set_m_HspeedB "<<m_HspeedB);
+                  break;
 
 
-            case CMD_Set_m_VfreqA:
-               attrIt->GetCommandData(m_VfreqA);
-               RWS_TRACE("CMD_Set_m_VfreqA " << m_VfreqA);
-               break;
-            case CMD_Set_m_VamplitudeA:
-               attrIt->GetCommandData(m_VamplitudeA);
-               RWS_TRACE("CMD_Set_m_VamplitudeA " << m_VamplitudeA);
-               break;
-            case CMD_Set_m_VspeedA:
-               attrIt->GetCommandData(m_VspeedA);
-               RWS_TRACE("CMD_Set_m_VspeedA " << m_VspeedA);
-               break;
+               case CMD_Set_m_VfreqA:
+                  attrIt->GetCommandData(m_VfreqA);
+                  RWS_TRACE("CMD_Set_m_VfreqA "<<m_VfreqA);
+                  break;
+               case CMD_Set_m_VamplitudeA:
+                  attrIt->GetCommandData(m_VamplitudeA);
+                  RWS_TRACE("CMD_Set_m_VamplitudeA "<<m_VamplitudeA);
+                  break;
+               case CMD_Set_m_VspeedA:
+                  attrIt->GetCommandData(m_VspeedA);
+                  RWS_TRACE("CMD_Set_m_VspeedA "<<m_VspeedA);
+                  break;
             }
             ++attrIt;
          }

@@ -37,8 +37,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -53,15 +53,15 @@
 
 #include "framework/core/attributehandler/allocation policies/linearallocationpolicy.h"
 
-#if (defined(DOLPHIN))
+#if (defined (DOLPHIN))
 #include "gamecube/cfxgamecubemotionblur.h"
 #endif
 
-#if (defined(_XBOX))
+#if (defined (_XBOX))
 #include "xbox/cfxxboxmotionblur.h"
 #endif
 
-#if (defined(SKY))
+#if (defined (SKY))
 #include "sky/cfxskymotionblur.h"
 #endif
 
@@ -85,7 +85,7 @@ namespace RWS
       *  store the current frame.
       *
       */
-      class CFXMotionBlur : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CFXMotionBlur: public CSystemCommands, public CAttributeHandler,public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CFXMotionBlur);
@@ -96,93 +96,94 @@ namespace RWS
          RWS_BEGIN_COMMANDS
 
 
-         RWS_MESSAGE(CMD_Start_Render,
-                     "Start Render Event",
-                     "Applies motion blur to the entire display",
-                     RECEIVE,
-                     RwCamera*,
-                     "iMsgDoPostRender")
+            RWS_MESSAGE  ( CMD_Start_Render,
+                           "Start Render Event",
+                           "Applies motion blur to the entire display",
+                           RECEIVE,
+                           RwCamera*,
+                           "iMsgDoPostRender" )
 
-         RWS_ATTRIBUTE(CMD_Priority,
-                       "Render Priority",
-                       "Specify the render priority",
-                       SLIDER,
-                       RwUInt32,
-                       RANGE(0, 32768, 65535))
+            RWS_ATTRIBUTE( CMD_Priority,
+                           "Render Priority",
+                           "Specify the render priority",
+                           SLIDER,
+                           RwUInt32,
+                           RANGE(0, 32768, 65535) )
 
-         RWS_ATTRIBUTE(CMD_Set_m_BlurAmount,
-                       "Blur amount",
-                       "Blur Amount value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(0, 0.5, 1.0))
+            RWS_ATTRIBUTE( CMD_Set_m_BlurAmount,
+                           "Blur amount",
+                           "Blur Amount value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(0, 0.5, 1.0) )
 
-         RWS_ATTRIBUTE(CMD_Set_m_OffsetX,
-                       "Offset X",
-                       "Offset X value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-1.0, 0.0, 1.0))
+            RWS_ATTRIBUTE( CMD_Set_m_OffsetX,
+                           "Offset X",
+                           "Offset X value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(-1.0,  0.0, 1.0) )
 
-         RWS_ATTRIBUTE(CMD_Set_m_OffsetY,
-                       "Offset Y",
-                       "Offset Y value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-1.0, 0.0, 1.0))
+            RWS_ATTRIBUTE( CMD_Set_m_OffsetY,
+                           "Offset Y",
+                           "Offset Y value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(-1.0,  0.0, 1.0) )
 
-         RWS_ATTRIBUTE(CMD_Set_m_ScaleX,
-                       "Scale X Axis",
-                       "Scale X axis value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-5.0, 1.0, 5.0))
-         RWS_ATTRIBUTE(CMD_Set_m_ScaleY,
-                       "Scale Y Axis",
-                       "Scale Y axis value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-5.0, 1.0, 5.0))
-         RWS_ATTRIBUTE(CMD_Set_m_Scale,
-                       "Scale",
-                       "Scale value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-5.0, 1.0, 5.0))
+            RWS_ATTRIBUTE( CMD_Set_m_ScaleX,
+                           "Scale X Axis",
+                           "Scale X axis value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(-5.0, 1.0, 5.0) )
+            RWS_ATTRIBUTE( CMD_Set_m_ScaleY,
+                           "Scale Y Axis",
+                           "Scale Y axis value",
+                            SLIDER,
+                            RwReal,
+                            RANGE(-5.0, 1.0, 5.0) )
+            RWS_ATTRIBUTE( CMD_Set_m_Scale,
+                           "Scale",
+                           "Scale value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(-5.0, 1.0, 5.0) )
 
-         RWS_ATTRIBUTE(CMD_Set_m_Angle,
-                       "Angle",
-                       "Angle value",
-                       SLIDER,
-                       RwReal,
-                       RANGE(-180, 0.0, 180))
+            RWS_ATTRIBUTE( CMD_Set_m_Angle,
+                           "Angle",
+                           "Angle value",
+                           SLIDER,
+                           RwReal,
+                           RANGE(-180, 0.0, 180) )
          RWS_END_COMMANDS;
 
          CFXMotionBlur(const CAttributePacket& rAttr);
          ~CFXMotionBlur();
-         virtual void HandleEvents(CMsg& pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr);
+         virtual void         HandleEvents         (CMsg &pMsg);
+         virtual void         HandleAttributes     (const CAttributePacket& attr);
 
-#if (defined(DOLPHIN))
-         CFXGameCubeMotionBlur m_Target;         /**< GameCube implementation of the motion blur.*/
+#if (defined (DOLPHIN))
+         CFXGameCubeMotionBlur   m_Target;         /**< GameCube implementation of the motion blur.*/
 #endif
 
-#if (defined(_XBOX))
-         CFXXBOXMotionBlur m_Target;         /**< XBox implementation of the motion blur.*/
+#if (defined (_XBOX))
+         CFXXBOXMotionBlur       m_Target;         /**< XBox implementation of the motion blur.*/
 #endif
 
-#if (defined(SKY))
-         CFXSkyMotionBlur m_Target;         /**< Sky implementation of the motion blur.*/
+#if (defined (SKY))
+         CFXSkyMotionBlur        m_Target;         /**< Sky implementation of the motion blur.*/
 #endif
 
       protected:
 
-         CEventId m_StartRender;   /**< Motion blur event.*/
-         RwUInt32 m_link_priority; /**< Current Link Priority, Used to determine rendering order */
+         CEventId                m_StartRender;   /**< Motion blur event.*/
+         RwUInt32                m_link_priority; /**< Current Link Priority, Used to determine rendering order */
+
       };
 
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

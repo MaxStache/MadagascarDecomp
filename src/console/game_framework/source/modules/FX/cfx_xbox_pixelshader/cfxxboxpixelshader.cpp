@@ -53,8 +53,8 @@ namespace RWS
       typedef struct
       {
          RpXboxPixelShader *m_PixelShader;
-
-      } t_MATERIAL_PS_CALLBACK_DATA;
+         
+      }t_MATERIAL_PS_CALLBACK_DATA;
 
       /**
       *
@@ -64,11 +64,11 @@ namespace RWS
       * \return                              RpAtomic. 
       *
       */
-      RpAtomic *CFXXBoxPixelShader::AtomicCallBack(RpAtomic *pAtomic, void *pData)
+      RpAtomic * CFXXBoxPixelShader::AtomicCallBack(RpAtomic *pAtomic, void *pData)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxPixelShader::AtomicCallBack");
 
-         RpGeometry *Geom;
+         RpGeometry  *Geom;
 
          Geom = RpAtomicGetGeometry(pAtomic);
          RWS_ASSERT(Geom, "Unable to get a pointer to the atomics geometry");
@@ -86,14 +86,14 @@ namespace RWS
       * \return                              pMaterial. 
       *
       */
-      RpMaterial *CFXXBoxPixelShader::MaterialCallBack(RpMaterial *pMaterial, void *pData)
+      RpMaterial * CFXXBoxPixelShader::MaterialCallBack(RpMaterial *pMaterial, void *pData)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxPixelShader::MaterialCallBack");
 
          t_MATERIAL_PS_CALLBACK_DATA *PSInfo;
 
-         PSInfo = static_cast<t_MATERIAL_PS_CALLBACK_DATA *>(pData);
-
+         PSInfo = static_cast<t_MATERIAL_PS_CALLBACK_DATA*>(pData); 
+        
          RpXboxMaterialSetPixelShader(pMaterial, PSInfo->m_PixelShader);
          RWS_RETURN(pMaterial);
       }
@@ -106,7 +106,7 @@ namespace RWS
       * \return                     TRUE. 
       *
       */
-      RwBool CFXXBoxPixelShader::AtomicSetPixelShader(const RpAtomic *pAtomic, RpXboxPixelShader *pPixelShader)
+      RwBool CFXXBoxPixelShader::AtomicSetPixelShader(const RpAtomic *pAtomic, RpXboxPixelShader  *pPixelShader)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxPixelShader::SetAtomicMaterialsPixelShader");
          t_MATERIAL_PS_CALLBACK_DATA CallBackData;
@@ -126,7 +126,7 @@ namespace RWS
       * \return                     TRUE. 
       *
       */
-      RwBool CFXXBoxPixelShader::ClumpSetPixelShader(const RpClump *pClump, RpXboxPixelShader *pPixelShader)
+      RwBool CFXXBoxPixelShader::ClumpSetPixelShader (const RpClump *pClump, RpXboxPixelShader  *pPixelShader)
       {
          RWS_FUNCTION("RWS::FX::CFXXBoxPixelShader::SetClumpMaterialsPixelShader");
          t_MATERIAL_PS_CALLBACK_DATA CallBackData;

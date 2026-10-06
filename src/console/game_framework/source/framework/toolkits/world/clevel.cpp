@@ -142,11 +142,11 @@ namespace RWS
       RWS_FUNCTION("RWS::CLevel::CLevel::PluginAttach");
 
       iCLevelGeometryPlugin_Offset = RpGeometryRegisterPlugin(
-         sizeof(CLevelGeometryPlugin),
-         MAKECHUNKID(rwVENDORID_CRITERIONRM, CLevelGeometryPluginID),
-         Plugin_Constructor,
-         0, // NOT USED
-         Plugin_Copy);
+          sizeof(CLevelGeometryPlugin),
+          MAKECHUNKID(rwVENDORID_CRITERIONRM, CLevelGeometryPluginID),
+          Plugin_Constructor,
+          0, // NOT USED
+          Plugin_Copy);
 
       RWS_POST(iCLevelGeometryPlugin_Offset);
 

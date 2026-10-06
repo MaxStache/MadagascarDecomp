@@ -61,8 +61,8 @@ namespace RWS
       *  \see CTutorial5
       *
       */
-      CTutorial4::CTutorial4(const CAttributePacket& attr) :
-         InitCEventHandler(&m_pAtomic)
+      CTutorial4::CTutorial4(const CAttributePacket& attr)
+         : InitCEventHandler(&m_pAtomic)
       {
 
          RWS_FUNCTION("RWS::Tutorial::CTutorial4::CTutorial4");
@@ -75,7 +75,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       /**
       *
       *  Destroy CTutorial4 object.   UnRegister m_trigger event.
@@ -98,7 +98,7 @@ namespace RWS
       *  \param pMsg
       *
       */
-      void CTutorial4::HandleEvents(CMsg& pMsg)
+      void CTutorial4::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial4::HandleEvents");
 
@@ -136,7 +136,7 @@ namespace RWS
 
                CMsg message(m_trigger, reinterpret_cast<void*>(attrIt->GetAs_RwUInt32()));
                SendMsg(message);
-               break;
+            break;
             }
 
             ++attrIt;

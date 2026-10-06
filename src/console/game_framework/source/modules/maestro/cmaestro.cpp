@@ -80,7 +80,7 @@ namespace RWS
       *  \see ~CMaestro
       */
       CMaestro::CMaestro(const CAttributePacket& attr) :
-         InitCEventHandler(0),
+         InitCEventHandler(0), 
          m_Link_Priority(0)
       {
          RWS_FUNCTION("RWS::Maestro::CMaestro::CMaestro");
@@ -91,7 +91,7 @@ namespace RWS
          LinkMsg(Win::iMsgResizeCameraRasters);
 #endif
 
-         LinkMsg(iMsgRunningTick, 0);
+         LinkMsg( iMsgRunningTick, 0 );
 
          RegisterMsg(m_Msg_Button[eBut_up], "INQ_MENU_BTN_UP", "return RwReal");
          RegisterMsg(m_Msg_Button[eBut_down], "INQ_MENU_BTN_DOWN", "return RwReal");
@@ -105,7 +105,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
 
       /**
       *
@@ -126,7 +126,7 @@ namespace RWS
          CEventHandler::UnRegisterMsg(Win::iMsgResizeCameraRasters);
 #endif
 
-         UnLinkMsg(iMsgRunningTick);
+         UnLinkMsg( iMsgRunningTick );
 
          for (RwInt32 i = 0; i < eBut_total; i++)
          {
@@ -138,7 +138,7 @@ namespace RWS
 
          UnLinkMsg(m_StartRender);
          UnRegisterMsg(m_StartRender);
-
+      
          UnLinkMsg(m_EndRender);
          UnRegisterMsg(m_EndRender);
 
@@ -181,7 +181,7 @@ namespace RWS
       *  \param pMsg
       *
       */
-      void CMaestro::HandleEvents(CMsg& pMsg)
+      void CMaestro::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Maestro::CMaestro::HandleEvents");
 
@@ -221,7 +221,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+  
 
       /**
       *
@@ -248,79 +248,79 @@ namespace RWS
          {
             switch (attrIt->GetCommandId())
             {
-            case CMD_Start_Render:
+               case CMD_Start_Render:
                   //////////////////////////////////////////////////////////////////
 
                   // If already linked, unlink and unregister as we're about to register with
                   // a new event.
                   //
-               UnLinkMsg(m_StartRender);
-               UnRegisterMsg(m_StartRender);
+                  UnLinkMsg(m_StartRender);
+                  UnRegisterMsg(m_StartRender);
 
                   //
                   //
-               RegisterMsg(m_StartRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-               LinkMsg(m_StartRender, "RwCamera*", m_Link_Priority);
-               break;
+                  RegisterMsg(m_StartRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  LinkMsg(m_StartRender, "RwCamera*", m_Link_Priority);
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_End_Render:
+               case CMD_End_Render:
                   //////////////////////////////////////////////////////////////////
-               ReplaceRegisteredMsg(m_EndRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-               break;
+                  ReplaceRegisteredMsg(m_EndRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  break;
 
-            case CMD_Priority:
+               case CMD_Priority:
                   //////////////////////////////////////////////////////////////////
-               m_Link_Priority = attrIt->GetAs_RwUInt32();
+                  m_Link_Priority = attrIt->GetAs_RwUInt32();
 
                   // If already linked, unlink as we're about to re-link at a different priority
                   //
-               UnLinkMsg(m_StartRender);
-               LinkMsg(m_StartRender, "RwCamera*", m_Link_Priority);
-               break;
+                  UnLinkMsg(m_StartRender);
+                  LinkMsg(m_StartRender, "RwCamera*", m_Link_Priority);
+                  break;
 
-            case CMD_ShowHide:
+               case CMD_ShowHide:
                   // Show/ hide animation
-               if (attrIt->GetAs_RwUInt32())
-                  Rt2dObjectSetVisible(m_Maestro.GetScene(), TRUE);
-               else
-                  Rt2dObjectSetVisible(m_Maestro.GetScene(), FALSE);
-               break;
+                  if (attrIt->GetAs_RwUInt32())
+                     Rt2dObjectSetVisible(m_Maestro.GetScene(), TRUE);
+                  else
+                     Rt2dObjectSetVisible(m_Maestro.GetScene(), FALSE);
+                  break;
 
-            case CMD_PlayMessage:
+               case CMD_PlayMessage:
                   // Play/ stop current animation
-               if (attrIt->GetAs_RwUInt32())
-                  m_Maestro.Play();
-               else
-                  m_Maestro.Stop();
-               break;
+                  if (attrIt->GetAs_RwUInt32())
+                     m_Maestro.Play();
+                  else
+                     m_Maestro.Stop();
+                  break;
 
-            case CMD_Interp:
+               case CMD_Interp:
                   // Turn on/ off interpolation
-               if (attrIt->GetAs_RwUInt32())
-                  m_Maestro.Interpolate(TRUE);
-               else
-                  m_Maestro.Interpolate(FALSE);
-               break;
-
-            case CMD_SetPosX:
+                  if (attrIt->GetAs_RwUInt32())
+                     m_Maestro.Interpolate(TRUE);
+                  else
+                     m_Maestro.Interpolate(FALSE);
+                  break;
+               
+               case CMD_SetPosX:
                   // Position slider to adjust the x-coordinate
-               m_Maestro.SetPositionX(attrIt->GetAs_RwReal());
-               break;
+                  m_Maestro.SetPositionX(attrIt->GetAs_RwReal());
+                  break;
 
-            case CMD_SetPosY:
+               case CMD_SetPosY:
                   // Position slider to adjust the y-coordinate
-               m_Maestro.SetPositionY(attrIt->GetAs_RwReal());
-               break;
+                  m_Maestro.SetPositionY(attrIt->GetAs_RwReal());
+                  break;
 
-            case CMD_SetPosZ:
+               case CMD_SetPosZ:
                   // Position slider to adjust the z-coordinate
-               m_Maestro.SetPositionZ(attrIt->GetAs_RwReal());
-               break;
+                  m_Maestro.SetPositionZ(attrIt->GetAs_RwReal());
+                  break;
 
-            case CMD_TriggerCntrlButton:
+               case CMD_TriggerCntrlButton:
                   // Test to activate up button
-               ReplaceLinkedMsg(m_TriggerCntrlButton, attrIt->GetAs_RwChar_ptr(), "return RwReal");
-               break;
+                  ReplaceLinkedMsg(m_TriggerCntrlButton, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+                  break;
             }
             ++attrIt;
          }

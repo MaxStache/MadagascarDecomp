@@ -13,14 +13,14 @@
  Function prototypes
  */
 
-#ifdef __cplusplus
+#ifdef    __cplusplus
 extern "C"
 {
 #endif                          /* __cplusplus */
 
-   RwBool DolphinInstallFileSystem(void);
+RwBool DolphinInstallFileSystem(void);
 
-#ifdef __cplusplus
+#ifdef    __cplusplus
 }
 #endif                          /* __cplusplus */
 

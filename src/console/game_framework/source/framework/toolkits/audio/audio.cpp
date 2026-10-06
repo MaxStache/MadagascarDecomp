@@ -56,7 +56,7 @@
 
 namespace RWS
 {
-   namespace RwsAudio
+   namespace RwsAudio 
    {
       namespace
       {
@@ -66,58 +66,58 @@ namespace RWS
          *
          * This typedef is used to maintain virtual voice allocation in the framework.
          *
-         */
+         */      
          typedef struct
          {
-            RwaVirtualVoice *pVirtualVoice;  /**< Pointer to a virtual voice.*/
-            RwBool VoiceAlloc;     /**< Allocation status for virtual voices.*/
-         } VirtualVoice;
+             RwaVirtualVoice *pVirtualVoice;  /**< Pointer to a virtual voice.*/
+             RwBool           VoiceAlloc;     /**< Allocation status for virtual voices.*/
+         }VirtualVoice;
 
-         RwUInt32 g_RefCount = 0;
-         RwaWaveDict *g_pWaveDict[NUMGROUPS];
-         RwaListener *g_pListener;
-         RwMemoryFunctions g_MemFuncs = {RWSMalloc, RWSFree, RWSReAlloc, RWSCalloc};
-         RwaOsOutput *g_pOsOutput;
-         VirtualVoice g_VirtualVoices[MAXVVOICES];
-         RwaOsVoice *g_pOsVoice[MAXVOICES];
-         RwaEnvironment g_Environment = rwaENVIRONMENT_OFF;
-         RwBool g_ObjectsRegistered = FALSE;
+         RwUInt32            g_RefCount = 0;
+         RwaWaveDict        *g_pWaveDict[NUMGROUPS];
+         RwaListener        *g_pListener;
+         RwMemoryFunctions   g_MemFuncs = {RWSMalloc, RWSFree, RWSReAlloc, RWSCalloc}; 
+         RwaOsOutput        *g_pOsOutput; 
+         VirtualVoice        g_VirtualVoices[MAXVVOICES];
+         RwaOsVoice         *g_pOsVoice[MAXVOICES];  
+         RwaEnvironment      g_Environment = rwaENVIRONMENT_OFF;
+         RwBool              g_ObjectsRegistered = FALSE;
 
          /*
          *
          * Create all virtual and hardware voices.
          *
-         */
-         void CreateAllVoices(void)
+         */        
+         void CreateAllVoices( void )
          {
             RWS_FUNCTION("RWS::RwsAudio::NULL::CreateAllVoices")
-
+ 
             RwUInt32 i;
             RwBool Success;
 
              // Create the hardware voice pool.
-            for (i = 0; i < MAXVOICES; i++)
+            for (i = 0; i < MAXVOICES; i ++)
             {
                // Create the voice.
                g_pOsVoice[i] = RwaOsVoiceCreate(g_pOsOutput, rwaOBJFLAGS_INTERFACES, 0, 0);
                RWS_ASSERT(g_pOsVoice[i], "Invalid voice in hardware voice pool");
             }
 
-            Success = RwaVoiceManagerRegister(reinterpret_cast<RwaObj *>(g_pOsOutput),
-                                              reinterpret_cast<RwaObj **>(g_pOsVoice), MAXVOICES);
+            Success = RwaVoiceManagerRegister(reinterpret_cast<RwaObj*>(g_pOsOutput), 
+                                              reinterpret_cast<RwaObj**>(g_pOsVoice), MAXVOICES);
             RWS_ASSERT(Success, "Can not register voice manager");
-
-            // Create the virtual voices.
-            for (i = 0; i < MAXVVOICES; i++)
+             
+            // Create the virtual voices. 
+            for (i = 0; i < MAXVVOICES; i ++)
             {
                // Create the virtual voice.
                g_VirtualVoices[i].pVirtualVoice = RwaVirtualVoiceCreate(0, 0, 0, 0, 0);
                RWS_ASSERT(g_VirtualVoices[i].pVirtualVoice, "Virtual voice " << i << " not created.");
-
+                
                RwaVirtualVoiceSetGain(g_VirtualVoices[i].pVirtualVoice, 1.0f);
-               RwaVirtualVoiceSetPan(g_VirtualVoices[i].pVirtualVoice, 0.0f);
+               RwaVirtualVoiceSetPan(g_VirtualVoices[i].pVirtualVoice, 0.0f);        
             }
-
+             
             RWS_RETURNVOID();
          }
 
@@ -129,24 +129,24 @@ namespace RWS
          void DestroyAllVoices(void)
          {
             RWS_FUNCTION("RWS::RwsAudio::NULL::DestroyAllVoices")
-
+               
             RwUInt32 i;
-
+            
             // Destroy all virtual voices.
-            for (i = 0; i < MAXVVOICES; i++)
+            for (i = 0; i < MAXVVOICES; i ++)
             {
                RwaVirtualVoiceDestroy(g_VirtualVoices[i].pVirtualVoice, 0, 0);
                g_VirtualVoices[i].VoiceAlloc = FALSE;
             }
 
             RwaVoiceManagerUnregister();
-
+            
             // Can't be done until all virtual voices have been destroyed.
-            for (i = 0; i < MAXVOICES; i++)
+            for (i = 0; i < MAXVOICES; i ++)
             {
                RwaOsVoiceDestroy(g_pOsVoice[i], 0, 0);
             }
-
+            
             RWS_RETURNVOID();
          }
 
@@ -159,63 +159,63 @@ namespace RWS
          void AudioInit(void)
          {
             RWS_FUNCTION("RWS::RwsAudio::NULL::AudioInit")
-
+               
             RWS_PRE(g_RefCount == 0);
-
-            memset(g_VirtualVoices, 0, sizeof(g_VirtualVoices));
-            memset(g_pWaveDict, 0, sizeof(g_pWaveDict));
-            memset(g_pOsVoice, 0, sizeof(g_pOsVoice));
-
-
-#if defined(SKY) || defined(DOLPHIN)
+            
+            memset (g_VirtualVoices, 0, sizeof(g_VirtualVoices));
+            memset (g_pWaveDict, 0, sizeof(g_pWaveDict));
+            memset (g_pOsVoice, 0, sizeof(g_pOsVoice));
+            
+               
+#if defined (SKY) || defined (DOLPHIN)
             g_pOsOutput = RwaOsOutputCreate(rwaOBJFLAGS_FIXED | rwaOBJFLAGS_INTERFACES, 0, 0);
-            RWS_ASSERT(g_pOsOutput, "Can not create output device");
+            RWS_ASSERT(g_pOsOutput, "Can not create output device"); 
 #endif
-
+               
 #ifdef _WINDOWS
             RwaDXAudioOutputCreationParams creationParams;
-
+            
             RwaObjDefGetDefaultCreationParams(RwaObjDefFindByUUID(&rwaDXAUDIOOUTPUTID, 0), &creationParams);
-
-            creationParams.useSoftware = FALSE;
-            creationParams.fast3D = FALSE;
-            creationParams.enableReverb = TRUE;
-
+            
+            creationParams.useSoftware  = FALSE;
+            creationParams.fast3D       = FALSE;
+            creationParams.enableReverb = TRUE; 
+            
 #ifdef RWS_DESIGN
             // In design mode it is useful to have the game window open at the same time as RwStudio,  by
-            // setting the display flag to 0 you can edit sound properties and still hear the changes while
+            // setting the display flag to 0 you can edit sound properties and still hear the changes while 
             // the framework does not have the window focus.
             creationParams.display = 0;
 #else
             creationParams.display = Win::GetMainWindow();
 #endif
-
-            g_pOsOutput = RwaDXAudioOutputCreate(0, &creationParams,
-                                                 rwaOBJFLAGS_FIXED | rwaOBJFLAGS_INTERFACES, 0, 0);
-
-            RWS_ASSERT(g_pOsOutput, "Can not create output device");
-#endif
-
+               
+            g_pOsOutput = RwaDXAudioOutputCreate (0, &creationParams, 
+                                    rwaOBJFLAGS_FIXED | rwaOBJFLAGS_INTERFACES, 0, 0);
+            
+            RWS_ASSERT(g_pOsOutput, "Can not create output device"); 
+#endif 
+                   
 #ifdef _XBOX
             RwaXBoxOutputCreationParams creationParams;
-
+            
             RwaObjDefGetDefaultCreationParams(RwaObjDefFindByUUID(&rwaXBOXOUTPUTID, 0), &creationParams);
-
-            g_pOsOutput = RwaXBoxOutputCreate(0, &creationParams,
-                                              rwaOBJFLAGS_FIXED | rwaOBJFLAGS_INTERFACES, 0, 0);
-
-            RWS_ASSERT(g_pOsOutput, "Can not create output device");
+            
+            g_pOsOutput = RwaXBoxOutputCreate   (0, &creationParams, 
+                                 rwaOBJFLAGS_FIXED | rwaOBJFLAGS_INTERFACES, 0, 0);
+              
+            RWS_ASSERT(g_pOsOutput, "Can not create output device"); 
 #endif
-            // Create the listener.
+            // Create the listener. 
             g_pListener = RwaListenerCreate(rwaOBJFLAGS_FIXED, 0, 0);
-            RWS_ASSERT(g_pListener, "Can not create listener");
-
+            RWS_ASSERT(g_pListener, "Can not create listener"); 
+            
             // Attach the listener to the output object.
             RwaOsOutputSetListener(g_pOsOutput, g_pListener);
-
+            
             RWS_RETURNVOID();
          }
-
+         
          /*
          *
          * Close Audio Core. This will stop all the voices and then shut down the audio core.
@@ -226,18 +226,18 @@ namespace RWS
          void AudioClose(void)
          {
             RWS_FUNCTION("RWS::RwsAudio::NULL::AudioClose")
-
-            RWS_PRE(g_RefCount >= 1);
-
+               
+               RWS_PRE(g_RefCount >= 1);  
+            
             DestroyAllVoices();
 
             // Destroy the output object.
-            RwaOsOutputDestroy(g_pOsOutput, 0, 0);
+            RwaOsOutputDestroy(g_pOsOutput, 0, 0);            
             RwaListenerDestroy(g_pListener, 0, 0);
 
             g_pOsOutput = 0;
             g_pListener = 0;
-
+                       
             RWS_RETURNVOID();
          }
       } // namespace
@@ -272,7 +272,7 @@ namespace RWS
             Success = RwaCoreRegisterDefaultObjects();
             RWS_ASSERT(Success, "Audio Core Register Failed.");
 
-            // Register the os dependent objects.
+            // Register the os dependent objects. 
             Success = RwaOsObjectsRegisterUsingInterface();
             RWS_ASSERT(Success, "Audio Objects Register Failed.");
 
@@ -283,7 +283,8 @@ namespace RWS
             g_ObjectsRegistered = FALSE;
          }
 
-         RWS_RETURN(g_ObjectsRegistered);
+         RWS_RETURN (g_ObjectsRegistered);
+
       }
 
       /**
@@ -306,9 +307,9 @@ namespace RWS
                                          "already been registered.");
 
          RWS_ASSERT(!g_pOsOutput, "Output object not destroyed. You must call Close() first.");
-
-         Success = RwaCoreUnregisterDefaultObjects();
-         RWS_ASSERT(Success, "Audio Core UnRegister Failed.");
+         
+         Success = RwaCoreUnregisterDefaultObjects();   
+         RWS_ASSERT(Success, "Audio Core UnRegister Failed."); 
 
          Success = RwaOsObjectsUnregister();
          RWS_ASSERT(Success, "Audio Objects UnRegister Failed.");
@@ -319,7 +320,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+      
       /**
       *
       * \ingroup RwsAudio
@@ -333,18 +334,18 @@ namespace RWS
       void Open(void)
       {
          RWS_FUNCTION("RWS::RwsAudio::Open")
-
+       
          RWS_ASSERT(g_ObjectsRegistered, "Your audio objects are not registered. "
                                          "Call UnRegisterAudioObjects() first.");
 
          if (g_RefCount == 0)
          {
             AudioInit();
-            CreateAllVoices();
-         }
-
+            CreateAllVoices();           
+         } 
+  
          g_RefCount++;
-
+  
          RWS_RETURNVOID();
       }
 
@@ -361,19 +362,19 @@ namespace RWS
       void Close(void)
       {
          RWS_FUNCTION("RWS::RwsAudio::Close")
-
+            
          RWS_PRE(g_RefCount != 0);
-
+         
          if (g_RefCount == 1)
          {
             AudioClose();
          }
-
+         
          g_RefCount--;
-
+         
          RWS_RETURNVOID();
       }
-
+               
       /**
       *
       * \ingroup RwsAudio
@@ -385,20 +386,20 @@ namespace RWS
       *
       * \param pDict The dictionary to be unloaded.
       */
-      void RemoveDictionary(const RwaWaveDict *const pDict)
+      void RemoveDictionary(const RwaWaveDict* const pDict)
       {
          RWS_FUNCTION("RWS::RwsAudio::RemoveDictionary")
-
-         RWS_PRE(g_RefCount >= 1);
+            
+         RWS_PRE(g_RefCount >= 1);  
          RWS_PRE(pDict);
-
+         
          RwUInt32 i;
-
+         
          StopAllVirtualVoices();
          RwaCoreUpdate();
-
+         
          DestroyAllVoices();
-
+         
          for (i = 0; i < NUMGROUPS; i++)
          {
             if (g_pWaveDict[i] == pDict)
@@ -407,13 +408,13 @@ namespace RWS
                g_pWaveDict[i] = 0;
             }
          }
-
+         
          CreateAllVoices();
-
+         
 
          RWS_RETURNVOID();
       }
-
+             
       /**
       *
       * \ingroup RwsAudio
@@ -424,15 +425,15 @@ namespace RWS
       * \param pDict A pointer to a RenderWare Audio wave dictionary.
       *
       */
-      void AddDictionary(RwaWaveDict *const pDict)
+      void AddDictionary(RwaWaveDict* const pDict)
       {
-         RWS_FUNCTION("RWS::RwsAudio::AddDictionary")
-
-         RWS_PRE(g_RefCount >= 1);
+         RWS_FUNCTION ("RWS::RwsAudio::AddDictionary")
+            
+         RWS_PRE(g_RefCount >= 1);  
          RWS_PRE(pDict);
-
+         
          RwUInt32 i = 0;
-
+         
          while (i < NUMGROUPS)
          {
             if (g_pWaveDict[i] == 0)
@@ -440,16 +441,16 @@ namespace RWS
                g_pWaveDict[i] = pDict;
                RWS_RETURNVOID();
             }
-
+            
             i++;
          }
-
+         
          RWS_ASSERTFAIL("Unable to add dictionary, increase RWS::Audio::NUMGROUPS, currently set at "
-                        << NUMGROUPS);
-
+               << NUMGROUPS);
+         
          RWS_RETURNVOID();
       }
-
+      
       /**
       *
       * \ingroup RwsAudio
@@ -465,37 +466,37 @@ namespace RWS
       RwBool FadeEnvironment(const RwInt32 Destination, const RwUInt32 Step)
       {
          RWS_FUNCTION("RWS::RwsAudio::FadeEnvironment")
-
-         RWS_PRE(g_RefCount >= 1);
+            
+         RWS_PRE(g_RefCount >= 1);  
          RWS_PRE(Step > 0);
          RWS_PRE(Destination >= -1000);
-
+         
          // Fade Down.
-         if (Destination < g_Environment.room)
+         if (Destination < g_Environment.room) 
          {
             g_Environment.room = g_Environment.room - Step;
-
+            
             // If gain goes out of range, then clamp.
-            if (g_Environment.room < Destination)
+            if (g_Environment.room < Destination) 
             {
                g_Environment.room = Destination;
             }
          }
-
+         
          // Fade Up
-         if (Destination > g_Environment.room)
+         if (Destination > g_Environment.room) 
          {
             g_Environment.room = g_Environment.room + Step;
-
+            
             // If gain goes out of range, then clamp.
-            if (g_Environment.room >= Destination)
+            if (g_Environment.room >= Destination) 
             {
                g_Environment.room = Destination;
             }
          }
-
+         
          RwaOsOutputSetEnvironment(g_pOsOutput, &g_Environment);
-
+         
          RWS_RETURN((g_Environment.room == Destination));
       }
 
@@ -516,41 +517,41 @@ namespace RWS
       RwBool FadeOutputObject(const RwReal Destination, const RwReal Step)
       {
          RWS_FUNCTION("RWS::RwsAudio::FadeOutputObject")
-
-         RWS_PRE(g_RefCount >= 1);
+            
+         RWS_PRE(g_RefCount >= 1);  
          RWS_PRE(Step > 0);
          RWS_PRE(Destination >= 0);
-
+         
          RwReal CurrentGain;
-
+         
          CurrentGain = RwaOsOutputGetGain(g_pOsOutput);
-
+         
          // Fade Down
-         if (Destination < CurrentGain)
+         if (Destination < CurrentGain) 
          {
             CurrentGain = CurrentGain - Step;
-
+            
             // If gain goes out of range,  then clamp.
-            if (CurrentGain < Destination)
+            if (CurrentGain < Destination) 
             {
                CurrentGain = Destination;
             }
          }
-
+         
          // Fade Up
-         if (Destination > CurrentGain)
+         if (Destination > CurrentGain) 
          {
             CurrentGain = CurrentGain + Step;
-
+            
             // If gain goes out of range, then clamp.
-            if (CurrentGain >= Destination)
+            if (CurrentGain >= Destination) 
             {
                CurrentGain = Destination;
             }
          }
-
-         RwaOsOutputSetGain(g_pOsOutput, CurrentGain);
-
+         
+         RwaOsOutputSetGain (g_pOsOutput, CurrentGain);
+         
          RWS_RETURN((CurrentGain == Destination));
       }
 
@@ -565,35 +566,35 @@ namespace RWS
       * \return Return pointer to an RwaOsWave, or 0 if wave not found.
       *   
       */
-      RwaOsWave *FindWave(const RwChar *const pName)
+      RwaOsWave *FindWave(const RwChar* const pName)
       {
          RWS_FUNCTION("RWS::RwsAudio::FindWave")
-
+            
          RWS_PRE(g_RefCount >= 1);
-
+         
          RwaOsWave *pWave = 0;
-
+         
          RwUInt32 i = 0;
-
+         
          while (i < NUMGROUPS)
          {
             if (g_pWaveDict[i] != 0)
             {
-               pWave = reinterpret_cast<RwaOsWave *>(RwaWaveDictFindWaveByName(g_pWaveDict[i], pName));
-
-               if (pWave)
+               pWave = reinterpret_cast<RwaOsWave*>(RwaWaveDictFindWaveByName  (g_pWaveDict[i], pName));
+               
+               if (pWave) 
                {
                   break;
                }
             }
-
+            
             i++;
          }
-
+         
          // If wave is 0, then the sound could not be found in any of the groups.
-         RWS_ASSERT(pWave, "The sound <" << pName << "> was not found in the wave dictionary.");
-
-         RWS_RETURN(pWave);
+         RWS_ASSERT (pWave, "The sound <" << pName << "> was not found in the wave dictionary.");
+         
+         RWS_RETURN (pWave);
       }
 
       /**
@@ -608,28 +609,28 @@ namespace RWS
       * in any dictionary.
       *
       */
-      DictionaryId FindDictionaryId(const RwChar *const pName)
+      DictionaryId FindDictionaryId(const RwChar* const pName)
       {
          RWS_FUNCTION("RWS::RwsAudio::FindDictionaryId")
-
-         RWS_PRE(g_RefCount >= 1);
-
+            
+         RWS_PRE(g_RefCount >= 1);  
+         
          RwaOsWave *pWave;
-
+         
          for (RwUInt32 i = 0; i < NUMGROUPS; i++)
          {
             if (g_pWaveDict[i] != 0)
             {
-               pWave = reinterpret_cast<RwaOsWave *>(RwaWaveDictFindWaveByName(g_pWaveDict[i], pName));
-
+               pWave = reinterpret_cast<RwaOsWave*>(RwaWaveDictFindWaveByName  (g_pWaveDict[i], pName));
+               
                if (pWave)
                {
-                  RWS_RETURN(i);
+                  RWS_RETURN (i);
                }
             }
          }
-
-         RWS_RETURN(-1);
+         
+         RWS_RETURN (-1);
       }
 
       /**
@@ -644,12 +645,12 @@ namespace RWS
       *
       *
       */
-      DictionaryId FindDictionaryId(const RwaWaveDict *const pDict)
+      DictionaryId FindDictionaryId(const RwaWaveDict* const pDict)
       {
          RWS_FUNCTION("RWS::RwsAudio::FindDictionaryId")
-
-         RWS_PRE(g_RefCount >= 1);
-
+            
+         RWS_PRE(g_RefCount >= 1);  
+         
          for (RwUInt32 i = 0; i < NUMGROUPS; i++)
          {
             if (g_pWaveDict[i] == pDict)
@@ -657,8 +658,8 @@ namespace RWS
                RWS_RETURN(i);
             }
          }
-
-         RWS_RETURN(-1);
+         
+         RWS_RETURN (-1);
       }
 
       /**
@@ -673,11 +674,11 @@ namespace RWS
       RwaVirtualVoice *AllocateVirtualVoice(void)
       {
          RWS_FUNCTION("RWS::RwsAudio::AllocateVirtualVoice")
-
+            
          RWS_PRE(g_RefCount >= 1);
-
+         
          RwUInt32 i = 0;
-
+         
          while (i < MAXVVOICES)
          {
             if (g_VirtualVoices[i].VoiceAlloc == FALSE)
@@ -685,10 +686,10 @@ namespace RWS
                g_VirtualVoices[i].VoiceAlloc = TRUE;
                RWS_RETURN(g_VirtualVoices[i].pVirtualVoice);
             }
-
+            
             i++;
          }
-
+         
          RWS_RETURN(0);
       }
 
@@ -701,15 +702,15 @@ namespace RWS
       * \param pVirtualVoice Pointer to a virtual voice.
       *
       */
-      void FreeVirtualVoice(RwaVirtualVoice *const pVirtualVoice)
+      void FreeVirtualVoice(RwaVirtualVoice* const pVirtualVoice)
       {
          RWS_FUNCTION("RWS::RwsAudio::FreeVirtualVoice")
-
-         RWS_PRE(g_RefCount >= 1);
+            
+         RWS_PRE(g_RefCount >= 1);  
          RWS_PRE(pVirtualVoice);
-
+         
          RwUInt32 i = 0;
-
+         
          while (i < MAXVVOICES)
          {
             if (g_VirtualVoices[i].pVirtualVoice == pVirtualVoice)
@@ -717,14 +718,14 @@ namespace RWS
                // Make sure virtual voice has stopped playing.
                RwaVirtualVoiceSetTrigger(g_VirtualVoices[i].pVirtualVoice, FALSE);
                g_VirtualVoices[i].VoiceAlloc = FALSE;
-
+               
                // We have destroyed the voice, no need to continue searching.
                break;
             }
-
+            
             i++;
          }
-
+         
          RWS_RETURNVOID();
       }
 
@@ -738,14 +739,14 @@ namespace RWS
       void StopAllVirtualVoices(void)
       {
          RWS_FUNCTION("RWS::RwsAudio::StopAllVirtualVoices")
-
-         RWS_PRE(g_RefCount >= 1);
-
+            
+         RWS_PRE(g_RefCount >= 1);  
+         
          for (RwUInt32 i = 0; i < MAXVVOICES; i++)
          {
             RwaVirtualVoiceSetTrigger(g_VirtualVoices[i].pVirtualVoice, FALSE);
          }
-
+         
          RWS_RETURNVOID();
       }
 
@@ -762,43 +763,43 @@ namespace RWS
       * \return Return TRUE when the fade has finished. FALSE whilst fade is in progress.
       *
       */
-      RwBool FadeVirtualVoice(const RwReal Destination, const RwReal Step, const RwaVirtualVoice *const pVoice)
+      RwBool FadeVirtualVoice( const RwReal Destination, const RwReal Step, const RwaVirtualVoice* const pVoice)
       {
          RWS_FUNCTION("RWS::RwsAudio::FadeVirtualVoice")
-
+            
          RWS_PRE(g_RefCount >= 1);
          RWS_PRE(pVoice);
          RWS_PRE(Step > 0);
          RWS_PRE(Destination >= 0.0f);
-
-         RwReal CurrentGain = RwaVirtualVoiceGetGain(const_cast<RwaVirtualVoice *>(pVoice));
-
+         
+         RwReal CurrentGain = RwaVirtualVoiceGetGain (const_cast<RwaVirtualVoice*>(pVoice));
+         
          // Fade Down
-         if (Destination < CurrentGain)
+         if (Destination < CurrentGain ) 
          {
             CurrentGain = CurrentGain - Step;
-
+            
             // If gain goes out of range,  then clamp.
-            if (CurrentGain < Destination)
+            if (CurrentGain < Destination) 
             {
                CurrentGain = Destination;
             }
          }
-
-         // Fade Up
-         if (Destination > CurrentGain)
+         
+         // Fade Up 
+         if (Destination > CurrentGain ) 
          {
             CurrentGain = CurrentGain + Step;
-
+            
             // If gain goes out of range, then clamp
-            if (CurrentGain >= Destination)
+            if (CurrentGain >= Destination) 
             {
                CurrentGain = Destination;
             }
          }
-
-         RwaVirtualVoiceSetGain(const_cast<RwaVirtualVoice *>(pVoice), CurrentGain);
-
+         
+         RwaVirtualVoiceSetGain(const_cast<RwaVirtualVoice*>(pVoice),  CurrentGain);
+         
          RWS_RETURN((CurrentGain == Destination));
       }
 
@@ -816,12 +817,12 @@ namespace RWS
       RwaOsOutput *GetOutputObject(void)
       {
          RWS_FUNCTION("RWS::RwsAudio::GetOutputObject")
-
-         RWS_PRE(g_RefCount >= 1);
-
+            
+         RWS_PRE(g_RefCount >= 1);  
+         
          RWS_RETURN(g_pOsOutput);
       }
-
+   
       /**
       *
       * \ingroup RwsAudio
@@ -838,7 +839,7 @@ namespace RWS
          RWS_FUNCTION("RWS::RwsAudio::GetListener")
 
          RWS_PRE(g_RefCount >= 1);
-
+         
          RWS_RETURN(g_pListener);
       }
 
@@ -860,7 +861,7 @@ namespace RWS
          RWS_FUNCTION("RWS::RwsAudio::GetDictionary")
 
          RWS_PRE(g_RefCount >= 1);
-
+         
          RWS_RETURN(g_pWaveDict[Id]);
       }
 
@@ -878,8 +879,8 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::RwsAudio::GetEnvironment")
 
-         RWS_PRE(g_RefCount >= 1);
-
+         RWS_PRE(g_RefCount >= 1);  
+         
          RWS_RETURN(&g_Environment);
       }
    }

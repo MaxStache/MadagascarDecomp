@@ -42,7 +42,7 @@ namespace RWS
       *
       */
 
-      const RwUInt32 rwID_SEQUENCE = MAKECHUNKID(rwVENDORID_CRITERIONRM, 0x80);
+      const RwUInt32 rwID_SEQUENCE = MAKECHUNKID (rwVENDORID_CRITERIONRM, 0x80);
 
       /**
       *
@@ -62,8 +62,8 @@ namespace RWS
       {
       public:
 
-         CSeqCtrlData(RwStream *pStream, const RwChar *pName,
-                      RwChunkHeaderInfo *pChunckHeader = 0);
+         CSeqCtrlData(RwStream* pStream, const RwChar *pName,
+            RwChunkHeaderInfo *pChunckHeader = 0);
          ~CSeqCtrlData(void);
 
          const RwChar *Name(void);
@@ -88,7 +88,7 @@ namespace RWS
       class CSeqCtrlKeyData
       {
       public:
-
+         
          CSeqCtrlKeyData(RwUInt32 maxDataSize, RwUInt32 memType, RwUInt32 flags = 0);
          virtual ~CSeqCtrlKeyData(void);
 
@@ -125,16 +125,16 @@ namespace RWS
          virtual ~CSeqCtrlInterpolData(void);
 
          void Set(const RwChar *name, const void *pData, RwUInt32 dataSize,
-                  RwUInt32 lengthTime, RwUInt32 memType);
+            RwUInt32 lengthTime, RwUInt32 memType);
          RwUInt32 LengthTime(void);
 
 #ifdef RWS_DESIGN
 
          void Set(const RwChar *name, const void *pData, RwUInt32 dataSize,
-                  RwReal delta, RwUInt32 memType);
+            RwReal delta, RwUInt32 memType);
 #else
          void Set(const RwChar *name, const void *pData, RwUInt32 dataSize,
-                  RwReal delta, RwUInt32 memType) {}
+            RwReal delta, RwUInt32 memType) {}
 #endif
 
          // Inline functions.
@@ -147,9 +147,9 @@ namespace RWS
 
 #ifdef RWS_DESIGN
 
-         RwBool IsDynamic(void) { return (m_isDynamic); }
+         RwBool IsDynamic(void) { return(m_isDynamic); }
 #else
-         RwBool IsDynamic(void) { return (FALSE); }
+         RwBool IsDynamic(void) { return(FALSE); }
 #endif
 
          /**
@@ -160,9 +160,9 @@ namespace RWS
 
 #ifdef RWS_DESIGN
 
-         RwReal GetDelta(void) { return ((IsDynamic() ? m_dynamicDelta : 0.0f)); }
+         RwReal GetDelta(void) { return((IsDynamic() ? m_dynamicDelta : 0.0f)); }
 #else
-         RwReal GetDelta(void) { return (0.0f); }
+         RwReal GetDelta(void) { return(0.0f); }
 #endif
 
       protected:
@@ -178,7 +178,7 @@ namespace RWS
       private:
 
          void Set(const RwChar *name, const void *pData,
-                  RwUInt32 dataSize, RwUInt32 memType) {};     /**< To invalidate calls, FORCES
+            RwUInt32 dataSize, RwUInt32 memType) {};     /**< To invalidate calls, FORCES
                                                               call extra param version. */
       };
 
@@ -235,9 +235,9 @@ namespace RWS
          };
 
          CSeqCtrlDataIttr(RwUInt32 memType, RwUInt32 strBuffSize = 0, RwUInt32 guidBuffSize = 0,
-                          RwUInt32 flags = 0);
+            RwUInt32 flags = 0);
          CSeqCtrlDataIttr(const CSeqCtrlData &dataObj, RwUInt32 memType,
-                          RwUInt32 strBuffSize = 0, RwUInt32 guidBuffSize = 0, RwUInt32 flags = 0);
+            RwUInt32 strBuffSize = 0, RwUInt32 guidBuffSize = 0, RwUInt32 flags = 0);
          virtual ~CSeqCtrlDataIttr(void);
 
          void Use(const CSeqCtrlData &dataObj);
@@ -246,7 +246,7 @@ namespace RWS
 
          void PreAllocMem(RwUInt32 strBuffSize, RwUInt32 guidBuffSize);
          void FreeMem(void);
-
+         
          void DebugDispCurrent(void);
          void DebugDispStringTable(void);
          void DebugDispGuidTable(void);
@@ -277,13 +277,13 @@ namespace RWS
 
          RwReal GetDynamicInterpolDelta(void);
 #else
-         RwReal GetDynamicInterpolDelta(void) { return (0.0f); }
+         RwReal GetDynamicInterpolDelta(void) { return(0.0f); }
 #endif
 
          virtual void GetKeyframe(CSeqCtrlKeyData &rKeyData,              /**< Called inside CSeqItem. */
-                                  RwUInt32 memType);
+            RwUInt32 memType);
          virtual void GetInterpol(CSeqCtrlInterpolData &rInterpolData,    /**< Called inside CSeqItem. */
-                                  RwUInt32 memType);
+            RwUInt32 memType);
 
          // Inline functions.
 

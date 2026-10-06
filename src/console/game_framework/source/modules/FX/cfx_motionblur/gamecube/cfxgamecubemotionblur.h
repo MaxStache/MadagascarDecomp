@@ -24,7 +24,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined(DOLPHIN))
+#if (defined (DOLPHIN))
 
 #ifndef __CFXGAMECUBEMOTIONBLUR_H__
 #define __CFXGAMECUBEMOTIONBLUR_H__
@@ -38,8 +38,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 #include "../cfxmotionblurbase.h"
@@ -71,16 +71,16 @@ namespace RWS
          CFXGameCubeMotionBlur();
          ~CFXGameCubeMotionBlur();
 
-         void CreateBlendPoly(RwCamera *pCamera);
-         void BlendFrontBuffer(RwCamera *pCamera);
+         void  CreateBlendPoly(RwCamera *pCamera);
+         void  BlendFrontBuffer(RwCamera *pCamera);
 
       protected:
-         RwIm2DVertex m_Vertex[4];      /**< Pointer to the frame buffer raster. */
-         RwRaster *m_pFrameRaster;  /**< Defines the blend polygon. */
+         RwIm2DVertex   m_Vertex[4];      /**< Pointer to the frame buffer raster. */
+         RwRaster       *m_pFrameRaster;  /**< Defines the blend polygon. */         
       };
 
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

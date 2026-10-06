@@ -5,11 +5,11 @@
 
 namespace Script
 {
-   class OpContext : public OpContext
-   {
-   public:
-      bool load(char *pszTypeName, void **ppData);
-   };
+    class OpContext : public OpContext
+    {
+    public:
+        bool load(char *pszTypeName, void **ppData);
+    };
 }
 
 #endif

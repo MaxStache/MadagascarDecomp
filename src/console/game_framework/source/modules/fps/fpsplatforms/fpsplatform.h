@@ -82,15 +82,15 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSPlatform);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Standard Platform", "A Platform which can be raised and lowered, the extent of the movement is defined by the geometry of the platform.");
-
+         
          FPSPlatform(const CAttributePacket&);
-
-         RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Target name", "Trigger the platform", RECEIVE, 0, "ACTN_PLAYERTOUCH")
-         RWS_ATTRIBUTE(CMD_height, "Height", "How high it will rise, If height is zero, the size of the geometry is used.", SLIDER, RwReal, RANGE(0, 0, 999))
-         RWS_ATTRIBUTE(CMD_speed, "Speed", "Speed of it's movement, units per second", SLIDER, RwUInt32, RANGE(1, 100, 999))
-         RWS_END_COMMANDS;
-
+         
+         RWS_BEGIN_COMMANDS                
+            RWS_MESSAGE( CMD_targetname, "Target name", "Trigger the platform",  RECEIVE, 0, "ACTN_PLAYERTOUCH")
+            RWS_ATTRIBUTE( CMD_height,  "Height", "How high it will rise, If height is zero, the size of the geometry is used.", SLIDER, RwReal, RANGE(0, 0, 999))
+            RWS_ATTRIBUTE( CMD_speed,   "Speed", "Speed of it's movement, units per second", SLIDER, RwUInt32, RANGE(1, 100, 999))                
+            RWS_END_COMMANDS;
+         
          virtual void HandleAttributes(const CAttributePacket& attr);
       };
    }

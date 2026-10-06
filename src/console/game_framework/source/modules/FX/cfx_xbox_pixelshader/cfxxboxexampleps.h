@@ -22,7 +22,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined(_XBOX))
+#if (defined (_XBOX))
 
 #ifndef __CFXXBOXEXAMPLEPS_H__
 #define __CFXXBOXEXAMPLEPS_H__
@@ -36,8 +36,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -62,7 +62,8 @@ namespace RWS
       * The effect could be used on an enemy to signal they are about to die or have been hit.
       *
       */
-      class CFXXBoxExamplePS : public CFXXBoxPixelShader, public CSystemCommands, public CAttributeHandler, public CEventHandler
+      class CFXXBoxExamplePS: public CFXXBoxPixelShader, public CSystemCommands, public CAttributeHandler,
+                              public CEventHandler
       {
       public:
          RWS_MAKENEWCLASS(CFXXBoxExamplePS);
@@ -71,24 +72,25 @@ namespace RWS
          RWS_DESCRIPTION("Example Pixel Shader", "Example of how to use a pixel shader using RenderWare");
 
          RWS_BEGIN_COMMANDS
-         RWS_ATTRIBUTE(CMD_Set_m_Speed, "Speed", "Speed of fade", SLIDER, RwReal, RANGE(0, 0, 1.0))
+            RWS_ATTRIBUTE(CMD_Set_m_Speed, "Speed",  "Speed of fade",     SLIDER,  RwReal,RANGE(0, 0, 1.0))
          RWS_END_COMMANDS;
 
          CFXXBoxExamplePS(const CAttributePacket& rAttr);
          ~CFXXBoxExamplePS();
-         virtual void HandleEvents(CMsg& pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr);
+         virtual void         HandleEvents               (CMsg &pMsg);
+         virtual void         HandleAttributes           (const CAttributePacket& attr);
 
       protected:
-         RwReal m_Speed;
+         RwReal               m_Speed;
 
-         RpXboxPixelShader* m_PixelShader;
-         RwUInt8 m_RampDir;   // 0 up 1 down
-         RwReal m_Blend;
+         RpXboxPixelShader    *m_PixelShader;
+         RwUInt8              m_RampDir;   // 0 up 1 down
+         RwReal               m_Blend;
+
       };
 
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

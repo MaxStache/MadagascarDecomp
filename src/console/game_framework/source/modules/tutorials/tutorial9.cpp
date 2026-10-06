@@ -53,8 +53,7 @@ namespace RWS
       *  \param attr the standard attribute data.
       *
       */
-      CTutorial9::CTutorial9(const CAttributePacket& attr) :
-         InitCEventHandler(0)
+      CTutorial9::CTutorial9(const CAttributePacket& attr) : InitCEventHandler(0)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial9::CTutorial9");
 
@@ -67,7 +66,7 @@ namespace RWS
 #endif
 
          RWS_RETURNVOID();
-      }
+      }   
 
       /**
       *
@@ -88,18 +87,18 @@ namespace RWS
              // that any child frames are managed by other objects, so it is sufficient
              // for us to simply detach them and let them 'float off').
              //
-               RwFrameForAllChildren(pFrame, FrameHelper::RemoveChildFrame, 0);
+             RwFrameForAllChildren(pFrame, FrameHelper::RemoveChildFrame, 0);
 
              // If this frame is itself attached to another, detach it.
              //
-               if (RwFrameGetParent(pFrame)) RwFrameRemoveChild(pFrame);
+             if (RwFrameGetParent(pFrame)) RwFrameRemoveChild(pFrame);
 
-               RpAtomicSetFrame(m_pAtomic, 0);
-               FrameHelper::FrameDestroy(pFrame);
+             RpAtomicSetFrame(m_pAtomic, 0);
+             FrameHelper::FrameDestroy(pFrame);
             }
 
             // Remove atomic from world.
-            RpWorld* pWorld = RpAtomicGetWorld(m_pAtomic);
+            RpWorld* pWorld = RpAtomicGetWorld (m_pAtomic);
             if (pWorld) RpWorldRemoveAtomic(pWorld, m_pAtomic);
 
             // RenderWare destroy atomic.
@@ -108,7 +107,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       /**
       *
       *  Handle events, processes message events.
@@ -116,13 +115,13 @@ namespace RWS
       * \param pMsg standard message data.
       *
       */
-      void CTutorial9::HandleEvents(CMsg& pMsg)
+      void CTutorial9::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Tutorial::CTutorial9::HandleEvents");
 
          RWS_RETURNVOID();
       }
-
+  
       /**
       *
       *  Handle attributes, processes attribute changes.
@@ -137,7 +136,7 @@ namespace RWS
          CAttributeHandler::HandleAttributes(attr);
 
          // handle system commands,  e.g. if object moved from within RenderWare studio, then
-         // move them on console.
+         // move them on console.    
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CSystemCommands));
          while (!attrIt.IsFinished())
          {
@@ -153,27 +152,27 @@ namespace RWS
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  RpAtomicCollisionProperties::SetIsSolid(*m_pAtomic, flag ? true : false);
+                  RpAtomicCollisionProperties::SetIsSolid( *m_pAtomic, flag?true:false );
                }
                break;
             case CSystemCommands::CMD_SetInvisibleFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  AtomicHelper::SetIsVisible(*m_pAtomic, flag ? false : true);
+                  AtomicHelper::SetIsVisible( *m_pAtomic, flag?false:true);
                }
                break;
             case CSystemCommands::CMD_SetCollisionFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  AtomicHelper::SetCanCollide(*m_pAtomic, flag ? true : false);
+                  AtomicHelper::SetCanCollide( *m_pAtomic, flag?true:false);
                }
                break;
             }
-
+         
             ++attrIt;
-         }
+         } 
 
          RWS_RETURNVOID();
       }
@@ -191,18 +190,18 @@ namespace RWS
       * being provided by the behavior.
       *
       */
-      RwV3d* CTutorial9::GetWorldPos(void)
+      RwV3d *CTutorial9::GetWorldPos(void)
       {
          RWS_FUNCTION("RWS::CTutorial9::Get3dPos");
-
+         
          if (m_pAtomic)
          {
-            RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic);
-
+            RwFrame *pFrame = RpAtomicGetFrame(m_pAtomic);
+            
             if (pFrame)
             {
-               RwMatrix* pMatrix = RwFrameGetLTM(pFrame);
-
+               RwMatrix *pMatrix = RwFrameGetLTM(pFrame);
+               
                RWS_RETURN(RwMatrixGetPos(pMatrix));
             }
          }

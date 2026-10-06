@@ -349,9 +349,9 @@ namespace
 
       SetLastError(0);
       g_hMainWindow = CreateWindowExA(
-         dwExStyle, lpszClassName, lpszWindowName, dwStyle,
-         x, y, nWindowWidth, nWindowHeight,
-         NULL, NULL, hInstance, NULL);
+          dwExStyle, lpszClassName, lpszWindowName, dwStyle,
+          x, y, nWindowWidth, nWindowHeight,
+          NULL, NULL, hInstance, NULL);
 
       RWS_RETURN(g_hMainWindow);
    }
@@ -552,7 +552,7 @@ void SaveSystemSettings()
    SystemParametersInfoA(SPI_GETSTICKYKEYS, 8, &g_skStartupStickyKeys, 0);
    g_skGameStickyKeys.cbSize = g_skStartupStickyKeys.cbSize;
    g_skGameStickyKeys.dwFlags =
-      g_skStartupStickyKeys.dwFlags & ~(SKF_HOTKEYACTIVE | SKF_CONFIRMHOTKEY);
+       g_skStartupStickyKeys.dwFlags & ~(SKF_HOTKEYACTIVE | SKF_CONFIRMHOTKEY);
    SystemParametersInfoA(SPI_SETSTICKYKEYS, 8, &g_skGameStickyKeys, 0);
    if (!SystemParametersInfoA(SPI_GETSCREENSAVETIMEOUT, 0, &g_skStartupScreenSaveTimeout, 0))
    {

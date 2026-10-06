@@ -62,7 +62,7 @@ namespace RWS
          bOpenFlag = true;
 #endif
 
-         CEventHandler::RegisterMsg(iMsgPreRpClumpDestroy, iMsgPreRpClumpDestroyStr, "RwFrame*");
+         CEventHandler::RegisterMsg ( iMsgPreRpClumpDestroy, iMsgPreRpClumpDestroyStr,"RwFrame*");
 
          RWS_RETURNVOID();
       }
@@ -81,7 +81,7 @@ namespace RWS
          bOpenFlag = false;
 #endif
 
-         CEventHandler::UnRegisterMsg(iMsgPreRpClumpDestroy);
+         CEventHandler::UnRegisterMsg ( iMsgPreRpClumpDestroy ); 
 
          RWS_RETURNVOID();
       }
@@ -136,7 +136,7 @@ namespace RWS
          // Remove clump from world, if necessary
          RpWorld* pWorld = RpClumpGetWorld(pClump);
          if (pWorld) RpWorldRemoveClump(pWorld, pClump);
-
+   
          RwBool ret = RpClumpDestroy(pClump);
 
          RWS_RETURN(ret);
@@ -171,7 +171,7 @@ namespace RWS
       *  \param isVisible New state of visibility flag, true is visible.
       *
       */
-      void SetIsVisible(RpClump& clump, bool isVisible)
+      void SetIsVisible( RpClump& clump, bool isVisible )
       {
          RWS_FUNCTION("RWS::ClumpHelper::SetIsVisible");
 
@@ -245,7 +245,7 @@ namespace RWS
       *  \param clump Reference to a RenderWare Graphics RpClump object.
       *  \param pEventHandler Pointer to the CEventHandler associated with this clump.
       */
-      void SetEventHandler(RpClump& clump, CEventHandler* pEventHandler)
+      void SetEventHandler( RpClump& clump, CEventHandler* pEventHandler )
       {
          RWS_FUNCTION("RWS::ClumpHelper::SetEventHandler");
 
@@ -262,39 +262,39 @@ namespace RWS
       *
       *  \param pClump Pointer to a RenderWare Graphics RpClump object.
       */
-      void RenderAllVisibleAtomics(RpClump* pClump)
+      void RenderAllVisibleAtomics(RpClump * pClump)
       {
          RWS_FUNCTION("RWS::ClumpHelper::RenderAllVisibleAtomics");
-
-         RwLLLink *cur, *end;
-
+         
+         RwLLLink           *cur, *end;
+         
          RWS_PRE(pClump);
-
+         
          cur = rwLinkListGetFirstLLLink(&pClump->atomicList);
          end = rwLinkListGetTerminator(&pClump->atomicList);
-
+         
          while (cur != end)
          {
-            RpAtomic* apAtom = rwLLLinkGetData(cur, RpAtomic, inClumpLink);
-
+            RpAtomic           *apAtom = rwLLLinkGetData(cur, RpAtomic, inClumpLink);
+            
             if (rwObjectTestFlags(apAtom, rpATOMICRENDER))
             {
-               const RwSphere* atomicBoundingSphere;
-
+               const RwSphere     *atomicBoundingSphere;
+               
                atomicBoundingSphere = RpAtomicGetWorldBoundingSphere(apAtom);
-
+               
                RWS_PRE(atomicBoundingSphere);
-
-               if (RwCameraFrustumTestSphere((RwCamera*)RWSRCGLOBAL(curCamera),
-                                             atomicBoundingSphere) != rwSPHEREOUTSIDE)
+               
+               if (RwCameraFrustumTestSphere((RwCamera *) RWSRCGLOBAL(curCamera),
+                  atomicBoundingSphere) != rwSPHEREOUTSIDE)
                {
                   RpAtomicRender(apAtom);
                }
             }
-
+            
             cur = rwLLLinkGetNext(cur);
          }
-
+         
          RWS_RETURNVOID();
       }
 
@@ -328,25 +328,25 @@ namespace RWS
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  RpAtomicCollisionProperties::SetIsSolid(rClump, flag ? true : false);
+                  RpAtomicCollisionProperties::SetIsSolid(rClump, flag?true:false );
                }
                break;
             case CSystemCommands::CMD_SetInvisibleFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  SetIsVisible(rClump, flag ? false : true);
+                  SetIsVisible( rClump, flag?false:true);
                }
                break;
             case CSystemCommands::CMD_SetCollisionFlag:
                {
                   RwUInt32 flag;
                   attrIt->GetCommandData(flag);
-                  SetCanCollide(rClump, flag ? true : false);
+                  SetCanCollide( rClump, flag?true:false);
                }
                break;
             }
-
+         
             ++attrIt;
          }
          RWS_RETURNVOID();

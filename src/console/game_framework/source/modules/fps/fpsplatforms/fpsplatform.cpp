@@ -48,31 +48,30 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSPlatform);
       RWS_REGISTERCLASS(FPSPlatform);
-
+      
       /**
       *
       * \ref FPSPlatform(). Create FPSPlatform object. Set up trigger states for start and stop states for platform.
       *
       * \ref ~FPSPlatform
       */
-      FPSPlatform::FPSPlatform(const CAttributePacket& attr) :
-         FPSToggle(attr, 0, 8, 0, 100) // angle,lip,height,speed
+      FPSPlatform::FPSPlatform(const CAttributePacket& attr) : FPSToggle(attr, 0, 8, 0, 100) // angle,lip,height,speed
       {
          RWS_FUNCTION("RWS::FPS::FPSPlatform::FPSPlatform");
-
+         
          // Initial state is State_off, setup trigger when ACTN_PLAYERTOUCH is received
          Set_m_msg_rx_off_to_on("ACTN_PLAYERTOUCH");                 // Receive Message off to on
          m_num_msg_rx_off_to_on = 1;                                 // Number of messages off to on required to trigger
-
-         // Time out using the default 3 seconds, setup trigger when 3*60
+         
+         // Time out using the default 3 seconds, setup trigger when 3*60 
          // ticks are received.
          Set_m_msg_rx_on_to_off(iMsgRunningTick);
          m_num_msg_rx_on_to_off = (3 * RWS::MainLoop::Logic::Rate);    // Number of messages on to off required to trigger
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /*
       *
       * \ref HandleAttributes(). Handle attributes for FPSPlatform.
@@ -83,29 +82,29 @@ namespace RWS
       void FPSPlatform::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSPlatform::HandleAttributes");
-
+         
          // Initialize base class first
          FPSToggle::HandleAttributes(attr);
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSPlatform));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
             case CMD_targetname:
                {
-                  const RwChar* name;
-
+                  const RwChar *name;
+                  
                   attrIt->GetCommandData(&name);
                   Set_m_msg_rx_off_to_on(name);
                }
                break;
-
+               
             case CMD_height:
                Set_m_height(*attrIt);
                break;
-
+               
             case CMD_speed:
                Set_m_speed(*attrIt);
                GenerateHeightTransform();
@@ -113,11 +112,11 @@ namespace RWS
             }
             ++attrIt;
          }
-
-
-         // FPSPlatform position is dependent on the size of the geometry, i.e. it is
+         
+         
+         // FPSPlatform position is dependent on the size of the geometry, i.e. it is 
          // not positioned at the position in the editor, the editor shows its final position
-         // the console shows its start position. Therefore need to modify the position by
+         // the console shows its start position. Therefore need to modify the position by 
          // detecting a CAtomicPtr::CMD_LoadMatrix and modifying it.
          attrIt = CAttributeCommandIterator(attr, RWS_CLASSID_OF(CSystemCommands));
          while (!attrIt.IsFinished())
@@ -127,15 +126,15 @@ namespace RWS
             case CSystemCommands::CMD_LoadMatrix:
                {
                   RwV3d translation;
-
+                  
                   if (GenerateHeightTransform(&translation))
                   {
                      RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
                      if (pFrame)
                      {
                         // Position atomic at start point, position in editor is end point
-                        translation.y = -translation.y;
-
+                        translation.y = - translation.y;
+                        
                         RwFrameTranslate(pFrame, &translation, rwCOMBINEPOSTCONCAT);
                      }
                   }
@@ -144,7 +143,7 @@ namespace RWS
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
    }// namespace FPS

@@ -49,10 +49,9 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial9 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CTutorial9 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
 #ifdef RWS_EVENTVISUALIZATION
-         ,
-                         public CEventVisualization
+      , public CEventVisualization
 #endif
       {
       public:
@@ -61,18 +60,18 @@ namespace RWS
          RWS_CATEGORY("Tutorial");
          RWS_DESCRIPTION("Tutorial9", "Tutorial 9");
 
-         CTutorial9(const CAttributePacket &attr);
+         CTutorial9(const CAttributePacket& attr);
          ~CTutorial9(void);
 
          virtual void HandleEvents(CMsg &pMsg);
-         virtual void HandleAttributes(const CAttributePacket &attr);
+         virtual void HandleAttributes(const CAttributePacket& attr);
 
 #ifdef RWS_EVENTVISUALIZATION
          virtual RwV3d *GetWorldPos(void);
 #endif
 
       protected:
-         RpAtomic *m_pAtomic; /**< Behaviors atomic. */
+         RpAtomic  *m_pAtomic; /**< Behaviors atomic. */
       };
    }//namespace Tutorial
 }//namespace RWS

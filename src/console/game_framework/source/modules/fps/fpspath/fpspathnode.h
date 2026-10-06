@@ -70,43 +70,43 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSPathNode);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Path Node", "A path node");
-
+         
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Target name", "Name used to identify this path corner", RECEIVE, CEventHandler *, 0)
-         RWS_MESSAGE(CMD_target, "Target", "Name used to identify the next path corner", TRANSMIT, CEventHandler *, 0)
-         RWS_ATTRIBUTE(CMD_wait, "Wait", "Delay when reaching the pathcorner seconds", SLIDER, RwReal, RANGE(0, 0, 60))
-         RWS_END_COMMANDS;
-
+            RWS_MESSAGE(   CMD_targetname,    "Target name", "Name used to identify this path corner"    ,   RECEIVE ,    CEventHandler*, 0)
+            RWS_MESSAGE(   CMD_target    ,    "Target"    , "Name used to identify the next path corner",   TRANSMIT,    CEventHandler*, 0)                
+            RWS_ATTRIBUTE( CMD_wait      ,    "Wait"      , "Delay when reaching the pathcorner seconds",   SLIDER  ,    RwReal        , RANGE(0, 0, 60))                
+            RWS_END_COMMANDS;
+         
          virtual void HandleEvents(CMsg &pMsg);
-         virtual void HandleAttributes(const CAttributePacket &attr);
-
-         FPSPathNode(const CAttributePacket &);
-
+         virtual void HandleAttributes(const CAttributePacket& attr);
+         
+         FPSPathNode(const CAttributePacket&);
+         
          ~FPSPathNode(void);
-
-         RwUInt32 Get_m_wait(void)
+         
+         RwUInt32 Get_m_wait(void) 
          {
             return m_wait;
          }
-
+         
          RwFrame *Get_RwFrame(void)
          {
             return RpAtomicGetFrame(m_pAtomic.ptr());
          }
-
+         
          CEventId &Get_m_target(void)
          {
             return m_target;
          }
-
+         
       protected:
-
-         RwUInt32 m_wait;                /**< How long the monster/train will delay when reaching the pathcorner. If set to -1 it stops. */
+         
+         RwUInt32 m_wait;                /**< How long the monster/train will delay when reaching the pathcorner. If set to -1 it stops. */            
          CEventId m_targetname;          /**< The parameter that other pathcorners,trains or monsters use to refer to the pathcorner. */
          CEventId m_target;              /**< The triggername of the next FPSPathNode in the chain.  */
-
+         
          static CEventId m_pathcorner;
-
+         
          CAtomicPtr m_pAtomic;
       };
    }

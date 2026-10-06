@@ -58,7 +58,7 @@ namespace RWS
       */
 
       CSeqProcessor::CSeqProcessor(RwUInt32 memType, RwUInt32 delBuffSize,
-                                   RwUInt32 flags) :
+            RwUInt32 flags) :
          m_isLooping(FALSE),
          m_isRunning(FALSE),
          m_isWaiting(FALSE),
@@ -119,7 +119,7 @@ namespace RWS
       */
 
       void CSeqProcessor::Init(const CSeqCtrlData &dataToUse, RwUInt32 strBuffSize,
-                               RwUInt32 guidBuffSize)
+         RwUInt32 guidBuffSize)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqProcessor::Init");
 
@@ -130,7 +130,7 @@ namespace RWS
          // Allocate new iterator & setup data for it to use.
 
          m_pSeqIttr = RWS_NEW_TYPE(m_memType) CSeqCtrlDataIttr(dataToUse,
-                                                               m_memType, strBuffSize, guidBuffSize, m_flags);
+            m_memType, strBuffSize, guidBuffSize, m_flags);
          RWS_ASSERT(m_pSeqIttr, "Failed to allocate new sequence iterator.");
 
          // Allocate the sequence stack...
@@ -442,7 +442,7 @@ namespace RWS
                   else
                   {
                      RWS_RETURN(SS_ENDED);
-                  }
+                  }               
                }
                else
                {
@@ -555,7 +555,7 @@ namespace RWS
                      // take off any slack time (overshoot) due to not processing fast enough...
 
                      pSeqNode = m_pSeqStack->AddItem(m_curEntityGuid, m_curClassName, m_curCommandID,
-                                                     m_pSeqIttr->GetKeyframeTypeName(), m_localNowTime - waitOverShoot);
+                        m_pSeqIttr->GetKeyframeTypeName(), m_localNowTime - waitOverShoot);
                   }
 
                   // Again, need to add key at correct time (in case it's an interpolation) so
@@ -586,8 +586,8 @@ namespace RWS
 
                   pSeqItem = m_pSeqStack->FindItem(m_curEntityGuid, m_curClassName, m_curCommandID);
                   RWS_ASSERT(pSeqItem, "attempting interpolation before setting start keyframe. "
-                                       "There MUST be a keyframe instruction before and after an interpolator "
-                                       "instruction.");
+                     "There MUST be a keyframe instruction before and after an interpolator "
+                     "instruction.");
 
                   // Add this interpolator data...
 
@@ -620,7 +620,7 @@ namespace RWS
                   m_isWaitingForEvent = TRUE;
                }
                break;
-
+               
             case CSeqCtrlDataIttr::IT_CREATE:
                {
                   const CAttributePacket *pAttrPack;
@@ -645,8 +645,8 @@ namespace RWS
                   {
                      count--;
                      RWS_ASSERT(m_pEntityDelGuidOffsetList[count] !=
-                                   m_pSeqIttr->GetDeleteGuidOffset(),
-                                "Deleting the same entity twice will cause at least an assert.");
+                        m_pSeqIttr->GetDeleteGuidOffset(),
+                        "Deleting the same entity twice will cause at least an assert.");
                   }
 #endif
                   // Since, the GUID is from the GUID table, the pointer to it can be
@@ -792,7 +792,7 @@ namespace RWS
          m_pEntityDelGuidOffsetList = 0;
          m_curNumEntityDels = 0;
          m_maxNumEntityDels = 0;
-
+         
          RWS_RETURNVOID();
       }
 
@@ -900,7 +900,7 @@ namespace RWS
             //       lost.
 
             m_timeSpace.UpdateUsingGlobalNow();
-            m_timeSpace.SetRunning(TRUE);
+            m_timeSpace.SetRunning(TRUE);            
          }
 
          RWS_RETURNVOID();
@@ -936,8 +936,8 @@ namespace RWS
                if ((m_flags & SEQ_FLAG_BUFFER_WARNINGS) != 0)
                {
                   RWS_DEBUGSTREAM_WARN("Resizing entity deletion buffer in sequence processor. "
-                                       "This is slow (due to data copying) and may cause memory fragmentation."
-                                       << std::endl);
+                     "This is slow (due to data copying) and may cause memory fragmentation." <<
+                     std::endl);
                }
 
                // Copy across old data and delete old list.

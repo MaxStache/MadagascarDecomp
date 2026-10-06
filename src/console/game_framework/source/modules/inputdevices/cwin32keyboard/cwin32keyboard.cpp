@@ -55,7 +55,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CWin32Keyboard);
       RWS_REGISTERCLASS(CWin32Keyboard);
-
+   
       const unsigned int _string2vkcode_tble_[] = {
          {VK_LBUTTON}, //01Leftmousebutton
          {VK_RBUTTON}, //02Rightmousebutton
@@ -177,15 +177,15 @@ namespace RWS
          {VK_PA1}, //FDPA1key
          {VK_OEM_CLEAR} //FEClearkey
       };
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CWin32Keyboard | Default Initialization for CWin32Keyboard class
       //
       //
       //
       //
-      CWin32Keyboard::CWin32Keyboard(const CAttributePacket&) :
+      CWin32Keyboard::CWin32Keyboard(const CAttributePacket&): 
          InitCEventHandler(0),
          m_input_val(0.0f),
          vKey1(0),
@@ -193,33 +193,33 @@ namespace RWS
       {
 
          RWS_FUNCTION("RWS::InputDevices::CWin32Keyboard::CWin32Keyboard");
-
+            
          LinkMsg(iMsgRunningTick, 0);   // Check Key state when game is running
          LinkMsg(iMsgPausedTick, 0); // Check Key state when game is paused
 
          RWS_RETURNVOID();
       }
-
+   
       CWin32Keyboard::~CWin32Keyboard(void)
       {
          RWS_FUNCTION("RWS::InputDevices::CWin32Keyboard::~CWin32Keyboard");
 
          UnLinkMsg(iMsgRunningTick);
          UnLinkMsg(iMsgPausedTick);
-
+      
          UnLinkMsg(m_InqKey_Msg_Id);
          UnRegisterMsg(m_InqKey_Msg_Id);
 
          RWS_RETURNVOID();
       }
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | HandleEvents | Process events
       //
       //
       //
       //
-      void CWin32Keyboard::HandleEvents(CMsg& pMsg)
+      void CWin32Keyboard::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::InputDevices::CWin32Keyboard::HandleEvents");
 
@@ -228,56 +228,55 @@ namespace RWS
          if (pMsg.Id == m_InqKey_Msg_Id)
          {
             *(RwReal*)(&pMsg.pData) = m_input_val;
-
+         
             RWS_RETURNVOID();
          }
-
+      
          if (pMsg.Id == iMsgRunningTick)
          {
             bool hasFocus = (Win::GetMainWindow() == GetFocus());
             RwReal last_input_val = m_input_val;
-
-            if (vKey1 != vKey2)   // Key Pair 1..0..-1 Emulates a Joystick
+         
+            if ( vKey1 != vKey2 )   // Key Pair 1..0..-1 Emulates a Joystick
             {
                if (hasFocus)
-               {
-                  SHORT keystate1 = GetAsyncKeyState(vKey1);
+               {               
+                   SHORT keystate1 = GetAsyncKeyState(vKey1);
 
-                  if ((keystate1 & 0x00008000) != 0) m_input_val = 1.0f;
-                  else m_input_val = 0.0f;
-
-                  SHORT keystate2 = GetAsyncKeyState(vKey2);
-
-                  if ((keystate2 & 0x00008000) != 0) m_input_val -= 1.0f;
-                  else
-                     ;
+                   if ( (keystate1&0x00008000) != 0) m_input_val = 1.0f;
+                   else                              m_input_val = 0.0f;
+            
+                   SHORT keystate2 = GetAsyncKeyState(vKey2);
+            
+                   if ( (keystate2&0x00008000) != 0) m_input_val -= 1.0f;
+                   else                              ;
                }
                else
                {
-                  m_input_val = 0.0f;
+                   m_input_val = 0.0f;
                }
             }
             else  // 1..-1 Emulates a single button
             {
                if (hasFocus)
-               {
-                  SHORT keystate1 = GetAsyncKeyState(vKey1);
+               {               
+                   SHORT keystate1 = GetAsyncKeyState(vKey1);
 
-                  if ((keystate1 & 0x00008000) != 0) m_input_val = 1.0f;
-                  else m_input_val = -1.0f;
+                   if ( (keystate1&0x00008000) != 0) m_input_val = 1.0f;
+                   else                              m_input_val = -1.0f;
                }
                else
                {
-                  m_input_val = -1.0f;
+                   m_input_val = -1.0f;
                }
             }
             RWS_RETURNVOID();
          }
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | HandleAttributes | Load Parameters from RenderWare Studio
       //
       //
@@ -290,7 +289,7 @@ namespace RWS
          CAttributeHandler::HandleAttributes(attr);
 
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CWin32Keyboard));
-
+      
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -300,7 +299,7 @@ namespace RWS
                //////////////////////////////////////////////////////////////////
                vKey1 = _string2vkcode_tble_[attrIt->GetAs_unsigned_int()];
                break;
-
+            
                //////////////////////////////////////////////////////////////////
             case CMD_vKey2:
                //////////////////////////////////////////////////////////////////

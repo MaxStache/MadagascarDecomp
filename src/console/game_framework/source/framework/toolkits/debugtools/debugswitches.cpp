@@ -70,7 +70,7 @@ namespace RWS
       bool GetSwitch(enum_flags var)
       {
          RWS_FUNCTION("RWS::DebugSwitches::GetSwitch");
-
+         
          RWS_RETURN(_flags[var]);
       }
 

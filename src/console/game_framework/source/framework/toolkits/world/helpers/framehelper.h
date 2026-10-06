@@ -43,7 +43,7 @@ namespace RWS
    */
    namespace FrameHelper
    {
-      RwBool FrameDestroy(RwFrame* pFrame);
+      RwBool FrameDestroy(RwFrame *pFrame);
       RwFrame* RemoveChildFrame(RwFrame* pFrame, void*);
    }
 }

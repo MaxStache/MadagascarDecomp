@@ -50,21 +50,21 @@ namespace RWS
       *  \see ~FPSPickup
       *
       */
-      FPSPickup::FPSPickup(const CAttributePacket &attr) :
-         InitCEventHandler(&m_pAtomic)
+      FPSPickup::FPSPickup (const CAttributePacket& attr)
+         :  InitCEventHandler(&m_pAtomic)
       {
          RWS_FUNCTION("RWS::FPS::FPSPickup::FPSPickup");
-
+         
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-
+         
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-
+         
          RegisterMsg(m_msg_rx, "ACTN_PLAYERTOUCH", "CEventHandler*");
          LinkMsg(m_msg_rx, "CEventHandler*");
 
          RWS_RETURNVOID();
       }
-
+      
 
       /**
       *
@@ -73,18 +73,18 @@ namespace RWS
       *  \see FPSPickup
       *
       */
-      FPSPickup::~FPSPickup()
+      FPSPickup::~FPSPickup () 
       {
          RWS_FUNCTION("RWS::FPS::FPSPickup::~FPSPickup");
-
+         
          UnLinkMsg(m_msg_rx);
-
+         
          UnRegisterMsg(m_msg_rx);
          UnRegisterMsg(m_msg_response_tx);
-
+         
          RWS_RETURNVOID();
       }
-
+      
 
       /**
       *
@@ -97,12 +97,12 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FPS::FPSPickup::Set_m_msg_response_tx");
          RWS_PRE(pEventName);
-
+         
          ReplaceRegisteredMsg(m_msg_response_tx, pEventName, "CEventHandler*");
-
+         
          RWS_RETURNVOID();
       }
-
+      
 
       /**
       *
@@ -120,14 +120,14 @@ namespace RWS
          {
             // Send Response Message
             //
-            CMsg Msg(m_msg_response_tx, static_cast<CEventHandler *>(this));
-
-            SendMsgToEventHandler(Msg, static_cast<CEventHandler *>(pMsg.pData));
+            CMsg Msg(m_msg_response_tx, static_cast<CEventHandler*>(this) );
+            
+            SendMsgToEventHandler (Msg, static_cast<CEventHandler*>(pMsg.pData));
          }
 
          RWS_RETURNVOID();
       }
-
+      
 
       /**
       *
@@ -138,11 +138,11 @@ namespace RWS
       */
       void FPSPickup::HandleAttributes(const CAttributePacket &rAttr)
       {
-         RWS_FUNCTION("RWS::FPS::FPSPickup::HandleAttributes");
+        RWS_FUNCTION("RWS::FPS::FPSPickup::HandleAttributes");
 
-         m_pAtomic.HandleSystemCommands(rAttr);
+        m_pAtomic.HandleSystemCommands(rAttr);
 
-         RWS_RETURNVOID();
+        RWS_RETURNVOID();
       }
    }
 }

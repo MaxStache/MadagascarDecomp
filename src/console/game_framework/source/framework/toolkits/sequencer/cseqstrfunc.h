@@ -48,7 +48,7 @@ namespace RWS
          static CSeqProcessor *sm_pProcessor;
 
          static void HandleDynamicSeq(RwChunkHeaderInfo &rChunkHeader,
-                                      RwStream *pStream);
+            RwStream *pStream);
 
          CSeqStrFunc(void) {}          /**< Stop direct construction. */
          ~CSeqStrFunc(void) {}         /**< Stop direct destruction. */

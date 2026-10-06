@@ -29,8 +29,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 namespace RWS
@@ -44,6 +44,6 @@ namespace RWS
    */
    namespace WorldHelper
    {
-      void MoveAllObjects(RpWorld *_src_RpWorld, RpWorld *_dst_RpWorld);
+      void MoveAllObjects (RpWorld *_src_RpWorld, RpWorld *_dst_RpWorld);
    }
 }//namespace

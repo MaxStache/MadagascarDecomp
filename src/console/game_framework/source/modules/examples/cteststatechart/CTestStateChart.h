@@ -51,10 +51,10 @@ namespace RWS
       *
       */
       class CTestStateChart : public CSystemCommands,
-                              public CAttributeHandler,
-                              public CEventHandler,
-                              public LinearAllocationPolicy,
-                              public CStateChartHandler
+          public CAttributeHandler ,
+          public CEventHandler,
+          public LinearAllocationPolicy,
+          public CStateChartHandler
       {
       public:
          RWS_MAKENEWCLASS(CTestStateChart);
@@ -65,11 +65,11 @@ namespace RWS
          CTestStateChart(const CAttributePacket& attr);
          ~CTestStateChart(void);
 
-         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
       protected:
-         RwMatrix* m_mat;        /**< Matrix used for rotating object. */
+         RwMatrix *m_mat;        /**< Matrix used for rotating object. */
          CAtomicPtr m_pAtomic;   /**< Behavior's Atomic. */
       };
 

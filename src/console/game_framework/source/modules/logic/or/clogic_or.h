@@ -43,31 +43,31 @@ namespace RWS
       *  \see CAttributeHandler, CEventHandler
       *
       */
-      class CLogic_OR : public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CLogic_OR : public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
       {
-      public:
-         RWS_MAKENEWCLASS(CLogic_OR);
-         RWS_DECLARE_CLASSID(CLogic_OR);
-         RWS_CATEGORY("Logic");
-         RWS_DESCRIPTION("OR", "Output Event is triggered if event A or B is received.");
+         public:
+            RWS_MAKENEWCLASS(CLogic_OR);
+            RWS_DECLARE_CLASSID(CLogic_OR);
+            RWS_CATEGORY("Logic");
+            RWS_DESCRIPTION("OR", "Output Event is triggered if event A or B is received.");
+         
+            RWS_BEGIN_COMMANDS
+               RWS_MESSAGE  (CMD_InputA, "Input Event A", "When Input Event A or B are received send Output Event", RECEIVE , 0 , 0)
+               RWS_MESSAGE  (CMD_InputB, "Input Event B", "When Input Event A or B are received send Output Event", RECEIVE , 0 , 0)
+               RWS_MESSAGE  (CMD_Output, "Output Event", "When Input Event A or B are received send Output Event", TRANSMIT , 0 , 0)
+            RWS_END_COMMANDS;
+            
+            CLogic_OR(const CAttributePacket& attr);
+            ~CLogic_OR(void);
+         
+            virtual void HandleEvents(CMsg &pMsg);
+            virtual void HandleAttributes(const CAttributePacket& attr);
 
-         RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_InputA, "Input Event A", "When Input Event A or B are received send Output Event", RECEIVE, 0, 0)
-         RWS_MESSAGE(CMD_InputB, "Input Event B", "When Input Event A or B are received send Output Event", RECEIVE, 0, 0)
-         RWS_MESSAGE(CMD_Output, "Output Event", "When Input Event A or B are received send Output Event", TRANSMIT, 0, 0)
-         RWS_END_COMMANDS;
+         protected:
 
-         CLogic_OR(const CAttributePacket& attr);
-         ~CLogic_OR(void);
-
-         virtual void HandleEvents(CMsg& pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr);
-
-      protected:
-
-         CEventId m_InputA;
-         CEventId m_InputB;
-         CEventId m_Output;
+            CEventId m_InputA;
+            CEventId m_InputB;
+            CEventId m_Output;
       };
    }//namespace Logic
 }//namespace RWS

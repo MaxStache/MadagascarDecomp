@@ -51,10 +51,10 @@
 
 namespace RWS
 {
-
-   namespace FX
+                                                  
+   namespace FX 
    {
-
+                            
       RWS_IMPLEMENT_CLASSID(CFXCameraSpaceBloom);
       RWS_REGISTERCLASS(CFXCameraSpaceBloom);
 
@@ -63,11 +63,10 @@ namespace RWS
       *  Construct a CFXCameraSpaceBloom object.
       *
       */
-      CFXCameraSpaceBloom::CFXCameraSpaceBloom(const CAttributePacket &rAttr) :
-         InitCEventHandler(0)
+      CFXCameraSpaceBloom::CFXCameraSpaceBloom(const CAttributePacket& rAttr) : InitCEventHandler(0)
       {
          RWS_FUNCTION("RWS::FX::CFXCameraSpaceBloom::CFXCameraSpaceBloom");
-
+                    
 
          RWS_RETURNVOID();
       }
@@ -101,7 +100,7 @@ namespace RWS
 
          if (pMsg.Id == m_StartRender)
          {
-            ProcessCamera(reinterpret_cast<RwCamera *>(pMsg.pData));
+            ProcessCamera(reinterpret_cast<RwCamera*>(pMsg.pData));
          }
 
          RWS_RETURNVOID();
@@ -112,90 +111,92 @@ namespace RWS
       *  Update attributes.
       *
       */
-      void CFXCameraSpaceBloom::HandleAttributes(const CAttributePacket &attr)
+      void CFXCameraSpaceBloom::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FX::CFXCameraSpaceBloom::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(attr);
-
+         
          // deal with the attributes related to the environment map behaviour
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXCameraSpaceBloom));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
-            case CMD_Start_Render:
+               case CMD_Start_Render:
 
                   // If already linked, unlink and unregister as we are about to register with
                   // a new event.
-               UnLinkMsg(m_StartRender);
-               UnRegisterMsg(m_StartRender);
+                  UnLinkMsg(m_StartRender);
+                  UnRegisterMsg(m_StartRender);
                   // register the new event
-               RegisterMsg(m_StartRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-               LinkMsg(m_StartRender, "RwCamera*");
-               break;
-            case CMD_Priority:
+                  RegisterMsg(m_StartRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  LinkMsg(m_StartRender, "RwCamera*");
+                  break;
+               case CMD_Priority:
                   //////////////////////////////////////////////////////////////////
-               m_link_priority = attrIt->GetAs_RwUInt32();
+                  m_link_priority = attrIt->GetAs_RwUInt32();
 
                   // If already linked, unlink as were about to relink at a different priority
                   //
-               UnLinkMsg(m_StartRender);
-               LinkMsg(m_StartRender, "RwCamera*", m_link_priority);
-               break;
-            case CMD_Set_Brightness:
+                  UnLinkMsg(m_StartRender);
+                  LinkMsg(m_StartRender, "RwCamera*",m_link_priority);
+                  break;
+               case CMD_Set_Brightness:
                {
                   m_Brightness = attrIt->GetAs_RwReal();
                   break;
                }
 
 
-            case CMD_Set_StartColor:
+               case CMD_Set_StartColor:
                {
                   RwUInt32 Color;
-
+                     
                   // Get color data from attribute form
                   attrIt->GetCommandData(Color);
 
                   // normalize RGBA elements and convert to RwReal
-                  m_StartColor.red = (RwReal)((Color & 0x00ff0000) >> 16) / 255.0f;
-                  m_StartColor.green = (RwReal)((Color & 0x0000ff00) >> 8) / 255.0f;
-                  m_StartColor.blue = (RwReal)((Color & 0x000000ff)) / 255.0f;
-                  m_StartColor.alpha = (RwReal)((Color & 0xff000000) >> 24) / 255.0f;
-
+                  m_StartColor.red   = (RwReal) ((Color&0x00ff0000)>>16) / 255.0f;
+                  m_StartColor.green = (RwReal) ((Color&0x0000ff00)>>8)  / 255.0f;
+                  m_StartColor.blue  = (RwReal) ((Color&0x000000ff))     / 255.0f;
+                  m_StartColor.alpha = (RwReal) ((Color&0xff000000)>>24) / 255.0f;
+                  
                   break;
                }
 
-            case CMD_Set_EndColor:
+               case CMD_Set_EndColor:
                {
                   RwUInt32 Color;
-
+                     
                   // Get color data from attribute form
                   attrIt->GetCommandData(Color);
-
+                                    
                   // normalize RGBA elements and convert to RwReal
-                  m_EndColor.red = (RwReal)((Color & 0x00ff0000) >> 16) / 255.0f;
-                  m_EndColor.green = (RwReal)((Color & 0x0000ff00) >> 8) / 255.0f;
-                  m_EndColor.blue = (RwReal)((Color & 0x000000ff)) / 255.0f;
-                  m_EndColor.alpha = (RwReal)((Color & 0xff000000) >> 24) / 255.0f;
-
+                  m_EndColor.red   = (RwReal) ((Color&0x00ff0000)>>16) / 255.0f;
+                  m_EndColor.green = (RwReal) ((Color&0x0000ff00)>>8)  / 255.0f;
+                  m_EndColor.blue  = (RwReal) ((Color&0x000000ff))     / 255.0f;
+                  m_EndColor.alpha = (RwReal) ((Color&0xff000000)>>24) / 255.0f;
+                  
                   break;
                }
-            case CMD_Set_Seperation:
+               case CMD_Set_Seperation:
                {
                   m_Separation = attrIt->GetAs_RwUInt32();
                   break;
                }
-            case CMD_Set_SeperationStep:
+               case CMD_Set_SeperationStep:
                {
                   m_SeparationStep = attrIt->GetAs_RwUInt32();
                   break;
                }
+
+
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
 
@@ -206,42 +207,42 @@ namespace RWS
          RwRaster *RasterZ;
 
          RwCamera *Camera = RwCameraCreate();
-
+   
          RWS_POST(Camera);
 
          Raster = RwRasterCreate(Width, Height, 0, rwRASTERTYPECAMERATEXTURE);
 
          RasterZ = RwRasterCreate(Width, Height, Depth, rwRASTERTYPEZBUFFER);
 
-         RwCameraSetRaster(Camera, Raster);
+         RwCameraSetRaster (Camera, Raster);
          RwCameraSetZRaster(Camera, RasterZ);
 
          RwFrame *Frame = RwFrameCreate();
          RwFrameSetIdentity(Frame);
-
-         RwCameraSetFrame(Camera, Frame);
-
-         RwCameraSetProjection(Camera, rwPARALLEL);
+   
+         RwCameraSetFrame (Camera, Frame);
+   
+         RwCameraSetProjection (Camera, rwPARALLEL);
 
          //-----------------------------------------------------
          //
-         RwCameraSetNearClipPlane(Camera, 1.0f);
-         RwCameraSetFarClipPlane(Camera, 5000.0f);
+         RwCameraSetNearClipPlane (Camera, 1.0f);
+         RwCameraSetFarClipPlane (Camera, 5000.0f);
 
          //-----------------------------------------------------
          //
          RwReal Aspect;
-
-         if (Height != 0)
+      
+         if (Height != 0) 
          {
             Aspect = (RwReal)Width / (RwReal)Height;
-
-            RwV2d Viewwindow;
+   
+            RwV2d  Viewwindow;
 
             Viewwindow.x = 1.0f;
             Viewwindow.y = 1.0f;
-
-            RwCameraSetViewWindow(Camera, &Viewwindow);
+   
+            RwCameraSetViewWindow (Camera, &Viewwindow);
          }
 
          RWS_RETURN(Camera);

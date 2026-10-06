@@ -41,9 +41,9 @@
 #include <rtintsec.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpcollis.lib")
-#pragma comment(lib, "rtintsec.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpcollis.lib")
+#pragma comment (lib, "rtintsec.lib") 
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -76,30 +76,30 @@ namespace RWS
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Sliding Door", "A generic two state sliding door.");
 
-         FPSDoor(const CAttributePacket &);
+         FPSDoor(const CAttributePacket&);
          ~FPSDoor(void);
 
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Target name", "Trigger the door", RECEIVE, 0, "ACTN_PLAYERTOUCH")
-         RWS_ATTRIBUTE(CMD_angle, "Angle", "Determines the opening direction. "
-                                           "Note: There are two special values, -1 opens the door up and -2 opens down.",
-                       SLIDER, RwReal, RANGE(-2, 0, 360))
-         RWS_ATTRIBUTE(CMD_wait, "Wait", "Wait before returning (3 default, -1 = never return)",
-                       SLIDER, RwReal, RANGE(-1, 3, 60))
-         RWS_ATTRIBUTE(CMD_speed, "Speed", "Movement speed (100 default) units per second",
-                       SLIDER, RwUInt32, RANGE(1, 100, 999))
-         RWS_ATTRIBUTE(CMD_lip, "Lip", "Lip remaining at end of move (8 default)",
-                       SLIDER, RwUInt32, RANGE(0, 8, 32))
-         RWS_ATTRIBUTE(CMD_spawnflags, "Flags", "",
-                       BITFIELD, RwUInt32, LIST("(1)Door Starts Open|(2)Unused|(4)Door Not Linked|(8)Unused|(16)Unused|(32)Unused|(64)Unused|(128)Unused|(256)Unused|(512)Unused(medium)|(1024)Unused|(2048)Unused"))
+             RWS_MESSAGE( CMD_targetname, "Target name", "Trigger the door", RECEIVE, 0, "ACTN_PLAYERTOUCH")
+             RWS_ATTRIBUTE( CMD_angle, "Angle", "Determines the opening direction. "
+                            "Note: There are two special values, -1 opens the door up and -2 opens down.", 
+                            SLIDER, RwReal, RANGE(-2,0,360))
+             RWS_ATTRIBUTE( CMD_wait, "Wait", "Wait before returning (3 default, -1 = never return)",
+                            SLIDER, RwReal, RANGE(-1,3,60))
+             RWS_ATTRIBUTE( CMD_speed, "Speed", "Movement speed (100 default) units per second",
+                            SLIDER, RwUInt32, RANGE(1,100,999))
+             RWS_ATTRIBUTE( CMD_lip, "Lip", "Lip remaining at end of move (8 default)",
+                            SLIDER, RwUInt32, RANGE(0,8,32))
+             RWS_ATTRIBUTE( CMD_spawnflags, "Flags", "", 
+                            BITFIELD, RwUInt32, LIST("(1)Door Starts Open|(2)Unused|(4)Door Not Linked|(8)Unused|(16)Unused|(32)Unused|(64)Unused|(128)Unused|(256)Unused|(512)Unused(medium)|(1024)Unused|(2048)Unused"))
          RWS_END_COMMANDS;
 
-         virtual void HandleAttributes(const CAttributePacket &attr);
+         virtual void HandleAttributes(const CAttributePacket& attr);            
          virtual void HandleEvents(CMsg &pMsg);
 
       protected:
 
-         RwUInt32 m_bStartOpen : 1;                /**< Flag specifies that this door starts open */
+         RwUInt32 m_bStartOpen:1;                /**< Flag specifies that this door starts open */
 
          FPSDoor *pLinked;                       /**< Overlapping doors act as one door, this pointer
                                                       links the two FPSDoors allowing events to be
@@ -108,11 +108,11 @@ namespace RWS
          static CEventId m_Inq_FPS_func_door;    /**< Inquire Event, sent between doors to determine that
                                                       they are doors. */
 
-         static RpAtomic *CheckIfTouching(RpIntersection *intersection,
-                                          RpWorldSector *sector,
-                                          RpAtomic *atomic,
-                                          RwReal distance,
-                                          void *data);
+         static RpAtomic   *CheckIfTouching( RpIntersection * intersection,
+                                             RpWorldSector * sector,
+                                             RpAtomic * atomic,
+                                             RwReal distance,
+                                             void *data);
 
          void SearchForLinks(void);
          void ClearLinks(void);

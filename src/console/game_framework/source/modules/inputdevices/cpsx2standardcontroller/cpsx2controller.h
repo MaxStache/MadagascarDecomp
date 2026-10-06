@@ -44,7 +44,7 @@
 #if defined(DOXYGEN) || defined(SKY)
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
+#pragma comment (lib, "rwcore.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ namespace RWS
    namespace InputDevices
    {
       // a Few defines for controlling button mapping
-      static const RwUInt32 PSX2Control_ButtonA = 2;
+      static const RwUInt32 PSX2Control_ButtonA = 2; 
       static const RwUInt32 PSX2Control_ButtonB = 3;
       static const RwUInt32 PSX2Control_ButtonC = 6;
       static const RwUInt32 PSX2Control_ButtonD = 0;
@@ -91,194 +91,194 @@ namespace RWS
          RWS_DECLARE_CLASSID(CPSX2StndController);
          RWS_CATEGORY("InputDevices");
          RWS_DESCRIPTION("Generic PSX Pad Handler", "Maps all buttons and pads to inquire events, return value of "
-                                                    "each is always (1 to -1)");
+                         "each is always (1 to -1)");
 
          virtual void HandleEvents(CMsg &pMsg);
-         virtual void HandleAttributes(const CAttributePacket &attr);
+         virtual void HandleAttributes(const CAttributePacket& attr);
 
-         CPSX2StndController(const CAttributePacket &);
-
+         CPSX2StndController(const CAttributePacket&);
+      
          virtual ~CPSX2StndController();
 
          RWS_BEGIN_COMMANDS
 
-         RWS_ATTRIBUTE(CMD_m_PortSelect,
-                       "Port Select",
-                       "Select port number UNIMPLEMENTED",
-                       LIST,
-                       RwUInt32,
-                       LIST("Port 1|Port 2"))
+            RWS_ATTRIBUTE(CMD_m_PortSelect,  
+                          "Port Select",
+                          "Select port number UNIMPLEMENTED",
+                          LIST,
+                          RwUInt32,
+                          LIST("Port 1|Port 2"))
 
-         RWS_ATTRIBUTE(CMD_m_SlotSelect,
-                       "Slot Select",
-                       "Select slot number UNIMPLEMENTED",
-                       LIST,
-                       RwUInt32,
-                       LIST("Slot 1|Slot 2|Slot 3|Slot 4"))
+            RWS_ATTRIBUTE(CMD_m_SlotSelect,  
+                          "Slot Select",
+                          "Select slot number UNIMPLEMENTED",
+                          LIST,
+                          RwUInt32,
+                          LIST("Slot 1|Slot 2|Slot 3|Slot 4"))
 
-         RWS_ATTRIBUTE(CMD_m_DeadZone,
-                       "Joystick DeadZone",
-                       "Set joystick dead zone",
-                       SLIDER,
-                       RwReal,
-                       RANGE(0, 0.25, 1))
+            RWS_ATTRIBUTE(CMD_m_DeadZone,    
+                          "Joystick DeadZone",
+                          "Set joystick dead zone",   
+                          SLIDER,  
+                          RwReal,  
+                          RANGE(0, 0.25, 1))
 
-         RWS_MESSAGE(CMD_m_Inq_Start,
-                     "Inquire Start Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_Start,    
+                         "Inquire Start Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_Select,
-                     "Inquire Select Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_Select,   
+                         "Inquire Select Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_Triangle,
-                     "Inquire Triangle Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_ACTN_JUMP")
+            RWS_MESSAGE( CMD_m_Inq_Triangle, 
+                         "Inquire Triangle Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_ACTN_JUMP")
+                         
+            RWS_MESSAGE( CMD_m_Inq_Cross,    
+                         "Inquire Cross Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_ACTN_FIRE")
 
-         RWS_MESSAGE(CMD_m_Inq_Cross,
-                     "Inquire Cross Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_ACTN_FIRE")
+            RWS_MESSAGE( CMD_m_Inq_Square,   
+                         "Inquire Square Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_Square,
-                     "Inquire Square Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_Circle,   
+                         "Inquire Circle Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_Circle,
-                     "Inquire Circle Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_PAD_Up,   
+                         "Inquire Up Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_PAD_Up,
-                     "Inquire Up Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_PAD_Down, 
+                         "Inquire Down Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_PAD_Down,
-                     "Inquire Down Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_PAD_Left, 
+                         "Inquire Left Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_PAD_Left,
-                     "Inquire Left Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_PAD_Right,
+                         "Inquire Right Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_PAD_Right,
-                     "Inquire Right Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_DPAD_Y,   
+                         "Inquire Up/Down As Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_DPAD_Y,
-                     "Inquire Up/Down As Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_DPAD_X,   
+                         "Inquire Left/Right As Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_DPAD_X,
-                     "Inquire Left/Right As Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_L1,       
+                         "Inquire L1 Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_L1,
-                     "Inquire L1 Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_L2,       
+                         "Inquire L2 Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_L2,
-                     "Inquire L2 Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_R1,       
+                         "Inquire R1 Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_R1,
-                     "Inquire R1 Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_R2,       
+                         "Inquire R2 Button",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_R2,
-                     "Inquire R2 Button",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_Inq_LR1,       
+                         "Inquire L1 R1 As Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_ACTN_STRAFE")
 
-         RWS_MESSAGE(CMD_m_Inq_LR1,
-                     "Inquire L1 R1 As Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_ACTN_STRAFE")
+            RWS_MESSAGE( CMD_m_Inq_LR2,       
+                         "Inquire L2 R2 As Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_Inq_LR2,
-                     "Inquire L2 R2 As Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
+            RWS_MESSAGE( CMD_m_LPAD_X,       
+                         "Inquire Left Analogue X Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_ACTN_TURN")
 
-         RWS_MESSAGE(CMD_m_LPAD_X,
-                     "Inquire Left Analogue X Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_ACTN_TURN")
+            RWS_MESSAGE( CMD_m_LPAD_Y,       
+                         "Inquire Left Analogue Y Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_ACTN_FWD")
 
-         RWS_MESSAGE(CMD_m_LPAD_Y,
-                     "Inquire Left Analogue Y Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_ACTN_FWD")
+            RWS_MESSAGE( CMD_m_RPAD_X,       
+                         "Inquire Right Analogue X Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         0)
 
-         RWS_MESSAGE(CMD_m_RPAD_X,
-                     "Inquire Right Analogue X Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     0)
-
-         RWS_MESSAGE(CMD_m_RPAD_Y,
-                     "Inquire Right Analogue Y Joystick",
-                     "return's +-1.0 depending on state of this input device",
-                     RECEIVE,
-                     return RwReal,
-                     "INQ_CAMERA_PITCH")
+            RWS_MESSAGE( CMD_m_RPAD_Y,       
+                         "Inquire Right Analogue Y Joystick",
+                         "return's +-1.0 depending on state of this input device",
+                         RECEIVE,
+                         return RwReal,
+                         "INQ_CAMERA_PITCH")
          RWS_END_COMMANDS;
 
-      protected:
+      protected:     
          u_int paddata;    // Extracted Pad Data
 
          u_char rdata[32]; // Raw Pad Data
@@ -287,7 +287,7 @@ namespace RWS
          RwUInt32 m_SlotSelect;  // Slot Number
 
          RwReal m_DeadZone;
-
+      
          CEventId m_Inq_Start;
          CEventId m_Inq_Select;
 
@@ -326,7 +326,7 @@ namespace RWS
 }//namespace RWS
 
 #else
-#pragma message("CPSX2StndController design for PSX2 only");
+#pragma message ("CPSX2StndController design for PSX2 only");
 #endif
 
 #endif

@@ -57,8 +57,8 @@ namespace RWS
       /*
       *  Constructor
       */
-      ATSphere::ATSphere(const CAttributePacket& attr) :
-         ATBase(attr)
+      ATSphere::ATSphere( const CAttributePacket& attr )
+         : ATBase(attr)
       {
       }
 
@@ -75,7 +75,7 @@ namespace RWS
       *  \param pPoint Point to test, in world coordinates.
       *  \return TRUE if point is inside the sphere, FALSE otherwise.
       */
-      RwBool ATSphere::PointInsideGeometry(const RwV3d* pPoint)
+      RwBool ATSphere::PointInsideGeometry( const RwV3d * pPoint )
       {
          RWS_FUNCTION("ATSphere::PointInsideGeometry");
 
@@ -83,11 +83,11 @@ namespace RWS
          RwV3d LocalPoint;
          RwV3dTransformPoints(&LocalPoint, pPoint, 1, &m_InvMatrix);
 
-         // Note: locally, the sphere is at (0,0,0) so the vector from
-         //       the center of the sphere to the point is the same as
+         // Note: locally, the sphere is at (0,0,0) so the vector from 
+         //       the center of the sphere to the point is the same as 
          //       LocalPoint.
          RwReal fDist = RwV3dLength(&LocalPoint);
-         if (fDist < 0.5f)
+         if ( fDist < 0.5f )
          {
             RWS_RETURN(TRUE);
          }
@@ -101,7 +101,7 @@ namespace RWS
       *  \param pLine Line to test, in world coordinates.
       *  \return TRUE if line intersects the sphere, FALSE otherwise.
       */
-      RwBool ATSphere::LineIntersectGeometry(const RwLine* pLine)
+      RwBool ATSphere::LineIntersectGeometry( const RwLine * pLine )
       {
          RWS_FUNCTION("ATSphere::LineIntersectGeometry");
 

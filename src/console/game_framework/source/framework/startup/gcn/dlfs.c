@@ -53,9 +53,9 @@
 
 /* Flags for fake ANSI file API */
 #ifndef SEEK_SET
-#define SEEK_SET 0               /* Seek absolute */
-#define SEEK_CUR 1               /* Seek relative current */
-#define SEEK_END 2               /* Seek relative end */
+#define SEEK_SET        0               /* Seek absolute */
+#define SEEK_CUR        1               /* Seek relative current */
+#define SEEK_END        2               /* Seek relative end */
 #endif  /* SEEK_SET */
 
 /****************************************************************************
@@ -83,43 +83,44 @@ static RwBool FIOStarted = FALSE;
 
 typedef enum FTypeTag
 {
-   ftNAFTYPE = 0,
-   ftDVD,
+    ftNAFTYPE = 0,
+    ftDVD,
 #ifdef FIOFILESYSTEM
-   ftFIO,
+    ftFIO,
 #endif /* FIOFILESYSTEM */
-   ftFORCEINT = RWFORCEENUMSIZEINT
+    ftFORCEINT = RWFORCEENUMSIZEINT
 } FType;
 
 typedef struct
 {
-   RwUInt8 readBuffer[READBUFFERSIZE]; /* Make sure this is 32Byte aligned and a multiple of 32 */
-   union
-   {
-      DVDFileInfo fileInfo;
+    RwUInt8        readBuffer[READBUFFERSIZE]; /* Make sure this is 32Byte aligned and a multiple of 32 */
+    union {
+        DVDFileInfo    fileInfo;
 #ifdef FIOFILESYSTEM
-      FIOHandle fioHandle;
+        FIOHandle      fioHandle;
 #endif /* FIOFILESYSTEM */
-   } fileHandle;
-   RwUInt32 POS;
-   RwUInt32 SOF;
+    } fileHandle;
+    RwUInt32       POS;
+    RwUInt32       SOF;
+    
+    RwUInt32       bufferPos;
 
-   RwUInt32 bufferPos;
-
-   FType fType;
-} DLFileHandle;
+    FType          fType;
+}
+DLFileHandle;
 
 typedef struct
 {
-   RwFileFunctions oldFileFuncs;       /* Old Filing system vectors */
-   RwFreeList *freeList;          /* File pointer free list */
-} FSGlobals;
+    RwFileFunctions     oldFileFuncs;       /* Old Filing system vectors */
+    RwFreeList          *freeList;          /* File pointer free list */
+}
+FSGlobals;
 
 /* These are all global to all RenderWare instances */
 
-static RwInt32 FSOpenFiles = 0;
+static RwInt32          FSOpenFiles = 0;
 
-static RwModuleInfo FSModuleInfo;
+static RwModuleInfo     FSModuleInfo;
 
 static RwInt32 rwID_DOLPHINDEVICEMODULE = MAKECHUNKID(rwVENDORID_CRITERIONINT, 0x30);
 
@@ -127,16 +128,16 @@ static RwInt32 rwID_DOLPHINDEVICEMODULE = MAKECHUNKID(rwVENDORID_CRITERIONINT, 0
 /* If defined, use the FIO open modes */
 #define DL_OPEN_RDONLY (FIO_OPEN_RDONLY)
 #define DL_OPEN_WRONLY (FIO_OPEN_WRONLY)
-#define DL_OPEN_RDWR (FIO_OPEN_RDWR)
-#define DL_OPEN_CREAT (FIO_OPEN_CREAT)
-#define DL_OPEN_TRUNC (FIO_OPEN_TRUNC)
+#define DL_OPEN_RDWR   (FIO_OPEN_RDWR)
+#define DL_OPEN_CREAT  (FIO_OPEN_CREAT)
+#define DL_OPEN_TRUNC  (FIO_OPEN_TRUNC)
 #else /* FIOFILESYSTEM */
 /* Just use a suitable set of flag values */
 #define DL_OPEN_RDONLY (1)
 #define DL_OPEN_WRONLY (2)
-#define DL_OPEN_RDWR (3)
-#define DL_OPEN_CREAT (4)
-#define DL_OPEN_TRUNC (8)
+#define DL_OPEN_RDWR   (3)
+#define DL_OPEN_CREAT  (4)
+#define DL_OPEN_TRUNC  (8)
 #endif /* FIOFILESYSTEM */
 
 
@@ -144,17 +145,17 @@ static RwInt32 rwID_DOLPHINDEVICEMODULE = MAKECHUNKID(rwVENDORID_CRITERIONINT, 0
 static RwBool
 dlStartFIO(void)
 {
-   while (!FIOInit(DL_FIO_EXICHAN, DL_FIO_MCCCHAN, DL_FIO_BLKSIZE))
-   {
-      ;
-   }
+    while (!FIOInit(DL_FIO_EXICHAN, DL_FIO_MCCCHAN, DL_FIO_BLKSIZE))
+    {
+        ;
+    }
 
-   while (!FIOQuery())
-   {
-      ;
-   }
-   FIOStarted = TRUE;
-   return (TRUE);
+    while (!FIOQuery())
+    {
+        ;
+    }
+    FIOStarted = TRUE;
+    return(TRUE);
 }
 #endif /* FIOFILESYSTEM */
 
@@ -170,43 +171,63 @@ dlStartFIO(void)
 static RwUInt32
 dlAccessToMode(const RwChar *access)
 {
-   RwUInt32 mode = 0;
+    RwUInt32 mode = 0;
 
     /* This is a bit crude, but it isn't mainline code */
-   if (!access)
-   {
-      return (mode);
-   }
+    if (!access)
+    {
+        return(mode);
+    }
 
     /* This code relies on evaluation order to prevent it running off the
        end of the string */
     /* I assume that there no difference between 'b' and non'b' files */
-   if ((access[0] == 'r') && ((access[1] == '\0') || ((access[1] == 'b') && (access[2] == '\0'))))
-   {
-      mode = DL_OPEN_RDONLY;
-   }
-   else if ((access[0] == 'w') && ((access[1] == '\0') || ((access[1] == 'b') && (access[2] == '\0'))))
-   {
-      mode = DL_OPEN_WRONLY | DL_OPEN_CREAT | DL_OPEN_TRUNC;
-   }
-   else if ((access[0] == 'a') && ((access[1] == '\0') || ((access[1] == 'b') && (access[2] == '\0'))))
-   {
-      mode = DL_OPEN_WRONLY | DL_OPEN_CREAT;
-   }
-   else if ((access[0] == 'r') && (access[1] == '+') && ((access[2] == '\0') || ((access[2] == 'b') && (access[3] == '\0'))))
-   {
-      mode = DL_OPEN_RDWR;
-   }
-   else if ((access[0] == 'w') && (access[1] == '+') && ((access[2] == '\0') || ((access[2] == 'b') && (access[3] == '\0'))))
-   {
-      mode = DL_OPEN_RDWR | DL_OPEN_CREAT | DL_OPEN_TRUNC;
-   }
-   else if ((access[0] == 'a') && (access[1] == '+') && ((access[2] == '\0') || ((access[2] == 'b') && (access[3] == '\0'))))
-   {
-      mode = DL_OPEN_RDWR | DL_OPEN_CREAT;
-   }
+    if ((access[0] == 'r')
+        && ((access[1] == '\0')
+            || ((access[1] == 'b') && (access[2] == '\0'))))
+    {
+        mode = DL_OPEN_RDONLY;
+    }
+    else
+    if ((access[0] == 'w')
+        && ((access[1] == '\0')
+            || ((access[1] == 'b') && (access[2] == '\0'))))
+    {
+        mode = DL_OPEN_WRONLY | DL_OPEN_CREAT | DL_OPEN_TRUNC;
+    }
+    else
+    if ((access[0] == 'a')
+        && ((access[1] == '\0')
+            || ((access[1] == 'b') && (access[2] == '\0'))))
+    {
+        mode = DL_OPEN_WRONLY | DL_OPEN_CREAT;
+    }
+    else
+    if ((access[0] == 'r')
+        && (access[1] == '+')
+        && ((access[2] == '\0')
+            || ((access[2] == 'b') && (access[3] == '\0'))))
+    {
+        mode = DL_OPEN_RDWR;
+    }
+    else
+    if ((access[0] == 'w')
+        && (access[1] == '+')
+        && ((access[2] == '\0')
+            || ((access[2] == 'b') && (access[3] == '\0'))))
+    {
+        mode = DL_OPEN_RDWR | DL_OPEN_CREAT | DL_OPEN_TRUNC;
+    }
+    else
+    if ((access[0] == 'a')
+        && (access[1] == '+')
+        && ((access[2] == '\0')
+            || ((access[2] == 'b') && (access[3] == '\0'))))
+    {
+        mode = DL_OPEN_RDWR | DL_OPEN_CREAT;
+    }
 
-   return (mode);
+    return(mode);
 }
 
 /****************************************************************************
@@ -219,135 +240,139 @@ dlAccessToMode(const RwChar *access)
 static void *
 dlFopen(const RwChar *name, const RwChar *access)
 {
-   DLFileHandle *fp;
-   RwUInt32 mode;
+    DLFileHandle    *fp;
+    RwUInt32        mode;
 
-   mode = dlAccessToMode(access);
+    mode = dlAccessToMode(access);
 
-   if (!mode)
-   {
-      return (NULL);
-   }
+    if (!mode)
+    {
+        return (NULL);
+    }
     /* Allocate structure for holding info */
-   fp = (DLFileHandle *)RwFreeListAlloc(RWGDFSGLOBAL(freeList), rwMEMHINTDUR_GLOBAL);
-   if (!fp)
-   {
-      return (NULL);
-   }
+    fp = (DLFileHandle *)RwFreeListAlloc(RWGDFSGLOBAL(freeList), rwMEMHINTDUR_GLOBAL);
+    if (!fp)
+    {
+        return (NULL);
+    }
 
-   fp->fType = ftNAFTYPE;
+    fp->fType = ftNAFTYPE;
 
 #ifdef FIOFILESYSTEM
     /* For now, we select DVD filesystem based on request for RDONLY */
-   if (mode != DL_OPEN_RDONLY)
-   {
-      fp->fType = ftFIO;
-   }
-   else
+    if (mode != DL_OPEN_RDONLY)
+    {
+        fp->fType = ftFIO;
+    }
+    else
 #else /* FIOFILESYSTEM */
-   if (mode == DL_OPEN_RDONLY)
+    if (mode == DL_OPEN_RDONLY)
 #endif /* FIOFILESYSTEM */
-   {
-      fp->fType = ftDVD;
-   }
+    {
+        fp->fType = ftDVD;
+    }
 
-   if (fp->fType == ftNAFTYPE)
-   {
+    if (fp->fType == ftNAFTYPE)
+    {
         /* Failed to choose a suitable filesystem */
-      RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-      return (NULL);
-   }
+        RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+        return (NULL);
+    }
 
     /* Move to the specified directory */
-   {
-   }
+    {
+    }
 
 #ifdef FIOFILESYSTEM
-   if (fp->fType == ftFIO)
-   {
-      FIOStat stat;
+    if (fp->fType == ftFIO)
+    {
+        FIOStat stat;
 
-      if (!FIOStarted)
-      {
-         if (!dlStartFIO())
-         {
-            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-            return (NULL);
-         }
-      }
+        if (!FIOStarted)
+        {
+            if (!dlStartFIO())
+            {
+                RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+                return (NULL);
+            }
+        }
 
         /* It looks as though we can't OR in FIO_OPEN_CREAT in the way we
            would on most platforms, so we do the following rather odd thing */
-      if ((mode & DL_OPEN_CREAT) && (FIO_INVALID_HANDLE == (fp->fileHandle.fioHandle = FIOFopen(name, mode))))
-      {
-         fp->fileHandle.fioHandle = FIOFopen(name, FIO_OPEN_CREAT);
-         if (FIO_INVALID_HANDLE == fp->fileHandle.fioHandle)
-         {
-            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-            return (NULL);
-         }
-      }
-      FIOFclose(fp->fileHandle.fioHandle);
+        if ((mode & DL_OPEN_CREAT)
+            && (FIO_INVALID_HANDLE
+                == (fp->fileHandle.fioHandle = FIOFopen(name, mode))))
+        {
+            fp->fileHandle.fioHandle = FIOFopen(name, FIO_OPEN_CREAT);
+            if (FIO_INVALID_HANDLE == fp->fileHandle.fioHandle)
+            {
+                RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+                return (NULL);
+            }
+        }
+        FIOFclose(fp->fileHandle.fioHandle);
 
         /* We have choosen to map our modes to the FIO ones. Handy */
-      if (FIO_INVALID_HANDLE == (fp->fileHandle.fioHandle = FIOFopen(name, mode)))
-      {
-         RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-         return (NULL);
-      }
+        if (FIO_INVALID_HANDLE
+            == (fp->fileHandle.fioHandle = FIOFopen(name, mode)))
+        {
+            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+            return (NULL);
+        }
 
         /* For some reason, we are only supporting 32bit files sizes */
-      if (!(FIOFstat(fp->fileHandle.fioHandle, &stat)) || (stat.fileSizeHigh != 0))
-      {
-         FIOFclose(fp->fileHandle.fioHandle);
-         RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-         return (NULL);
-      }
-
-      fp->SOF = stat.fileSizeLow;
-
-        /* We may have to seek to the end of the file */
-      if ((mode & DL_OPEN_CREAT) && !(mode & DL_OPEN_TRUNC))
-      {
-         long res;
-
-         res = FIOFseek(fp->fileHandle.fioHandle, 0l, FIO_SEEK_LAST);
-
-         if (-1 == res)
-         {
+        if (!(FIOFstat(fp->fileHandle.fioHandle, &stat))
+            || (stat.fileSizeHigh != 0))
+        {
             FIOFclose(fp->fileHandle.fioHandle);
             RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
             return (NULL);
-         }
-         fp->POS = fp->SOF;
-      }
-      else
-      {
-         fp->POS = 0;
-      }
-   }
-   else
+        }
+
+        fp->SOF = stat.fileSizeLow;
+
+        /* We may have to seek to the end of the file */
+        if ((mode & DL_OPEN_CREAT) && !(mode & DL_OPEN_TRUNC))
+        {
+            long res;
+
+            res = FIOFseek(fp->fileHandle.fioHandle, 0l, FIO_SEEK_LAST);
+
+            if (-1 == res)
+            {
+                FIOFclose(fp->fileHandle.fioHandle);
+                RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+                return (NULL);
+            }
+            fp->POS = fp->SOF;
+        }
+        else
+        {
+            fp->POS = 0;
+        }
+    }
+    else
 #endif /* FIOFILESYSTEM */
-   {
+    {
         /* Open the file for reading */
-      if (!DVDOpen((RwChar *)name, &fp->fileHandle.fileInfo))
-      {
-         RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
-         return (NULL);
-      }
+        if (!DVDOpen((RwChar *)name, &fp->fileHandle.fileInfo))
+        {
+            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+            return (NULL);
+        }
 
         /* Get the file size */
-      fp->SOF = DVDGetLength(&fp->fileHandle.fileInfo);
-      fp->POS = 0;
-   }
+        fp->SOF = DVDGetLength(&fp->fileHandle.fileInfo);
+        fp->POS = 0;
+    }
 
 
     /* Initialise the buffer to show nothing buffered */
-   fp->bufferPos = READBUFFERSIZE;
+    fp->bufferPos = READBUFFERSIZE;
 
-   FSOpenFiles++;
+    FSOpenFiles++;
 
-   return ((void *)fp);
+    return ((void *)fp);
 }
 
 /****************************************************************************
@@ -357,40 +382,40 @@ dlFopen(const RwChar *name, const RwChar *access)
  On exit    : 0 on success
  */
 
-static int
+static int 
 dlFclose(void *fptr)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
+    DLFileHandle *fp = (DLFileHandle *)fptr;
 
-   if (fp && FSOpenFiles)
-   {
+    if (fp && FSOpenFiles)
+    {
 #ifdef FIOFILESYSTEM
-      if (fp->fType == ftFIO)
-      {
-         if (FIOFclose(fp->fileHandle.fioHandle))
-         {
-            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+        if (fp->fType == ftFIO)
+        {
+            if (FIOFclose(fp->fileHandle.fioHandle))
+            {
+                RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+    
+                FSOpenFiles--;
 
-            FSOpenFiles--;
-
-            return (0);
-         }
-      }
-      else
+                return (0);
+            }
+        }
+        else
 #endif /* FIOFILESYSTEM */
-      {
-         if (DVDClose(&fp->fileHandle.fileInfo))
-         {
-            RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+        {
+            if (DVDClose(&fp->fileHandle.fileInfo))
+            {
+                RwFreeListFree(RWGDFSGLOBAL(freeList), fp);
+    
+                FSOpenFiles--;
 
-            FSOpenFiles--;
+                return (0);
+            }
+        }
+    }
 
-            return (0);
-         }
-      }
-   }
-
-   return (-1);
+    return (-1);
 }
 
 /****************************************************************************
@@ -403,20 +428,20 @@ dlFclose(void *fptr)
 static RwBool
 dlFexist(const RwChar *name)
 {
-   void *res;
+    void *res;
 
 #ifdef FIOFILESYSTEM
     /* Not obvious what to do here. For now we only check the DVD filesystem */
 #endif /* FIOFILESYSTEM */
 
-   res = RwOsGetFileInterface()->rwfopen(name, "r");
-   if (res)
-   {
-      RwOsGetFileInterface()->rwfclose(res);
-      return (TRUE);
-   }
+    res = RwOsGetFileInterface()->rwfopen(name, "r");
+    if (res)
+    {
+        RwOsGetFileInterface()->rwfclose(res);
+        return (TRUE);
+    }
 
-   return (FALSE);
+    return (FALSE);
 }
 
 /****************************************************************************
@@ -426,202 +451,203 @@ dlFexist(const RwChar *name)
  On exit    : Number of bytes read
  */
 
-static size_t
+static size_t 
 dlFread(void *addr, size_t size, size_t count, void *fptr)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
-   size_t numBytesToRead = size * count;
-   int bytesRead, bytesRead2;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
+    size_t          numBytesToRead = size * count;
+    int             bytesRead, bytesRead2;
 
-   bytesRead = 0;
+    bytesRead = 0;
 
     /* Trim number of bytes for the size of the file */
-   if ((fp->POS + (RwInt32)numBytesToRead) > fp->SOF)
-   {
-      numBytesToRead = fp->SOF - fp->POS;
-   }
+    if ((fp->POS + (RwInt32)numBytesToRead) > fp->SOF)
+    {
+        numBytesToRead = fp->SOF - fp->POS;
+    }
 
     /* First try and use the buffer */
-   if ((fp->bufferPos < READBUFFERSIZE) &&
-       (bytesRead < (RwInt32)numBytesToRead))
-   {
+    if ((fp->bufferPos < READBUFFERSIZE) &&
+        (bytesRead < (RwInt32)numBytesToRead))
+    {
         /* Pull from the buffer */
-      if (numBytesToRead < (READBUFFERSIZE - fp->bufferPos))
-      {
+        if (numBytesToRead < (READBUFFERSIZE-fp->bufferPos))
+        {
             /* Can satisfy entirely from buffer */
-         bytesRead = numBytesToRead;
-      }
-      else
-      {
+            bytesRead = numBytesToRead;
+        }
+        else
+        {
             /* Pull as much as possible from the buffer */
-         bytesRead = READBUFFERSIZE - fp->bufferPos;
-      }
+            bytesRead = READBUFFERSIZE-fp->bufferPos;
+        }
 
         /* Copy it */
-      memcpy(addr, &fp->readBuffer[fp->bufferPos], bytesRead);
+        memcpy(addr, &fp->readBuffer[fp->bufferPos], bytesRead);
 
         /* Update target address and source address */
-      addr = (void *)((RwUInt8 *)addr + bytesRead);
-      fp->bufferPos += bytesRead;
-      fp->POS += bytesRead;
-      assert(fp->POS <= fp->SOF);
-   }
+        addr = (void *)((RwUInt8 *)addr + bytesRead);
+        fp->bufferPos += bytesRead;
+        fp->POS += bytesRead;
+        assert(fp->POS <= fp->SOF);
+    }
 
     /* If next bit is bigger than a buffer, read it directly and ignore the
      * buffer.
      */
-   if ((numBytesToRead - bytesRead) > 0)
-   {
-      if ((numBytesToRead - bytesRead) >= READBUFFERSIZE)
-      {
+    if ((numBytesToRead-bytesRead) > 0)
+    {
+        if ((numBytesToRead-bytesRead) >= READBUFFERSIZE)
+        {
             /* If we're 32Byte aligned and a multiple of 32 do a direct read */
-         if (((((RwUInt32)addr) & (32 - 1)) == 0) && !((numBytesToRead - bytesRead) & 0x1f))
-         {
-            bytesRead2 = (numBytesToRead - bytesRead);
-#ifdef FIOFILESYSTEM
-            if (fp->fType == ftFIO)
+            if (((((RwUInt32)addr) & (32-1)) == 0) && !((numBytesToRead-bytesRead) & 0x1f))
             {
-               if (FIOFseek(fp->fileHandle.fioHandle, fp->POS,
-                            FIO_SEEK_TOP) != -1)
-               {
-                  bytesRead2 = (int)FIOFread(fp->fileHandle.fioHandle,
-                                             addr, bytesRead2);
-               }
-               else
-               {
-                  bytesRead2 = -1;
-               }
+                bytesRead2 = (numBytesToRead-bytesRead);
+#ifdef FIOFILESYSTEM
+                if (fp->fType == ftFIO)
+                {
+                    if (FIOFseek(fp->fileHandle.fioHandle, fp->POS, 
+                                 FIO_SEEK_TOP) != -1)
+                    {
+                        bytesRead2 = (int)FIOFread(fp->fileHandle.fioHandle,
+                                                   addr, bytesRead2);
+                    }
+                    else
+                    {
+                        bytesRead2 = -1;
+                    }
+                }
+                else
+#endif /* FIOFILESYSTEM */
+                {
+                    bytesRead2 = DVDRead(&fp->fileHandle.fileInfo, addr, bytesRead2, fp->POS);
+                }
+                if (bytesRead2 < 0)
+                {
+                    bytesRead2 = 0;
+                }
             }
             else
-#endif /* FIOFILESYSTEM */
             {
-               bytesRead2 = DVDRead(&fp->fileHandle.fileInfo, addr, bytesRead2, fp->POS);
-            }
-            if (bytesRead2 < 0)
-            {
-               bytesRead2 = 0;
-            }
-         }
-         else
-         {
-            RwInt32 n;
-            RwInt32 byteLeftToRead;
-            RwInt32 offset;
+                RwInt32 n;
+                RwInt32 byteLeftToRead;
+                RwInt32 offset;
 
-            bytesRead2 = 0;
-            byteLeftToRead = numBytesToRead - bytesRead;
-            offset = fp->POS;
-            n = (byteLeftToRead / READBUFFERSIZE) + 1;
+                bytesRead2 = 0;
+                byteLeftToRead = numBytesToRead-bytesRead;
+                offset = fp->POS;
+                n = (byteLeftToRead / READBUFFERSIZE) + 1;
 
                 /* Go via the buffer */
-            while (n--)
-            {
-               RwInt32 readSize;
+                while (n--)
+                {
+                    RwInt32 readSize;
 
-               readSize = fp->SOF - (fp->POS + bytesRead2);
-               readSize = (readSize > READBUFFERSIZE) ? READBUFFERSIZE : readSize;
+                    readSize = fp->SOF - (fp->POS + bytesRead2);
+                    readSize = (readSize > READBUFFERSIZE) ? READBUFFERSIZE : readSize;
 
                     /* Read a buffers worth of data*/
 #ifdef FIOFILESYSTEM
-               if (fp->fType == ftFIO)
-               {
-                  if (FIOFseek(fp->fileHandle.fioHandle, offset,
-                               FIO_SEEK_TOP) != -1)
-                  {
-                     u32 res;
+                    if (fp->fType == ftFIO)
+                    {
+                        if (FIOFseek(fp->fileHandle.fioHandle, offset, 
+                                     FIO_SEEK_TOP) != -1)
+                        {
+                            u32 res;
 
-                     res = FIOFread(fp->fileHandle.fioHandle,
-                                    fp->readBuffer,
-                                    ((readSize + 31) & ~0x1F));
-                     if (res == 0xffffffff)
-                     {
-                        return (bytesRead + bytesRead2);
-                     }
-                  }
-                  else
-                  {
-                     return (bytesRead + bytesRead2);
-                  }
-               }
-               else
+                            res = FIOFread(fp->fileHandle.fioHandle,
+                                           fp->readBuffer,
+                                           ((readSize + 31) & ~0x1F));
+                            if (res == 0xffffffff)
+                            {
+                                return (bytesRead + bytesRead2);
+                            }
+                        }
+                        else
+                        {
+                            return (bytesRead + bytesRead2);
+                        }
+                    }
+                    else
 #endif /* FIOFILESYSTEM */
-               {
-                  if (DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer,
-                              ((readSize + 31) & ~0x1F), offset) == -1)
-                  {
-                     return (bytesRead + bytesRead2);
-                  }
-               }
+                    {
+                        if (DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer,
+                            ((readSize + 31) & ~0x1F), offset) == -1)
+                        {
+                            return (bytesRead + bytesRead2);
+                        }
+                    }
 
                     /* Copy what we need */
-               if (byteLeftToRead >= readSize)
-               {
-                  memcpy(addr, fp->readBuffer, readSize);
-                  byteLeftToRead -= readSize;
-                  bytesRead2 += readSize;
-                  offset += readSize;
+                    if (byteLeftToRead >= readSize)
+                    {
+                        memcpy(addr, fp->readBuffer, readSize);
+                        byteLeftToRead -= readSize;
+                        bytesRead2 += readSize;
+                        offset += readSize;
 
                         /* Update target address and source address */
-                  addr = (void *)((RwUInt8 *)addr + readSize);
-               }
-               else
-               {
-                  memcpy(addr, fp->readBuffer, byteLeftToRead);
-                  bytesRead2 += byteLeftToRead;
-                  offset += byteLeftToRead;
+                        addr = (void *)((RwUInt8 *)addr + readSize);
+                    }
+                    else
+                    {
+                        memcpy(addr, fp->readBuffer, byteLeftToRead);
+                        bytesRead2 += byteLeftToRead;
+                        offset += byteLeftToRead;
 
-                  fp->bufferPos = byteLeftToRead;
-               }
+                        fp->bufferPos = byteLeftToRead;
+                    }
+                }
             }
-         }
-      }
-      else
-      {
-         RwInt32 bytes;
-         RwInt32 read;
+        }
+        else
+        {
+            RwInt32 bytes;
+            RwInt32 read;
 
-         bytes = OSRoundUp32B((fp->SOF - fp->POS));
-         if (bytes > READBUFFERSIZE)
-         {
-            bytes = READBUFFERSIZE;
-         }
+            bytes = OSRoundUp32B((fp->SOF - fp->POS));
+            if (bytes > READBUFFERSIZE)
+            {
+                bytes = READBUFFERSIZE;
+            }
 
             /* Go via the buffer */
 #ifdef FIOFILESYSTEM
-         if (fp->fType == ftFIO)
-         {
-            if (FIOFseek(fp->fileHandle.fioHandle, fp->POS, FIO_SEEK_TOP) != -1)
+            if (fp->fType == ftFIO)
             {
-               read = (int)FIOFread(fp->fileHandle.fioHandle,
-                                    fp->readBuffer, bytes);
+                if (FIOFseek(fp->fileHandle.fioHandle, fp->POS, FIO_SEEK_TOP)
+                    != -1)
+                {
+                    read = (int)FIOFread(fp->fileHandle.fioHandle,
+                                            fp->readBuffer, bytes);
+                }
+                else
+                {
+                    read = -1;
+                }
             }
             else
-            {
-               read = -1;
-            }
-         }
-         else
 #endif /* FIOFILESYSTEM */
-         {
-            read = DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer, bytes,
-                           fp->POS);
-         }
-         if (read == -1)
-         {
-            return (bytesRead);
-         }
+            {
+                read = DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer, bytes,
+                               fp->POS);
+            }
+            if (read == -1)
+            {
+                return (bytesRead);
+            }
 
-         bytesRead2 = (numBytesToRead - bytesRead);
-         memcpy(addr, fp->readBuffer, bytesRead2);
-         fp->bufferPos = bytesRead2;
-      }
+            bytesRead2 = (numBytesToRead-bytesRead);
+            memcpy(addr, fp->readBuffer, bytesRead2);
+            fp->bufferPos = bytesRead2;
+        }
 
-      fp->POS += bytesRead2;
-      assert(fp->POS <= fp->SOF);
-      bytesRead += bytesRead2;
-   }
+        fp->POS += bytesRead2;
+        assert(fp->POS <= fp->SOF);
+        bytesRead += bytesRead2;
+    }
 
-   return (bytesRead / size);
+    return (bytesRead/size);
 }
 
 /****************************************************************************
@@ -631,84 +657,85 @@ dlFread(void *addr, size_t size, size_t count, void *fptr)
  On exit    : Number of bytes written
  */
 
-static size_t
+static size_t 
 dlFwrite(const void *addr, size_t size, size_t count, void *fptr)
 {
 #ifdef FIOFILESYSTEM
-   DLFileHandle *fp = (DLFileHandle *)fptr;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
 
-   if (fp->fType == ftFIO)
-   {
-      RwUInt32 len;
-      RwUInt32 len2;
+    if (fp->fType == ftFIO)
+    {
+        RwUInt32 len;
+        RwUInt32 len2;
 
-      len = size * count;
-      len2 = 0;
-      if ((len != size * count) || (len == 0xffffffff))
-      {
+        len = size * count;
+        len2 = 0;
+        if ((len != size*count)
+            || (len == 0xffffffff))
+        {
             /* We have to fail the size as it is the error condition */
-         return (0);
-      }
+            return(0);
+        }
 
         /* We now flush any buffered read data, as this is invalid */
-      fp->bufferPos = READBUFFERSIZE;
+        fp->bufferPos = READBUFFERSIZE;
 
         /* We can't write if the buffer is not aligned on 32b, so */
-      if ((RwUInt32)addr & 0x1f)
-      {
-         RwUInt8 buf[64];
-         RwUInt8 *bufStart;
-         RwUInt32 i;
+        if ((RwUInt32)addr & 0x1f)
+        {
+            RwUInt8 buf[64];
+            RwUInt8* bufStart;
+            RwUInt32 i;
 
-         bufStart = (RwUInt8 *)(((RwUInt32)buf + 31) & ~0x1f);
-         len2 = 32 - ((RwUInt32)addr & 0x1f);
-         if (len2 > len)
-         {
-            len2 = len;
-         }
-         len -= len2;
-         for (i = 0; i < len2; i++)
-         {
-            bufStart[i] = *(((RwUInt8 *)addr)++);
-         }
-         len2 = FIOFwrite(fp->fileHandle.fioHandle, (void *)bufStart, len2);
-         if (len2 != 0xffffffff)
-         {
+            bufStart = (RwUInt8*)(((RwUInt32)buf + 31) & ~0x1f);
+            len2 = 32 - ((RwUInt32)addr & 0x1f);
+            if (len2 > len)
+            {
+                len2 = len;
+            }
+            len -= len2;
+            for (i=0; i<len2; i++)
+            {
+                bufStart[i] = *(((RwUInt8*)addr)++);
+            }
+            len2 = FIOFwrite(fp->fileHandle.fioHandle, (void *)bufStart, len2);
+            if (len2 != 0xffffffff)
+            {
                 /* Overflow danger here */
-            fp->POS += len2;
-         }
-         else
-         {
+                fp->POS += len2;
+            }
+            else
+            {
                 /* Should really seek/stat the file here, etc */
-            return (len2);
-         }
-      }
+                return(len2);
+            }
+        }
 
-      if (len)
-      {
-         len = FIOFwrite(fp->fileHandle.fioHandle, (void *)addr, len);
-         if (len != 0xffffffff)
-         {
+        if (len)
+        {
+            len = FIOFwrite(fp->fileHandle.fioHandle, (void *)addr, len);
+            if (len != 0xffffffff)
+            {
                 /* Overflow danger here */
-            fp->POS += len;
-         }
-         else
-         {
+                fp->POS += len;
+            }
+            else
+            {
                 /* Should really seek/stat the file here, etc */
-         }
-      }
+            }
+        }
 
-      if (fp->SOF < fp->POS)
-      {
-         fp->SOF = fp->POS;
-      }
-      return (len + len2);
-   }
-   else
+        if (fp->SOF < fp->POS)
+        {
+            fp->SOF = fp->POS;
+        }
+        return(len + len2);
+    }
+    else
 #endif /* FIOFILESYSTEM */
-   {
-      return (0);
-   }
+    {
+        return (0);
+    }
 }
 
 /****************************************************************************
@@ -718,162 +745,163 @@ dlFwrite(const void *addr, size_t size, size_t count, void *fptr)
  On exit    : 0 on success
  */
 
-static int
+static int 
 dlFseek(void *fptr, long offset, int origin)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
-   RwInt32 sector;
-   RwInt32 bytes;
-   RwInt32 oldFPos;
-   RwInt32 tempOffset;
-   RwInt32 sectorPos;
-   RwInt32 bufferStart;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
+    RwInt32         sector;
+    RwInt32         bytes;
+    RwInt32         oldFPos;
+    RwInt32         tempOffset;
+    RwInt32      sectorPos;
+    RwInt32         bufferStart;
 
-   oldFPos = fp->POS;
+    oldFPos = fp->POS;
 
-   switch (origin)
-   {
-   case SEEK_CUR:
-      {
-         tempOffset = offset;
-         fp->POS += offset;
-         assert(fp->POS <= fp->SOF);
+    switch (origin)
+    {
+        case SEEK_CUR:
+        {
+            tempOffset = offset;
+            fp->POS += offset;
+            assert(fp->POS <= fp->SOF);
             /* See if we can do this common one quickly first (if we are still in the cached sectors)... */
             /* Note: two tests in one by using unsigned test:
              *       (newIndex >= 0) && (newIndex < (SECTORS_BUFFERED * SECTOR_SIZE))
              */
-         sectorPos = (RwUInt32)((RwInt32)(fp->bufferPos) + offset);
-         if (sectorPos >= 0)
-         {
-            if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+            sectorPos = (RwUInt32)((RwInt32)(fp->bufferPos) + offset);
+            if (sectorPos >= 0)
             {
-               if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
-               {
+                if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+                {
+                    if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
+                    {
                         /* We're still in the buffer, cool */
-                  fp->bufferPos += offset;
+                        fp->bufferPos += offset;
 
-                  return (0);
-               }
+                        return (0);
+                    }
+                }
             }
-         }
-         break;
-      }
-   case SEEK_END:
-      {
-         tempOffset = (fp->SOF + offset) - fp->POS;
-         fp->POS = (fp->SOF + offset);
-         assert(fp->POS <= fp->SOF);
+            break;
+        }
+        case SEEK_END:
+        {
+            tempOffset = (fp->SOF + offset) - fp->POS;
+            fp->POS     = (fp->SOF + offset);
+            assert(fp->POS <= fp->SOF);
 
-         sectorPos = ((RwInt32)fp->bufferPos) + tempOffset;
+            sectorPos = ((RwInt32) fp->bufferPos) + tempOffset;
 
-         if (sectorPos >= 0)
-         {
-            if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+            if (sectorPos >= 0)
             {
-               if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
-               {
+                if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+                {
+                    if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
+                    {
                         /* We're still in the buffer, cool */
-                  fp->bufferPos += tempOffset;
+                        fp->bufferPos += tempOffset;
 
-                  return (0);
-               }
+                        return (0);
+                    }
+                }
             }
-         }
-         break;
-      }
-   case SEEK_SET:
-      {
-         tempOffset = offset - fp->POS;
-         fp->POS = offset;
-         assert(fp->POS <= fp->SOF);
+            break;
+        }
+        case SEEK_SET:
+        {
+            tempOffset = offset - fp->POS;
+            fp->POS     = offset;
+            assert(fp->POS <= fp->SOF);
 
-         sectorPos = ((RwInt32)fp->bufferPos) + tempOffset;
+            sectorPos = ((RwInt32) fp->bufferPos) + tempOffset;
 
-         if (sectorPos >= 0)
-         {
-            if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+            if (sectorPos >= 0)
             {
-               if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
-               {
+                if (sectorPos <= (RwUInt32)(READBUFFERSIZE))
+                {
+                    if ((fp->POS >= 0) && (fp->POS <= fp->SOF))
+                    {
                         /* We're still in the buffer, cool */
-                  fp->bufferPos += tempOffset;
+                        fp->bufferPos += tempOffset;
 
-                  return (0);
-               }
+                        return (0);
+                    }
+                }
             }
-         }
-         break;
-      }
-   default:
-      {
-         return (-1);
-      }
-   }
+            break;
+        }
+        default:
+        {
+            return (-1);
+        }
+    }
 
-   if (fp->POS < 0)
-   {
+    if (fp->POS < 0)
+    {
         /* Can't seek off the front of the file */
-      fp->POS = oldFPos;
-      assert(fp->POS <= fp->SOF);
-      return (-1);
-   }
+        fp->POS = oldFPos;
+        assert(fp->POS <= fp->SOF);
+        return (-1);
+    }
 
-   if (fp->POS > fp->SOF)
-   {
+    if (fp->POS > fp->SOF)
+    {
         /* Can't seek off the end of the file */
-      fp->POS = oldFPos;
-      assert(fp->POS <= fp->SOF);
-      return (-1);
-   }
+        fp->POS = oldFPos;
+        assert(fp->POS <= fp->SOF);
+        return (-1);
+    }
 
     /* Find which sector we need to be in */
-   sector = fp->POS / READBUFFERSIZE;
-   bufferStart = sector * READBUFFERSIZE;
+    sector = fp->POS / READBUFFERSIZE;
+    bufferStart = sector * READBUFFERSIZE;
 
-   if ((fp->SOF - bufferStart) > READBUFFERSIZE)
-   {
-      bytes = READBUFFERSIZE;
-   }
-   else
-   {
-      bytes = OSRoundUp32B((fp->SOF - bufferStart));
-   }
+    if ((fp->SOF - bufferStart) > READBUFFERSIZE)
+    {
+        bytes = READBUFFERSIZE; 
+    }
+    else
+    {
+        bytes = OSRoundUp32B((fp->SOF - bufferStart));
+    }
 
     /* Load in the sector */
 #ifdef FIOFILESYSTEM
-   if (fp->fType == ftFIO)
-   {
-      if (FIOFseek(fp->fileHandle.fioHandle,
-                   sector * READBUFFERSIZE, FIO_SEEK_TOP) == -1)
-      {
+    if (fp->fType == ftFIO)
+    {
+        if (FIOFseek(fp->fileHandle.fioHandle,
+                     sector * READBUFFERSIZE, FIO_SEEK_TOP) == -1)
+        {
             /* may not be quite right */
-         fp->POS = oldFPos;
-         assert(fp->POS <= fp->SOF);
-         return (-1);
-      }
-      if (FIOFread(fp->fileHandle.fioHandle, fp->readBuffer, bytes) == 0xffffffff)
-      {
-         fp->POS = oldFPos;
-         assert(fp->POS <= fp->SOF);
-         return (-1);
-      }
-   }
-   else
+            fp->POS = oldFPos;
+            assert(fp->POS <= fp->SOF);
+            return (-1);
+        }
+        if (FIOFread(fp->fileHandle.fioHandle, fp->readBuffer, bytes)
+            == 0xffffffff)
+        {
+            fp->POS = oldFPos;
+            assert(fp->POS <= fp->SOF);
+            return (-1);
+        }
+    }
+    else
 #endif /* FIOFILESYSTEM */
-   {
-      if (DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer, bytes,
-                  sector * READBUFFERSIZE) == -1)
-      {
-         fp->POS = oldFPos;
-         assert(fp->POS <= fp->SOF);
-         return (-1);
-      }
-   }
+    {
+        if (DVDRead(&fp->fileHandle.fileInfo, fp->readBuffer, bytes,
+                    sector * READBUFFERSIZE) == -1)
+        {
+            fp->POS = oldFPos;
+            assert(fp->POS <= fp->SOF);
+            return (-1);
+        }
+    }
 
     /* Set the position in the buffered sector */
-   fp->bufferPos = fp->POS - bufferStart;
+    fp->bufferPos = fp->POS - bufferStart;
 
-   return (0);
+    return (0);
 }
 
 /****************************************************************************
@@ -886,71 +914,71 @@ dlFseek(void *fptr, long offset, int origin)
 static RwChar *
 dlFgets(RwChar *buffer, int maxLen, void *fptr)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
-   RwInt32 i;
-   RwInt32 numBytesRead;
+    DLFileHandle    *fp = (DLFileHandle *) fptr;
+    RwInt32         i;
+    RwInt32         numBytesRead;
 
-   i = 0;
+    i = 0;
 
-   numBytesRead = dlFread(buffer, 1, maxLen - 1, fp);
+    numBytesRead = dlFread(buffer, 1, maxLen - 1, fp);
 
-   if (numBytesRead == 0)
-   {
-      return (NULL);
-   }
+    if (numBytesRead == 0)
+    {
+        return (NULL);
+    }
 
-   while (i < numBytesRead)
-   {
-      if (buffer[i] == '\n')
-      {
-         i++;
+    while (i < numBytesRead)
+    {
+        if (buffer[i] == '\n')
+        {
+            i++;
 
-         buffer[i] = '\0';
+            buffer[i] = '\0';
 
             /* the file pointer needs */
             /* to be reset as dlFread */
             /* will have overshot the */
             /* first new line         */
 
-         i -= numBytesRead;
-         dlFseek(fp, i, SEEK_CUR);
+            i -= numBytesRead;
+            dlFseek(fp, i, SEEK_CUR);
 
-         return (buffer);
-      }
-      else if (buffer[i] == 0x0D)
-      {
-         if ((i < (numBytesRead - 1)) && (buffer[i + 1] == '\n'))
-         {
-            memcpy(&buffer[i], &buffer[i + 1], (numBytesRead - i - 1));
-            numBytesRead--;
-         }
-         else
-         {
+            return (buffer);
+        }
+        else if ( buffer[i] == 0x0D )
+        {
+            if ((i < (numBytesRead - 1)) && (buffer[i + 1] == '\n'))
+            {
+                memcpy(&buffer[i], &buffer[i + 1], (numBytesRead - i - 1));
+                numBytesRead--;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        else
+        {
             i++;
-         }
-      }
-      else
-      {
-         i++;
-      }
-   }
+        }
+    }
 
-   if (numBytesRead < maxLen)
-   {
-      DLFileHandle *fp = (DLFileHandle *)fptr;
+    if (numBytesRead < maxLen)
+    {
+        DLFileHandle    *fp = (DLFileHandle *)fptr;
 
         /* Trim number of bytes for the size of the file */
-      if (fp->POS == fp->SOF)
-      {
-         buffer[numBytesRead] = '\0';
-      }
-   }
+        if (fp->POS == fp->SOF)
+        {
+            buffer[numBytesRead] = '\0';
+        }
+    }
 
     /*
      * Don't return NULL because we could have read maxLen bytes
      * without finding a \n
      */
-   return (buffer);
+    return (buffer);
 }
 
 /****************************************************************************
@@ -962,31 +990,31 @@ dlFgets(RwChar *buffer, int maxLen, void *fptr)
  Note that the trailing \0 is not written.
  */
 
-static int
+static int 
 dlFputs(const RwChar *buffer, void *fptr)
 {
 #ifdef FIOFILESYSTEM
-   DLFileHandle *fp = (DLFileHandle *)fptr;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
+    
+    if (fp->fType == ftFIO)
+    {
+        u32 len = 0;
+        const RwChar *ptr = buffer;
 
-   if (fp->fType == ftFIO)
-   {
-      u32 len = 0;
-      const RwChar *ptr = buffer;
+        while (*ptr != '\0')
+        {
+            len++;
+        }
+        
+        if (!len)
+        {
+            return(0);
+        }
 
-      while (*ptr != '\0')
-      {
-         len++;
-      }
-
-      if (!len)
-      {
-         return (0);
-      }
-
-      return (dlFwrite(buffer, 1, len, fptr));
-   }
+        return(dlFwrite(buffer, 1, len, fptr));
+    }
 #endif /* FIOFILESYSTEM */
-   return (-1);
+    return (-1);
 }
 
 /****************************************************************************
@@ -996,12 +1024,12 @@ dlFputs(const RwChar *buffer, void *fptr)
  On exit    : Non zero if end of file reached
  */
 
-static int
+static int 
 dlFeof(void *fptr)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
 
-   return (fp->POS >= fp->SOF);
+    return (fp->POS >= fp->SOF);
 }
 
 /****************************************************************************
@@ -1011,18 +1039,18 @@ dlFeof(void *fptr)
  On exit    :
  */
 
-static int
+static int 
 dlFflush(void *fptr __RWUNUSED__)
 {
 #ifdef FIOFILESYSTEM
-   DLFileHandle *fp = (DLFileHandle *)fptr;
-
-   if (fp->fType == ftFIO)
-   {
-      return (!FIOFflush(fp->fileHandle.fioHandle));
-   }
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
+    
+    if (fp->fType == ftFIO)
+    {
+        return(!FIOFflush(fp->fileHandle.fioHandle));
+    }
 #endif /* FIOFILESYSTEM */
-   return (0);
+    return (0);
 }
 
 /****************************************************************************
@@ -1032,12 +1060,12 @@ dlFflush(void *fptr __RWUNUSED__)
  On exit    :
  */
 
-static int
+static int 
 dlFtell(void *fptr)
 {
-   DLFileHandle *fp = (DLFileHandle *)fptr;
+    DLFileHandle    *fp = (DLFileHandle *)fptr;
 
-   return (fp->POS);
+    return (fp->POS);
 }
 
 /****************************************************************************
@@ -1047,50 +1075,50 @@ dlFtell(void *fptr)
  On exit    : instance pointer on success
  */
 
-static void *
+static void * 
 _rwDolphinFSOpen(void *instance, RwInt32 offset, RwInt32 size __RWUNUSED__)
 {
-   RwFileFunctions *fileFuncs;
+    RwFileFunctions  *fileFuncs;
 
     /* Cache the globals offset */
-   FSModuleInfo.globalsOffset = offset;
+    FSModuleInfo.globalsOffset = offset;
 
     /* Create a free list for file handle structures. Making sure they are
      * 32Byte aligned as the buffer is the first entry and this must be
      * aligned to a 32Byte boundary.
      */
-   RWGDFSGLOBAL(freeList) = RwFreeListCreate(sizeof(DLFileHandle), 5, 32, rwMEMHINTDUR_GLOBAL);
-   if (!RWGDFSGLOBAL(freeList))
-   {
-      return (NULL);
-   }
+    RWGDFSGLOBAL(freeList) = RwFreeListCreate(sizeof(DLFileHandle), 5, 32, rwMEMHINTDUR_GLOBAL);
+    if (!RWGDFSGLOBAL(freeList))
+    {
+        return (NULL);
+    }
 
     /* This is per instance of RenderWare */
-   fileFuncs = RwOsGetFileInterface();
+    fileFuncs = RwOsGetFileInterface();
 
     /* save away the old filing system */
-   RWGDFSGLOBAL(oldFileFuncs) = *fileFuncs;
+    RWGDFSGLOBAL(oldFileFuncs) = *fileFuncs;
 
     /* attach the new filing system */
-   fileFuncs->rwfexist = dlFexist; /* fileFuncs->rwfexist;  */
-   fileFuncs->rwfopen = dlFopen;
-   fileFuncs->rwfclose = dlFclose;
-   fileFuncs->rwfread = dlFread;
-   fileFuncs->rwfwrite = dlFwrite;
-   fileFuncs->rwfgets = dlFgets;
-   fileFuncs->rwfputs = dlFputs;
-   fileFuncs->rwfeof = dlFeof;
-   fileFuncs->rwfseek = dlFseek;
-   fileFuncs->rwfflush = dlFflush;
-   fileFuncs->rwftell = dlFtell;
+    fileFuncs->rwfexist   = dlFexist; /* fileFuncs->rwfexist;  */
+    fileFuncs->rwfopen    = dlFopen;
+    fileFuncs->rwfclose   = dlFclose;
+    fileFuncs->rwfread    = dlFread;
+    fileFuncs->rwfwrite   = dlFwrite;
+    fileFuncs->rwfgets    = dlFgets;
+    fileFuncs->rwfputs    = dlFputs;
+    fileFuncs->rwfeof     = dlFeof;
+    fileFuncs->rwfseek    = dlFseek;
+    fileFuncs->rwfflush   = dlFflush;
+    fileFuncs->rwftell    = dlFtell;
 
 #ifdef FIOFILESYSTEM
-   FIOStarted = FALSE;
+    FIOStarted = FALSE;
 #endif /* FIOFILESYSTEM */
 
-   FSModuleInfo.numInstances++;
+    FSModuleInfo.numInstances++;
 
-   return (instance);
+    return (instance);
 }
 
 /****************************************************************************
@@ -1100,37 +1128,37 @@ _rwDolphinFSOpen(void *instance, RwInt32 offset, RwInt32 size __RWUNUSED__)
  On exit    : instance pointer on success
  */
 
-static void *
+static void * 
 _rwDolphinFSClose(void *instance,
                   RwInt32 offset __RWUNUSED__,
                   RwInt32 size __RWUNUSED__)
 {
-   RwFileFunctions *fileFuncs;
+    RwFileFunctions  *fileFuncs;
 
-   fileFuncs = RwOsGetFileInterface();
+    fileFuncs = RwOsGetFileInterface();
 
     /*
      * re-attach the old filing system - not strictly necessary,
      * but we are feeling kind today!
      */
-   *fileFuncs = RWGDFSGLOBAL(oldFileFuncs);
+    *fileFuncs = RWGDFSGLOBAL(oldFileFuncs);
 
     /*
      * Blow away our free list
      */
-   RwFreeListDestroy(RWGDFSGLOBAL(freeList));
+    RwFreeListDestroy(RWGDFSGLOBAL(freeList));
 
-   FSModuleInfo.numInstances--;
+    FSModuleInfo.numInstances--;
 
 #ifdef FIOFILESYSTEM
-   if (FIOStarted)
-   {
-      FIOExit();
-      FIOStarted = FALSE;
-   }
+    if (FIOStarted)
+    {
+        FIOExit();
+        FIOStarted = FALSE;
+    }
 #endif /* FIOFILESYSTEM */
 
-   return (instance);
+    return (instance);
 }
 
 /****************************************************************************
@@ -1146,20 +1174,20 @@ DolphinInstallFileSystem(void)
     /*
      * Initializes the DVD device driver
      */
-   DVDInit();
+    DVDInit();
 
     /* Set the root directory */
     /*DVDSetRoot("DOLPHIN/build/demos/dvddemo/diskroot");*/
 
-   if (RwEngineRegisterPlugin(sizeof(FSGlobals),
-                              rwID_DOLPHINDEVICEMODULE,
-                              _rwDolphinFSOpen,
-                              _rwDolphinFSClose) < 0)
-   {
+    if (RwEngineRegisterPlugin(sizeof(FSGlobals),
+                               rwID_DOLPHINDEVICEMODULE, 
+                               _rwDolphinFSOpen,
+                               _rwDolphinFSClose) < 0)
+    {
         /* If it is negative, we've failed */
-      return (FALSE);
-   }
+        return (FALSE);
+    }
 
     /* Hurrah */
-   return (TRUE);
+    return (TRUE);
 }

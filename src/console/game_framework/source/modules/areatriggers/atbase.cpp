@@ -52,9 +52,9 @@ namespace RWS
       *  Constructor
       *
       */
-      ATBase::ATBase(const CAttributePacket& attr) :
-         InitCEventHandler(0),
-         m_pLogic(0)
+      ATBase::ATBase( const CAttributePacket& attr )
+         : InitCEventHandler(0),
+           m_pLogic(0)
       {
          RwMatrixSetIdentity(&m_Matrix);
          RwMatrixSetIdentity(&m_InvMatrix);
@@ -68,7 +68,7 @@ namespace RWS
       */
       ATBase::~ATBase()
       {
-         if (m_pLogic)
+         if ( m_pLogic )
          {
             delete m_pLogic;
             m_pLogic = 0;
@@ -89,14 +89,14 @@ namespace RWS
       *  \param Msg Message to react to.
       *
       */
-      void ATBase::HandleEvents(CMsg& Msg)
+      void ATBase::HandleEvents( CMsg& Msg )
       {
          RWS_FUNCTION("ATBase::HandleEvents");
 
-         if (Msg.Id == m_QueryEvent)
+         if ( Msg.Id == m_QueryEvent )
          {
             // test for collision here
-            ATCollisionQuery* pData = reinterpret_cast<ATCollisionQuery*>(Msg.pData);
+            ATCollisionQuery * pData = reinterpret_cast<ATCollisionQuery *>(Msg.pData);
 
             if (m_pLogic && pData)
             {
@@ -113,19 +113,19 @@ namespace RWS
 
                   bIntersecting = LineIntersectGeometry(&pData->Data.t.line);
                   break;
-
+                  
                default:
                   // Unhandled intersection types
                   bIntersecting = false;
                   break;
                }
-
+               
                m_pLogic->ProcessLogic(pData->pEventHandler, bIntersecting);
             }
          }
 
 #if defined(RWS_DEBUGTOOLS)
-         if (Msg.Id == iMsgRunningTick)
+         if ( Msg.Id == iMsgRunningTick )
          {
             DebugToolsRender();
          }
@@ -141,7 +141,7 @@ namespace RWS
       *  \param attr Attribute packet to respond to.
       *
       */
-      void ATBase::HandleAttributes(const CAttributePacket& attr)
+      void ATBase::HandleAttributes( const CAttributePacket& attr )
       {
          RWS_FUNCTION("ATBase::HandleAttributes");
 
@@ -167,7 +167,7 @@ namespace RWS
                break;
 
             default:
-
+   
                break;
             }
 
@@ -182,25 +182,25 @@ namespace RWS
             switch (attrIt->GetCommandId())
             {
             case CMD_QueryEvent:
-
-               ReplaceLinkedMsg(m_QueryEvent, attrIt->GetAs_RwChar_ptr(), "ATCollisionQuery*");
+            
+               ReplaceLinkedMsg( m_QueryEvent, attrIt->GetAs_RwChar_ptr(), "ATCollisionQuery*" );
                break;
 
             case CMD_Logic:
                {
                   // create new logic object
                   RwUInt32 LogicType = attrIt->GetAs_RwUInt32();
-                  ATLogic* pNewLogic = 0;
-                  switch (LogicType)
+                  ATLogic * pNewLogic = 0;
+                  switch ( LogicType )
                   {
                   case 0:
                      pNewLogic = new ATLogic(this);
                      break;
 
                   case 1:
-                     pNewLogic = new ATFireOnceOnEntry(this);
+                     pNewLogic = new ATFireOnceOnEntry(this);                  
                      break;
-
+                     
                   case 2:
                      pNewLogic = new ATFireOnceOnEntryAndExit(this);
                      break;
@@ -210,7 +210,7 @@ namespace RWS
                   }
 
                   // destroy current logic object
-                  if (m_pLogic)
+                  if ( m_pLogic )
                   {
                      delete m_pLogic;
                   }
@@ -220,25 +220,25 @@ namespace RWS
                break;
 
             case CMD_EnterEvent:
-
-               ReplaceRegisteredMsg(m_EnterEvent, attrIt->GetAs_RwChar_ptr(), 0);
+            
+               ReplaceRegisteredMsg( m_EnterEvent, attrIt->GetAs_RwChar_ptr(), 0 );
                break;
 
             case CMD_ExitEvent:
-
-               ReplaceRegisteredMsg(m_ExitEvent, attrIt->GetAs_RwChar_ptr(), 0);
+            
+               ReplaceRegisteredMsg( m_ExitEvent, attrIt->GetAs_RwChar_ptr(), 0 );
                break;
 
             case CMD_DebugRender:
-
+            
 #if defined(RWS_DEBUGTOOLS)
-               if (attrIt->GetAs_RwUInt32())
+               if ( attrIt->GetAs_RwUInt32() )
                {
-                  LinkMsg(iMsgRunningTick);
+                  LinkMsg( iMsgRunningTick );
                }
                else
                {
-                  UnLinkMsg(iMsgRunningTick);
+                  UnLinkMsg( iMsgRunningTick );
                }
 #else
                // ignore this command in non-RWS_DEBUGTOOLS builds
@@ -246,7 +246,7 @@ namespace RWS
                break;
 
             default:
-
+   
                break;
             }
 

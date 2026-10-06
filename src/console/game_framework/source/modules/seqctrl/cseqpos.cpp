@@ -33,7 +33,7 @@
 #endif                     // Generator for PS2, present in CW 3.04
 
 #if defined(DOLPHIN) && defined(__MWERKS__)
-using namespace std;
+   using namespace std;
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -56,9 +56,9 @@ namespace RWS
       *
       */
 
-      const RwReal MTX_CACHE_NORMAL_MIN = 0.9999f;
-      const RwReal MTX_CACHE_MIN_VECT_DOT_PROD = 0.9999f;
-      const RwReal MTX_CACHE_LENGTH_MIN = 0.0001f;
+      const RwReal MTX_CACHE_NORMAL_MIN         = 0.9999f;
+      const RwReal MTX_CACHE_MIN_VECT_DOT_PROD  = 0.9999f;
+      const RwReal MTX_CACHE_LENGTH_MIN         = 0.0001f;
 
       /////////////////////////
       //
@@ -351,7 +351,7 @@ namespace RWS
          }
 
          RWS_ASSERT(RwV3dLength(pWorldUp) >= MTX_CACHE_NORMAL_MIN,
-                    "Non unit length world up vector.");
+            "Non unit length world up vector.");
 
          pMtxAt = RwMatrixGetAt(m_pBaseMatrix);
          pMtxUp = RwMatrixGetUp(m_pBaseMatrix);
@@ -612,7 +612,7 @@ namespace RWS
                   pos_source newSrc = static_cast<pos_source>(attrIt->GetAs_RwUInt32());
 
                   if (newSrc != m_posSourceA)
-                  {
+                  {                     
                      m_posSourceA = newSrc;
                      UpdatePosSource(this, &m_posSourceA);
                      m_updated = TRUE;
@@ -625,7 +625,7 @@ namespace RWS
                   pos_source newSrc = static_cast<pos_source>(attrIt->GetAs_RwUInt32());
 
                   if (newSrc != m_posSourceB)
-                  {
+                  {                     
                      m_posSourceB = newSrc;
                      UpdatePosSource(this, &m_posSourceB);
                      m_updated = TRUE;
@@ -757,7 +757,7 @@ namespace RWS
             {
             case CSystemCommands::CMD_AttachResource:
                {
-                  const RWSGUID *pResourceId;
+                  const RWSGUID * pResourceId;
                   attrIt->GetCommandData(&pResourceId);
                   AddResource(pResourceId);
                   m_updated = TRUE;
@@ -793,8 +793,8 @@ namespace RWS
 
          const RwChar *ResourceType;
          const RwChar *ResourceName;
-         const void *pObject = RWS::CResourceManager::FindById(pResourceID,
-                                                               &ResourceType, 0, &ResourceName);
+         const void *pObject = RWS::CResourceManager::FindById (pResourceID, 
+            &ResourceType, 0, &ResourceName);
 
          if (pObject)
          {
@@ -804,11 +804,11 @@ namespace RWS
             }
             else
             {
-               if (!rwstrcmp("rwID_SPLINE", ResourceType))
+               if (!rwstrcmp ("rwID_SPLINE", ResourceType))
                {
                   // Store RenderWare Graphics spline data.
 
-                  m_pSpline = static_cast<RpSpline *>(const_cast<void *>(pObject));
+                  m_pSpline = static_cast<RpSpline*>(const_cast<void *>(pObject));
                }
             }
          }
@@ -905,23 +905,23 @@ namespace RWS
             // Need to blend the two, has either matrix been updated ?
 
             if (pAlphaCache->HasChanged() || pBetaCache->HasChanged() ||
-                m_quatInvalid)
+               m_quatInvalid)
             {
                // Recalculate the slerp.
 
                RtQuatSetupSlerpCache(const_cast<RtQuat *>(pAlphaCache->Quat()),
-                                     const_cast<RtQuat *>(pBetaCache->Quat()), &m_slerpCache);
+                  const_cast<RtQuat *>(pBetaCache->Quat()), &m_slerpCache);
             }
 
             if (pAlphaCache->HasChanged() || pBetaCache->HasChanged() ||
-                m_updatedRotBlendTVal || m_quatInvalid)
+               m_updatedRotBlendTVal || m_quatInvalid)
             {
                RtQuat blendQuat;
 
                // Get the 'blended' rotation matrix.
 
                RtQuatSlerp(&blendQuat, const_cast<RtQuat *>(pAlphaCache->Quat()),
-                           const_cast<RtQuat *>(pBetaCache->Quat()), m_rotBlendTVal, &m_slerpCache);
+                  const_cast<RtQuat *>(pBetaCache->Quat()), m_rotBlendTVal, &m_slerpCache);
 
                RtQuatConvertToMatrix(&blendQuat, m_pBlendedRotMatrix);
 
@@ -969,7 +969,7 @@ namespace RWS
             RwMatrixRotate(pAtomicMatrix, &xAxis, m_rotOffset.x, rwCOMBINEPRECONCAT);
          }
 
-         // Update the position of the object & get the matrix cache for it and place
+         // Update the position of the object & get the matrix cache for it and place 
          // position from this into the atomic...
 
          RwV3d *pPosVect;
@@ -993,7 +993,7 @@ namespace RWS
          {
             RwMatrixCopy(pNonScaledMatrix, pAtomicMatrix);
          }
-
+         
          // Add in the scale (before everything else).
 
          RwV3d scaleVect;
@@ -1057,14 +1057,14 @@ namespace RWS
             // Need to update the value ?
 
             if (pPosAMtxCache->HasChanged() || pPosBMtrCache->HasChanged() ||
-                m_updatedPosBlendTVal || m_curPosInvalid)
+               m_updatedPosBlendTVal || m_curPosInvalid)
             {
                m_blendedPosCache.x = pPosAMtxCache->Pos()->x +
-                                     (pPosBMtrCache->Pos()->x - pPosAMtxCache->Pos()->x) * m_posBlendTVal;
+                  (pPosBMtrCache->Pos()->x - pPosAMtxCache->Pos()->x) * m_posBlendTVal;
                m_blendedPosCache.y = pPosAMtxCache->Pos()->y +
-                                     (pPosBMtrCache->Pos()->y - pPosAMtxCache->Pos()->y) * m_posBlendTVal;
+                  (pPosBMtrCache->Pos()->y - pPosAMtxCache->Pos()->y) * m_posBlendTVal;
                m_blendedPosCache.z = pPosAMtxCache->Pos()->z +
-                                     (pPosBMtrCache->Pos()->z - pPosAMtxCache->Pos()->z) * m_posBlendTVal;
+                  (pPosBMtrCache->Pos()->z - pPosAMtxCache->Pos()->z) * m_posBlendTVal;
 
                m_updatedPosBlendTVal = FALSE;
                m_curPosInvalid = FALSE;
@@ -1100,7 +1100,7 @@ namespace RWS
       * this pointer is zero, the function will extract the matrix for itself.
       *
       */
-
+      
       void CSeqPos::SendPositionOut(RwMatrix *pMatrix)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqPos::SendPositionOut");
@@ -1363,7 +1363,7 @@ namespace RWS
             break;
 
          default:
-
+            
             RWS_ASSERTFAIL("Unknown source matrix type.");
             break;
          }
@@ -1425,7 +1425,7 @@ namespace RWS
             break;
 
          default:
-
+            
             RWS_ASSERTFAIL("Unknown source matrix type.");
             break;
          }
@@ -1479,7 +1479,7 @@ namespace RWS
             break;
 
          default:
-
+            
             RWS_ASSERTFAIL("Unknown source matrix type.");
             break;
          }
@@ -1517,7 +1517,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       /**
       *
       * Clears the 'changed' flag in the matrix and sub-matrices used by the specified
@@ -1609,7 +1609,7 @@ namespace RWS
             break;
 
          default:
-
+            
             RWS_ASSERTFAIL("Unknown source matrix type.");
             break;
          }
@@ -1668,7 +1668,7 @@ namespace RWS
             break;
 
          default:
-
+            
             RWS_ASSERTFAIL("Unknown source matrix type.");
             break;
          }

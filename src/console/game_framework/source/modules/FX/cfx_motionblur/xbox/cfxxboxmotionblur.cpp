@@ -49,7 +49,7 @@
 namespace RWS
 {
 
-   namespace FX
+   namespace FX 
    {
 
       /**
@@ -91,7 +91,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXXBOXMotionBlur::CreateSavedRenderState");
 
-         HRESULT Res;
+         HRESULT  Res;
 
          Res = m_Dev->CreateStateBlock(D3DSBT_ALL, SB);
          RWS_ASSERT(Res == D3D_OK, "Unable to create stateblock");
@@ -142,58 +142,58 @@ namespace RWS
 
          // create transformation matrix used to transform the blend poly
          t_FullScreenVert *pVertices = m_Verts;
-         RwV3d Angle = {0.0f, 0.0f, 1.0f};
-         RwV3d Pos;
-         const RwReal Top = -1.0f;
-         const RwReal Bottom = 1.0f;
-         const RwReal Left = -1.0f;
-         const RwReal Right = 1.0f;
-         const RwReal ZDist = 0.3f;
-         const RwReal HalfTexel = 0.5f;
+         RwV3d             Angle     = {0.0f, 0.0f, 1.0f};
+         RwV3d             Pos;
+         const RwReal      Top       = -1.0f;
+         const RwReal      Bottom    =  1.0f;
+         const RwReal      Left      = -1.0f;
+         const RwReal      Right     =  1.0f;
+         const RwReal      ZDist     =  0.3f;  
+         const RwReal      HalfTexel =  0.5f;  
 
 
          // get the width and height of the current render target, we need to do this as the render target
-         //is linear we need to specify uvs in texels
-         float Width = static_cast<RwReal>(RwRasterGetWidth(RwCameraGetRaster(pCamera)));
+         //is linear we need to specify uvs in texels 
+         float Width  = static_cast<RwReal>(RwRasterGetWidth (RwCameraGetRaster(pCamera)));
          float Height = static_cast<RwReal>(RwRasterGetHeight(RwCameraGetRaster(pCamera)));
 
 
          Pos.x = m_OffsetX;
          Pos.y = m_OffsetY;
          Pos.z = 0.0f;
-         RwMatrixTranslate(m_RotMat, &Pos, rwCOMBINEREPLACE);
+         RwMatrixTranslate(m_RotMat, &Pos, rwCOMBINEREPLACE); 
 
-         RwMatrixRotate(m_RotMat, &Angle, m_Angle, rwCOMBINEPOSTCONCAT);
+         RwMatrixRotate(m_RotMat, &Angle, m_Angle, rwCOMBINEPOSTCONCAT); 
 
-         RwV3d Scale;
-         Scale.x = (m_ScaleX)*m_Scale;
-         Scale.y = (-m_ScaleY) * m_Scale;
+         RwV3d    Scale;
+         Scale.x = (   m_ScaleX) * m_Scale;
+         Scale.y = ( - m_ScaleY) * m_Scale;
          Scale.z = 1.0f;
-         RwMatrixScale(m_RotMat, &Scale, rwCOMBINEPOSTCONCAT);
+         RwMatrixScale (m_RotMat, &Scale, rwCOMBINEPOSTCONCAT); 
 
          // build up the blend poly vertices
          // top left
-         pVertices->Pos = TransformMotionVert(m_RotMat, Left, Top, ZDist);
-         pVertices->u = HalfTexel;
-         pVertices->v = HalfTexel;
+         pVertices->Pos = TransformMotionVert ( m_RotMat, Left,  Top,    ZDist );
+         pVertices->u   = HalfTexel;
+         pVertices->v   = HalfTexel;
          pVertices++;
-
-         // top right
-         pVertices->Pos = TransformMotionVert(m_RotMat, Right, Top, ZDist);
-         pVertices->u = Width + HalfTexel;
-         pVertices->v = HalfTexel;
+                                                       
+         // top right                                         
+         pVertices->Pos = TransformMotionVert ( m_RotMat, Right, Top,    ZDist );
+         pVertices->u   = Width + HalfTexel;
+         pVertices->v   = HalfTexel;
          pVertices++;
-
-         // bottom left
-         pVertices->Pos = TransformMotionVert(m_RotMat, Left, Bottom, ZDist);
-         pVertices->u = HalfTexel;
-         pVertices->v = Height + HalfTexel;
+                                                       
+         // bottom left                                        
+         pVertices->Pos = TransformMotionVert ( m_RotMat, Left,  Bottom, ZDist );
+         pVertices->u   = HalfTexel;
+         pVertices->v   = Height + HalfTexel;
          pVertices++;
-
-         // bottom right
-         pVertices->Pos = TransformMotionVert(m_RotMat, Right, Bottom, ZDist);
-         pVertices->u = Width + HalfTexel;
-         pVertices->v = Height + HalfTexel;
+                                                       
+         // bottom right                                        
+         pVertices->Pos = TransformMotionVert ( m_RotMat, Right, Bottom, ZDist );
+         pVertices->u   = Width  + HalfTexel;
+         pVertices->v   = Height + HalfTexel;
 
          RWS_RETURNVOID();
       }
@@ -208,57 +208,57 @@ namespace RWS
 
          // setup the render states for alpha blended textured poly
          m_Dev->SetPixelShader(0);
-         m_Dev->SetVertexShader(D3DFVF_XYZ | D3DFVF_TEX1);
+         m_Dev->SetVertexShader(  D3DFVF_XYZ | D3DFVF_TEX1 );
 
-         m_Dev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-         m_Dev->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TFACTOR);
+         m_Dev->SetTextureStageState  (0, D3DTSS_ALPHAOP,         D3DTOP_SELECTARG1);
+         m_Dev->SetTextureStageState  (0, D3DTSS_ALPHAARG1,       D3DTA_TFACTOR);
+                                                                  
+         m_Dev->SetTextureStageState  (0, D3DTSS_COLOROP,         D3DTOP_SELECTARG2);
+         m_Dev->SetTextureStageState  (0, D3DTSS_COLORARG1,       D3DTA_DIFFUSE);
+         m_Dev->SetTextureStageState  (0, D3DTSS_COLORARG2,       D3DTA_TEXTURE);
+         m_Dev->SetTextureStageState  (0, D3DTSS_ADDRESSU,        D3DTADDRESS_CLAMPTOEDGE );
+         m_Dev->SetTextureStageState  (0, D3DTSS_ADDRESSV,        D3DTADDRESS_CLAMPTOEDGE );
 
-         m_Dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG2);
-         m_Dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-         m_Dev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TEXTURE);
-         m_Dev->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMPTOEDGE);
-         m_Dev->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_CLAMPTOEDGE);
+         m_Dev->SetTextureStageState  (0, D3DTSS_MAGFILTER,       D3DTEXF_POINT );
+         m_Dev->SetTextureStageState  (0, D3DTSS_MINFILTER,       D3DTEXF_POINT );
+         m_Dev->SetTextureStageState  (0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
+         m_Dev->SetTextureStageState  (0, D3DTSS_RESULTARG,       D3DTA_CURRENT);
+         m_Dev->SetTextureStageState  (0, D3DTSS_MIPMAPLODBIAS,   0);
+         m_Dev->SetTextureStageState  (0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
+         m_Dev->SetTextureStageState  (1, D3DTSS_COLOROP,         D3DTOP_DISABLE);
 
-         m_Dev->SetTextureStageState(0, D3DTSS_MAGFILTER, D3DTEXF_POINT);
-         m_Dev->SetTextureStageState(0, D3DTSS_MINFILTER, D3DTEXF_POINT);
-         m_Dev->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-         m_Dev->SetTextureStageState(0, D3DTSS_RESULTARG, D3DTA_CURRENT);
-         m_Dev->SetTextureStageState(0, D3DTSS_MIPMAPLODBIAS, 0);
-         m_Dev->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
-         m_Dev->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
-
-         m_Dev->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
-
-         m_Dev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-         m_Dev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-         m_Dev->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-         m_Dev->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-         m_Dev->SetRenderState(D3DRS_FOGCOLOR, FALSE);
-         m_Dev->SetRenderState(D3DRS_AMBIENT, FALSE);
-         m_Dev->SetRenderState(D3DRS_BLENDCOLOR, 0);
-         m_Dev->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-         m_Dev->SetRenderState(D3DRS_SPECULARENABLE, FALSE);
-         m_Dev->SetRenderState(D3DRS_LIGHTING, FALSE);
-         m_Dev->SetTexture(0, 0);
-         m_Dev->SetTexture(1, 0);
+         m_Dev->SetRenderState        (D3DRS_ZWRITEENABLE,        FALSE);
+         m_Dev->SetRenderState        (D3DRS_ZFUNC,               D3DCMP_ALWAYS);
+                                                                  
+         m_Dev->SetRenderState        (D3DRS_SRCBLEND,            D3DBLEND_SRCALPHA);
+         m_Dev->SetRenderState        (D3DRS_DESTBLEND,           D3DBLEND_INVSRCALPHA);
+         m_Dev->SetRenderState        (D3DRS_ALPHABLENDENABLE,    TRUE);
+         m_Dev->SetRenderState        (D3DRS_ALPHATESTENABLE,     FALSE);
+         m_Dev->SetRenderState        (D3DRS_CULLMODE,            D3DCULL_NONE);
+                                                                  
+         m_Dev->SetRenderState        (D3DRS_FOGCOLOR,            FALSE);
+         m_Dev->SetRenderState        (D3DRS_AMBIENT,             FALSE);
+         m_Dev->SetRenderState        (D3DRS_BLENDCOLOR,          0);
+         m_Dev->SetRenderState        (D3DRS_BLENDOP,             D3DBLENDOP_ADD);
+         m_Dev->SetRenderState        (D3DRS_SPECULARENABLE,      FALSE);
+         m_Dev->SetRenderState        (D3DRS_LIGHTING,            FALSE);
+         m_Dev->SetTexture            (0, 0);
+         m_Dev->SetTexture            (1, 0);
 
 
          // setup the camera
-         D3DXMATRIX MatView;
-         D3DXMATRIX MatProj;
-         const RwReal NearZ = 0.2f;
-         const RwReal FarZ = 20.0f;
-         const RwReal Width = 2.0f;
-         const RwReal Height = 2.0f;
+         D3DXMATRIX     MatView;
+         D3DXMATRIX     MatProj;
+         const RwReal   NearZ =  0.2f;
+         const RwReal   FarZ  = 20.0f;
+         const RwReal   Width =  2.0f;
+         const RwReal   Height =  2.0f;
 
          D3DXMatrixIdentity(&MatView);
-         D3DXMatrixOrthoLH(&MatProj, Width, Height, NearZ, FarZ);
+         D3DXMatrixOrthoLH (&MatProj, Width, Height, NearZ, FarZ);
 
-         m_Dev->SetTransform(D3DTS_VIEW, &MatView);
-         m_Dev->SetTransform(D3DTS_WORLD, &MatView);
+         m_Dev->SetTransform(D3DTS_VIEW,       &MatView);
+         m_Dev->SetTransform(D3DTS_WORLD,      &MatView);
          m_Dev->SetTransform(D3DTS_PROJECTION, &MatProj);
          RWS_RETURNVOID();
       }
@@ -270,8 +270,8 @@ namespace RWS
       void CFXXBOXMotionBlur::BlendFrontBuffer(RwCamera *pCamera)
       {
          RWS_FUNCTION("RWS::FX::CFXXBOXMotionBlur::BlendFrontBuffer");
-         DWORD SavedRenderState;
-         LPDIRECT3DSURFACE8 FrontBuffer;
+         DWORD                SavedRenderState;
+         LPDIRECT3DSURFACE8   FrontBuffer;
 
          // save the state of the GPU so we can put render states back as we found them
          CreateSavedRenderState(&SavedRenderState);
@@ -281,7 +281,7 @@ namespace RWS
             CreateBlendPoly(pCamera);
             m_UpdateBlendPoly = FALSE;
          }
-
+  
          m_Dev->GetBackBuffer(-1, 0, &FrontBuffer);
 
          // setup the render states for the alpha blended polygon
@@ -289,8 +289,8 @@ namespace RWS
 
 
          // set the current texture to the front buffer
-         m_Dev->SetTexture(0, (IDirect3DBaseTexture8 *)FrontBuffer);
-         m_Dev->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(1.0f, 1.0f, 1.0f, m_BlurAmount));
+         m_Dev->SetTexture(0, (IDirect3DBaseTexture8*)FrontBuffer);
+         m_Dev->SetRenderState (D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(1.0f, 1.0f, 1.0f, m_BlurAmount) );
          m_Dev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &m_Verts, sizeof(t_FullScreenVert));
 
          // set the current texture to be NULL, in doing so decrement FrontBuffer Refcount

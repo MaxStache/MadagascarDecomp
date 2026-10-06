@@ -57,46 +57,46 @@ namespace RWS
    class CResourceManager
    {
    public:
-
-      static void Add(const RwChar *_pResName,
-                      const RWSGUID *_pResId,
-                      const RwChar *_pResType,
-                      const void *_pResData,
-                      RwUInt32 _ResDataSize);
-
+      
+      static void Add(  const RwChar *_pResName,
+                        const RWSGUID *_pResId,
+                        const RwChar *_pResType,
+                        const void *_pResData,
+                        RwUInt32 _ResDataSize);
+      
       static const void *Remove(const void *_pResData);
-
-      static const void *FindById(const RWSGUID *_pResId,
-                                  RwChar const **_pResType = 0,
-                                  RwUInt32 *_ResDataSize = 0,
-                                  RwChar const **_pResName = 0);
-
-      static const void *FindByName(const RwChar *const _pResName,
+      
+      static const void *FindById(  const RWSGUID *_pResId,
+                                    RwChar const **_pResType = 0,
+                                    RwUInt32 *_ResDataSize = 0,
+                                    RwChar const **_pResName = 0);
+      
+      static const void *FindByName(const RwChar * const _pResName,
                                     RWSGUID *_pResId = 0,
                                     RwChar const **_pResType = 0,
                                     RwUInt32 *_ResDataSize = 0);
-
+      
       static void Lock(const void *ptr);
-
+      
       static void UnLock(const void *ptr);
-
+      
       static void *Load(const RwChar *pStrName,
                         const RWSGUID *pResId,
                         const RwChar *pStrType,
                         const RwChar *pStrFName,
                         const RwChar *pStrLoc);
-
-      static void *UpLoad(const RwChar *pStrName,
-                          const RWSGUID *pResId,
-                          const RwChar *pStrType,
-                          const RwChar *pStrLoc,
-                          RwStream *pStream,
-                          RwUInt32 nEmbDataSize);
+      
+      static void *UpLoad( const RwChar *pStrName,
+                           const RWSGUID *pResId,
+                           const RwChar *pStrType,
+                           const RwChar *pStrLoc,
+                           RwStream *pStream,
+                           RwUInt32 nEmbDataSize);
 
       static bool Purge(void);
 
       static bool PurgeAll(void);
-
+      
 #ifdef _DEBUG
       static void Debug_ListAvailableResources(void);
 #endif

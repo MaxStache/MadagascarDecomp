@@ -13,19 +13,19 @@
  Function prototypes
  */
 
-#ifdef __cplusplus
+#ifdef    __cplusplus
 extern "C"
 {
 #endif                          /* __cplusplus */
 
-   RwBool RwsDolphinHeapInit(void);
-   void RwsDolphinHeapFree(void *memory);
-   void *RwsDolphinHeapAlloc(size_t size);
-   void *RwsDolphinHeapCalloc(size_t num, size_t size);
-   void *RwsDolphinHeapRealloc(void *memory, size_t size);
-   RwBool RwsDolphinTermMemorySystem(void);
+RwBool RwsDolphinHeapInit(void);
+void RwsDolphinHeapFree(void *memory);
+void *RwsDolphinHeapAlloc(size_t size);
+void *RwsDolphinHeapCalloc(size_t num, size_t size);
+void *RwsDolphinHeapRealloc(void *memory, size_t size);
+RwBool RwsDolphinTermMemorySystem(void);
 
-#ifdef __cplusplus
+#ifdef    __cplusplus
 }
 #endif                          /* __cplusplus */
 

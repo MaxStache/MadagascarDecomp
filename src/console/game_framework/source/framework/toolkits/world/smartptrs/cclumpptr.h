@@ -32,8 +32,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -54,11 +54,10 @@ namespace RWS
    *  and handling CSystemCommands.
    *
    */
-
+   
    class CClumpPtr : public CRwObjectPtr<RpClump>
 #ifdef RWS_EVENTVISUALIZATION
-      ,
-                     public CEventVisualization
+      , public CEventVisualization
 #endif
    {
    public:
@@ -66,29 +65,20 @@ namespace RWS
       /**
       * Default constructor, constructs a NULL CClumpPtr pointer
       */
-      CClumpPtr() :
-         CRwObjectPtr<RpClump>()
-      {
-      }
+      CClumpPtr() : CRwObjectPtr<RpClump>() {}
 
       /**
       * Constructor, constructs a CClumpPtr pointer that points to \a p;
       *
       * \param p Pointer to an RpClump object.
       */
-      CClumpPtr(RpClump* p) :
-         CRwObjectPtr<RpClump>(p)
-      {
-      }
+      CClumpPtr(RpClump* p) : CRwObjectPtr<RpClump>(p) {}
 
       /**
       * Destructor for CClumpPtr object, if this CClumpPtr is still assigned to an RpClump calls CClumpPtr::Destroy.
       */
-      ~CClumpPtr()
-      {
-         if (p_) ClumpHelper::Destroy(p_);
-      }
-
+      ~CClumpPtr() { if (p_) ClumpHelper::Destroy(p_); }
+      
       /**
       *
       * Copy operator, if the pointer is already assigned to an RpClump, calls ClumpHelper::Destroy
@@ -97,20 +87,19 @@ namespace RWS
       *
       * \param p Pointer to an RpClump object.
       */
-      CClumpPtr& operator=(RpClump* p)
+      CClumpPtr& operator = (RpClump* p)
       {
          if (p_ != p)
          {
-            if (p_)
-            {
+            if (p_) {
                ClumpHelper::Destroy(p_);
             }
             p_ = p;
          }
-
+         
          return *this;
       }
-
+      
       /**
       *
       * Mandatory CEventVisualization interface
@@ -121,22 +110,22 @@ namespace RWS
       *
       */
 #ifdef RWS_EVENTVISUALIZATION
-      virtual RwV3d* GetWorldPos(void)
+      virtual RwV3d *GetWorldPos(void) 
       {
          if (p_)
          {
-            RwFrame* pFrame = RpClumpGetFrame(p_);
+            RwFrame *pFrame = RpClumpGetFrame(p_);
 
             if (pFrame)
             {
-               RwMatrix* pMatrix = RwFrameGetLTM(pFrame);
+               RwMatrix *pMatrix = RwFrameGetLTM(pFrame);
 
-               return (RwMatrixGetPos(pMatrix));
+               return(RwMatrixGetPos(pMatrix));
             }
          }
-         return (0);
+         return(0);
       }
-#endif
+#endif      
       /**
       *
       * Handles system commands, CMD_LoadMatrix, CMD_SetSolidFlag, CMD_SetInvisibleFlag, CMD_SetCollisionFlag
@@ -150,15 +139,15 @@ namespace RWS
             ClumpHelper::HandleSystemCommands(*p_, rAttr);
          }
       }
-
+      
    private:
-
+      
       // Revoked ops
       CClumpPtr(const CClumpPtr&);
-      CClumpPtr& operator=(const CClumpPtr&);
+      CClumpPtr& operator = (const CClumpPtr&);
    };
 }
 
-extern RwBool RpClumpDestroy(RWS::CClumpPtr& rCClumpPtr);
+extern RwBool RpClumpDestroy( RWS::CClumpPtr &rCClumpPtr );
 
 #endif

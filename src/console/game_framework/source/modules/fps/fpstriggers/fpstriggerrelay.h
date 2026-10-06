@@ -77,43 +77,43 @@ namespace RWS
       *
       * delay Delay before the target trigger is triggered. 
       */
-      class FPSTriggerRelay : public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class FPSTriggerRelay: public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
-      public:
+      public:            
          RWS_MAKENEWCLASS(FPSTriggerRelay);
          RWS_DECLARE_CLASSID(FPSTriggerRelay);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Trigger Relay", "Passes on an event after {delay} seconds");
-
+         
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Targetname", "Receive Event", RECEIVE, 0, 0)
-         RWS_MESSAGE(CMD_target, "Target", "Send Event Triggered", TRANSMIT, "RwFrame*", 0)
-         RWS_MESSAGE(CMD_killtarget, "Kill target", "Removes CEventHandlers linked to this event", TRANSMIT, 0, 0)
-         RWS_ATTRIBUTE(CMD_delay, "Delay", "Delay {Seconds} before sending event (target, killtarget)", SLIDER, RwReal, RANGE(0, 0, 60))
+            RWS_MESSAGE  ( CMD_targetname, "Targetname", "Receive Event", RECEIVE , 0, 0)
+            RWS_MESSAGE  ( CMD_target    , "Target"    , "Send Event Triggered" ,TRANSMIT, "RwFrame*", 0)       
+            RWS_MESSAGE  ( CMD_killtarget, "Kill target", "Removes CEventHandlers linked to this event", TRANSMIT, 0     , 0)       
+            RWS_ATTRIBUTE( CMD_delay     , "Delay"     , "Delay {Seconds} before sending event (target, killtarget)", SLIDER, RwReal, RANGE(0, 0, 60))       
          RWS_END_COMMANDS;
-
-         virtual void HandleEvents(CMsg& pMsg);
-
+         
+         virtual void HandleEvents(CMsg &pMsg);
+         
          virtual void HandleAttributes(const CAttributePacket& attr);
-
+         
          FPSTriggerRelay(const CAttributePacket&);
          ~FPSTriggerRelay(void);
-         void TriggerEvent(void);
-         void TriggerDelayed(void);
-
+         void TriggerEvent( void);
+         void TriggerDelayed( void );
+         
       protected:
-
+         
          // Define entities states
          enum State
          {
             State_Waiting,          /*< Waiting to be triggered */
             State_Delayed           /*< Delay before triggering */
          };
-
-         RwUInt32 m_state;        /*< Current state */
-         CEventId m_targetname;   /*< Received to triggers this FPS_trigger_relay */
+         
+         RwUInt32 m_state;        /*< Current state */        
+         CEventId m_targetname;   /*< Received to triggers this FPS_trigger_relay */        
          CEventId m_target;       /*< Sent when m_targetname received */
-         CEventId m_killtarget;   /*< Used to kill all CEventHandlers linked to m_killtarget */
+         CEventId m_killtarget;   /*< Used to kill all CEventHandlers linked to m_killtarget */      
          RwUInt32 m_delay;        /*< Delay in ticks */
          RwUInt32 m_delay_count;  /*< Count of number of ticks */
          CAtomicPtr m_pAtomic;    /*< Pointer to 3D representation of this entity*/

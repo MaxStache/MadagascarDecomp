@@ -60,7 +60,7 @@ namespace RWS
       *
       */
 
-      CCameraLookAtPoint::CCameraLookAtPoint(const CAttributePacket &attr) :
+      CCameraLookAtPoint::CCameraLookAtPoint(const CAttributePacket& attr) : 
          InitCEventHandler(&m_pAtomic),
          m_this_camera_active(true),
          m_distance(100.0f),
@@ -80,8 +80,7 @@ namespace RWS
          m_pref_angle(180.0f),
          m_smooth_angle(0.025f)
 #ifdef RWS_DESIGN
-         ,
-         m_respondtocamerarequest(true)
+         , m_respondtocamerarequest(true)
 #endif
       {
          RWS_FUNCTION("RWS::Examples::CCameraLookAtPoint::CCameraLookAtPoint");
@@ -89,9 +88,9 @@ namespace RWS
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-
+   
          m_ViewWindow = static_cast<RwReal>(RwTan(RWDEG2RAD(45.0f * 0.5f)));
-
+   
          LinkMsg(iMsgRunningPostTick, 0);
          LinkMsg(iMsg_SetEnableDirectorsCamera, 0);
          LinkMsg(iMsg_SetDisableDirectorsCamera, 0);
@@ -152,53 +151,54 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Examples::CCameraLookAtPoint::Proc_m_Msg_Rx_Pos");
 
-         RwFrame *frame = static_cast<RwFrame *>(pMsg.pData);
+         RwFrame *frame = static_cast<RwFrame*>(pMsg.pData);
 
-         if (frame)
+         if (frame) 
          {
             // We won't modify it, honest!
             //
-            RwMatrix &msgmatrix = *RwFrameGetLTM(frame); // Use reference
-
+            RwMatrix &msgmatrix = *RwFrameGetLTM(frame); // Use reference 
+      
             RwMatrix rotmatrix = msgmatrix; // rot matrix
             RwMatrix irotmatrix; // Inverse rot matrix
             RwV3d v;
-
+      
             // Assume our own entity has a frame
             //
             RwFrame *frame = RpAtomicGetFrame(m_pAtomic.ptr());
-            RWS_ASSERT(frame, "Atomic has no frame");
+            RWS_ASSERT( frame, "Atomic has no frame" );
             const RwMatrix *matrix = RwFrameGetLTM(frame);
-
+      
             // Remove the translation from the rot matrix
             //
             rotmatrix.pos.x = 0;
             rotmatrix.pos.y = 0;
             rotmatrix.pos.z = 0;
-
+      
             RwMatrixInvert(&irotmatrix, &rotmatrix);
 
             RwV3dSubMacro(&v, &matrix->pos, &msgmatrix.pos);
 
             RwV3dTransformVectors(&v, &v, 1, &irotmatrix);  // Remove the target objects rotation
-
+      
             rwSqrt(&m_distance, (v.x * v.x) + (v.z * v.z));        // Distance X/Z only
 
-#if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
+#if defined (RWS_DEBUGTOOLS) && defined (RWS_DESIGN)
             if (m_Flags & uATTRIBUTEHANDLER_FLAG_DEBUG)
             {
                DebugTools::Printf("m_distance += (m_pref_distance - m_distance) * m_smooth_distance;\n");
 
                DebugTools::Printf("%f = (%f - %f) * %f;\n",
-                                  (m_pref_distance - m_distance) * m_smooth_distance, m_pref_distance, m_distance, m_smooth_distance);
+                  (m_pref_distance - m_distance) * m_smooth_distance, m_pref_distance, m_distance,m_smooth_distance);
+
             }
 #endif
-
+            
             // Head towards preferred distance ?
             //
             m_distance += (m_pref_distance - m_distance) * m_smooth_distance;
-
-#if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
+      
+#if defined (RWS_DEBUGTOOLS) && defined (RWS_DESIGN)
             if (m_Flags & uATTRIBUTEHANDLER_FLAG_DEBUG)
             {
                DebugTools::Printf("Head towards preferred distance %f\n", m_distance);
@@ -206,25 +206,25 @@ namespace RWS
 #endif
             // Clamp min/max distance
             //
-            if (m_distance > m_max_distance) m_distance = m_max_distance;
-            if (m_distance < m_min_distance) m_distance = m_min_distance;
+            if (m_distance>m_max_distance) m_distance = m_max_distance;
+            if (m_distance<m_min_distance) m_distance = m_min_distance;
 
-#if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
+#if defined (RWS_DEBUGTOOLS) && defined (RWS_DESIGN)
             if (m_Flags & uATTRIBUTEHANDLER_FLAG_DEBUG)
             {
                DebugTools::Printf("Clamp min/max distance %f %f %f\n", m_min_distance, m_distance, m_max_distance);
             }
 #endif
-
+            
             m_elevation = v.y;
-
+      
             // Head towards preferred elevation, may need to change this to be an angle diff not sure, as atan2 should
             // always return +-180
             //
 
             m_elevation += (m_pref_elevation - m_elevation) * m_smooth_elevation;
-
-#if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
+      
+#if defined (RWS_DEBUGTOOLS) && defined (RWS_DESIGN)
             if (m_Flags & uATTRIBUTEHANDLER_FLAG_DEBUG)
             {
                DebugTools::Printf("Head towards preferred elevation %f\n", m_elevation);
@@ -233,58 +233,58 @@ namespace RWS
 
             // Clamp Elevation
             //
-            if (m_elevation > m_max_elevation) m_elevation = m_max_elevation;
-            if (m_elevation < m_min_elevation) m_elevation = m_min_elevation;
+            if (m_elevation>m_max_elevation) m_elevation = m_max_elevation;
+            if (m_elevation<m_min_elevation) m_elevation = m_min_elevation;
 
-#if defined(RWS_DEBUGTOOLS) && defined(RWS_DESIGN)
+#if defined (RWS_DEBUGTOOLS) && defined (RWS_DESIGN)
             if (m_Flags & uATTRIBUTEHANDLER_FLAG_DEBUG)
             {
                DebugTools::Printf("Clamp min/max elevation %f %f %f\n", m_min_elevation, m_elevation, m_max_elevation);
             }
 #endif
-
-            m_angle = RWRAD2DEG(static_cast<RwReal>(RwATan2(v.x, v.z)));
-
+            
+            m_angle =  RWRAD2DEG( static_cast<RwReal>( RwATan2 (v.x, v.z) ));
+      
             // Head towards preferred angle
             //
             RwReal d_angle = DegAngDiffAndRange(m_angle, m_pref_angle, m_lastAngle);
-
+      
             m_angle += d_angle * m_smooth_angle;
-
+      
             // Clamp angle
             //
-            if (m_angle > m_max_angle) m_angle = m_max_angle;
-            if (m_angle < m_min_angle) m_angle = m_min_angle;
+            if (m_angle>m_max_angle) m_angle = m_max_angle;
+            if (m_angle<m_min_angle) m_angle = m_min_angle;
 
             m_lastAngle = m_angle;
-
+      
             // Generate a position vector relative to the character, this is the desired place to put the camera
             //
             v.x = m_distance * static_cast<RwReal>(RwSin(RWDEG2RAD(m_angle)));
             v.y = m_elevation;
             v.z = m_distance * static_cast<RwReal>(RwCos(RWDEG2RAD(m_angle)));
-
-            // Apply the target objects rotation
+      
+            // Apply the target objects rotation 
             //
             RwV3dTransformVectors(&v, &v, 1, &rotmatrix);
-
-            RwReal y_angle = 180.0f + RWRAD2DEG(static_cast<RwReal>(RwATan2(v.x, v.z)));
+      
+            RwReal y_angle = 180.0f + RWRAD2DEG ( static_cast<RwReal>( RwATan2 (v.x, v.z) ));
 
             RwReal temp;
 
-            rwSqrt(&temp, (v.x * v.x) + (v.z * v.z));
+            rwSqrt (&temp, (v.x * v.x) + (v.z * v.z));
 
-            RwReal x_angle = RWRAD2DEG(static_cast<RwReal>(RwATan2(v.y, temp)));
+            RwReal x_angle = RWRAD2DEG( static_cast<RwReal> (RwATan2 (v.y, temp)));
 
             // Add back to original position, to create our new camera position
             //
             RwV3dAddMacro(&v, &v, &msgmatrix.pos);
 
-            RwFrameRotate(frame, &XAxis, x_angle, rwCOMBINEREPLACE);   // Pitch
-
-            RwFrameRotate(frame, &YAxis, y_angle, rwCOMBINEPOSTCONCAT);   // Heading
-
-            RwFrameTranslate(frame, &v, rwCOMBINEPOSTCONCAT); // Position
+            RwFrameRotate (frame, &XAxis, x_angle, rwCOMBINEREPLACE);   // Pitch
+      
+            RwFrameRotate (frame, &YAxis, y_angle, rwCOMBINEPOSTCONCAT);   // Heading
+      
+            RwFrameTranslate (frame, &v, rwCOMBINEPOSTCONCAT); // Position
          }
 
          RWS_RETURNVOID();
@@ -335,7 +335,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Examples::CCameraLookAtPoint::Proc_m_RxEnableCameraEvent");
 
-         SendMsg(m_TxEnableCameraEvent);
+         SendMsg(m_TxEnableCameraEvent); 
 
          m_this_camera_active = true;
 
@@ -377,18 +377,18 @@ namespace RWS
          // Receive position from another entity
          //
          if (pMsg.Id == m_Msg_Rx_Pos && m_pAtomic) Proc_m_Msg_Rx_Pos(pMsg);
-
+   
          // NOTE: user may use the same message for their events, so do not use else-if, because
          //       second, third, etc, user selectable messages will not be picked up.
 
          // Enable the directors camera
          //
          if (pMsg.Id == iMsg_SetEnableDirectorsCamera && m_pAtomic) Proc_iMsg_SetEnableDirectorsCamera();
-
+   
          // Disable the directors camera
          //
          if (pMsg.Id == iMsg_SetDisableDirectorsCamera && m_pAtomic) Proc_iMsg_SetDisableDirectorsCamera();
-
+   
          // Enable this camera
          //
          if (pMsg.Id == m_RxEnableCameraEvent) Proc_m_RxEnableCameraEvent();
@@ -418,7 +418,7 @@ namespace RWS
             // Set the matrix inside this camera to that of the look-at-camera.
 
             RwMatrixCopy(RwFrameGetMatrix(RwCameraGetFrame(pOutCam)),
-                         RwFrameGetMatrix(RpAtomicGetFrame(m_pAtomic.ptr())));
+                  RwFrameGetMatrix(RpAtomicGetFrame(m_pAtomic.ptr())));
 
             CameraHelper::SetFieldOfView(m_ViewWindow, pOutCam);
 
@@ -476,20 +476,20 @@ namespace RWS
          {
             switch (attrIt->GetCommandId())
             {
-            case CMD_AttachResource:
+               case CMD_AttachResource:
                   // If the directors camera is active, this atomic/clump is invisible
                   //
-#ifdef RWS_DEBUGTOOLS
-               if (DebugSwitches::GetSwitch(DebugSwitches::m_enable_DirectorsCamera) == true)
-               {
-                  AtomicHelper::SetIsVisible(*m_pAtomic, false);
-               }
-               else
-               {
-                  AtomicHelper::SetIsVisible(*m_pAtomic, true);
-               }
-#endif
-               break;
+   #ifdef RWS_DEBUGTOOLS
+                  if (DebugSwitches::GetSwitch (DebugSwitches::m_enable_DirectorsCamera) == true)
+                  {
+                     AtomicHelper::SetIsVisible(*m_pAtomic, false);
+                  }
+                  else
+                  {
+                     AtomicHelper::SetIsVisible(*m_pAtomic, true);
+                  }
+   #endif               
+                  break;
             }
 
             ++attrIt;
@@ -506,184 +506,184 @@ namespace RWS
       *
       */
 
-      void CCameraLookAtPoint::HandleAttributes(const CAttributePacket &attr)
+      void CCameraLookAtPoint::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Examples::CCameraLookAtPoint::HandleAttributes");
 
          CAttributeHandler::HandleAttributes(attr);
 
          HandleSystemCommands(attr);
-
+      
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CCameraLookAtPoint));
          while (!attrIt.IsFinished())
          {
-            switch (attrIt->GetCommandId())
-            {
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_max_distance:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_max_distance);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_pref_distance:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_pref_distance);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_min_distance:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_min_distance);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_smooth_distance:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_smooth_distance);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_max_elevation:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_max_elevation);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_pref_elevation:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_pref_elevation);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_min_elevation:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_min_elevation);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_smooth_elevation:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_smooth_elevation);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_max_angle:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_max_angle);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_pref_angle:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_pref_angle);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_min_angle:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_min_angle);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_m_smooth_angle:
-                  //////////////////////////////////////////////////////////////////
-               attrIt->GetCommandData(m_smooth_angle);
-               break;
-                  //////////////////////////////////////////////////////////////////
-            case CMD_Set_m_Msg_Rx_Pos:
-                  //////////////////////////////////////////////////////////////////
+               switch (attrIt->GetCommandId())
                {
-                  const RwChar *name;
-
-                  attrIt->GetCommandData(&name);
-
-                  UnLinkMsg(m_Msg_Rx_Pos);
-                  UnRegisterMsg(m_Msg_Rx_Pos);
-                  RegisterMsg(m_Msg_Rx_Pos, name, "RwFrame*");
-                  LinkMsg(m_Msg_Rx_Pos, "RwFrame*");
-               }
-               break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_Set_m_RxEnableCameraEvent:
+               case CMD_m_max_distance:
                   //////////////////////////////////////////////////////////////////
-               {
-                  const RwChar *name;
-
-                  attrIt->GetCommandData(&name);
-
-                  UnLinkMsg(m_RxEnableCameraEvent);
-                  UnRegisterMsg(m_RxEnableCameraEvent);
-                  RegisterMsg(m_RxEnableCameraEvent, name, 0);
-                  LinkMsg(m_RxEnableCameraEvent, 0);
-               }
-               break;
+                  attrIt->GetCommandData(m_max_distance);
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_Set_m_TxEnableCameraEvent:
+               case CMD_m_pref_distance:
                   //////////////////////////////////////////////////////////////////
-               {
-                  const RwChar *name;
-
-                  attrIt->GetCommandData(&name);
-
-                  UnRegisterMsg(m_TxEnableCameraEvent);
-                  RegisterMsg(m_TxEnableCameraEvent, name, 0);
-               }
-               break;
+                  attrIt->GetCommandData(m_pref_distance);
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_Set_m_RxDisableCameraEvent:
+               case CMD_m_min_distance:
                   //////////////////////////////////////////////////////////////////
-               {
-                  const RwChar *name;
-
-                  attrIt->GetCommandData(&name);
-
-                  UnLinkMsg(m_RxDisableCameraEvent);
-                  UnRegisterMsg(m_RxDisableCameraEvent);
-                  RegisterMsg(m_RxDisableCameraEvent, name, 0);
-                  LinkMsg(m_RxDisableCameraEvent, 0);
-               }
-               break;
+                  attrIt->GetCommandData(m_min_distance);
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_Set_View_Angle:
+               case CMD_m_smooth_distance:
                   //////////////////////////////////////////////////////////////////
-               {
-                  RwReal angle;
+                  attrIt->GetCommandData(m_smooth_distance);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_max_elevation:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_max_elevation);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_pref_elevation:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_pref_elevation);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_min_elevation:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_min_elevation);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_smooth_elevation:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_smooth_elevation);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_max_angle:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_max_angle);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_pref_angle:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_pref_angle);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_min_angle:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_min_angle);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_m_smooth_angle:
+                  //////////////////////////////////////////////////////////////////
+                  attrIt->GetCommandData(m_smooth_angle);
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_Set_m_Msg_Rx_Pos:
+                  //////////////////////////////////////////////////////////////////
+                  {
+                     const RwChar *name;
+                  
+                     attrIt->GetCommandData(&name);
 
-                  attrIt->GetCommandData(angle);
+                     UnLinkMsg (m_Msg_Rx_Pos);
+                     UnRegisterMsg(m_Msg_Rx_Pos);
+                     RegisterMsg(m_Msg_Rx_Pos, name, "RwFrame*");
+                     LinkMsg(m_Msg_Rx_Pos, "RwFrame*");
+                  }
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_Set_m_RxEnableCameraEvent:
+                  //////////////////////////////////////////////////////////////////
+                  {
+                     const RwChar *name;
+                  
+                     attrIt->GetCommandData(&name);
 
-                  m_ViewWindow = static_cast<RwReal>(RwTan(RWDEG2RAD(angle * 0.5f)));
-               }
-               break;
+                     UnLinkMsg (m_RxEnableCameraEvent);
+                     UnRegisterMsg(m_RxEnableCameraEvent);
+                     RegisterMsg(m_RxEnableCameraEvent, name, 0);
+                     LinkMsg(m_RxEnableCameraEvent, 0);
+                  }
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_Set_m_TxEnableCameraEvent:
+                  //////////////////////////////////////////////////////////////////
+                  {
+                     const RwChar *name;
+                  
+                     attrIt->GetCommandData(&name);
 
+                     UnRegisterMsg(m_TxEnableCameraEvent);
+                     RegisterMsg(m_TxEnableCameraEvent, name, 0);
+                  }
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_Set_m_RxDisableCameraEvent:
+                  //////////////////////////////////////////////////////////////////
+                  {
+                     const RwChar *name;
+                  
+                     attrIt->GetCommandData(&name);
+
+                     UnLinkMsg (m_RxDisableCameraEvent);
+                     UnRegisterMsg(m_RxDisableCameraEvent);
+                     RegisterMsg(m_RxDisableCameraEvent, name, 0);
+                     LinkMsg(m_RxDisableCameraEvent, 0);
+                  }
+                  break;
+                  //////////////////////////////////////////////////////////////////
+               case CMD_Set_View_Angle:
+                  //////////////////////////////////////////////////////////////////
+                  {
+                     RwReal angle;
+
+                     attrIt->GetCommandData(angle);
+
+                     m_ViewWindow = static_cast<RwReal>(RwTan(RWDEG2RAD(angle * 0.5f)));
+                  }
+                  break;
+            
                   // Enable/Disable this camera
                   //
-            case CMD_Set_StartsActive:
+               case CMD_Set_StartsActive:
 
-               attrIt->GetCommandData(m_this_camera_active);
-               break;
+                  attrIt->GetCommandData(m_this_camera_active);
+                  break;
 
                   // Set incoming render message.
 
-            case CMD_Set_m_InRender:
+               case CMD_Set_m_InRender:
 
-               UnLinkMsg(m_renderInMsg);
-               UnRegisterMsg(m_renderInMsg);
-               RegisterMsg(m_renderInMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-               LinkMsg(m_renderInMsg, "RwCamera*", m_renderInPriority);
-               break;
+                  UnLinkMsg(m_renderInMsg);
+                  UnRegisterMsg(m_renderInMsg);
+                  RegisterMsg(m_renderInMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  LinkMsg(m_renderInMsg, "RwCamera*", m_renderInPriority);
+                  break;
 
                   // Set priority of the rendering message.
 
-            case CMD_priority:
+               case CMD_priority:
 
-               attrIt->GetCommandData(m_renderInPriority);
-               UnLinkMsg(m_renderInMsg);
-               LinkMsg(m_renderInMsg, "RwCamera*", m_renderInPriority);
-               break;
+                  attrIt->GetCommandData(m_renderInPriority);
+                  UnLinkMsg(m_renderInMsg);
+                  LinkMsg(m_renderInMsg, "RwCamera*", m_renderInPriority);
+                  break;
 
                   // Set outgoing render message.
 
-            case CMD_Set_m_OutRender:
+               case CMD_Set_m_OutRender:
 
-               UnRegisterMsg(m_renderOutMsg);
-               RegisterMsg(m_renderOutMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
-               break;
+                  UnRegisterMsg(m_renderOutMsg);
+                  RegisterMsg(m_renderOutMsg, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  break;
 #ifdef RWS_DESIGN
-            case CMD_Set_m_respondtocamerarequest:
-               attrIt->GetCommandData(m_respondtocamerarequest);
-               break;
+               case CMD_Set_m_respondtocamerarequest:
+                  attrIt->GetCommandData(m_respondtocamerarequest);
+                  break;
 #endif
-            }
+               }
             ++attrIt;
          }
 

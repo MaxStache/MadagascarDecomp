@@ -42,7 +42,7 @@
 //
 #include "rprandom.h"
 #ifdef _MSC_VER
-#pragma comment(lib, "rprandom.lib")
+#pragma comment (lib, "rprandom.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@
 #include "cfxreplicatorgenerator.h"
 #include "framework/toolkits/math/maths.h"
 #include "framework/toolkits/world/factory.h"
-#include "framework/toolkits/world/clevel.h"
+#include "framework/toolkits/world/clevel.h" 
 
 namespace RWS
 {
@@ -70,7 +70,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::AddConstToRwV3d");
 
-         V3d.x += r;
+         V3d.x += r; 
          V3d.y += r;
          V3d.z += r;
 
@@ -87,9 +87,9 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::SetRwV3D");
 
-         V3d.x =
-            V3d.y =
-               V3d.z = r;
+         V3d.x = 
+         V3d.y = 
+         V3d.z = r;
 
          RWS_RETURNVOID();
       }
@@ -104,10 +104,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::SetRwRGBAReal");
 
-         RGBAReal.red =
-            RGBAReal.green =
-               RGBAReal.blue =
-                  RGBAReal.alpha = r;
+         RGBAReal.red = 
+         RGBAReal.green =
+         RGBAReal.blue = 
+         RGBAReal.alpha = r;
 
          RWS_RETURNVOID();
       }
@@ -119,12 +119,12 @@ namespace RWS
       * RWS_ATTRIBUTE(CMD_Set_Color, "Color",    "",   COLOR,  RwUInt32,   DEFAULT(65535))
       *
       */
-      void SetAttribute_RwRGBAReal(RwRGBAReal &dest, const CAttributeCommandIterator &attr)
+      void SetAttribute_RwRGBAReal (RwRGBAReal &dest, const CAttributeCommandIterator& attr)
       {
          RWS_FUNCTION("RWS::FX::SetAttribute_RwRGBAReal");
 
          RwRGBA Color = attr->GetAs_RwRGBA();
-         RwRGBARealFromRwRGBA(&dest, &Color);
+         RwRGBARealFromRwRGBA  (&dest, &Color);
 
          RWS_RETURNVOID();
       }
@@ -135,8 +135,8 @@ namespace RWS
       * CFXReplicatorGenerator constructor
       *
       */
-      CFXReplicatorGenerator::CFXReplicatorGenerator(const CAttributePacket &attr) :
-         InitCEventHandler(&m_pAtomic),
+      CFXReplicatorGenerator::CFXReplicatorGenerator(const CAttributePacket& attr) : 
+      InitCEventHandler(&m_pAtomic),
          m_total_number_of_particles(0),
          m_modify_paths(false),
          m_link_priority(32768)
@@ -186,7 +186,7 @@ namespace RWS
          // Initial angular velocity bias i.e. velocity = random angular velocity + bias angular velocity
          SetRwV3D(m_initial_angvelocity_bias);
 
-         m_number_of_message_to_trigger = 1;
+         m_number_of_message_to_trigger  = 1;
          m_number_of_particles_to_create = 10;
 
          // Limit the total number of particles
@@ -210,13 +210,13 @@ namespace RWS
       *  Callback used to remove any remaining atomics from the clump before its is deleted.
       *
       */
-      RpAtomic *CFXReplicatorGenerator::RemoveAtomic(RpAtomic *pAtomic, void *data)
+      RpAtomic* CFXReplicatorGenerator::RemoveAtomic(RpAtomic* pAtomic, void *data)
       {
          RWS_FUNCTION("RWS::FX::CFXReplicatorGenerator::RemoveAtomic");
 
          RpClump *_pClump = RpAtomicGetClump(pAtomic);
 
-         RpClumpRemoveAtomic(_pClump, pAtomic);
+         RpClumpRemoveAtomic( _pClump, pAtomic);
 
          RWS_RETURN(pAtomic);
       }
@@ -264,13 +264,13 @@ namespace RWS
 
          if (pMsg.Id == m_StartRender)
          {
-            RwCamera *pRwCamera = reinterpret_cast<RwCamera *>(pMsg.pData);
+            RwCamera *pRwCamera = reinterpret_cast<RwCamera*>(pMsg.pData);
 
-            if (pRwCamera)
+            if ( pRwCamera)
             {
                RpWorldAddCamera(CLevel::GetOpaqueWorld(), pRwCamera);
 
-
+ 
                if (RwCameraBeginUpdate(pRwCamera))
                {
                   // Temporary store of RenderState
@@ -296,9 +296,9 @@ namespace RWS
                   RwRenderStateSet(rwRENDERSTATESRCBLEND, (void *)m_rwRENDERSTATESRCBLEND);
                   RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void *)m_rwRENDERSTATEDESTBLEND);
                   RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)m_rwRENDERSTATEVERTEXALPHAENABLE);
-                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *)m_rwRENDERSTATEZWRITEENABLE);
-                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)m_rwRENDERSTATEZTESTENABLE);
-                  RwRenderStateSet(rwRENDERSTATECULLMODE, (void *)m_rwRENDERSTATECULLMODE);
+                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)m_rwRENDERSTATEZWRITEENABLE);
+                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)m_rwRENDERSTATEZTESTENABLE);
+                  RwRenderStateSet(rwRENDERSTATECULLMODE, (void*)m_rwRENDERSTATECULLMODE);
 
                   ClumpHelper::RenderAllVisibleAtomics(m_pClump);
 
@@ -307,11 +307,11 @@ namespace RWS
                   RwRenderStateSet(rwRENDERSTATESRCBLEND, (void *)_rwRENDERSTATESRCBLEND);
                   RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void *)_rwRENDERSTATEDESTBLEND);
                   RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)_rwRENDERSTATEVERTEXALPHAENABLE);
-                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *)_rwRENDERSTATEZWRITEENABLE);
-                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)_rwRENDERSTATEZTESTENABLE);
-                  RwRenderStateSet(rwRENDERSTATECULLMODE, (void *)_rwRENDERSTATECULLMODE);
+                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)_rwRENDERSTATEZWRITEENABLE);
+                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)_rwRENDERSTATEZTESTENABLE);
+                  RwRenderStateSet(rwRENDERSTATECULLMODE, (void*)_rwRENDERSTATECULLMODE);
 
-                  RwCameraEndUpdate(pRwCamera);
+                  RwCameraEndUpdate (pRwCamera);
 
                } // RwCameraBeginUpdate
 
@@ -332,7 +332,7 @@ namespace RWS
       *
       *
       */
-      void CFXReplicatorGenerator::TriggerParticles(CMsg &pMsg)
+      void CFXReplicatorGenerator::TriggerParticles ( CMsg &pMsg )
       {
          RWS_FUNCTION("RWS::FX::CFXReplicatorGenerator::TriggerParticles");
 
@@ -343,55 +343,62 @@ namespace RWS
          {
             m_message_count = 0;
 
-            // Check if the message contained a RpAtomic* if so then
+            // Check if the message contained a RpAtomic* if so then 
             // that is where the particles should be generated.
-            const RwMatrix *pSMatrix = 0;
+            const RwMatrix* pSMatrix = 0;
 
             // Check if the message contains a valid RpAtomic *
             if (pMsg.Id == m_Msg_Rx_Trigger_Particles && pMsg.pData)
             {
-               RwFrame *pFrame = static_cast<RwFrame *>(pMsg.pData);
+               RwFrame* pFrame = static_cast<RwFrame*>(pMsg.pData);
 
-               if (pFrame) pSMatrix = RwFrameGetLTM(pFrame);
+               if ( pFrame ) pSMatrix = RwFrameGetLTM(pFrame);
             }
 
             // Otherwise use the frame of the particle generator
             else
             {
-               RwFrame *pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-               if (pFrame) pSMatrix = RwFrameGetLTM(pFrame);
+               RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
+               if ( pFrame ) pSMatrix = RwFrameGetLTM(pFrame);
             }
-
+         
             // Create m_number_of_particles_to_create particles
             for (RwUInt32 i = 0; i < m_number_of_particles_to_create; i++)
             {
                CFXReplicator *pParticle = ::RWS_NEW CFXReplicator(m_ParticleDynamics);
-
+            
                // Velocity = bias +- random/2
-               pParticle->m_ParticleDynamics.vXYZ.x = m_initial_velocity_bias.x + m_initial_velocity.x * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_velocity.x / 2;
+               pParticle->m_ParticleDynamics.vXYZ.x = m_initial_velocity_bias.x 
+                  + m_initial_velocity.x * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_velocity.x/2;
 
-               pParticle->m_ParticleDynamics.vXYZ.y = m_initial_velocity_bias.y + m_initial_velocity.y * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_velocity.y / 2;
+               pParticle->m_ParticleDynamics.vXYZ.y = m_initial_velocity_bias.y 
+                  + m_initial_velocity.y * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_velocity.y/2;
 
-               pParticle->m_ParticleDynamics.vXYZ.z = m_initial_velocity_bias.z + m_initial_velocity.z * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_velocity.z / 2;
-
+               pParticle->m_ParticleDynamics.vXYZ.z = m_initial_velocity_bias.z 
+                  + m_initial_velocity.z * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_velocity.z/2;
+            
                // Angular velocity = bias +- random / 2
-               pParticle->m_ParticleDynamics.avXYZ.x = m_initial_angvelocity_bias.x + m_initial_angvelocity.x * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_angvelocity.x / 2;
+               pParticle->m_ParticleDynamics.avXYZ.x = m_initial_angvelocity_bias.x 
+                  + m_initial_angvelocity.x * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_angvelocity.x/2;
 
-               pParticle->m_ParticleDynamics.avXYZ.y = m_initial_angvelocity_bias.y + m_initial_angvelocity.y * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_angvelocity.y / 2;
+               pParticle->m_ParticleDynamics.avXYZ.y = m_initial_angvelocity_bias.y 
+                  + m_initial_angvelocity.y * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_angvelocity.y/2;
 
-               pParticle->m_ParticleDynamics.avXYZ.z = m_initial_angvelocity_bias.z + m_initial_angvelocity.z * ((RwReal)RpRandom() / (RwUInt32MAXVAL >> 1)) - m_initial_angvelocity.z / 2;
-
+               pParticle->m_ParticleDynamics.avXYZ.z = m_initial_angvelocity_bias.z 
+                  + m_initial_angvelocity.z * ((RwReal)RpRandom() / (RwUInt32MAXVAL>>1)) - m_initial_angvelocity.z/2;
+            
                // Expire Time = bias + random
-               pParticle->m_ParticleDynamics.TimeOut = RpRandom() % m_ExpireTime + m_ExpireTime_Bias;
-
+               pParticle->m_ParticleDynamics.TimeOut = RpRandom() % m_ExpireTime 
+                  + m_ExpireTime_Bias;
+            
                // Calc Spline Step Rate
-               pParticle->m_ParticleDynamics.TimeStep =
-                  1.0f / (RwReal)pParticle->m_ParticleDynamics.TimeOut;
-
+               pParticle->m_ParticleDynamics.TimeStep = 
+                  1.0f / (RwReal) pParticle->m_ParticleDynamics.TimeOut;
+            
                // Copy the properties
                //
                //               pParticle->m_CAtomic.m_properties = m_CAtomic.m_properties;   // Copy entity parameters
-
+            
                // Clone the entity of the particle generator and attach the clone to the particle
                pParticle->m_pAtomic = RpAtomicClone(m_pAtomic);
 
@@ -401,18 +408,18 @@ namespace RWS
 
                RWS_ASSERT(pParticle->m_pAtomic, "RpAtomicClone failed");
 
-               RwFrame *pFrame = RwFrameCreate();
+               RwFrame* pFrame = RwFrameCreate();
 
                RWS_ASSERT(pFrame, "RwFrameCreate failed");
 
-               RpAtomicSetFrame(pParticle->m_pAtomic, pFrame);
+               RpAtomicSetFrame( pParticle->m_pAtomic, pFrame );
 
                // Don't add the atomic to the world otherwise it will be rendered inside RpWorldRender
-               // which would be wrong, as we want to render the atomics using RpClumpRender
+               // which would be wrong, as we want to render the atomics using RpClumpRender 
                // so that we can control the order of rendering.
                //
                RpClumpAddAtomic(m_pClump, pParticle->m_pAtomic);
-
+            
                // And set its position to that of the particle generator
                if (pSMatrix)
                {
@@ -420,37 +427,37 @@ namespace RWS
                   {
                      // Apply Local Transform to Particle System Parameters...
                      RwV3dTransformVectors(&pParticle->m_ParticleDynamics.vXYZ,
-                                           &pParticle->m_ParticleDynamics.vXYZ, 1, pSMatrix);
+                        &pParticle->m_ParticleDynamics.vXYZ, 1, pSMatrix);
 
                      RwV3dTransformVectors(&pParticle->m_ParticleDynamics.aXYZ,
-                                           &pParticle->m_ParticleDynamics.aXYZ, 1, pSMatrix);
-
-                     // Because of the way the friction parameters are "centered"
-                     // around 1, 1, 1 need to move them to the origin
+                        &pParticle->m_ParticleDynamics.aXYZ, 1, pSMatrix);
+                  
+                     // Because of the way the friction parameters are "centered" 
+                     // around 1, 1, 1 need to move them to the origin 
                      // before applying the transform and then put them back.
                      //
                      AddConstToRwV3d(pParticle->m_ParticleDynamics.fXYZ, -1.0f);
-
+                  
                      RwV3dTransformVectors(&pParticle->m_ParticleDynamics.fXYZ,
-                                           &pParticle->m_ParticleDynamics.fXYZ, 1, pSMatrix);
-
+                        &pParticle->m_ParticleDynamics.fXYZ, 1, pSMatrix);
+                  
                      AddConstToRwV3d(pParticle->m_ParticleDynamics.fXYZ, 1.0f);
                   }
-
-                  // Position the particle, FE Add offset and area
+               
+                  // Position the particle, FE Add offset and area                  
                   RwFrame *frame = RpAtomicGetFrame(pParticle->m_pAtomic.ptr());
-
+               
                   RwFrameTransform(frame, pSMatrix, rwCOMBINEREPLACE);
 
                   // Apply scale
-                  RwFrameScale(frame, &m_ParticleDynamics.iScale, rwCOMBINEPRECONCAT);
+                  RwFrameScale (frame, &m_ParticleDynamics.iScale, rwCOMBINEPRECONCAT);
                }
             }
-
+         
             if (m_total_number_of_particles_to_create != 0)
             {
                m_total_number_of_particles += m_number_of_particles_to_create;
-
+            
                if (m_total_number_of_particles > m_total_number_of_particles_to_create)
                {
                   Delete();
@@ -470,44 +477,44 @@ namespace RWS
       RwBlendFunction CFXReplicatorGenerator::Map_AttributeListToBlendMode(RwUInt32 var) const
       {
          RWS_FUNCTION("RWS::FX::CFXParticle::Map_AttributeListToBlendMode");
-
+         
          RwBlendFunction temp;
-
+         
          switch (var)
          {
-         default:
-         case 0: temp = rwBLENDZERO; break;
-         case 1: temp = rwBLENDONE; break;
-         case 2: temp = rwBLENDSRCCOLOR; break;
-         case 3: temp = rwBLENDINVSRCCOLOR; break;
-         case 4: temp = rwBLENDSRCALPHA; break;
-         case 5: temp = rwBLENDINVSRCALPHA; break;
-         case 6: temp = rwBLENDDESTALPHA; break;
-         case 7: temp = rwBLENDINVDESTALPHA; break;
-         case 8: temp = rwBLENDDESTCOLOR; break;
-         case 9: temp = rwBLENDINVDESTCOLOR; break;
-         case 10: temp = rwBLENDSRCALPHASAT; break;
+            default:
+            case 0: temp = rwBLENDZERO; break;
+            case 1: temp = rwBLENDONE; break;
+            case 2: temp = rwBLENDSRCCOLOR; break;
+            case 3: temp = rwBLENDINVSRCCOLOR; break;
+            case 4: temp = rwBLENDSRCALPHA; break;
+            case 5: temp = rwBLENDINVSRCALPHA; break;
+            case 6: temp = rwBLENDDESTALPHA; break;
+            case 7: temp = rwBLENDINVDESTALPHA; break;
+            case 8: temp = rwBLENDDESTCOLOR; break;
+            case 9: temp = rwBLENDINVDESTCOLOR; break;
+            case 10: temp = rwBLENDSRCALPHASAT;break;
          }
-
+         
          RWS_RETURN(temp);
       }
-
-
+      
+      
       /**
       *
       * Handle Attributes
       *
       */
-      void CFXReplicatorGenerator::HandleAttributes(const CAttributePacket &attr)
+      void CFXReplicatorGenerator::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FX::CFXReplicatorGenerator::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(attr);
-
+         
          m_pAtomic.HandleSystemCommands(attr);
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXReplicatorGenerator));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -520,7 +527,7 @@ namespace RWS
                //
                UnLinkMsg(m_StartRender);
                UnRegisterMsg(m_StartRender);
-
+               
                //
                //
                RegisterMsg(m_StartRender, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
@@ -530,7 +537,7 @@ namespace RWS
             case CMD_priority:
                //////////////////////////////////////////////////////////////////
                m_link_priority = attrIt->GetAs_RwUInt32();
-
+               
                // If already linked, unlink as were about to relink at a different priority
                //
                UnLinkMsg(m_StartRender);
@@ -666,40 +673,40 @@ namespace RWS
                //////////////////////////////////////////////////////////////////
                switch (attrIt->GetAs_RwUInt32())
                {
-               case 0: m_rwRENDERSTATECULLMODE = rwCULLMODECULLNONE; break;
-               case 1: m_rwRENDERSTATECULLMODE = rwCULLMODECULLBACK; break;
-               case 2: m_rwRENDERSTATECULLMODE = rwCULLMODECULLFRONT; break;
+               case 0: m_rwRENDERSTATECULLMODE = rwCULLMODECULLNONE;break;
+               case 1: m_rwRENDERSTATECULLMODE = rwCULLMODECULLBACK;break;
+               case 2: m_rwRENDERSTATECULLMODE = rwCULLMODECULLFRONT;break;
                }
                break;
                //////////////////////////////////////////////////////////////////
-            case CMD_rwRENDERSTATESRCBLEND:
+               case CMD_rwRENDERSTATESRCBLEND:
                   //////////////////////////////////////////////////////////////////
-               m_rwRENDERSTATESRCBLEND = Map_AttributeListToBlendMode(attrIt->GetAs_RwInt32());
-               break;
+                  m_rwRENDERSTATESRCBLEND = Map_AttributeListToBlendMode(attrIt->GetAs_RwInt32());
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_rwRENDERSTATEDESTBLEND:
+               case CMD_rwRENDERSTATEDESTBLEND:
                   //////////////////////////////////////////////////////////////////
-               m_rwRENDERSTATEDESTBLEND = Map_AttributeListToBlendMode(attrIt->GetAs_RwInt32());
-               break;
+                  m_rwRENDERSTATEDESTBLEND = Map_AttributeListToBlendMode(attrIt->GetAs_RwInt32());
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_rwRENDERSTATEVERTEXALPHAENABLE:
+               case CMD_rwRENDERSTATEVERTEXALPHAENABLE:
                   //////////////////////////////////////////////////////////////////
-               m_rwRENDERSTATEVERTEXALPHAENABLE = attrIt->GetAs_RwInt32();
-               break;
+                  m_rwRENDERSTATEVERTEXALPHAENABLE = attrIt->GetAs_RwInt32();
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_rwRENDERSTATEZWRITEENABLE:
+               case CMD_rwRENDERSTATEZWRITEENABLE:
                   //////////////////////////////////////////////////////////////////
-               m_rwRENDERSTATEZWRITEENABLE = attrIt->GetAs_RwInt32();
-               break;
+                  m_rwRENDERSTATEZWRITEENABLE = attrIt->GetAs_RwInt32();
+                  break;
                   //////////////////////////////////////////////////////////////////
-            case CMD_rwRENDERSTATEZTESTENABLE:
+               case CMD_rwRENDERSTATEZTESTENABLE:
                   //////////////////////////////////////////////////////////////////
-               m_rwRENDERSTATEZTESTENABLE = attrIt->GetAs_RwInt32();
-               break;
+                  m_rwRENDERSTATEZTESTENABLE = attrIt->GetAs_RwInt32();
+                  break;
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
    }//namespace

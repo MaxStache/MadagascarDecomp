@@ -47,7 +47,7 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial4 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CTutorial4 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial4);
@@ -58,18 +58,18 @@ namespace RWS
          CTutorial4(const CAttributePacket& attr);
          ~CTutorial4(void);
 
-         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
          // The attribute definition for this behavior allows you to turn on and off the sending message.
          //
          RWS_BEGIN_COMMANDS
-         RWS_ATTRIBUTE(CMD_TriggerMessage, "Send Event", "", BOOLEAN, RwUInt32, DEFAULT(0))
+            RWS_ATTRIBUTE(CMD_TriggerMessage, "Send Event", "", BOOLEAN, RwUInt32, DEFAULT(0))
          RWS_END_COMMANDS;
 
       protected:
          CAtomicPtr m_pAtomic;   /**< Behavior's Atomic. */
-         CEventId m_trigger;     /**< m_trigger is used to store the clients reference to an event. */
+         CEventId m_trigger;     /**< m_trigger is used to store the clients reference to an event. */ 
       };
    }//namespace Tutorial
 }//namespace RWS

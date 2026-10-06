@@ -57,19 +57,18 @@ namespace RWS
 
       RWS_IMPLEMENT_CLASSID(CDirectorsCamera);
       RWS_REGISTERCLASS(CDirectorsCamera);
-
+      
       /**
       *
       *  Construct a CDirectorsCamera object.
       *
       */
-      CDirectorsCamera::CDirectorsCamera(const CAttributePacket& rAttr) :
-         InitCEventHandler(0)
+      CDirectorsCamera::CDirectorsCamera(const CAttributePacket& rAttr) : InitCEventHandler(0)
       {
          RWS_FUNCTION("RWS::Generic::CDirectorsCamera::CDirectorsCamera");
-
+         
          LinkMsg(iMsgDoRenderDirectorsCamera, "RwCamera*");
-
+         
          RWS_RETURNVOID();
       }
 
@@ -93,7 +92,7 @@ namespace RWS
       *  Handle events
       *
       */
-      void CDirectorsCamera::HandleEvents(CMsg& pMsg)
+      void CDirectorsCamera::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::Generic::CDirectorsCamera::HandleEvents");
 
@@ -115,22 +114,22 @@ namespace RWS
       void CDirectorsCamera::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::Generic::CDirectorsCamera:HandleAttributes");
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CDirectorsCamera));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
                   //////////////////////////////////////////////////////////////////
-            case CMD_RenderOut:
+               case CMD_RenderOut:
                   //////////////////////////////////////////////////////////////////
-               ReplaceRegisteredMsg(m_Render_Out, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
+                  ReplaceRegisteredMsg(m_Render_Out, attrIt->GetAs_RwChar_ptr(), "RwCamera*");
                break;
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
    }//namespace Tutorial

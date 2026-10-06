@@ -59,9 +59,9 @@ namespace RWS
       */
       typedef struct
       {
-         RwFrame *EnvMapFrame;  /**< Pointer to frame used by the materials environment map */
-         CFXBaseEnvironmentMap *EnvMapObject; /**< Pointer to CFXBaseEnvironmentMap class  */
-      } t_MaterialCallBackData;
+         RwFrame                 *EnvMapFrame;  /**< Pointer to frame used by the materials environment map */
+         CFXBaseEnvironmentMap   *EnvMapObject; /**< Pointer to CFXBaseEnvironmentMap class  */
+      }t_MaterialCallBackData;
 
 
       /**
@@ -81,19 +81,19 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::MaterialCallback")
 
-         RpMatFXMaterialFlags Flags;
-         RwFrame *pMatFrame;
+         RpMatFXMaterialFlags  Flags;
+         RwFrame              *pMatFrame;
 
-         pMatFrame = reinterpret_cast<t_MaterialCallBackData *>(pCallBackData)->EnvMapFrame;
+         pMatFrame = reinterpret_cast<t_MaterialCallBackData*>(pCallBackData)->EnvMapFrame;
 
          Flags = RpMatFXMaterialGetEffects(pMaterial);
 
-         if (Flags == rpMATFXEFFECTENVMAP || Flags == rpMATFXEFFECTBUMPENVMAP)
+         if ( Flags == rpMATFXEFFECTENVMAP || Flags == rpMATFXEFFECTBUMPENVMAP )
          {
-            RpMaterial *Res;
+            RpMaterial            *Res;         
             CFXBaseEnvironmentMap *pEnvMapObject;
 
-            pEnvMapObject = reinterpret_cast<t_MaterialCallBackData *>(pCallBackData)->EnvMapObject;
+            pEnvMapObject = reinterpret_cast<t_MaterialCallBackData*>(pCallBackData)->EnvMapObject;
 
             Res = RpMatFXMaterialSetEnvMapFrame(pMaterial, pMatFrame);
 
@@ -108,9 +108,10 @@ namespace RWS
             {
                pEnvMapObject->m_MatList.AddToList(pMaterial);
             }
+            
          }
 
-         RWS_RETURN(pMaterial);
+         RWS_RETURN( pMaterial );
       }
 
       /**
@@ -127,16 +128,16 @@ namespace RWS
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::AtomicCallback")
 
          RpGeometry *pGeom;
-         pGeom = RpAtomicGetGeometry(pAtomic);
+         pGeom = RpAtomicGetGeometry( pAtomic );
 
          if (pGeom)
-         {
+         { 
             RpGeometry *pRes;
-            pRes = RpGeometryForAllMaterials(pGeom, MaterialCallback, pCallBackData);
+            pRes = RpGeometryForAllMaterials (pGeom, MaterialCallback, pCallBackData); 
             RWS_ASSERT(pRes, "RpGeometryForAllMaterials failed");
          }
 
-         RWS_RETURN(pAtomic);
+         RWS_RETURN( pAtomic );
       }
 
       /**
@@ -154,7 +155,8 @@ namespace RWS
 
          RpWorldSectorForAllAtomics(pWorldSector, CFXBaseEnvironmentMap::AtomicCallback, pCallBackData);
 
-         RWS_RETURN(pWorldSector);
+         RWS_RETURN( pWorldSector );
+
       }
 
       /**
@@ -166,16 +168,16 @@ namespace RWS
       *  
       *
       */
-      RpClump *CFXBaseEnvironmentMap::ClumpCallback(RpClump *pClump, void *pCallBackData)
+      RpClump * CFXBaseEnvironmentMap::ClumpCallback(RpClump *pClump, void *pCallBackData)
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::ClumpCallback")
 
          RpClump *pRes;
-         pRes = RpClumpForAllAtomics(pClump, AtomicCallback, pCallBackData);
+         pRes = RpClumpForAllAtomics (pClump, AtomicCallback, pCallBackData); 
 
          RWS_ASSERT(pRes, "RpClumpForAllAtomics failed");
 
-         RWS_RETURN(pClump);
+         RWS_RETURN( pClump );
       }
 
       /**
@@ -197,16 +199,16 @@ namespace RWS
          RWS_ASSERT(pEnvMapFrame, "environment map frame has not been setup");
 
          RpGeometry *pGeom;
-         pGeom = RpAtomicGetGeometry(pAtomic);
+         pGeom = RpAtomicGetGeometry( pAtomic );
 
-         if (pGeom)
-         {
+         if ( pGeom )
+         { 
             // fill in the callback data
-            RpGeometry *pRes;
-            t_MaterialCallBackData CallBackData;
-            CallBackData.EnvMapFrame = pEnvMapFrame;// environment map frame
+            RpGeometry              *pRes;
+            t_MaterialCallBackData  CallBackData;
+            CallBackData.EnvMapFrame  = pEnvMapFrame;// environment map frame
             CallBackData.EnvMapObject = pObject;     // environment map object
-            pRes = RpGeometryForAllMaterials(pGeom, MaterialCallback, &CallBackData);
+            pRes = RpGeometryForAllMaterials (pGeom, MaterialCallback, &CallBackData); 
             RWS_ASSERT(pRes, "RpGeometryForAllMaterials failed");
          }
 
@@ -223,7 +225,7 @@ namespace RWS
       *
       */
       void CFXBaseEnvironmentMap::SetMatFXEnvFrameForClump(CFXBaseEnvironmentMap *pObject, const RpClump *pClump,
-                                                           RwFrame *pEnvMapFrame)
+                                                           RwFrame  *pEnvMapFrame)
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::SetMatFXEnvFrameForClump")
 
@@ -231,10 +233,10 @@ namespace RWS
 
 
          RpClump *pRes;
-         t_MaterialCallBackData CallBackData;
-         CallBackData.EnvMapFrame = pEnvMapFrame;
+         t_MaterialCallBackData  CallBackData;
+         CallBackData.EnvMapFrame  = pEnvMapFrame;
          CallBackData.EnvMapObject = pObject;
-         pRes = RpClumpForAllAtomics(const_cast<RpClump *>(pClump), AtomicCallback, &CallBackData);
+         pRes = RpClumpForAllAtomics (const_cast<RpClump*>(pClump), AtomicCallback, &CallBackData); 
          RWS_ASSERT(pRes, "RpClumpForAllAtomics failed");
 
 
@@ -251,7 +253,7 @@ namespace RWS
       *
       */
       void CFXBaseEnvironmentMap::SetMatFXEnvFrameForWorld(CFXBaseEnvironmentMap *pObject, const RpWorld *pWorld,
-                                                           RwFrame *pEnvMapFrame)
+                                                           RwFrame  *pEnvMapFrame)
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::SetMatFXEnvFrameForWorld")
 
@@ -259,10 +261,10 @@ namespace RWS
 
          RpWorld *pRes;
 
-         t_MaterialCallBackData CallBackData;
-         CallBackData.EnvMapFrame = pEnvMapFrame;// environment map frame
+         t_MaterialCallBackData  CallBackData;
+         CallBackData.EnvMapFrame  = pEnvMapFrame;// environment map frame 
          CallBackData.EnvMapObject = pObject;    // environment map object
-         pRes = RpWorldForAllMaterials(const_cast<RpWorld *>(pWorld), MaterialCallback, &CallBackData);
+         pRes = RpWorldForAllMaterials(const_cast<RpWorld*>(pWorld), MaterialCallback, &CallBackData);
          RWS_ASSERT(pRes, "RpWorldForAllMaterials failed");
 
          RWS_RETURNVOID();
@@ -281,8 +283,8 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::SetMatFXDefaultEnvFrameForAtomic")
 
-         RWS_ASSERT(GetDefaultEnvFrame(), "Default environment map frame has not been created");
-         SetMatFXEnvFrameForAtomic(pObject, pAtomic, GetDefaultEnvFrame());
+         RWS_ASSERT( GetDefaultEnvFrame(), "Default environment map frame has not been created");
+         SetMatFXEnvFrameForAtomic(pObject, pAtomic,  GetDefaultEnvFrame());
 
          RWS_RETURNVOID();
       }
@@ -298,8 +300,8 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap:SetMatFXDefaultEnvFrameForClump:")
 
-         RWS_ASSERT(GetDefaultEnvFrame(), "Default environment map frame has not been created");
-         SetMatFXEnvFrameForClump(pObject, pClump, GetDefaultEnvFrame());
+         RWS_ASSERT( GetDefaultEnvFrame(), "Default environment map frame has not been created");
+         SetMatFXEnvFrameForClump(pObject, pClump,  GetDefaultEnvFrame());
 
          RWS_RETURNVOID();
       }
@@ -315,7 +317,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::SetMatFXDefaultEnvFrameForWorld")
 
-         RWS_ASSERT(GetDefaultEnvFrame(), "Default environment map frame has not been created");
+         RWS_ASSERT( GetDefaultEnvFrame(), "Default environment map frame has not been created");
          SetMatFXEnvFrameForWorld(pObject, pWorld, GetDefaultEnvFrame());
 
          RWS_RETURNVOID();
@@ -350,7 +352,7 @@ namespace RWS
 
          if (m_DefaultEnvFrame)
          {
-            RwFrameDestroy(m_DefaultEnvFrame);
+            RwFrameDestroy (m_DefaultEnvFrame);
             m_DefaultEnvFrame = 0;
          }
 
@@ -374,16 +376,16 @@ namespace RWS
       *  Destroy a CFXBaseEnvironmentMap object.
       *
       */
-      CFXBaseEnvironmentMap::~CFXBaseEnvironmentMap(void)
+      CFXBaseEnvironmentMap::~CFXBaseEnvironmentMap(void) 
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::~CFXBaseEnvironmentMap")
 
-         t_MaterialCallBackData CallBackData;
+         t_MaterialCallBackData  CallBackData;
 
          // set the default environment map frame
-         CallBackData.EnvMapFrame = GetDefaultEnvFrame();
+         CallBackData.EnvMapFrame  = GetDefaultEnvFrame();
          // as this is the default environment map frame we are setting then we don't have a owner
-         // environment map behaviour, so we set EnvMapObject to be null
+         // environment map behaviour, so we set EnvMapObject to be null 
          CallBackData.EnvMapObject = 0;
 
          // set the default environment map frame for every material
@@ -393,6 +395,7 @@ namespace RWS
          m_MatList.DeleteList();
 
          RWS_RETURNVOID();
+
       }
 
       /**
@@ -402,7 +405,7 @@ namespace RWS
       * \param pEnvFrame   Pointer to an environment map frame.
       *
       */
-      void CFXBaseEnvironmentMap::ProcessAttachments(const CAttributePacket &attr, RwFrame *pEnvFrame)
+      void CFXBaseEnvironmentMap::ProcessAttachments(const CAttributePacket& attr, RwFrame *pEnvFrame)
       {
          RWS_FUNCTION("RWS::FX::CFXBaseEnvironmentMap::ProcessAttachments")
 
@@ -410,40 +413,40 @@ namespace RWS
          // the current entity. The asset will then be linked to the current environment map entity so that
          // attributes changed in the current entity will effect the environment maps on the assets that have been
          // linked
-         CAttributeCommandIterator sysattrIt(attr, RWS_CLASSID_OF(CSystemCommands));
+         CAttributeCommandIterator sysattrIt (attr, RWS_CLASSID_OF (CSystemCommands));
          while (!sysattrIt.IsFinished())
          {
             switch (sysattrIt->GetCommandId())
             {
-            case CSystemCommands::CMD_AttachResource:
-               {
-                  const RWSGUID *pResourceId;
-                  sysattrIt->GetCommandData(&pResourceId);
-
-                  const RwChar *resourceType;
-
-                  const void *pObject = CResourceManager::FindById(pResourceId, &resourceType);
-
-                  RWS_ASSERT(pObject, "Resource::Find failed for id = " << pResourceId);
-
-                  if (resourceType)
+               case CSystemCommands::CMD_AttachResource:
                   {
-                     if (!rwstrcmp("rwID_ATOMIC", resourceType))
+                     const RWSGUID * pResourceId;
+                     sysattrIt->GetCommandData(&pResourceId);
+
+                     const RwChar *resourceType;
+      
+                     const void *pObject = CResourceManager::FindById( pResourceId, &resourceType);
+      
+                     RWS_ASSERT (pObject, "Resource::Find failed for id = " << pResourceId);
+
+                     if (resourceType)
                      {
-                        SetMatFXEnvFrameForAtomic(this, reinterpret_cast<const RpAtomic *>(pObject), pEnvFrame);
-                     }
-                     else if (!rwstrcmp("rwID_CLUMP", resourceType))
-                     {
-                        SetMatFXEnvFrameForClump(this, reinterpret_cast<const RpClump *>(pObject), pEnvFrame);
-                     }
-                     else if (!rwstrcmp("rwID_WORLD", resourceType))
-                     {
-                        SetMatFXEnvFrameForWorld(this, reinterpret_cast<const RpWorld *>(pObject), pEnvFrame);
+                        if (!rwstrcmp("rwID_ATOMIC", resourceType))
+                        {
+                           SetMatFXEnvFrameForAtomic(this, reinterpret_cast<const RpAtomic *>(pObject), pEnvFrame);
+                        }
+                        else if (!rwstrcmp("rwID_CLUMP", resourceType))
+                        {
+                           SetMatFXEnvFrameForClump(this, reinterpret_cast<const RpClump *>(pObject),   pEnvFrame);
+                        }
+                        else if (!rwstrcmp("rwID_WORLD", resourceType))
+                        {
+                           SetMatFXEnvFrameForWorld(this, reinterpret_cast<const RpWorld *>(pObject),   pEnvFrame);
+                        }
                      }
                   }
-               }
-               break;
-            };
+                  break;
+            }; 
             ++sysattrIt;
          }
 

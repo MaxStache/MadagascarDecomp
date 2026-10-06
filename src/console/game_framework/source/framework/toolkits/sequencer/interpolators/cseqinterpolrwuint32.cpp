@@ -61,7 +61,7 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwUInt32DefaultReg(CSeqInterpolBase::MakeNew,
-                                               CSeqInterpolBase::MaxSize, RWSTRING("RwUInt32"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwUInt32"), 0, FALSE);
 
       // Interpolator specific ones...
 
@@ -114,9 +114,9 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwUInt32::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
          RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwUInt32),
-                    "Memory buffer too small");
+            "Memory buffer too small");
 
-         CSeqInterpolLinearRwUInt32 *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwUInt32 *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwUInt32(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -199,7 +199,8 @@ namespace RWS
 
       inline RwUInt32 CalcValue(const RwUInt32 *pStartVal, const RwUInt32 *pEndVal, RwReal tVal)
       {
-         return (*pStartVal + static_cast<RwUInt32>(static_cast<RwReal>(*pEndVal - *pStartVal) * tVal));
+         return(*pStartVal + static_cast<RwUInt32>(static_cast<RwReal>
+            (*pEndVal - *pStartVal) * tVal));
       }
 
       /**
@@ -238,8 +239,10 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta < 1.0f, "Delta is out of range.");
 
-         const RwUInt32 *pEndVal = reinterpret_cast<const RwUInt32 *>(rData.EndKey()->Data()),
-                        *pStartVal = reinterpret_cast<const RwUInt32 *>(rData.LastKey()->Data());
+         const RwUInt32 *pEndVal = reinterpret_cast<const RwUInt32 *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwUInt32 *>
+               (rData.LastKey()->Data());
          RwUInt32 *pCalcVal;
 
          // Calculate the current value & insert into attribute data...

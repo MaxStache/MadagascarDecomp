@@ -77,7 +77,7 @@ namespace RWS
          // It'd be better to link to the running tick once the first animation
          // has kicked off. However, we'd need a flag to tell us that we haven't
          // linked yet - do we really want the overhead of that extra memory?
-         LinkMsg(iMsgRunningTick, 0);
+         LinkMsg( iMsgRunningTick, 0 );
 
          RWS_RETURNVOID()
       }
@@ -92,7 +92,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::Examples::CMultiAnimate::~CMultiAnimate")
 
-         UnLinkMsg(iMsgRunningTick);
+         UnLinkMsg( iMsgRunningTick );
          UnLinkMsg(m_msgNextAnimTrigger);
          UnRegisterMsg(m_msgNextAnimTrigger);
 
@@ -124,10 +124,10 @@ namespace RWS
          while (!SysattrIt.IsFinished())
          {
             // Intercept CMD_AttachResource's only
-            if (CMD_AttachResource == SysattrIt->GetCommandId())
+            if ( CMD_AttachResource == SysattrIt->GetCommandId() )
             {
                // Next anim, if possible
-               if (m_animSet.HasTarget() && m_animSet.GetAnimationCount())
+               if (m_animSet.HasTarget() && m_animSet.GetAnimationCount() )
                {
                   m_animSet.SetDstAnimation(m_animSet.GetAnimationCount() - 1);
                }
@@ -147,7 +147,7 @@ namespace RWS
             case CMD_MsgNextAnimTrigger:
                //////////////////////////////////////////////////////////////////
                {
-                  const RwChar* name;
+                  const RwChar *name;
 
                   attrIt->GetCommandData(&name);
 
@@ -186,7 +186,7 @@ namespace RWS
                   RwUInt32 loopFlag;
 
                   attrIt->GetCommandData(loopFlag);
-
+               
                   SetLooping(0 != loopFlag);
                }
                break;
@@ -203,13 +203,13 @@ namespace RWS
       *
       */
 
-      void CMultiAnimate::SetRate(RwReal rate)
+      void CMultiAnimate::SetRate( RwReal rate )
       {
          RWS_FUNCTION("RWS::Examples::CMultiAnimate::SetRate")
 
-         for (RwUInt32 i = 0; i < m_animSet.GetAnimationCount(); ++i)
+         for (RwUInt32 i = 0; i < m_animSet.GetAnimationCount(); ++i )
          {
-            m_animSet.SetRateMultiplier(i, rate);
+            m_animSet.SetRateMultiplier( i, rate );
          }
 
          RWS_RETURNVOID()
@@ -221,12 +221,12 @@ namespace RWS
       *
       */
 
-      void CMultiAnimate::SetLooping(bool doLoop)
+      void CMultiAnimate::SetLooping( bool doLoop )
       {
          RWS_FUNCTION("RWS::Examples::CMultiAnimate::SetLooping")
 
          const CAnimSet::EndBehavior behavior = doLoop ? CAnimSet::LOOP : CAnimSet::HOLD;
-         for (RwUInt32 i = 0; i < m_animSet.GetAnimationCount(); ++i)
+         for (RwUInt32 i = 0; i < m_animSet.GetAnimationCount(); ++i )
          {
             m_animSet.SetEndBehavior(i, behavior);
          }
@@ -241,22 +241,22 @@ namespace RWS
       *
       */
 
-      void CMultiAnimate::HandleEvents(CMsg& msg)
+      void CMultiAnimate::HandleEvents(CMsg &msg)
       {
          RWS_FUNCTION("RWS::Examples::CMultiAnimate::HandleEvents")
 
-         if (m_msgNextAnimTrigger == msg.Id)
+         if (m_msgNextAnimTrigger == msg.Id )
          {
             // Next anim, if possible
             const RwUInt32 animCount = m_animSet.GetAnimationCount();
-            if (m_animSet.HasTarget() && animCount)
+            if (m_animSet.HasTarget() && animCount )
             {
                RwUInt32 nextAnim = 0;
                nextAnim = (m_animSet.GetDstAnimation() + 1) % animCount;
                m_animSet.SetDstAnimation(nextAnim);
             }
          }
-         else if (iMsgRunningTick == msg.Id)
+         else if (iMsgRunningTick == msg.Id )
          {
             if (!m_animSet.Update(kFrameTime))
             {
@@ -279,3 +279,4 @@ namespace RWS
       }
    }//namespace Examples
 }//namespace RWS
+   

@@ -52,11 +52,11 @@ namespace RWS
    class CEventHandler;
    class CAttributePacket;
 
-   RpAtomic* CreateAtomicInWorldFromResource(const CAttributePacket& attr, CEventHandler* eventHandler = 0);
-   RpAtomic* CreateAtomicFromResource(const CAttributePacket& attr, CEventHandler* eventHandler = 0);
+   RpAtomic *CreateAtomicInWorldFromResource( const CAttributePacket& attr, CEventHandler* eventHandler = 0);
+   RpAtomic *CreateAtomicFromResource( const CAttributePacket& attr, CEventHandler* eventHandler = 0);
 
-   RpClump* CreateClumpInWorldFromResource(const CAttributePacket& attr, CEventHandler* eventHandler = 0);
-   RpClump* CreateClumpFromResource(const CAttributePacket& attr, CEventHandler* eventHandler = 0);
+   RpClump *CreateClumpInWorldFromResource( const CAttributePacket& attr, CEventHandler* eventHandler = 0);
+   RpClump *CreateClumpFromResource( const CAttributePacket& attr, CEventHandler* eventHandler = 0);
 }
 
 #endif

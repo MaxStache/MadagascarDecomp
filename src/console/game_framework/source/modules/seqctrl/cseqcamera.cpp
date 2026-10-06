@@ -60,7 +60,7 @@ namespace RWS
       RWS_IMPLEMENT_CLASSID(CSeqCamera);
       RWS_REGISTERCLASS(CSeqCamera);
       RWS_DS_REGISTER_START(CSeqCamera)
-      RWS_DS_REGISTER_BASE(CSeqCamera, CSeqPos)
+         RWS_DS_REGISTER_BASE(CSeqCamera, CSeqPos)
       RWS_DS_REGISTER_END
 
       /**
@@ -78,7 +78,7 @@ namespace RWS
          LinkMsg(iMsgStartSystem);
 
 #ifdef RWS_DESIGN
-
+         
          LinkMsg(iMsgRequestCurrentCameraMatrix, "RwUInt32 InstanceID");
 #endif
 
@@ -90,7 +90,7 @@ namespace RWS
       * Destructor - unlink from messages, etc.
       *
       */
-
+         
       CSeqCamera::~CSeqCamera(void)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCamera::~CSeqCamera");
@@ -109,7 +109,7 @@ namespace RWS
          UnLinkMsg(iMsgStartSystem);
 
 #ifdef RWS_DESIGN
-
+         
          UnLinkMsg(iMsgRequestCurrentCameraMatrix);
 #endif
 
@@ -142,7 +142,7 @@ namespace RWS
          // on listening behaviour).
 
          if (msg.Id == m_inRenderMsg && msg.pData && m_enabledFlag &&
-             m_outRenderMsg.Get_registered_count())
+            m_outRenderMsg.Get_registered_count())
          {
             RwCamera *pOutCam;
             RwFrame *pOutFrame;
@@ -332,7 +332,7 @@ namespace RWS
       void CSeqCamera::Update(void)
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqCamera::Update");
-
+         
          // Just call this functions update.
 
          UpdateObjectData();

@@ -55,23 +55,23 @@
 #include <rphanim.h>
 
 // RenderWare Version Exceeds 3.4
-//
+//      
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
 #include <rtanim.h>
 #endif
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "RpSkin.lib")
-#pragma comment(lib, "RpHAnim.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "RpSkin.lib")
+#pragma comment (lib, "RpHAnim.lib")
 #endif
 
 // RenderWare Version Exceeds 3.4
-//
+//      
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
 #include <rtanim.h>
 #ifdef _MSC_VER
-#pragma comment(lib, "RtAnim.lib")
+#pragma comment (lib, "RtAnim.lib")
 #endif
 
 #endif
@@ -92,7 +92,7 @@ namespace RWS
       *  \returns true if all the flags in 'flagMask' are set on the given hierarchy
       *
       */
-      bool FlagsAreSet(const RpHAnimHierarchy& hierarchy, RpHAnimHierarchyFlag flagMask)
+      bool FlagsAreSet( const RpHAnimHierarchy& hierarchy, RpHAnimHierarchyFlag flagMask )
       {
          RWS_FUNCTION("RWS::NULL::FlagsAreSet");
          RWS_RETURN(flagMask == (flagMask & RpHAnimHierarchyGetFlags(const_cast<RpHAnimHierarchy*>(&hierarchy))));
@@ -109,7 +109,7 @@ namespace RWS
       *  \param nMatrices The number of matrices to invert.
       *
       */
-      void InvertMatrices(const RwMatrix* pSrcMatrices, RwMatrix* pDstMatrices, RwInt32 nMatrices)
+      void InvertMatrices( const RwMatrix *pSrcMatrices, RwMatrix *pDstMatrices, RwInt32 nMatrices )
       {
          RWS_FUNCTION("RWS::NULL::InvertMatrices")
 
@@ -137,11 +137,8 @@ namespace RWS
       */
       struct FindChildWithHAnimIDCallbackData
       {
-         FindChildWithHAnimIDCallbackData(RwInt32 id) :
-            id_(id),
-            pFoundFrame_(0)
-         {
-         }
+         FindChildWithHAnimIDCallbackData(RwInt32 id)
+            : id_(id), pFoundFrame_(0) {}
 
          RwInt32 id_;
          RwFrame* pFoundFrame_;
@@ -271,30 +268,30 @@ namespace RWS
       *  successfully processed.
       *
       */
-      template <class Desc>
-      bool ForEachInHierarchy(const RpHAnimNodeInfo*& pCurrInfo, Desc& desc)
+      template< class Desc >
+      bool ForEachInHierarchy( const RpHAnimNodeInfo*& pCurrInfo, Desc& desc )
       {
          RWS_FUNCTION("RWS::NULL::ForEachInHierarchy")
 
-         RWS_PRE(pCurrInfo);
-         RWS_PRE(desc.IsValid(pCurrInfo));
+         RWS_PRE( pCurrInfo );
+         RWS_PRE( desc.IsValid(pCurrInfo) );
 
          // Find out if the next frame is a child of this one, then move right on to it
          bool nextFrameIsChild = (0 == (pCurrInfo->flags & rpHANIMPOPPARENTMATRIX));
          ++pCurrInfo;
-
+      
          // If the last frame had children, subsequent frames will be child frames for as long
          // as there are 'push' flags...
          bool keepIterating = true;
          while (nextFrameIsChild && keepIterating)
          {
             // Can we descend into this child?
-            if (desc.CanDescend(pCurrInfo))
+            if ( desc.CanDescend(pCurrInfo) )
             {
                // Yes - remember whether the one after is a child and descend...
                nextFrameIsChild = (0 != (pCurrInfo->flags & rpHANIMPUSHPARENTMATRIX));
-               Desc childDescender(desc.Descend(pCurrInfo));
-               keepIterating = ForEachInHierarchy<Desc>(pCurrInfo, childDescender);
+               Desc childDescender( desc.Descend(pCurrInfo) );
+               keepIterating = ForEachInHierarchy<Desc>( pCurrInfo, childDescender ); 
             }
             else
             {
@@ -313,11 +310,11 @@ namespace RWS
       *  A version of 'ForEachInHierarchy' that works with const descenders
       *
       */
-      template <class Desc>
-      bool ConstForEachInHierarchy(const RpHAnimNodeInfo*& pCurrInfo, const Desc& desc)
+      template< class Desc >
+      bool ConstForEachInHierarchy( const RpHAnimNodeInfo*& pCurrInfo, const Desc& desc )
       {
          RWS_FUNCTION("RWS::NULL::ConstForEachInHierarchy")
-         RWS_RETURN(ForEachInHierarchy<const Desc>(pCurrInfo, desc));
+         RWS_RETURN(ForEachInHierarchy<const Desc>( pCurrInfo, desc ));
       }
 
       /**
@@ -331,14 +328,13 @@ namespace RWS
       class CFrameIsAttachable
       {
       public:
-         CFrameIsAttachable(const RwFrame& frame) :
-            frame_(frame)
+         CFrameIsAttachable( const RwFrame& frame ) : frame_(frame)
          {
             RWS_FUNCTION("RWS::NULL::CFrameIsAttachable::CFrameIsAttachable")
             RWS_RETURNVOID()
          }
 
-         bool CanDescend(const RpHAnimNodeInfo* pChildInfo) const
+         bool CanDescend( const RpHAnimNodeInfo* pChildInfo ) const
          {
             RWS_FUNCTION("RWS::NULL::CFrameIsAttachable::CanDescend")
 
@@ -347,7 +343,7 @@ namespace RWS
             RWS_RETURN(0 != FindChildWithHAnimID(frame_, pChildInfo->nodeID));
          }
 
-         bool IsValid(const RpHAnimNodeInfo* pCurrInfo) const
+         bool IsValid( const RpHAnimNodeInfo* pCurrInfo ) const
          {
             RWS_FUNCTION("RWS::NULL::CFrameIsAttachable::IsValid")
 
@@ -356,20 +352,20 @@ namespace RWS
             RWS_RETURN(pCurrInfo->nodeID == RpHAnimFrameGetID(const_cast<RwFrame*>(&frame_)));
          }
 
-         CFrameIsAttachable Descend(const RpHAnimNodeInfo* pChildInfo) const
+         CFrameIsAttachable Descend( const RpHAnimNodeInfo* pChildInfo ) const
          {
             RWS_FUNCTION("RWS::NULL::CFrameIsAttachable::Descend")
 
-            RWS_PRE(pChildInfo);
-            RWS_PRE(CanDescend(pChildInfo));
+            RWS_PRE( pChildInfo );
+            RWS_PRE( CanDescend(pChildInfo) );
 
             const RwFrame* pFoundFrame = FindChildWithHAnimID(frame_, pChildInfo->nodeID);
-            RWS_ASSERT(pFoundFrame, "No frame");
+            RWS_ASSERT( pFoundFrame, "No frame" );
 
             const CFrameIsAttachable result(*pFoundFrame);
-            RWS_POST(result.IsValid(pChildInfo));
+            RWS_POST( result.IsValid(pChildInfo) );
 
-            RWS_RETURN(result);
+            RWS_RETURN( result );
          }
 
       private:
@@ -387,8 +383,8 @@ namespace RWS
       class CIteratorIsWithinBounds
       {
       public:
-         CIteratorIsWithinBounds(const RpHAnimNodeInfo* pEndInfo) :
-            pEndInfo_(pEndInfo)
+         CIteratorIsWithinBounds( const RpHAnimNodeInfo* pEndInfo )
+            :  pEndInfo_(pEndInfo)
          {
             RWS_FUNCTION("RWS:NULL::CIteratorIsWithinBounds::CIteratorIsWithinBounds")
 
@@ -397,7 +393,7 @@ namespace RWS
             RWS_RETURNVOID()
          }
 
-         bool CanDescend(const RpHAnimNodeInfo* pChildInfo) const
+         bool CanDescend( const RpHAnimNodeInfo* pChildInfo ) const
          {
             RWS_FUNCTION("RWS:NULL::CIteratorIsWithinBounds::CanDescend")
 
@@ -406,7 +402,7 @@ namespace RWS
             RWS_RETURN(pChildInfo < pEndInfo_);
          }
 
-         bool IsValid(const RpHAnimNodeInfo* pCurrInfo) const
+         bool IsValid( const RpHAnimNodeInfo* pCurrInfo ) const
          {
             RWS_FUNCTION("RWS:NULL::CIteratorIsWithinBounds::IsValid")
 
@@ -415,15 +411,15 @@ namespace RWS
             RWS_RETURN(pCurrInfo < pEndInfo_);
          }
 
-         const CIteratorIsWithinBounds& Descend(const RpHAnimNodeInfo* pChildInfo) const
+         const CIteratorIsWithinBounds& Descend( const RpHAnimNodeInfo* pChildInfo ) const
          {
             RWS_FUNCTION("RWS:NULL::CIteratorIsWithinBounds::Descend")
 
-            RWS_PRE(pChildInfo);
-            RWS_PRE(CanDescend(pChildInfo));
+            RWS_PRE( pChildInfo );
+            RWS_PRE( CanDescend(pChildInfo) );
 
             const CIteratorIsWithinBounds& result = *this;
-            RWS_POST(result.IsValid(pChildInfo));
+            RWS_POST( result.IsValid(pChildInfo) );
 
             RWS_RETURN(result);
          }
@@ -443,9 +439,8 @@ namespace RWS
       class CPopulateMatrices
       {
       public:
-         CPopulateMatrices(const RwMatrix& invParentBone, const RwMatrix*& pBoneMatrix) :
-            invParentBone_(invParentBone),
-            pBoneMatrix_(pBoneMatrix)
+         CPopulateMatrices( const RwMatrix& invParentBone, const RwMatrix*& pBoneMatrix )
+            : invParentBone_(invParentBone), pBoneMatrix_(pBoneMatrix)
          {
             RWS_FUNCTION("RWS:NULL::CPopulateMatrices::CPopulateMatrices")
 
@@ -454,24 +449,24 @@ namespace RWS
             RWS_RETURNVOID()
          }
 
-         bool CanDescend(const RpHAnimNodeInfo*) const
+         bool CanDescend( const RpHAnimNodeInfo* ) const
          {
             RWS_FUNCTION("RWS:NULL::CPopulateMatrices::CanDescend")
             RWS_RETURN(true);
          }
 
-         bool IsValid(const RpHAnimNodeInfo*) const
+         bool IsValid( const RpHAnimNodeInfo* ) const
          {
             RWS_FUNCTION("RWS:NULL::CPopulateMatrices::IsValid")
             RWS_RETURN(true);
          }
 
-         CPopulateMatrices Descend(const RpHAnimNodeInfo* pChildInfo)
+         CPopulateMatrices Descend( const RpHAnimNodeInfo* pChildInfo )
          {
             RWS_FUNCTION("RWS:NULL::CPopulateMatrices::Descend")
 
-            RWS_PRE(pChildInfo);
-            RWS_PRE(CanDescend(pChildInfo));
+            RWS_PRE( pChildInfo );
+            RWS_PRE( CanDescend(pChildInfo) );
 
             // We're descending from a parent into a child, so move from the parent
             // bone matrix to the child bone matrix (assumes structures are identical)
@@ -483,16 +478,16 @@ namespace RWS
             // and child bone matrices respectively, then Bc = Bp Mc and thus
             // Mc = Bp' Bc
             RwFrame* pDstFrame = pChildInfo->pFrame;
-            RWS_ASSERT(pDstFrame, "No RwFrame");
-            RwMatrixInvert(RwFrameGetMatrix(pDstFrame), pBoneMatrix_);
-            RwFrameTransform(pDstFrame, &invParentBone_, rwCOMBINEPOSTCONCAT);
+            RWS_ASSERT( pDstFrame, "No RwFrame" );
+            RwMatrixInvert( RwFrameGetMatrix(pDstFrame), pBoneMatrix_ );
+            RwFrameTransform( pDstFrame, &invParentBone_, rwCOMBINEPOSTCONCAT );
             // NB: no need for RwFrameUpdateObjects() - RwFrameTransform() will have
             // already done that
 
-            const CPopulateMatrices result(*pBoneMatrix_, pBoneMatrix_);
-            RWS_POST(result.IsValid(pChildInfo));
+            const CPopulateMatrices result( *pBoneMatrix_, pBoneMatrix_ );
+            RWS_POST( result.IsValid(pChildInfo) );
 
-            RWS_RETURN(result);
+            RWS_RETURN( result );
          }
 
       private:
@@ -510,27 +505,27 @@ namespace RWS
    *  \return true if the RpHAnimHierarchy can be set with the skin's default pose
    *
    */
-   bool HierarchyCanAcceptDefaultPose(const RpHAnimHierarchy& hierarchy, const RpSkin& skin)
+   bool HierarchyCanAcceptDefaultPose( const RpHAnimHierarchy& hierarchy, const RpSkin& skin )
    {
       RWS_FUNCTION("RWS::HierarchyCanAcceptDefaultPose")
 
       bool result = false;
 
       // Is the hierarchy internally consistent?
-      if (HierarchyStructureIsValid(hierarchy))
+      if ( HierarchyStructureIsValid(hierarchy) )
       {
          // Yes. Is it compatible with our skin?
-         if (HierarchyIsCompatibleWithSkin(hierarchy, skin))
+         if ( HierarchyIsCompatibleWithSkin(hierarchy, skin) )
          {
             // Yes. Does the hierarchy have local matrices?
-            if (FlagsAreSet(hierarchy, rpHANIMHIERARCHYNOMATRICES))
+            if ( FlagsAreSet(hierarchy, rpHANIMHIERARCHYNOMATRICES) )
             {
                // No. We'll need to splurge the default pose into an RwFrame hierarchy. Do
                // we have one?
-               if (hierarchy.parentFrame)
+               if ( hierarchy.parentFrame )
                {
                   // Yes. Would we be able to attach to it?
-                  if (HierarchyIsAttachable(hierarchy, *hierarchy.parentFrame))
+                  if ( HierarchyIsAttachable( hierarchy, *hierarchy.parentFrame ) )
                   {
                      // Yes. That's all we need to know
                      result = true;
@@ -564,15 +559,15 @@ namespace RWS
    *  \param skin A reference to a RpSkin object.
    *
    */
-   void ApplyDefaultPoseToHierarchy(RpHAnimHierarchy& hierarchy, const RpSkin& skin)
+   void ApplyDefaultPoseToHierarchy( RpHAnimHierarchy& hierarchy, const RpSkin& skin )
    {
       RWS_FUNCTION("RWS::ApplyDefaultPoseToHierarchy")
 
-      RWS_PRE(HierarchyCanAcceptDefaultPose(hierarchy, skin));
+      RWS_PRE( HierarchyCanAcceptDefaultPose( hierarchy, skin ) );
 
       // If the hierarchy was created with no local matrices, we need to apply
       // the default pose to the RwFrame hierarchy instead
-      if (FlagsAreSet(hierarchy, rpHANIMHIERARCHYNOMATRICES))
+      if ( FlagsAreSet(hierarchy, rpHANIMHIERARCHYNOMATRICES) )
       {
          // Attach the RpHAnimHierarchy to the RwFrame hierarchy - this should ensure that
          // each RpHAnimNodeInfo refers to a valid RwFrame (particularly in view of the
@@ -586,34 +581,35 @@ namespace RWS
          const RpHAnimNodeInfo* pCurrNodeInfo = hierarchy.pNodeInfo;
          const RwMatrix* pBoneMatrix = RpSkinGetSkinToBoneMatrices(const_cast<RpSkin*>(&skin));
          RwFrame* pDstFrame = pCurrNodeInfo->pFrame;
-         RWS_ASSERT(pDstFrame, "No RwFrame");
-         RwMatrixInvert(RwFrameGetMatrix(pDstFrame), pBoneMatrix);
-         RwFrameUpdateObjects(pDstFrame);
+         RWS_ASSERT( pDstFrame, "No RwFrame" );
+         RwMatrixInvert( RwFrameGetMatrix(pDstFrame), pBoneMatrix );
+         RwFrameUpdateObjects( pDstFrame );
 
-         CPopulateMatrices descender(*pBoneMatrix, pBoneMatrix);
-         ForEachInHierarchy(pCurrNodeInfo, descender);
+         CPopulateMatrices descender( *pBoneMatrix, pBoneMatrix );
+         ForEachInHierarchy( pCurrNodeInfo, descender );
       }
       else
       {
          // Set the 'local space matrices' flag - this ensures that
          RwUInt32 hierarchyFlags = RpHAnimHierarchyGetFlags(&hierarchy);
 
-         RWS_TRACEIF((hierarchyFlags & rpHANIMHIERARCHYSUBHIERARCHY), "This hierarchy is a sub-hierarchy");
-         RWS_TRACEIF((hierarchyFlags & rpHANIMHIERARCHYNOMATRICES), "This hierarchy has no local matrices");
-         RWS_TRACEIF((hierarchyFlags & rpHANIMHIERARCHYUPDATEMODELLINGMATRICES), "This hierarchy updates modeling matrices");
-         RWS_TRACEIF((hierarchyFlags & rpHANIMHIERARCHYUPDATELTMS), "This hierarchy updates LTMs");
-         RWS_TRACEIF((hierarchyFlags & rpHANIMHIERARCHYLOCALSPACEMATRICES), "This hierarchy calculates matrices in a space relative to its root");
+         RWS_TRACEIF ((hierarchyFlags&rpHANIMHIERARCHYSUBHIERARCHY), "This hierarchy is a sub-hierarchy");
+         RWS_TRACEIF ((hierarchyFlags&rpHANIMHIERARCHYNOMATRICES), "This hierarchy has no local matrices");
+         RWS_TRACEIF ((hierarchyFlags&rpHANIMHIERARCHYUPDATEMODELLINGMATRICES), "This hierarchy updates modeling matrices");
+         RWS_TRACEIF ((hierarchyFlags&rpHANIMHIERARCHYUPDATELTMS), "This hierarchy updates LTMs");
+         RWS_TRACEIF ((hierarchyFlags&rpHANIMHIERARCHYLOCALSPACEMATRICES), "This hierarchy calculates matrices in a space relative to its root");
 
          hierarchyFlags |= rpHANIMHIERARCHYLOCALSPACEMATRICES;
 
-         RpHAnimHierarchy* pHierarchy;
-         pHierarchy = RpHAnimHierarchySetFlags(&hierarchy, RpHAnimHierarchyFlag(hierarchyFlags));
+         RpHAnimHierarchy * pHierarchy;
+         pHierarchy = RpHAnimHierarchySetFlags(&hierarchy, RpHAnimHierarchyFlag(hierarchyFlags) );
 
          // Set the matrices
          InvertMatrices(
             RpSkinGetSkinToBoneMatrices(const_cast<RpSkin*>(&skin)),
             hierarchy.pMatrixArray,
-            RpSkinGetNumBones(const_cast<RpSkin*>(&skin)));
+            RpSkinGetNumBones(const_cast<RpSkin*>(&skin))
+            );
       }
 
       RWS_RETURNVOID()
@@ -628,7 +624,7 @@ namespace RWS
    *  \return true if the RpHAnimHierarchy defines a valid frame structure, otherwise false.
    *
    */
-   bool HierarchyStructureIsValid(const RpHAnimHierarchy& hierarchy)
+   bool HierarchyStructureIsValid( const RpHAnimHierarchy& hierarchy )
    {
       RWS_FUNCTION("RWS::HierarchyStructureIsValid")
 
@@ -637,7 +633,7 @@ namespace RWS
       // The structure is valid if we can 'swallow' the RpHAnimNodeInfo hierarchy with no 'leftovers'
       const RpHAnimNodeInfo* pCurrNodeInfo = hierarchy.pNodeInfo;
       const RpHAnimNodeInfo* pEndNodeInfo = pCurrNodeInfo + hierarchy.numNodes;
-      if (pCurrNodeInfo < pEndNodeInfo && ConstForEachInHierarchy(pCurrNodeInfo, CIteratorIsWithinBounds(pEndNodeInfo)))
+      if ( pCurrNodeInfo < pEndNodeInfo && ConstForEachInHierarchy(pCurrNodeInfo, CIteratorIsWithinBounds(pEndNodeInfo)) )
       {
          isValid = (pCurrNodeInfo == pEndNodeInfo);
       }
@@ -655,11 +651,11 @@ namespace RWS
    *  \return true if every frame in the RpHAnimHierarchy could successfully be attached to
    *  a structurally equivalent counterpart in the RwFrame hierarchy, otherwise false.
    */
-   bool HierarchyIsAttachable(const RpHAnimHierarchy& hierarchy, const RwFrame& rootFrame)
+   bool HierarchyIsAttachable( const RpHAnimHierarchy& hierarchy, const RwFrame& rootFrame )
    {
       RWS_FUNCTION("RWS::HierarchyIsAttachable")
 
-      RWS_PRE(HierarchyStructureIsValid(hierarchy));
+      RWS_PRE( HierarchyStructureIsValid(hierarchy) );
 
       bool isAttachable = false;
 
@@ -667,9 +663,9 @@ namespace RWS
       // determine whether their descendant structures correspond
       const RpHAnimNodeInfo* pCurrNodeInfo = hierarchy.pNodeInfo;
       const RwFrame* pRootEquivalent = FindChildWithHAnimIDRecursive(rootFrame, pCurrNodeInfo->nodeID);
-      if (pRootEquivalent)
+      if ( pRootEquivalent )
       {
-         isAttachable = ConstForEachInHierarchy(pCurrNodeInfo, CFrameIsAttachable(*pRootEquivalent));
+         isAttachable = ConstForEachInHierarchy( pCurrNodeInfo, CFrameIsAttachable(*pRootEquivalent) );
       }
 
       RWS_RETURN(isAttachable);
@@ -685,7 +681,7 @@ namespace RWS
    *  \return true if the RpHAnimHierarchy could successfully be used to drive the RpSkin
    *
    */
-   bool HierarchyIsCompatibleWithSkin(const RpHAnimHierarchy& hierarchy, const RpSkin& skin)
+   bool HierarchyIsCompatibleWithSkin( const RpHAnimHierarchy& hierarchy, const RpSkin& skin )
    {
       RWS_FUNCTION("RWS::HierarchyIsCompatibleWithSkin")
 
@@ -707,7 +703,7 @@ namespace RWS
    *  false.
    *
    */
-   bool AnimationIsCompatibleWithHierarchy(const RpHAnimAnimation& anim, const RpHAnimHierarchy& hierarchy)
+   bool AnimationIsCompatibleWithHierarchy( const RpHAnimAnimation& anim, const RpHAnimHierarchy& hierarchy )
    {
       RWS_FUNCTION("RWS::AnimationIsCompatibleWithHierarchy")
 
@@ -731,13 +727,13 @@ namespace RWS
          RwInt32 strandsCount = 0;  // A RwUInt32 would be better - however, hierarchy.numNodes is RwInt32
 
 // RenderWare Version Precedes 3.4
-//
+//      
 #if (rwLIBRARYCURRENTVERSION < 0x34002)
-         while (RwReal(0) == reinterpret_cast<const RpHAnimKeyFrameHeader*>(pRawAnimData)->time)
+         while ( RwReal(0) == reinterpret_cast<const RpHAnimKeyFrameHeader*>(pRawAnimData)->time )
 #elif (rwLIBRARYCURRENTVERSION >= 0x34002)
 // RenderWare Version Exceeds 3.4
-//
-         while (RwReal(0) == reinterpret_cast<const RtAnimKeyFrameHeader*>(pRawAnimData)->time)
+//      
+         while ( RwReal(0) == reinterpret_cast<const RtAnimKeyFrameHeader*>(pRawAnimData)->time )
 #endif
          {
             ++strandsCount;

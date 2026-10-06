@@ -117,10 +117,10 @@ namespace RWS
          void LinkInOrder(CSeqInterpolRegGroup *&rpRoot);
          void Unlink(CSeqInterpolRegGroup *&rpRoot);
          CSeqInterpolRegister *FindInterpol(const RwChar *interpolName,
-                                            RwBool specifiedOnly);
+            RwBool specifiedOnly);
          void Add(CSeqInterpolRegister *pRegister);
          RwBool Remove(CSeqInterpolRegister *pRegister);
-
+         
       private:
 
          const RwChar *m_typeName;              /**< Copy of pointer ONLY, does not copy string. */
@@ -147,8 +147,8 @@ namespace RWS
       public:
 
          CSeqInterpolRegister(CSeqInterpolBase *(*pMakeFunc)(CSeqItem &rData),
-                              RwUInt32 (*pSizeFunc)(void), const RwChar *typeName,
-                              const RwChar *interpolName, RwBool override);
+            RwUInt32 (*pSizeFunc)(void), const RwChar *typeName,
+            const RwChar *interpolName, RwBool override);
          ~CSeqInterpolRegister(void);
 
          CSeqInterpolBase *MakeInterpol(CSeqItem &rData);
@@ -160,7 +160,7 @@ namespace RWS
          void Unlink(CSeqInterpolRegister *&rpRoot);
 
          static CSeqInterpolRegGroup *FindGroup(const RwChar *typeName,
-                                                RwBool specifiedOnly);
+            RwBool specifiedOnly);
          static void Sort(void);
 
       private:
@@ -190,10 +190,10 @@ namespace RWS
       class CSeqItem
       {
       public:
-
+         
          CSeqItem(RWSGUID &rGuid, const RwChar *pClassName, RwUInt32 commandID,
-                  const RwChar *typeName, RwUInt32 nowTimer, CSeqStack &rSeqStack,
-                  RwUInt32 flags = 0);
+            const RwChar *typeName, RwUInt32 nowTimer, CSeqStack &rSeqStack,
+            RwUInt32 flags = 0);
          virtual ~CSeqItem(void);
 
          RwBool AddKey(CSeqCtrlDataIttr &rIttr, RwUInt32 nowTime);
@@ -206,7 +206,7 @@ namespace RWS
          CSeqCtrlKeyData *LastKey(void);
          CSeqCtrlKeyData *EndKey(void);
          void Guid(RwUInt32 &rGuidData0, RwUInt32 &rGuidData1, RwUInt32 &rGuidData2,
-                   RwUInt32 &rGuidData3);
+            RwUInt32 &rGuidData3);
          const RWSGUID &GuidRef(void);
          RwBool IsSameGuid(RWSGUID &rGuid);
          const RwChar *ClassName(void);
@@ -221,7 +221,7 @@ namespace RWS
          void SetBuffSlot(CSeqAttrHandSlot &rBuffSlot);
          void DisconnectFromHandler(void);
 
-      protected:
+      protected: 
 
          RWSGUID m_guid;
          const RwChar *m_pClassName;
@@ -270,7 +270,7 @@ namespace RWS
       class CSeqNodeLink
       {
       public:
-
+         
          /**
          *
          * Constructor - just initialize the object.
@@ -284,7 +284,7 @@ namespace RWS
             RWS_FUNCTION("RWS::SEQUENCE::CSeqNodeLink::CSeqNodeLink");
             RWS_RETURNVOID();
          }
-
+         
          /**
          *
          * Returns next item in list or 0 if none.
@@ -313,7 +313,7 @@ namespace RWS
          void Unlink(CSeqNode *&rpRoot, CSeqNode &pNode);
 
       private:
-
+         
          CSeqNode *m_pNext,
             *m_pPrev;
       };
@@ -345,8 +345,8 @@ namespace RWS
       private:
 
          CSeqNode(RWSGUID &rGuid, const RwChar *pClassName, RwUInt32 commandID,
-                  const RwChar *typeName, RwUInt32 nowTime, CSeqStack &rSeqStack,
-                  RwUInt32 flags = 0);
+            const RwChar *typeName, RwUInt32 nowTime, CSeqStack &rSeqStack,
+            RwUInt32 flags = 0);
          ~CSeqNode(void);
 
          CSeqNodeLink m_ptrs;
@@ -364,8 +364,8 @@ namespace RWS
 
       public:
 
-         RwBool IsFound(void) { return (m_pSeqNode != 0); }
-         CSeqItem *GetSeqItem(void) { return (m_pSeqNode); }
+         RwBool IsFound(void) { return(m_pSeqNode != 0); }
+         CSeqItem *GetSeqItem(void) { return(m_pSeqNode); }
 
       private:
 
@@ -388,7 +388,7 @@ namespace RWS
          ~CSeqStack(void);
 
          CSeqNode *AddItem(RWSGUID &rGuid, const RwChar *pClassName, RwUInt32 commandID,
-                           const RwChar *typeName, RwUInt32 nowTime);
+            const RwChar *typeName, RwUInt32 nowTime);
          CSeqNode *FindItem(RWSGUID &rGuid, const RwChar *pClassName, RwUInt32 commandID);
          void ProcessItems(RwUInt32 nowTime);
          void MoveToActive(CSeqNode *pItem);
@@ -411,12 +411,12 @@ namespace RWS
             RWS_FUNCTION("RWS::SEQUENCE::CSeqItem::IsActiveEmpty");
             RWS_RETURN(m_pActiveRoot == 0);
          }
-
+         
       private:
 
          void EmptyList(CSeqNode *pRoot);
          CSeqNode *FindItemInList(RWSGUID &rGuid, const RwChar *pClassName,
-                                  RwUInt32 commandID, CSeqNode *pRoot);
+            RwUInt32 commandID, CSeqNode *pRoot);
          void FindNextItemMatch(CSeqStackFindToken &rToken, RwBool moveToNext);
 
          RwUInt32 m_memType,              /**< The memory 'type' passed in to allocation functions. */

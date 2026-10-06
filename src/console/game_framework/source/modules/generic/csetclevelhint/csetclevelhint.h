@@ -50,30 +50,30 @@ namespace RWS
       */
       class CSetCLevelHint : public CAttributeHandler, public CSystemCommands, public LinearAllocationPolicy
       {
-      public:
+         public:
 
-         RWS_MAKENEWCLASS(CSetCLevelHint);
-         RWS_DECLARE_CLASSID(CSetCLevelHint);
-         RWS_CATEGORY("Generic");
-         RWS_DESCRIPTION("Set CLevelHint", "Sets the CevelHint for attached assets.");
+            RWS_MAKENEWCLASS(CSetCLevelHint);
+            RWS_DECLARE_CLASSID(CSetCLevelHint);
+            RWS_CATEGORY("Generic");
+            RWS_DESCRIPTION("Set CLevelHint", "Sets the CevelHint for attached assets.");
 
-         RWS_BEGIN_COMMANDS
+            RWS_BEGIN_COMMANDS
 
-         RWS_ATTRIBUTE(CMD_CLevelHint, "Set the Level Hint",
-                       "Specify the CLevelHint for each of the assets attached to this instance of CSetCLevelHint behavior,"
-                       " typically for this to take effect the level should be reset. The level hint is used by the level"
-                       " manager CLevel to determine the preferred world to add an instance of the atomic/clump to.",
-                       LIST, RwUInt32, LIST("@HINT_OPAQUE_WORLD|HINT_TRANSLUCENT_WORLD"))
+               RWS_ATTRIBUTE(CMD_CLevelHint, "Set the Level Hint", 
+                  "Specify the CLevelHint for each of the assets attached to this instance of CSetCLevelHint behavior,"
+                  " typically for this to take effect the level should be reset. The level hint is used by the level"
+                  " manager CLevel to determine the preferred world to add an instance of the atomic/clump to.",
+                  LIST, RwUInt32, LIST("@HINT_OPAQUE_WORLD|HINT_TRANSLUCENT_WORLD"))
 
-         RWS_END_COMMANDS;
+            RWS_END_COMMANDS;
 
-         CSetCLevelHint(const CAttributePacket&);
+            CSetCLevelHint(const CAttributePacket&);
 
-         virtual void HandleAttributes(const CAttributePacket& attr);
+            virtual void HandleAttributes(const CAttributePacket& attr);
 
-      private:
+         private:
 
-         CLevel::CLevelHint m_CLevelHint;
+            CLevel::CLevelHint m_CLevelHint;
       };
    }
 }

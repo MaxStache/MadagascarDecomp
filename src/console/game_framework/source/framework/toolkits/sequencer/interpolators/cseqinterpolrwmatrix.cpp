@@ -37,12 +37,12 @@
 // System Includes
 //
 #include <new.h>
-#if (!defined(SKY) && !defined(DOLPHIN))
+#if (!defined (SKY) && !defined (DOLPHIN))
 #include <memory.h>
 #endif
 
 #if defined(DOLPHIN) && defined(__MWERKS__)
-using namespace std;
+   using namespace std;
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -74,13 +74,13 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwMatrixDefaultReg(CSeqInterpolBase::MakeNew,
-                                               CSeqInterpolBase::MaxSize, RWSTRING("RwMatrix"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwMatrix"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwMatrixLinearInterpolReg(CSeqInterpolLinearRwMatrix::MakeNew,
-                                                      CSeqInterpolLinearRwMatrix::MaxSize, RWSTRING("RwMatrix"),
-                                                      INTERPOL_TYPE_LINEAR_NAME, FALSE);
+         CSeqInterpolLinearRwMatrix::MaxSize, RWSTRING("RwMatrix"),
+         INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       ////////////////////////////////////////
       //
@@ -125,10 +125,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwMatrix::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwMatrix),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwMatrix), 
+            "Memory buffer too small");
 
-         CSeqInterpolLinearRwMatrix *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwMatrix *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwMatrix(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -220,7 +220,7 @@ namespace RWS
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwMatrix::Step (time)");
 
          RwReal delta = static_cast<RwReal>(nowTime - rData.StartTime()) *
-                        m_oneOverSeqTime;
+            m_oneOverSeqTime;
 
          Step(rData, delta);
 
@@ -304,7 +304,7 @@ namespace RWS
             RwMatrixMultiply(&m_outMatrix, &m_rotMatrix, &m_posScaleMatrix);
             memcpy(pWrite, &m_outMatrix, sizeof(RwMatrix));
          }
-
+         
          RWS_RETURNVOID();
       }
 
@@ -324,7 +324,7 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
          RwMatrix *pEndVal = reinterpret_cast<RwMatrix *>(const_cast<void *>(rData.EndKey()->Data())),
-                  *pStartVal = reinterpret_cast<RwMatrix *>(const_cast<void *>(rData.LastKey()->Data()));
+            *pStartVal = reinterpret_cast<RwMatrix *>(const_cast<void *>(rData.LastKey()->Data()));
          RwV3d *pStartVect,
             *pEndVect,
             vect;

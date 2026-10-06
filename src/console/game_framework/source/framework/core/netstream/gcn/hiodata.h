@@ -48,7 +48,7 @@ enum RWSMail
    rwsmIsDataPending = 100, // Target asks host if any data pending
    rwsmNoDataToRead,        // Host has data to be read
    rwsmDataToRead,          // Host has data to be read
-   rwsmDataToSend,          // Target has data to send to host
+   rwsmDataToSend,          // Target has data to send to host 
    rwsmIPAddress,           // Target asks for host's IP address
    rwsmLastCommand
 };

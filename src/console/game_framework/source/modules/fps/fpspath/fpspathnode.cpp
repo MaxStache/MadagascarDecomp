@@ -55,10 +55,10 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSPathNode);
       RWS_REGISTERCLASS(FPSPathNode);
-
+      
       CEventId FPSPathNode::m_pathcorner;
-
-
+      
+      
       /**
       *
       * \ref FPSPathNode. FPSPathNode Constructor.
@@ -66,22 +66,20 @@ namespace RWS
       * \see ~FPSPathNode.
       *
       */
-      FPSPathNode::FPSPathNode(const CAttributePacket& attr) :
-         InitCEventHandler(&m_pAtomic),
-         m_wait(0)
+      FPSPathNode::FPSPathNode(const CAttributePacket& attr) : InitCEventHandler(&m_pAtomic) , m_wait(0)
       {
          RWS_FUNCTION("RWS::FPS::FPSPathNode::FPSPathNode");
-
+         
          // Can't use initializer ('this' isn't valid) so...
          m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
          RWS_ASSERT(m_pAtomic, "Failed to create atomic");
-
+         
          RegisterMsg(m_pathcorner, "ptr_FPSPathNode", "FPSPathNode*");
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref ~FPSPathNode. FPSPathNode Destructor.
@@ -92,16 +90,16 @@ namespace RWS
       FPSPathNode::~FPSPathNode(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSPathNode::~FPSPathNode");
-
-         UnLinkMsg(m_targetname);
+         
+         UnLinkMsg (m_targetname);
          UnRegisterMsg(m_targetname);
          UnRegisterMsg(m_target);
          UnRegisterMsg(m_pathcorner);
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -110,42 +108,42 @@ namespace RWS
       *  
       * \ref iMsgRunningTick
       */
-      void FPSPathNode::HandleEvents(CMsg& pMsg)
+      void FPSPathNode::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSPathNode::HandleEvents");
-
+         
          if (pMsg.Id == m_targetname)
          {
             if (pMsg.pData)
             {
-               CEventHandler* pCEventHandler = static_cast<CEventHandler*>(pMsg.pData);
+               CEventHandler *pCEventHandler = static_cast<CEventHandler*>(pMsg.pData);
                CMsg reply(m_pathcorner, static_cast<FPSPathNode*>(this));
                SendMsgToEventHandler(reply, pCEventHandler);
             }
          }
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */
+      */ 
       void FPSPathNode::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSPathNode::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(attr);
-
+         
          // Initialize contained class first
          m_pAtomic.HandleSystemCommands(attr); // Initialize atomic/clump/frame
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSPathNode));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -153,15 +151,15 @@ namespace RWS
             case CMD_targetname:
                ReplaceLinkedMsg(m_targetname, attrIt->GetAs_RwChar_ptr(), "CEventHandler*");
                break;
-
+               
             case CMD_target:
                ReplaceRegisteredMsg(m_target, attrIt->GetAs_RwChar_ptr(), "CEventHandler*");
                break;
-
+               
             case CMD_wait:
                {
                   RwReal wait;
-
+                  
                   attrIt->GetCommandData(wait);
                   m_wait = static_cast<RwUInt32>(wait * RWS::MainLoop::Logic::Rate);   // Multiply by frame rate
                }
@@ -169,7 +167,7 @@ namespace RWS
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
    } // namespace FPS

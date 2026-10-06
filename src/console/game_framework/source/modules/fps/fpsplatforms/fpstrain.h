@@ -49,43 +49,43 @@ namespace RWS
       *  \see CAttributeHandler, CEventHandler, CSystemCommands
       *
       */
-      class FPSTrain : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class FPSTrain : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(FPSTrain);
          RWS_DECLARE_CLASSID(FPSTrain);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Path following Platform", "Alternate platform type, path is specified using multiple FPSPathNodes");
-
-         virtual void HandleAttributes(const CAttributePacket &attr);
+         
+         virtual void HandleAttributes(const CAttributePacket& attr);            
          virtual void HandleEvents(CMsg &pMsg);
-
-         FPSTrain(const CAttributePacket &);
+         
+         FPSTrain(const CAttributePacket&);            
          ~FPSTrain(void);
-
+         
          RwBool TriggerTarget(void);
          void Proc_m_pathcorner(CMsg &pMsg);
-
+         
          enum states
          {
             State_Initialize,
-            State_Waiting_To_Trigger,
-            State_Moving,
-            State_Delayed,
-            State_Finished
+               State_Waiting_To_Trigger,
+               State_Moving,
+               State_Delayed,
+               State_Finished
          };
-
-         RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Target name", "Event which will activate the train", RECEIVE, 0, "ACTN_PLAYERTOUCH")
-         RWS_MESSAGE(CMD_target, "Target", "The triggername of it's first pathcorner", TRANSMIT, CEventHandler *, 0)
-         RWS_ATTRIBUTE(CMD_speed, "Speed", "Movement speed (100 default) units per second", SLIDER, RwUInt32, RANGE(1, 100, 999))
-         RWS_END_COMMANDS;
-
+         
+         RWS_BEGIN_COMMANDS                
+            RWS_MESSAGE( CMD_targetname, "Target name", "Event which will activate the train", RECEIVE, 0, "ACTN_PLAYERTOUCH")
+            RWS_MESSAGE( CMD_target,    "Target","The triggername of it's first pathcorner", TRANSMIT, CEventHandler*, 0)
+            RWS_ATTRIBUTE( CMD_speed,   "Speed","Movement speed (100 default) units per second", SLIDER, RwUInt32, RANGE(1, 100, 999))                
+            RWS_END_COMMANDS;
+         
       protected:
-         RwMatrix *m_pRwMatrix;          /**< Transformation matrix applied each frame while the entity is moving */
+         RwMatrix *m_pRwMatrix;          /**< Transformation matrix applied each frame while the entity is moving */            
          CEventId m_targetname;          /**< Activate train event */
          CEventId m_target;              /**< Get path node event */
-         static CEventId m_pathcorner;
+         static CEventId m_pathcorner;   
          states m_state;                 /**< Current state see enum */
          RwUInt32 m_count;               /**< A counter, used to count up to m_num_frames_to_move and m_num_frames_to_delay */
          RwUInt32 m_num_frames_to_move;  /**< Number of frames to move for */

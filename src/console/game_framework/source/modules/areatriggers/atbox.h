@@ -48,15 +48,16 @@ namespace RWS
          RWS_CATEGORY("AreaTriggers");
          RWS_DESCRIPTION("Box Area Trigger", "An area trigger that uses a Box for collision tests.");
 
-         ATBox(const CAttributePacket& attr);
+         ATBox( const CAttributePacket& attr );
          virtual ~ATBox();
-
-         RwBool PointInsideGeometry(const RwV3d* pPoint);
-         RwBool LineIntersectGeometry(const RwLine* pLine);
+      
+         RwBool PointInsideGeometry( const RwV3d * pPoint );
+         RwBool LineIntersectGeometry( const RwLine * pLine );
 
          void DebugToolsRender();
 
       protected:
+      
       };
 
    } // namespace AreaTrigger

@@ -47,35 +47,35 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial6 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CTutorial6 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial6);
          RWS_DECLARE_CLASSID(CTutorial6);
          RWS_CATEGORY("Tutorial");
          RWS_DESCRIPTION("Tutorial6", "Tutorial 6");
-
+         
          CTutorial6(const CAttributePacket& attr);
          ~CTutorial6(void);
-
-         virtual void HandleEvents(CMsg& pMsg);
+         
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-
+         
          /*
           *  The attribute definition for this behavior allows you to turn on and off the sending message with
           *  a boolean check box.  Also  CMD_targetname lets you specify a receive event unique message string.
           */
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Receive Event", "", RECEIVE, "RwUInt32*", 0)
-         RWS_MESSAGE(CMD_transname, "Transmit Event", "", TRANSMIT, "RwUInt32*", 0)
-         RWS_ATTRIBUTE(CMD_TriggerMessage, "Send Event", "", BOOLEAN, RwUInt32, DEFAULT(0))
-         RWS_END_COMMANDS;
+            RWS_MESSAGE(CMD_targetname, "Receive Event", "", RECEIVE, "RwUInt32*", 0)
+            RWS_MESSAGE(CMD_transname, "Transmit Event", "", TRANSMIT, "RwUInt32*", 0)
+            RWS_ATTRIBUTE(CMD_TriggerMessage, "Send Event", "", BOOLEAN, RwUInt32, DEFAULT(0))
+            RWS_END_COMMANDS;
       protected:
-
+         
          CAtomicPtr m_pAtomic;      /**< Behavior's Atomic. */
-         CEventId m_incoming,       /**< Used to store the clients reference to the receiving event. */
-            m_outgoing;          /**< Used to store the clients reference to the transmitting event. */
-         RwMatrix* m_mat;           /**< Matrix used for rotating object. */
+         CEventId m_incoming,       /**< Used to store the clients reference to the receiving event. */ 
+               m_outgoing;          /**< Used to store the clients reference to the transmitting event. */ 
+         RwMatrix *m_mat;           /**< Matrix used for rotating object. */
       };
 
    }//namespace Tutorial

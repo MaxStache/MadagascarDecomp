@@ -43,26 +43,26 @@
 #include "rpskin.h"
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "RpHAnim.lib")
-#pragma comment(lib, "RpSkin.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "RpHAnim.lib")
+#pragma comment (lib, "RpSkin.lib")
 #endif
 
 namespace RWS
 {
-   bool HierarchyCanAcceptDefaultPose(const RpHAnimHierarchy& hierarchy, const RpSkin& skin);
+   bool HierarchyCanAcceptDefaultPose( const RpHAnimHierarchy& hierarchy, const RpSkin& skin );
 
    // RWS_PRE( HierarchyCanAcceptDefaultPose( hierarchy, skin ) )
-   void ApplyDefaultPoseToHierarchy(RpHAnimHierarchy& hierarchy, const RpSkin& skin);
+   void ApplyDefaultPoseToHierarchy( RpHAnimHierarchy& hierarchy, const RpSkin& skin );
 
-   bool HierarchyStructureIsValid(const RpHAnimHierarchy& hierarchy);
+   bool HierarchyStructureIsValid( const RpHAnimHierarchy& hierarchy );
 
    // RWS_PRE( HierarchyStructureIsValid(hierarchy) )
-   bool HierarchyIsAttachable(const RpHAnimHierarchy& hierarchy, const RwFrame& rootFrame);
+   bool HierarchyIsAttachable( const RpHAnimHierarchy& hierarchy, const RwFrame& rootFrame );
 
-   bool HierarchyIsCompatibleWithSkin(const RpHAnimHierarchy& hierarchy, const RpSkin& skin);
-
-   bool AnimationIsCompatibleWithHierarchy(const RpHAnimAnimation& anim, const RpHAnimHierarchy& hierarchy);
+   bool HierarchyIsCompatibleWithSkin( const RpHAnimHierarchy& hierarchy, const RpSkin& skin );
+   
+   bool AnimationIsCompatibleWithHierarchy( const RpHAnimAnimation& anim, const RpHAnimHierarchy& hierarchy );
 }
 
 

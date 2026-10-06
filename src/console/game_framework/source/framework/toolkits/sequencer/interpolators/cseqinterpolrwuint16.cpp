@@ -62,13 +62,13 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwUInt16DefaultReg(CSeqInterpolBase::MakeNew,
-                                               CSeqInterpolBase::MaxSize, RWSTRING("RwUInt16"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwUInt16"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwUInt16InterpolReg(CSeqInterpolLinearRwUInt16::MakeNew,
-                                                CSeqInterpolLinearRwUInt16::MaxSize, RWSTRING("RwUInt16"),
-                                                INTERPOL_TYPE_LINEAR_NAME, FALSE);
+         CSeqInterpolLinearRwUInt16::MaxSize, RWSTRING("RwUInt16"),
+         INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       ////////////////////////////////////////
       //
@@ -114,12 +114,12 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwUInt16::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwUInt16),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwUInt16), 
+            "Memory buffer too small");
 
          // Use placement new to create the object within the memory buffer...
 
-         CSeqInterpolLinearRwUInt16 *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwUInt16 *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwUInt16(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -202,7 +202,8 @@ namespace RWS
 
       inline RwUInt16 CalcValue(const RwUInt16 *pStartVal, const RwUInt16 *pEndVal, RwReal tVal)
       {
-         return (*pStartVal + static_cast<RwUInt16>(static_cast<RwReal>(*pEndVal - *pStartVal) * tVal));
+         return(*pStartVal + static_cast<RwUInt16>(static_cast<RwReal>
+               (*pEndVal - *pStartVal) * tVal));
       }
 
       /**
@@ -242,8 +243,10 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta is out of range.");
 
-         const RwUInt16 *pEndVal = reinterpret_cast<const RwUInt16 *>(rData.EndKey()->Data()),
-                        *pStartVal = reinterpret_cast<const RwUInt16 *>(rData.LastKey()->Data());
+         const RwUInt16 *pEndVal = reinterpret_cast<const RwUInt16 *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwUInt16 *>
+               (rData.LastKey()->Data());
          RwUInt16 *pCalcVal;
 
          // Calculate the current value & insert into attribute data...

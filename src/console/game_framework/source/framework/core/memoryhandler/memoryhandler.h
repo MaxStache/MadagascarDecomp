@@ -193,15 +193,15 @@ const RwUInt32 RWS_MEMORY_TYPE_USER = 3;
 // RWS_NEW_TYPE and RWS_OP_NEW_TYPE macros.
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
-void *operator new(size_t size, RwUInt32 type);
-void *operator new[](size_t size, RwUInt32 type);
-void operator delete(void *pMem, RwUInt32 type);
-void operator delete[](void *pMem, RwUInt32 type);
+   void *operator new(size_t size, RwUInt32 type);
+   void *operator new[](size_t size, RwUInt32 type);
+   void operator delete(void *pMem, RwUInt32 type);
+   void operator delete[](void *pMem, RwUInt32 type);
 #else
-void *operator new(size_t size, const char *file, int line, RwUInt32 type);
-void *operator new[](size_t size, const char *file, int line, RwUInt32 type);
-void operator delete(void *pMem, const char *file, int line, RwUInt32 type);
-void operator delete[](void *pMem, const char *file, int line, RwUInt32 type);
+   void *operator new(size_t size, const char *file, int line, RwUInt32 type);
+   void *operator new[](size_t size, const char *file, int line, RwUInt32 type);
+   void operator delete(void *pMem, const char *file, int line, RwUInt32 type);
+   void operator delete[](void *pMem, const char *file, int line, RwUInt32 type);
 #endif
 
 // Standard memory functions, needed for VC libraries, etc.
@@ -294,9 +294,9 @@ void operator delete[](void *pMem);
 */
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
-#define RWS_NEW new (RWS_MEMORY_TYPE_RWS)
+#define RWS_NEW new(RWS_MEMORY_TYPE_RWS)
 #else
-#define RWS_NEW new (__FILE__, __LINE__, RWS_MEMORY_TYPE_RWS)
+#define RWS_NEW new(__FILE__, __LINE__, RWS_MEMORY_TYPE_RWS)
 #endif
 
 /**
@@ -398,9 +398,9 @@ void operator delete[](void *pMem);
 // NOTE: Keep LONG names for size & type so help in compiler is more useful.
 
 #ifdef RWS_DISABLE_MEMORY_CHECKING
-#define RWS_NEW_TYPE(type) new (type)
+#define RWS_NEW_TYPE(type) new(type)
 #else
-#define RWS_NEW_TYPE(type) new (__FILE__, __LINE__, type)
+#define RWS_NEW_TYPE(type) new(__FILE__, __LINE__, type)
 #endif
 
 // Access function which call function within the memory handler class. Needed because otherwise the control

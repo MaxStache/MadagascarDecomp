@@ -32,8 +32,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -57,37 +57,27 @@ namespace RWS
 
    class CCameraPtr : public CRwObjectPtr<RwCamera>
 #ifdef RWS_EVENTVISUALIZATION
-      ,
-                      public CEventVisualization
+   , public CEventVisualization
 #endif
    {
    public:
       /**
       * Default constructor, constructs a NULL CCameraPtr pointer
       */
-      CCameraPtr() :
-         CRwObjectPtr<RwCamera>()
-      {
-      }
+      CCameraPtr() : CRwObjectPtr<RwCamera>() {}
 
       /**
       * Constructor, constructs a CCameraPtr pointer that points to \a p;
       *
       * \param p Pointer to an RwCamera object.
       */
-      CCameraPtr(RwCamera* p) :
-         CRwObjectPtr<RwCamera>(p)
-      {
-      }
+      CCameraPtr(RwCamera* p) : CRwObjectPtr<RwCamera>(p) {}
 
       /**
       * Destructor for CCameraPtr object, if this CCameraPtr is still assigned to an RwCamera
       * calls CameraHelper::Destroy.
       */
-      ~CCameraPtr()
-      {
-         if (p_) CameraHelper::Destroy(p_);
-      }
+      ~CCameraPtr() { if (p_) CameraHelper::Destroy(p_); }
 
       /**
       *
@@ -97,7 +87,7 @@ namespace RWS
       *
       * \param p Pointer to an RwCamera object.
       */
-      CCameraPtr& operator=(RwCamera* p)
+      CCameraPtr& operator = (RwCamera* p)
       {
          if (p_ != p)
          {
@@ -107,7 +97,7 @@ namespace RWS
 
          return *this;
       }
-
+     
       /**
       *
       * Mandatory CEventVisualization interface.
@@ -118,20 +108,20 @@ namespace RWS
       *
       */
 #ifdef RWS_EVENTVISUALIZATION
-      virtual RwV3d* GetWorldPos(void)
+      virtual RwV3d *GetWorldPos(void) 
       {
          if (p_)
          {
-            RwFrame* pFrame = RwCameraGetFrame(p_);
+            RwFrame *pFrame = RwCameraGetFrame(p_);
 
             if (pFrame)
             {
-               RwMatrix* pMatrix = RwFrameGetLTM(pFrame);
+               RwMatrix *pMatrix = RwFrameGetLTM(pFrame);
 
-               return (RwMatrixGetPos(pMatrix));
+               return(RwMatrixGetPos(pMatrix));
             }
          }
-         return (0);
+         return(0);
       }
 #endif
       /**
@@ -152,11 +142,11 @@ namespace RWS
 
       // Revoked ops
       CCameraPtr(const CCameraPtr&);
-      CCameraPtr& operator=(const CCameraPtr&);
+      CCameraPtr& operator = (const CCameraPtr&);
    };
 }
 
-extern RwBool RwCameraDestroy(RWS::CCameraPtr& rCCameraPtr);
+extern RwBool RwCameraDestroy( RWS::CCameraPtr &rCCameraPtr );
 
 
 #endif

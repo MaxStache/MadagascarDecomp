@@ -44,7 +44,7 @@
 *  \param rCAtomicPtr Reference to a CAtomicPtr, contains a pointer to the RpAtomic to be
 *  destroyed.
 */
-RwBool RpAtomicDestroy(RWS::CAtomicPtr &rCAtomicPtr)
+RwBool RpAtomicDestroy( RWS::CAtomicPtr &rCAtomicPtr )
 {
    RWS_FUNCTION("RWS::RpAtomicDestroy");
 

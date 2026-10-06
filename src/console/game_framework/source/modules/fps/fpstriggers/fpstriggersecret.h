@@ -52,28 +52,28 @@ namespace RWS
       * incremented.
       *
       */
-      class FPSTriggerSecret : public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class FPSTriggerSecret: public CSystemCommands, public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(FPSTriggerSecret);
          RWS_DECLARE_CLASSID(FPSTriggerSecret);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Secret Area Trigger", "Triggered By Player Touch Signifying Entry To The Secret Area");
-
-         virtual void HandleEvents(CMsg& pMsg);
+         
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-
+         
          FPSTriggerSecret(const CAttributePacket&);
          ~FPSTriggerSecret(void);
-         void IncreaseSecretsFound(void);
-
+         void IncreaseSecretsFound( void );
+         
          static RwUInt32 m_Secrets_Found;   /**< Total number of secrets found */
-
-      protected:
-         static CEventId m_targetname;      /**< Received to trigger FPSTriggerSecret, this member variable is static as all
+         
+      protected:          
+      static CEventId m_targetname;      /**< Received to trigger FPSTriggerSecret, this member variable is static as all
                                               FPSTriggerSecret are triggered by the same event i.e. ACTN_PLAYERTOUCH */
-
-         CAtomicPtr m_pAtomic;              /**< Pointer to 3D representation of this entity */
+      
+      CAtomicPtr m_pAtomic;              /**< Pointer to 3D representation of this entity */
       };
    }
 }

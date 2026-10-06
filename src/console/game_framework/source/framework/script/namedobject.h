@@ -3,9 +3,9 @@
 
 namespace Script
 {
-   class NamedObject
-   {
-   };
+    class NamedObject
+    {
+    };
 }
 
 #endif

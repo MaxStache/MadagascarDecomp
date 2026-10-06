@@ -34,7 +34,7 @@
 #include <rwcore.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
+#pragma comment (lib, "rwcore.lib")
 #endif
 
 namespace RWS
@@ -51,21 +51,21 @@ namespace RWS
    */
    class CResourceHandler
    {
-   public:
+      public:
 
          /**
          *
          *  Called to initialize the resource handler when CResourceManager::Open is called.
          *
          */
-      virtual void Open(void) {};
+         virtual void Open(void) {};
 
          /**
          *
          *  Called to uninitialize the resource handler when CResourceManager::Close is called.
          *
          */
-      virtual void Close(void) {};
+         virtual void Close(void) {};
 
 
          /**
@@ -76,8 +76,8 @@ namespace RWS
          *  \param psType A pointer to a string defining the resource type.
          * 
          */
-      virtual RwBool IsHandled(const RwChar *psType) = 0;
-
+         virtual RwBool IsHandled(const RwChar *psType) = 0;
+  
          /**
          *
          * This function is responsible for loading the specified resource. RenderWare 
@@ -110,12 +110,12 @@ namespace RWS
          *
          *  \image html cresourcehandlerload.png
          */
-      virtual void *Load(const RwChar *psName,
-                         const RwChar *psType,
-                         const RwChar *psResourcePath,
-                         RwStream *pStream,
-                         RwUInt32 uiStreamSize,
-                         RwUInt32 &uiResourceSize) = 0;
+         virtual void *Load(const RwChar *psName,
+            const RwChar *psType,
+            const RwChar *psResourcePath,
+            RwStream* pStream,
+            RwUInt32 uiStreamSize,
+            RwUInt32 &uiResourceSize) = 0;
 
          /**
          *
@@ -128,8 +128,8 @@ namespace RWS
          *  \returns True If the resource was successfully unloaded otherwise false.
          *
          */
-      virtual RwBool UnLoad(const RwChar *pStrType, void *pResource) = 0;
-
+         virtual RwBool UnLoad(const RwChar *pStrType, void *pResource) = 0;
+         
          /**
          *  
          *  \ref CResourceHandler::Update
@@ -138,23 +138,23 @@ namespace RWS
          *  \param pData A pointer to the data used to update the resource.
          * 
          */
-      virtual void Update(const void *pResData,
-                          const void *pData,
-                          const RwChar *pStrType) = 0;
+         virtual void Update(const void *pResData,
+                             const void *pData,
+                             const RwChar *pStrType) = 0;
 
-      CResourceHandler(void);
+         CResourceHandler(void);
 
-      virtual ~CResourceHandler(void);
+         virtual ~CResourceHandler(void);
 
-      static CResourceHandler *FindHandler(const RwChar *const psType);
+         static CResourceHandler *FindHandler(const RwChar *const psType);
 
-      static void OpenAll(void);
-      static void CloseAll(void);
+         static void OpenAll(void);
+         static void CloseAll(void);
 
-   private:
+      private:
 
-      CResourceHandler(const CResourceHandler &rhs);               // Disable copy constructor
-      CResourceHandler &operator=(const CResourceHandler &rhs);  // Disable copy operator,
+         CResourceHandler(const CResourceHandler& rhs);               // Disable copy constructor 
+         CResourceHandler &operator = (const CResourceHandler& rhs);  // Disable copy operator,
    };
 }
 

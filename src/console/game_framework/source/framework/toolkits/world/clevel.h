@@ -85,7 +85,7 @@ namespace RWS
       static void SetOpaqueWorld(RpWorld *const pWorld)
       {
          sm_pOpaqueWorld =
-            sm_pActiveWorld = pWorld;
+             sm_pActiveWorld = pWorld;
       }
 
       /**
@@ -103,7 +103,7 @@ namespace RWS
       static void SetTranslucentWorld(RpWorld *const pWorld)
       {
          sm_pTranslucentWorld =
-            sm_pActiveWorld = pWorld;
+             sm_pActiveWorld = pWorld;
       }
 
       static RpWorld *AddAtomic(RpAtomic *atomic);

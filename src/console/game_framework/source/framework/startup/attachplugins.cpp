@@ -26,7 +26,7 @@
 #include "precomp.h"
 
 //////////////////////////////////////////////////////////////////
-//
+// 
 // RenderWare Studio Includes
 //
 #include "framework/core/macros/debugmacros.h"
@@ -59,12 +59,12 @@
 #include "rtcmpkey.h"
 
 
-#if (defined(_XBOX))
+#if (defined (_XBOX))
 #include "rpanisot.h"
 #endif
 
 // RenderWare Version Exceeds 3.4
-//
+//      
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
 #if (defined(SKY))
 #include "rppds.h"
@@ -74,52 +74,52 @@
 // Auto Include Libs
 //
 #ifdef _MSC_VER
-#pragma comment(lib, "rpusrdat.lib")
-#pragma comment(lib, "rtquat.lib")
-#pragma comment(lib, "rtslerp.lib")
-#pragma comment(lib, "rpskinmatfx.lib")
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rphanim.lib")
-#pragma comment(lib, "rppvs.lib")
-#pragma comment(lib, "rprandom.lib")
-#pragma comment(lib, "rpmorph.lib")
-#pragma comment(lib, "rplodatm.lib")
-#pragma comment(lib, "rpltmap.lib")
-#pragma comment(lib, "rpptank.lib")
-#pragma comment(lib, "rpprtstd.lib")
-#pragma comment(lib, "rtpick.lib")
-#pragma comment(lib, "rpdmorph.lib")
-#pragma comment(lib, "rtpitexd.lib")
-#pragma comment(lib, "rprandom.lib")
-#pragma comment(lib, "rppatchskinmatfx.lib")
-#pragma comment(lib, "rtbezpat.lib")
-#pragma comment(lib, "rt2d.lib")
-#pragma comment(lib, "rt2danim.lib")
-#pragma comment(lib, "rtpng.lib")
-#pragma comment(lib, "rtbmp.lib")
-#pragma comment(lib, "rtcharse.lib")
-#pragma comment(lib, "rtintsec.lib")
-#pragma comment(lib, "rtworld.lib")
-#pragma comment(lib, "rpmatfx.lib")
-#pragma comment(lib, "rpcollis.lib")
-#pragma comment(lib, "rppvs.lib")
-#pragma comment(lib, "rpspline.lib")
-#pragma comment(lib, "rplogo.lib")
-#pragma comment(lib, "rpworld.lib")
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rtanim.lib")
-#pragma comment(lib, "rtcmpkey.lib")
-#if (defined(_XBOX))
-#pragma comment(lib, "rpanisot.lib")
+#pragma comment (lib, "rpusrdat.lib")
+#pragma comment (lib, "rtquat.lib")
+#pragma comment (lib, "rtslerp.lib")
+#pragma comment (lib, "rpskinmatfx.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rphanim.lib")
+#pragma comment (lib, "rppvs.lib")
+#pragma comment (lib, "rprandom.lib")
+#pragma comment (lib, "rpmorph.lib")
+#pragma comment (lib, "rplodatm.lib")
+#pragma comment (lib, "rpltmap.lib")
+#pragma comment (lib, "rpptank.lib")
+#pragma comment (lib, "rpprtstd.lib")
+#pragma comment (lib, "rtpick.lib")
+#pragma comment (lib, "rpdmorph.lib")
+#pragma comment (lib, "rtpitexd.lib")
+#pragma comment (lib, "rprandom.lib")
+#pragma comment (lib, "rppatchskinmatfx.lib")
+#pragma comment (lib, "rtbezpat.lib")
+#pragma comment (lib, "rt2d.lib")
+#pragma comment (lib, "rt2danim.lib")
+#pragma comment (lib, "rtpng.lib")
+#pragma comment (lib, "rtbmp.lib")
+#pragma comment (lib, "rtcharse.lib")
+#pragma comment (lib, "rtintsec.lib")
+#pragma comment (lib, "rtworld.lib")
+#pragma comment (lib, "rpmatfx.lib")
+#pragma comment (lib, "rpcollis.lib")
+#pragma comment (lib, "rppvs.lib")
+#pragma comment (lib, "rpspline.lib")
+#pragma comment (lib, "rplogo.lib")
+#pragma comment (lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rtanim.lib")
+#pragma comment (lib, "rtcmpkey.lib")
+#if (defined (_XBOX))
+#pragma comment (lib, "rpanisot.lib")
 #endif
 #endif
 
-#if (defined(XBOX_DRVMODEL_H))
+#if (defined (XBOX_DRVMODEL_H))
 #include "modules\fx\cfx_xbox_vertexshader\cfxxboxvertexshaderbase.h"
 #endif
 
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
-#if (defined(SKY))
+#if (defined(SKY))      
 #include "sky\skyregisterpipes.h"
 #endif
 #endif
@@ -139,13 +139,13 @@ namespace RWS
       bool AttachPlugins()
       {
          RWS_FUNCTION("AttachPlugins");
-
+         
 #if (defined(__MWERKS__) || defined(SN_TARGET_PS2)) || defined(SN_TARGET_NGC)
          typedef RwBool (*functor)(void);
 #else
-         typedef RwBool(__cdecl * functor)(void);
+         typedef RwBool (__cdecl *functor)(void);
 #endif
-
+         
          typedef struct pluginlist_tag
          {
             functor pFunc;
@@ -156,39 +156,40 @@ namespace RWS
 #define ADD_PLUGIN(a) {a}
 #endif
          } pluginlist;
-
-         static const pluginlist plugins[] =
-            {
-               ADD_PLUGIN(RpWorldPluginAttach),
-               ADD_PLUGIN(RpCollisionPluginAttach),
-               ADD_PLUGIN(RpPVSPluginAttach),
-               ADD_PLUGIN(RpMorphPluginAttach),
-               ADD_PLUGIN(RpDMorphPluginAttach),
-
-               ADD_PLUGIN(RpSkinPluginAttach),
-               ADD_PLUGIN(RpHAnimPluginAttach),
-
-               ADD_PLUGIN(RpRandomPluginAttach),
-
-               ADD_PLUGIN(RpPatchPluginAttach),
-               ADD_PLUGIN(RpMatFXPluginAttach),
-
-               ADD_PLUGIN(RpPTankPluginAttach),
-               ADD_PLUGIN(RpLtMapPluginAttach),
-               ADD_PLUGIN(RpLODAtomicPluginAttach),
-               ADD_PLUGIN(RpSplinePluginAttach),
-               ADD_PLUGIN(RpUserDataPluginAttach),
-
-#if (defined(XBOX_DRVMODEL_H))
-               ADD_PLUGIN(RpAnisotPluginAttach),
-               ADD_PLUGIN(FX::CFXXBoxBaseVertexShader::PluginAttach),
+         
+         static const pluginlist plugins[] = 
+         {
+            ADD_PLUGIN(RpWorldPluginAttach),
+            ADD_PLUGIN(RpCollisionPluginAttach),
+            ADD_PLUGIN(RpPVSPluginAttach),
+            ADD_PLUGIN(RpMorphPluginAttach),
+            ADD_PLUGIN(RpDMorphPluginAttach),
+               
+            ADD_PLUGIN(RpSkinPluginAttach),
+            ADD_PLUGIN(RpHAnimPluginAttach),
+               
+            ADD_PLUGIN(RpRandomPluginAttach),
+               
+            ADD_PLUGIN(RpPatchPluginAttach),
+            ADD_PLUGIN(RpMatFXPluginAttach),
+               
+            ADD_PLUGIN(RpPTankPluginAttach),
+            ADD_PLUGIN(RpLtMapPluginAttach),
+            ADD_PLUGIN(RpLODAtomicPluginAttach),
+            ADD_PLUGIN(RpSplinePluginAttach),
+            ADD_PLUGIN(RpUserDataPluginAttach),
+               
+#if (defined (XBOX_DRVMODEL_H))
+            ADD_PLUGIN(RpAnisotPluginAttach),
+            ADD_PLUGIN(FX::CFXXBoxBaseVertexShader::PluginAttach),
 #endif
             // Finally Add RenderWare Studio RpAtomic -> CEventHandler Plugin
             //
-               ADD_PLUGIN(RpAtomicToEventHandler::PluginAttach),
-               ADD_PLUGIN(RpAtomicCollisionProperties::PluginAttach),
-               ADD_PLUGIN(CLevel::PluginAttach),
-               ADD_PLUGIN(MaterialHelper::CMaterialEvent::MaterialEventPluginAttach)};
+            ADD_PLUGIN(RpAtomicToEventHandler::PluginAttach),
+            ADD_PLUGIN(RpAtomicCollisionProperties::PluginAttach),
+            ADD_PLUGIN(CLevel::PluginAttach),
+            ADD_PLUGIN(MaterialHelper::CMaterialEvent::MaterialEventPluginAttach)
+         };
 
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
          /*
@@ -198,44 +199,44 @@ namespace RWS
          */
          if (!RtAnimInitialize())
          {
-            RWS_ASSERTFAIL("Unable to initialize RtAnim");
+            RWS_ASSERTFAIL ("Unable to initialize RtAnim");
 
             RWS_RETURN(false);
          }
 #endif
-
+         
          // RenderWare Version Exceeds 3.4
-         //
+         //      
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
-#if (defined(SKY))
+#if (defined(SKY))      
          RpPDSPluginAttach(RpWorldNumPipes);
-
+         
          Pipelines::PrePluginAttachRegisterPipeLines();
 #endif
 #endif
-
+         
          bool flag = true;
-         for (RwUInt32 i = 0; i < sizeof(plugins) / sizeof(pluginlist); i++)
+         for (RwUInt32 i = 0;i < sizeof(plugins) / sizeof(pluginlist);i++)
          {
 #ifdef RWS_TRACEENABLE
-            RWS_TRACE("Attaching Pluging : " << plugins[i].pName);
+            RWS_TRACE("Attaching Pluging : "<<plugins[i].pName);
 #endif
             if (!plugins[i].pFunc())
             {
-               RWS_ASSERTFAIL("Unable to Attach Plugin: Index [" << i << "]");
-
+               RWS_ASSERTFAIL ("Unable to Attach Plugin: Index ["<<i<<"]");
+               
                flag = false;
             }
          }
-
+         
          // RenderWare Version Exceeds 3.4
-         //
+         //      
 #if (rwLIBRARYCURRENTVERSION >= 0x34002)
-#if (defined(SKY))
+#if (defined(SKY))      
          Pipelines::PostPluginAttachRegisterPipeLines();
+#endif      
 #endif
-#endif
-
+         
          // Register the compressed keyframe animation scheme.
          //
          if (!RtCompressedKeyFrameRegister())

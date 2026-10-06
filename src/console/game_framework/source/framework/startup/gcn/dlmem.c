@@ -43,7 +43,7 @@
  Local (static) Globals
  */
 
-OSHeapHandle TheHeap;
+OSHeapHandle    TheHeap;
 
 /****************************************************************************
  Functions
@@ -51,91 +51,91 @@ OSHeapHandle TheHeap;
 
 RwBool RwsDolphinHeapInit(void)
 {
-   void *arenaLo = NULL;
-   void *arenaHi = NULL;
+    void*   arenaLo = NULL;
+    void*   arenaHi = NULL;
 
-   arenaLo = OSGetArenaLo();
-   arenaHi = OSGetArenaHi();
+    arenaLo = OSGetArenaLo();
+    arenaHi = OSGetArenaHi();
 
     /* OSInitAlloc should only ever be invoked once. */
-   arenaLo = OSInitAlloc(arenaLo, arenaHi, 1); /* 1 heap */
-   OSSetArenaLo(arenaLo);
+    arenaLo = OSInitAlloc(arenaLo, arenaHi, 1); /* 1 heap */
+    OSSetArenaLo(arenaLo);
 
     /* The boundaries given to OSCreateHeap should be 32B aligned */
-   TheHeap = OSCreateHeap((void *)OSRoundUp32B(arenaLo),
-                          (void *)OSRoundDown32B(arenaHi));
+    TheHeap = OSCreateHeap((void*)OSRoundUp32B(arenaLo),
+                           (void*)OSRoundDown32B(arenaHi));
 
     /* TheHeap - this always seems to be 0, even in the sample code */
 
-   OSSetCurrentHeap(TheHeap);
+    OSSetCurrentHeap(TheHeap);
 
     /* From here on out, OSAlloc and OSFree behave like malloc and free
      * respectively
      */
 
-   OSSetArenaLo(arenaLo = arenaHi);
+    OSSetArenaLo(arenaLo = arenaHi);
 
-   return (TRUE);
+    return (TRUE);
 }
 
 void RwsDolphinHeapFree(void *memory)
 {
     /* realloc can filter NULL pointers down to here */
     //assert(OSCheckHeap(TheHeap) >= 0);
-   if (memory)
-   {
+    if (memory)
+    {
         /* Free memory that starts with size field */
-      OSFree(((RwUInt8 *)memory) - 32);
-   }
+        OSFree(((RwUInt8 *)memory) - 32);
+    }
     //assert(OSCheckHeap(TheHeap) >= 0);
 }
 
 void *RwsDolphinHeapAlloc(size_t size)
 {
-   RwUInt32 *memory;
-
-   if (size < 0)
-   {
-      return (NULL);
-   }
+    RwUInt32    *memory;
+    
+    if (size < 0)
+    {
+        return (NULL);
+    }
 
    //assert(OSCheckHeap(TheHeap) >= 0);
     /* Need to keep track of size of realloc */
-   memory = (RwUInt32 *)OSAlloc(size + 32);
+    memory = (RwUInt32 *)OSAlloc(size + 32);
     //assert(OSCheckHeap(TheHeap) >= 0);
 
-   if (memory)
-   {
+    if (memory)
+    {
        /* Store the size so we can do a realloc later */
-      *memory = size;
-      ((RwUInt8 *)memory) += 32;
-   }
+       *memory = size;
+        ((RwUInt8 *)memory) += 32;
+    }
 
-   return ((void *)memory);
+    return ((void *)memory);
 }
 
 void *RwsDolphinHeapCalloc(size_t num, size_t size)
 {
-   void *mem;
+    void *mem;
 
-   mem = RwsDolphinHeapAlloc(num * size);
-   if (mem)
-   {
-      memset(mem, 0, num * size);
-   }
+    mem = RwsDolphinHeapAlloc(num*size);
+    if (mem)
+    {
+        memset(mem, 0, num*size);
+    }
 
-   return (mem);
+    return (mem);
 }
 
 void *RwsDolphinHeapRealloc(void *memory, size_t size)
 {
     /* We have to do a real dumb thing here, grab the size from the old block!!! */
-   RwUInt32 oldSize;
-   RwUInt32 *newMem;
+    RwUInt32  oldSize;
+    RwUInt32 *newMem;
 
    if (memory)
    {
-      oldSize = *(RwUInt32 *)(((RwUInt8 *)memory) - 32);
+      oldSize = *(RwUInt32 *)(((RwUInt8 *)memory) -32);
    }
    else
    {
@@ -143,28 +143,28 @@ void *RwsDolphinHeapRealloc(void *memory, size_t size)
    }
 
     /* Allocate new memory */
-   newMem = (RwUInt32 *)RwsDolphinHeapAlloc(size);
-   if (newMem)
-   {
-      if (oldSize < size)
-      {
+    newMem = (RwUInt32 *)RwsDolphinHeapAlloc(size);
+    if (newMem)
+    {
+       if (oldSize < size)
+       {
            /* Expanding the block */
-         memcpy(newMem, memory, oldSize);
-      }
-      else
-      {
+           memcpy(newMem, memory, oldSize);
+       }
+       else
+       {
            /* Shrinking the block */
-         memcpy(newMem, memory, size);
-      }
+           memcpy(newMem, memory, size);
+       }
 
        /* Free the old block */
-      RwsDolphinHeapFree(memory);
-   }
+       RwsDolphinHeapFree(memory);
+    }
 
-   return (newMem);
+    return (newMem);
 }
 
 RwBool RwsDolphinTermMemorySystem(void)
 {
-   return TRUE;
+    return TRUE;
 }

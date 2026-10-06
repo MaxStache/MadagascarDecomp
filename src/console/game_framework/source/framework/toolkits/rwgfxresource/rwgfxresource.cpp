@@ -49,8 +49,8 @@
 #endif
 
 /* Some plug-in IDs that we can't get from public headers */
-#define rwID_BINMESHPLUGIN MAKECHUNKID(rwVENDORID_CRITERIONWORLD, 0x0E)
-#define rwID_NATIVEDATAPLUGIN MAKECHUNKID(rwVENDORID_CRITERIONWORLD, 0x10)
+#define rwID_BINMESHPLUGIN      MAKECHUNKID(rwVENDORID_CRITERIONWORLD, 0x0E)
+#define rwID_NATIVEDATAPLUGIN   MAKECHUNKID(rwVENDORID_CRITERIONWORLD, 0x10)
 
 //////////////////////////////////////////////////////////////////
 //
@@ -63,8 +63,8 @@
 
 namespace RWS
 {
-   namespace
-   {
+      namespace
+      {
          /*
          *
          *  Callback to override the default font reading method used by RenderWare.
@@ -74,22 +74,22 @@ namespace RWS
          *
          *  \return A pointer to a RenderWare Graphics Rt2dFont object on success, otherwise 0.
          */
-      Rt2dFont *FontReaderCB(const RwChar *pFontName)
-      {
-         RWS_FUNCTION("RWS::NULL::FontReaderCB");
-         RWS_ASSERT(pFontName, "No font name supplied.");
+         Rt2dFont *FontReaderCB(const RwChar *pFontName)
+         {
+            RWS_FUNCTION("RWS::NULL::FontReaderCB");
+            RWS_ASSERT(pFontName, "No font name supplied.");
 
-         Rt2dFont *pFont;
+            Rt2dFont *pFont;
 
             // Find the font object in the resource manager
-         const void *pObject = CResourceManager::FindByName(pFontName, 0, 0, 0);
+            const void* pObject = CResourceManager::FindByName(pFontName, 0, 0, 0);
 
-         pFont = static_cast<Rt2dFont *>(const_cast<void *>(pObject));
+            pFont = static_cast<Rt2dFont*>(const_cast<void*>(pObject));
 
-         RWS_ASSERT(pFont, "Unable to find named font ( " << pFontName << " )");
+            RWS_ASSERT(pFont, "Unable to find named font ( " << pFontName << " )");
 
-         RWS_RETURN(pFont);
-      }
+            RWS_RETURN (pFont);
+         }
 
 
          /*
@@ -101,27 +101,27 @@ namespace RWS
          *
          *  \returns A pointer to a RenderWare Graphics Rt2dFont object on success, otherwise 0.
          */
-      Rt2dFont *MaestroFontReaderCB(const RwChar *pFontName)
-      {
-         RWS_FUNCTION("RWS::NULL::MaestroFontReaderCB");
-         RWS_ASSERT(pFontName, "No font name supplied.");
+         Rt2dFont *MaestroFontReaderCB(const RwChar *pFontName)
+         {
+            RWS_FUNCTION("RWS::NULL::MaestroFontReaderCB");
+            RWS_ASSERT(pFontName, "No font name supplied.");
 
-         Rt2dFont *pFont;
+            Rt2dFont *pFont;
 
             // Find the font object in the resource manager
-         const void *pObject = CResourceManager::FindByName(pFontName, 0, 0, 0);
+            const void* pObject = CResourceManager::FindByName(pFontName, 0, 0, 0);
 
-         pFont = static_cast<Rt2dFont *>(const_cast<void *>(pObject));
+            pFont = static_cast<Rt2dFont*>(const_cast<void*>(pObject));
 
-         RWS_ASSERT(pFont, "Unable to find named Maestro font ( " << pFontName << " )");
+            RWS_ASSERT(pFont, "Unable to find named Maestro font ( " << pFontName << " )");
 
             // The returned font is now managed by rt2d.
             // Remove the font from the resource manager
-         CResourceManager::Remove(pObject);
-
-         RWS_RETURN(pFont);
+            CResourceManager::Remove(pObject);
+            
+            RWS_RETURN (pFont);
+         }
       }
-   }
 
       /**
       *
@@ -131,25 +131,25 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RpWorld object, otherwise 0.
       */
-   RpWorld *CRenderwareResource::WorldStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::WorldStreamRead");
-      RWS_PRE(stream);
-
-      RpWorld *world;
+      RpWorld* CRenderwareResource::WorldStreamRead (RwStream *stream)
+      {
+         RWS_FUNCTION("RWS::CRenderwareResource::WorldStreamRead");
+         RWS_PRE(stream);
+         
+         RpWorld *world;
 
          // Read the new world from the stream
          //
-      world = RpWorldStreamRead(stream);
+         world = RpWorldStreamRead(stream);
 
-      RWS_POST(world);
+         RWS_POST(world);
 
-#if defined(SKY)
-      RtMipKWorldCalculateKValues(world, MainLoop::Render::GetCamera());
+#if defined (SKY)
+         RtMipKWorldCalculateKValues(world, MainLoop::Render::GetCamera());
 #endif
 
-      RWS_RETURN(world);
-   }
+         RWS_RETURN( world );
+      }
 
       /**
       *
@@ -159,36 +159,36 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RpAtomic object, otherwise 0.
       */
-   RpAtomic *CRenderwareResource::AtomicStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::AtomicStreamRead");
-      RWS_PRE(stream);
-
-      RpAtomic *atomic;
-
-      atomic = RpAtomicStreamRead(stream);
-
-      RWS_POST(atomic);
-
-#if defined(SKY)
-      RpClump *clump = RpClumpCreate();
-
-      if (clump)
+      RpAtomic* CRenderwareResource::AtomicStreamRead (RwStream *stream)
       {
-         RwFrame *pFrame = RwFrameCreate();
-         RpAtomicSetFrame(atomic, pFrame);
+         RWS_FUNCTION("RWS::CRenderwareResource::AtomicStreamRead");
+         RWS_PRE(stream);
 
-         RpClumpAddAtomic(clump, atomic);
-         RtMipKClumpCalculateKValues(clump, MainLoop::Render::GetCamera());
-         RpClumpRemoveAtomic(clump, atomic);
-         RpClumpDestroy(clump);
+         RpAtomic *atomic;
 
-         RpAtomicSetFrame(atomic, 0);
-         RwFrameDestroy(pFrame);
-      }
+         atomic = RpAtomicStreamRead(stream);
+
+         RWS_POST(atomic);
+
+#if defined (SKY) 
+         RpClump *clump = RpClumpCreate();
+
+         if (clump)
+         {
+            RwFrame *pFrame = RwFrameCreate();
+            RpAtomicSetFrame(atomic, pFrame);
+
+            RpClumpAddAtomic(clump, atomic);
+            RtMipKClumpCalculateKValues(clump, MainLoop::Render::GetCamera());
+            RpClumpRemoveAtomic(clump, atomic);
+            RpClumpDestroy(clump);
+
+            RpAtomicSetFrame(atomic, 0);
+            RwFrameDestroy(pFrame);
+         }
 #endif
-      RWS_RETURN(atomic);
-   }
+         RWS_RETURN ( atomic );
+      }
 
       /**
       *
@@ -198,23 +198,23 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RpClump object, otherwise 0.
       */
-   RpClump *CRenderwareResource::ClumpStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::ClumpStreamRead");
-      RWS_PRE(stream);
+      RpClump *CRenderwareResource::ClumpStreamRead (RwStream *stream)
+      {
+         RWS_FUNCTION("RWS::CRenderwareResource::ClumpStreamRead");
+         RWS_PRE(stream);
 
-      RpClump *clump;
+         RpClump *clump;
 
-      clump = RpClumpStreamRead(stream);
+         clump = RpClumpStreamRead(stream);
 
-      RWS_POST(clump);
+         RWS_POST(clump);
 
-#if defined(SKY)
-      RtMipKClumpCalculateKValues(clump, MainLoop::Render::GetCamera());
+#if defined (SKY)
+         RtMipKClumpCalculateKValues(clump, MainLoop::Render::GetCamera());
 #endif
 
-      RWS_RETURN(clump);
-   }
+         RWS_RETURN( clump );
+      }
 
       /**
       *
@@ -224,21 +224,21 @@ namespace RWS
       *
       *  \returns Returns a pointer to a Rt2dMaestro object.
       */
-   Rt2dMaestro *CRenderwareResource::MaestroStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::MaestroStreamRead");
-      RWS_PRE(stream);
+      Rt2dMaestro *CRenderwareResource::MaestroStreamRead (RwStream *stream)
+      {
+         RWS_FUNCTION ("RWS::CRenderwareResource::MaestroStreamRead");
+         RWS_PRE(stream);
 
-      Rt2dMaestro *maestro;
+         Rt2dMaestro *maestro;
 
-      Rt2dDeviceSetCamera(RWS::MainLoop::Render::GetCamera());
+         Rt2dDeviceSetCamera(RWS::MainLoop::Render::GetCamera());
 
-      maestro = Rt2dMaestroStreamRead((Rt2dMaestro *)NULL, stream);
+         maestro = Rt2dMaestroStreamRead ((Rt2dMaestro *)NULL, stream);
 
-      RWS_POST(maestro);
+         RWS_POST(maestro);
 
-      RWS_RETURN(maestro);
-   }
+         RWS_RETURN ( maestro );
+      }
 
 
       /**
@@ -249,25 +249,25 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the Rt2dFont object, otherwise 0.
       */
-   Rt2dFont *CRenderwareResource::FontStreamRead(RwStream *pStream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::FontStreamRead");
-      RWS_PRE(pStream);
+      Rt2dFont *CRenderwareResource::FontStreamRead (RwStream *pStream)
+      {
+         RWS_FUNCTION ("RWS::CRenderwareResource::FontStreamRead");
+         RWS_PRE(pStream);
 
          // Assume last read texture dictionary is the one for the fonts
-      RwTexDictionary *pTexDict = RwTexDictionaryGetCurrent();
-      Rt2dFontTexDictionarySet(pTexDict);
+         RwTexDictionary* pTexDict = RwTexDictionaryGetCurrent();
+         Rt2dFontTexDictionarySet(pTexDict);
 
-      Rt2dFont *pFont;
+         Rt2dFont *pFont;
 
-      Rt2dFontSetReadCallBack(MaestroFontReaderCB);
+         Rt2dFontSetReadCallBack(MaestroFontReaderCB);
 
-      pFont = Rt2dFontStreamRead(pStream);
+         pFont = Rt2dFontStreamRead(pStream);
 
-      RWS_POST(pFont);
+         RWS_POST(pFont);
 
-      RWS_RETURN(pFont);
-   }
+         RWS_RETURN(pFont);
+      }
 
       /**
       *
@@ -279,21 +279,21 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RwTexDictionary object, otherwise 0.
       */
-   RwTexDictionary *CRenderwareResource::TexDictionaryStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::TexDictionaryStreamRead");
-      RWS_PRE(stream);
-
-      RwTexDictionary *tex_dictionary;
-
-      tex_dictionary = RwTexDictionaryStreamRead(stream);
-
-      RWS_POST(tex_dictionary);
-
-      RwTexDictionarySetCurrent(tex_dictionary);
-
-      RWS_RETURN(tex_dictionary);
-   }
+      RwTexDictionary* CRenderwareResource::TexDictionaryStreamRead (RwStream *stream)
+      {
+         RWS_FUNCTION("RWS::CRenderwareResource::TexDictionaryStreamRead");
+         RWS_PRE(stream);
+         
+         RwTexDictionary *tex_dictionary;
+         
+         tex_dictionary = RwTexDictionaryStreamRead (stream);
+         
+         RWS_POST(tex_dictionary);
+         
+         RwTexDictionarySetCurrent (tex_dictionary);
+         
+         RWS_RETURN( tex_dictionary );
+      }
 
 
       /**
@@ -306,29 +306,29 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RwTexDictionary object, otherwise 0.
       */
-   RwTexDictionary *CRenderwareResource::PiTexDictionaryStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::PiTexDictionaryStreamRead");
-      RWS_PRE(stream);
+      RwTexDictionary* CRenderwareResource::PiTexDictionaryStreamRead (RwStream *stream)
+      {         
+         RWS_FUNCTION("RWS::CRenderwareResource::PiTexDictionaryStreamRead");
+         RWS_PRE(stream);
 
-#if defined(D3D8_DRVMODEL_H) || defined(D3D9_DRVMODEL_H) || defined(OPENGL_DRVMODEL_H) || defined(GERBERA_DRVMODEL_H)
-
-      RwTexDictionary *tex_dictionary;
-
-      tex_dictionary = RtPITexDictionaryStreamRead(stream);
-
-      RWS_POST(tex_dictionary);
-
-      RwTexDictionarySetCurrent(tex_dictionary);
-
-      RWS_RETURN(tex_dictionary);
+#if defined (D3D8_DRVMODEL_H) || defined (D3D9_DRVMODEL_H) || defined (OPENGL_DRVMODEL_H) || defined(GERBERA_DRVMODEL_H)
+         
+         RwTexDictionary *tex_dictionary;
+         
+         tex_dictionary = RtPITexDictionaryStreamRead (stream);
+         
+         RWS_POST(tex_dictionary);
+         
+         RwTexDictionarySetCurrent (tex_dictionary);
+         
+         RWS_RETURN( tex_dictionary );
 #else
-      RWS_ASSERTFAIL("CRenderwareResource::Platform independent texture dictionary's"
-                     " are only recommended for use with OpenGL and DirectX");
+         RWS_ASSERTFAIL("CRenderwareResource::Platform independent texture dictionary's"
+            " are only recommended for use with OpenGL and DirectX");
 
-      RWS_RETURN(0);
+         RWS_RETURN(0);
 #endif
-   }
+      }
 
 
 #if defined(DOLPHIN) || defined(_XBOX)
@@ -342,23 +342,23 @@ namespace RWS
       *
       *  \returns If successful returns a pointer to the RpMTEffectDict object, otherwise 0.
       */
-   RpMTEffectDict *CRenderwareResource::MTEffectDictionaryStreamRead(RwStream *stream)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::MTEffectDictionaryStreamRead");
-      RWS_PRE(stream);
+      RpMTEffectDict* CRenderwareResource::MTEffectDictionaryStreamRead (RwStream *stream)
+      {
+         RWS_FUNCTION("RWS::CRenderwareResource::MTEffectDictionaryStreamRead");
+         RWS_PRE(stream);
 
-      RpMTEffectDict *MTE_dictionary;
+         RpMTEffectDict *MTE_dictionary;
 
-      MTE_dictionary = RpMTEffectDictStreamRead(stream);
+         MTE_dictionary = RpMTEffectDictStreamRead  (stream);
 
-      RWS_POST(MTE_dictionary);
+         RWS_POST(MTE_dictionary);
 
-      RpMTEffectDictSetCurrent(MTE_dictionary);
+         RpMTEffectDictSetCurrent (MTE_dictionary);
 
-      RWS_RETURN(MTE_dictionary);
-   }
+         RWS_RETURN( MTE_dictionary );
+      }
 #endif
-
+      
       /**
       *
       *  Loads a RenderWare Graphics Resource.
@@ -377,54 +377,54 @@ namespace RWS
       *  \returns If successful returns a pointer to the loaded resource, otherwise 0.
       *
       */
-   void *CRenderwareResource::Load(const RwChar *psName,
-                                   const RwChar *psType,
-                                   const RwChar *psResourcePath,
-                                   RwStream *pStream,
-                                   RwUInt32 uiStreamSize,
-                                   RwUInt32 &uiResourceSize)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::Load");
-      RWS_PRE(psType);
-      RWS_PRE(psResourcePath);
-      RWS_PRE(pStream);
-
-      void *ret = 0;
-
-      if (uiStreamSize == 0)
+      void *CRenderwareResource::Load( const RwChar *psName,
+                                       const RwChar *psType,
+                                       const RwChar *psResourcePath,
+                                       RwStream* pStream,
+                                       RwUInt32 uiStreamSize,
+                                       RwUInt32 &uiResourceSize)
       {
-         RWS_RETURN(ret);
-      }
+         RWS_FUNCTION("RWS::CRenderwareResource::Load");
+         RWS_PRE(psType);
+         RWS_PRE(psResourcePath);
+         RWS_PRE(pStream);
 
-      if (psResourcePath) RwImageSetPath(psResourcePath);
+         void *ret = 0;
 
-      RwChunkHeaderInfo _RwChunkHeaderInfo;
+         if (uiStreamSize == 0)
+         {
+            RWS_RETURN(ret);
+         }
 
-      RwStreamReadChunkHeaderInfo(pStream, &_RwChunkHeaderInfo);
+         if (psResourcePath) RwImageSetPath(psResourcePath);
 
-      switch (_RwChunkHeaderInfo.type)
-      {
-      default:
-      case rwID_NAOBJECT:
-         RWS_ASSERTFAIL("CRenderwareResource::Load doesn't support this RenderWare type ( "
-                        << _RwChunkHeaderInfo.type << " )");
-         break;
+         RwChunkHeaderInfo _RwChunkHeaderInfo;
 
-      case rwID_WORLD: ret = WorldStreamRead(pStream); break;
-      case rwID_CLUMP: ret = ClumpStreamRead(pStream); break;
-      case rwID_ATOMIC: ret = AtomicStreamRead(pStream); break;
-      case rwID_TEXDICTIONARY: ret = TexDictionaryStreamRead(pStream); break;
-      case rwID_PITEXDICTIONARY: ret = PiTexDictionaryStreamRead(pStream); break;
-      case rwID_HANIMANIMATION: ret = RpHAnimAnimationStreamRead(pStream); break;
-      case rwID_2DMAESTRO: ret = MaestroStreamRead(pStream); break;
-      case rwID_2DFONT: ret = FontStreamRead(pStream); break;
+         RwStreamReadChunkHeaderInfo(pStream, &_RwChunkHeaderInfo);
+
+         switch (_RwChunkHeaderInfo.type)
+         {
+            default:
+            case rwID_NAOBJECT:
+               RWS_ASSERTFAIL("CRenderwareResource::Load doesn't support this RenderWare type ( "
+                     << _RwChunkHeaderInfo.type << " )");
+               break;
+
+            case rwID_WORLD:           ret = WorldStreamRead(pStream);            break;
+            case rwID_CLUMP:           ret = ClumpStreamRead(pStream);            break;
+            case rwID_ATOMIC:          ret = AtomicStreamRead(pStream);           break;
+            case rwID_TEXDICTIONARY:   ret = TexDictionaryStreamRead(pStream);    break;
+            case rwID_PITEXDICTIONARY: ret = PiTexDictionaryStreamRead(pStream);  break;
+            case rwID_HANIMANIMATION:  ret = RpHAnimAnimationStreamRead(pStream); break;
+            case rwID_2DMAESTRO:       ret = MaestroStreamRead(pStream);          break;
+            case rwID_2DFONT:          ret = FontStreamRead(pStream);             break;
 #if defined(DOLPHIN) || defined(_XBOX)
-      case rwID_MTEFFECTDICT: ret = MTEffectDictionaryStreamRead(pStream); break;
+            case rwID_MTEFFECTDICT:    ret = MTEffectDictionaryStreamRead(pStream); break;
 #endif
-      }
+         }
 
-      RWS_RETURN(ret);
-   }
+         RWS_RETURN( ret );
+      }
 
       /**
       *
@@ -437,56 +437,57 @@ namespace RWS
       *  \returns True if the resource was successfully unloaded otherwise false.
       *
       */
-   RwBool CRenderwareResource::UnLoad(const RwChar *pStrType, void *pResource)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::UnLoad");
+      RwBool CRenderwareResource::UnLoad (const RwChar *pStrType, void *pResource)
+      {
+         RWS_FUNCTION("RWS::CRenderwareResource::UnLoad");
 
-      RwBool ret = FALSE;
+         RwBool ret = FALSE;
 
-      const RwChar *_pStrType = &pStrType[5];
+         const RwChar *_pStrType = &pStrType[5];
 
-      if (rwstrcmp(_pStrType, RWSTRING("WORLD")) == 0)
-      {
-         ret = RpWorldDestroy(reinterpret_cast<RpWorld *>(pResource));
-      }
-      else if ((rwstrcmp(_pStrType, RWSTRING("TEXDICTIONARY")) == 0) || (rwstrcmp(_pStrType, RWSTRING("PITEXDICTIONARY")) == 0))
-      {
-         ret = RwTexDictionaryDestroy(reinterpret_cast<RwTexDictionary *>(pResource));
-      }
-      else if (rwstrcmp(_pStrType, RWSTRING("CLUMP")) == 0)
-      {
-         ret = RpClumpDestroy(reinterpret_cast<RpClump *>(pResource));
-      }
-      else if (rwstrcmp(_pStrType, RWSTRING("ATOMIC")) == 0)
-      {
-         ret = RpAtomicDestroy(reinterpret_cast<RpAtomic *>(pResource));
-      }
-      else if (rwstrcmp(_pStrType, RWSTRING("HANIMANIMATION")) == 0)
-      {
-         ret = RpHAnimAnimationDestroy(reinterpret_cast<RpHAnimAnimation *>(pResource));
-      }
-      else if (rwstrcmp(_pStrType, RWSTRING("2DMAESTRO")) == 0)
-      {
-         ret = (Rt2dMaestroDestroy(reinterpret_cast<Rt2dMaestro *>(pResource)));
-      }
-      else if (rwstrcmp(_pStrType, RWSTRING("2DFONT")) == 0)
-      {
-         ret = TRUE;
-      }
+         if (rwstrcmp(_pStrType, RWSTRING("WORLD")) == 0)
+         {
+            ret = RpWorldDestroy(reinterpret_cast<RpWorld*>(pResource));
+         }
+         else if ((rwstrcmp(_pStrType, RWSTRING("TEXDICTIONARY")) == 0)
+               || (rwstrcmp(_pStrType, RWSTRING("PITEXDICTIONARY")) == 0))
+         {
+            ret = RwTexDictionaryDestroy(reinterpret_cast<RwTexDictionary*>(pResource));
+         }
+         else if (rwstrcmp(_pStrType, RWSTRING("CLUMP")) == 0)
+         {
+            ret = RpClumpDestroy(reinterpret_cast<RpClump*>(pResource));
+         }
+         else if (rwstrcmp(_pStrType, RWSTRING("ATOMIC")) == 0)
+         {
+            ret = RpAtomicDestroy(reinterpret_cast<RpAtomic*>(pResource));
+         }
+         else if (rwstrcmp(_pStrType, RWSTRING("HANIMANIMATION")) == 0)
+         {
+            ret = RpHAnimAnimationDestroy (reinterpret_cast<RpHAnimAnimation*>(pResource));
+         }
+         else if (rwstrcmp(_pStrType, RWSTRING("2DMAESTRO")) == 0)
+         {
+            ret = ( Rt2dMaestroDestroy (reinterpret_cast<Rt2dMaestro*>(pResource)) );
+         }
+         else if (rwstrcmp(_pStrType, RWSTRING("2DFONT")) == 0)
+         {
+            ret = TRUE;
+         }     
 #if defined(DOLPHIN) || defined(_XBOX)
-      else if (rwstrcmp(_pStrType, RWSTRING("MTEFFECTDICT")) == 0)
-      {
-         RpMTEffectDictDestroy(static_cast<RpMTEffectDict *>(pResource));
-         ret = TRUE;
-      }
+         else if (rwstrcmp(_pStrType, RWSTRING("MTEFFECTDICT")) == 0)
+         {
+            RpMTEffectDictDestroy(static_cast<RpMTEffectDict*>(pResource));
+            ret = TRUE;
+         }     
 #endif
-      else
-      {
-         RWS_TRACE("OnFreeResource - Unimplemented resource type \"" << pStrType << "\"");
-      }
+         else
+         {
+            RWS_TRACE ("OnFreeResource - Unimplemented resource type \"" << pStrType << "\"");
+         }
 
-      RWS_RETURN(ret);
-   }
+         RWS_RETURN(ret);
+      }
 
       /**
       *
@@ -497,38 +498,38 @@ namespace RWS
       * \returns TRUE if the resource is a RenderWare Graphics resource, otherwise returns FALSE.
       *
       */
-   RwBool CRenderwareResource::IsHandled(const RwChar *psType)
-   {
-      RWS_FUNCTION("RWS::CRenderwareResource::IsHandled");
-      RWS_PRE(psType);
-
-      if (psType[0] == RWSTRING('r') && psType[1] == RWSTRING('w') && psType[2] == RWSTRING('I') && psType[3] == RWSTRING('D'))
+      RwBool CRenderwareResource::IsHandled(const RwChar *psType)
       {
-         const RwChar *_pStrType = &psType[5];
+         RWS_FUNCTION("RWS::CRenderwareResource::IsHandled");
+         RWS_PRE(psType);
 
-         if (rwstrcmp(_pStrType, RWSTRING("WORLD")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("TEXDICTIONARY")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("CLUMP")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("ATOMIC")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("HANIMANIMATION")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("2DMAESTRO")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("2DFONT")) == 0) { RWS_RETURN(TRUE); }
-         else if (rwstrcmp(_pStrType, RWSTRING("PITEXDICTIONARY")) == 0) { RWS_RETURN(TRUE); }
+         if (psType[0] == RWSTRING('r')
+         && psType[1] == RWSTRING('w')
+         && psType[2] == RWSTRING('I')
+         && psType[3] == RWSTRING('D'))
+         {
+            const RwChar *_pStrType = &psType[5];
+
+            if (rwstrcmp(_pStrType, RWSTRING("WORLD")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("TEXDICTIONARY")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("CLUMP")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("ATOMIC")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("HANIMANIMATION")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("2DMAESTRO")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("2DFONT")) == 0) {RWS_RETURN(TRUE);}
+            else if (rwstrcmp(_pStrType, RWSTRING("PITEXDICTIONARY")) == 0) {RWS_RETURN(TRUE);}
 #if defined(DOLPHIN) || defined(_XBOX)
-         else if (rwstrcmp(_pStrType, RWSTRING("MTEFFECTDICT")) == 0) { RWS_RETURN(TRUE); }
+            else if (rwstrcmp(_pStrType, RWSTRING("MTEFFECTDICT")) == 0) {RWS_RETURN(TRUE);}
 #endif
-      }
+         }
 
-      RWS_RETURN(FALSE);
-   }
+         RWS_RETURN(FALSE);
+      }
       /*
       *
       * Create an instance of the RenderWare Resource handler, this is required in order to register the handler.
       *
       */
-   namespace
-   {
-      CRenderwareResource gCRenderwareResource;
-   }
+      namespace { CRenderwareResource gCRenderwareResource; }
 }//namespace RWS
 

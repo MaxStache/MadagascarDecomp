@@ -64,14 +64,14 @@ namespace RWS
       * \see CAttributeHandler, CEventHandler
       *
       */
-      class CLinkPriority : public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class CLinkPriority: public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
-      public:
+         public:
 
-         RWS_MAKENEWCLASS(CLinkPriority);
-         RWS_DECLARE_CLASSID(CLinkPriority);
-         RWS_CATEGORY("Examples");
-         RWS_DESCRIPTION("Link Priority", "Example of a behavior where the link priority can be specified to control the order in which events are processed.");
+            RWS_MAKENEWCLASS(CLinkPriority);
+            RWS_DECLARE_CLASSID(CLinkPriority);
+            RWS_CATEGORY("Examples");
+            RWS_DESCRIPTION("Link Priority", "Example of a behavior where the link priority can be specified to control the order in which events are processed.");
 
             /** 
             *
@@ -80,29 +80,29 @@ namespace RWS
             *
             */
 
-         RWS_BEGIN_COMMANDS
+            RWS_BEGIN_COMMANDS
 
-         RWS_ATTRIBUTE(CMD_priority, "Priority", "Specify the link priority, see LinkMsg", SLIDER, RwUInt32, RANGE(0, 32768, 65535))
+               RWS_ATTRIBUTE( CMD_priority,   "Priority","Specify the link priority, see LinkMsg", SLIDER, RwUInt32, RANGE(0, 32768, 65535))
 
-         RWS_END_COMMANDS;
-
-            //////////////////////////////////////////////////////////////////
-            //
-         virtual void HandleEvents(CMsg& pMsg);
+            RWS_END_COMMANDS;
 
             //////////////////////////////////////////////////////////////////
-            //
-         virtual void HandleAttributes(const CAttributePacket& attr);
+            // 
+            virtual void HandleEvents(CMsg &pMsg);
 
             //////////////////////////////////////////////////////////////////
-            //
-         CLinkPriority(const CAttributePacket&);
-         ~CLinkPriority(void);
+            // 
+            virtual void HandleAttributes(const CAttributePacket& attr);
 
-      protected:
+            //////////////////////////////////////////////////////////////////
+            // 
+            CLinkPriority(const CAttributePacket&);
+            ~CLinkPriority(void);
 
-         CAtomicPtr m_pAtomic; /**< Behaviors atomic */
-         RwUInt16 m_priority; /**< Link Priority, current value */
+         protected:
+
+            CAtomicPtr m_pAtomic; /**< Behaviors atomic */
+            RwUInt16  m_priority; /**< Link Priority, current value */
       };
    }//namespace Examples
 }//namespace RWS

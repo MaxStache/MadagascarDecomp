@@ -51,11 +51,11 @@ namespace RWS
       *  Constructor
       *
       */
-      ATLogic::ATLogic(ATBase* pBase)
+      ATLogic::ATLogic( ATBase * pBase )
       {
          m_pBase = pBase;
       }
-
+   
       /**
       *
       *  Destructor
@@ -74,7 +74,7 @@ namespace RWS
       *  \param bIntersecting true if the object is intersecting the trigger area, false otherwise.
       *
       */
-      void ATLogic::ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting)
+      void ATLogic::ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting )
       {
          RWS_FUNCTION("ATLogic::ProcessLogic");
 
@@ -93,7 +93,7 @@ namespace RWS
       *  \param pEntered Pointer to the object that has entered the trigger area.
       *
       */
-      void ATLogic::OnEnter(CEventHandler* pEntered)
+      void ATLogic::OnEnter( CEventHandler * pEntered )
       {
          RWS_FUNCTION("ATLogic::OnEnter");
 
@@ -109,7 +109,7 @@ namespace RWS
       *  \param pExited Pointer to the object which has left the trigger area.
       *
       */
-      void ATLogic::OnExit(CEventHandler* pExited)
+      void ATLogic::OnExit( CEventHandler* pExited )
       {
          RWS_FUNCTION("ATLogic::OnExit");
 
@@ -154,9 +154,9 @@ namespace RWS
       *  Constructor
       *
       */
-      ATFireOnceOnEntry::ATFireOnceOnEntry(ATBase* pBase) :
-         ATLogic(pBase),
-         m_NumObjects(0)
+      ATFireOnceOnEntry::ATFireOnceOnEntry( ATBase * pBase )
+         : ATLogic(pBase),
+           m_NumObjects(0)
       {
          memset(m_IntersectingObjects, 0, sizeof(m_IntersectingObjects));
       }
@@ -173,7 +173,7 @@ namespace RWS
       *                       area, false otherwise.
       *
       */
-      void ATFireOnceOnEntry::ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting)
+      void ATFireOnceOnEntry::ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::ProcessLogic");
 
@@ -209,14 +209,14 @@ namespace RWS
       /**
       *
       */
-      void ATFireOnceOnEntry::OnEnter(CEventHandler* pEntered)
+      void ATFireOnceOnEntry::OnEnter( CEventHandler * pEntered )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::OnEnter");
 
          if (m_NumObjects < MAX_OBJECTS_TRACKED && pEntered)
          {
             m_IntersectingObjects[m_NumObjects] = pEntered;
-            ++m_NumObjects;
+           ++m_NumObjects;
          }
 
          SendEnterMsg();
@@ -227,7 +227,7 @@ namespace RWS
       /**
       *
       */
-      void ATFireOnceOnEntry::OnExit(CEventHandler* pExited)
+      void ATFireOnceOnEntry::OnExit( CEventHandler * pExited )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::OnExit");
 
@@ -238,7 +238,7 @@ namespace RWS
             if (m_IntersectingObjects[Index] == pExited)
             {
                // swap the element for the last one and decrease the number of intersecting objects
-               CEventHandler* pTemp = m_IntersectingObjects[Index];
+               CEventHandler * pTemp = m_IntersectingObjects[Index];
                m_IntersectingObjects[Index] = m_IntersectingObjects[m_NumObjects - 1];
                m_IntersectingObjects[m_NumObjects - 1] = pTemp;
                --m_NumObjects;
@@ -250,15 +250,15 @@ namespace RWS
          RWS_RETURNVOID();
       }
 
-
+      
       /**
       *
       *  Constructor
       *
       */
-      ATFireOnceOnEntryAndExit::ATFireOnceOnEntryAndExit(ATBase* pBase) :
-         ATLogic(pBase),
-         m_NumObjects(0)
+      ATFireOnceOnEntryAndExit::ATFireOnceOnEntryAndExit( ATBase * pBase )
+         : ATLogic(pBase),
+           m_NumObjects(0)
       {
          memset(m_IntersectingObjects, 0, sizeof(m_IntersectingObjects));
       }
@@ -275,7 +275,7 @@ namespace RWS
       *                       area, false otherwise.
       *
       */
-      void ATFireOnceOnEntryAndExit::ProcessLogic(CEventHandler* pEventHandler, RwBool bIntersecting)
+      void ATFireOnceOnEntryAndExit::ProcessLogic( CEventHandler * pEventHandler, RwBool bIntersecting )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::ProcessLogic");
 
@@ -292,7 +292,7 @@ namespace RWS
 
          if (bCurrentlyIntersecting)
          {
-            if (!bIntersecting)
+            if ( !bIntersecting )
             {
                OnExit(pEventHandler);
             }
@@ -311,11 +311,11 @@ namespace RWS
       /**
       *
       */
-      void ATFireOnceOnEntryAndExit::OnEnter(CEventHandler* pEntered)
+      void ATFireOnceOnEntryAndExit::OnEnter( CEventHandler * pEntered )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::OnEnter");
 
-         if (m_NumObjects < MAX_OBJECTS_TRACKED && pEntered)
+         if ( m_NumObjects < MAX_OBJECTS_TRACKED && pEntered )
          {
             m_IntersectingObjects[m_NumObjects] = pEntered;
             ++m_NumObjects;
@@ -329,7 +329,7 @@ namespace RWS
       /**
       *
       */
-      void ATFireOnceOnEntryAndExit::OnExit(CEventHandler* pExited)
+      void ATFireOnceOnEntryAndExit::OnExit( CEventHandler * pExited )
       {
          RWS_FUNCTION("ATFireOnceOnEntry::OnExit");
 
@@ -340,7 +340,7 @@ namespace RWS
             if (m_IntersectingObjects[Index] == pExited)
             {
                // swap the element for the last one and decrease the number of intersecting objects
-               CEventHandler* pTemp = m_IntersectingObjects[Index];
+               CEventHandler * pTemp = m_IntersectingObjects[Index];
                m_IntersectingObjects[Index] = m_IntersectingObjects[m_NumObjects - 1];
                m_IntersectingObjects[m_NumObjects - 1] = pTemp;
                --m_NumObjects;
@@ -353,7 +353,7 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+      
    } // namespace AreaTrigger
 
 } // namespace RWS

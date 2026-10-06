@@ -48,8 +48,8 @@ namespace RWS
    *  Sent each frame to begin rendering, if directors camera is disabled or no
    *  event handler is linked to iMsgDoRenderDirectorsCamera.
    */
-   RWS_DEFINE_EVENT(iMsgDoRender, "RwCamera*",
-                    "Sent each frame to begin rendering, if directors camera is disabled.");
+   RWS_DEFINE_EVENT(iMsgDoRender, "RwCamera*", 
+      "Sent each frame to begin rendering, if directors camera is disabled.");
 
    /**
    *  \ingroup SystemEvents
@@ -58,7 +58,7 @@ namespace RWS
    *  Sent each frame to begin rendering if directors camera is enabled.
    */
    RWS_DEFINE_EVENT(iMsgDoRenderDirectorsCamera, "RwCamera*",
-                    "Sent each frame to begin rendering if directors camera is enabled.");
+      "Sent each frame to begin rendering if directors camera is enabled.");
    /**
    *  \ingroup SystemEvents
    *  \page RenderEvents
@@ -66,7 +66,7 @@ namespace RWS
    *  Sent when the directors camera is enabled.
    */
    RWS_DEFINE_EVENT(iMsg_SetEnableDirectorsCamera, 0,
-                    "Sent when the directors camera is enabled.");
+      "Sent when the directors camera is enabled.");
    /**
    *  \ingroup SystemEvents
    *  \page RenderEvents
@@ -74,7 +74,7 @@ namespace RWS
    *  Sent when the directors camera is disabled.
    */
    RWS_DEFINE_EVENT(iMsg_SetDisableDirectorsCamera, 0,
-                    "Sent when the directors camera is disabled.");
+      "Sent when the directors camera is disabled.");
 
    /**
    *  \ingroup SystemEvents
@@ -82,9 +82,9 @@ namespace RWS
    *  \li iMsgPreShowRaster
    *  Sent each frame just before show raster is called.
    */
-   RWS_DEFINE_EVENT(iMsgPreShowRaster, "RwCamera*",
-                    "Sent each frame just before show raster is called.");
-
+   RWS_DEFINE_EVENT(iMsgPreShowRaster, "RwCamera*", 
+      "Sent each frame just before show raster is called.");
+ 
    /**
    *  \ingroup SystemEvents
    *  \page StreamEvents
@@ -92,7 +92,7 @@ namespace RWS
    *  Sent when the workspace requests the current camera.
    */
    RWS_DEFINE_EVENT(iMsgRequestCurrentCameraMatrix,
-                    "RwUInt32 InstanceID", "Sent when the workspace requests the current camera.");
+      "RwUInt32 InstanceID", "Sent when the workspace requests the current camera.");
 
    namespace MainLoop
    {
@@ -116,12 +116,12 @@ namespace RWS
          *  Usage RWS::MainLoop::Render::Rate
          *
          */
-#if defined(VIDEO_MODE_PAL)
-         const RwUInt32 Rate = 50;
-#elif defined(VIDEO_MODE_NTSC)
-         const RwUInt32 Rate = 60;
+#if defined (VIDEO_MODE_PAL)
+         const RwUInt32 Rate = 50; 
+#elif defined (VIDEO_MODE_NTSC)
+         const RwUInt32 Rate = 60; 
 #else
-         const RwUInt32 Rate = 60;
+         const RwUInt32 Rate = 60; 
 #endif
 
          void Open(void); // Open Render SubModule
@@ -130,7 +130,7 @@ namespace RWS
 
          void Poll(void); // Poll Render SubModule
 
-         void SetEnabled(RwBool bEnabled); // Enable/Disable rendering event
+         void SetEnabled(RwBool bEnabled); // Enable/Disable rendering event 
 
          RwUInt32 GetFrameCount(void);
 
@@ -150,10 +150,10 @@ namespace RWS
          *
          *  \param pCamera Pointer to a RwCamera object, Sets global camera to pCamera
          */
-         void SetCamera(RwCamera *const pCamera);
+         void SetCamera(RwCamera * const pCamera);
       }
    }
 }
 
 #endif
-
+   

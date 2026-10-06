@@ -27,7 +27,7 @@
 //#define RWS_CALLSTACKENABLE
 
 //////////////////////////////////////////////////////////////////
-//
+// 
 // RenderWare Studio Includes
 //
 #include "rtfsyst.h" // New 3.6 File System
@@ -38,23 +38,23 @@
 #include "attachplugins.h"
 #include "debugmsghandler.h"
 
-#if (defined(DOLPHIN))
+#if (defined (DOLPHIN))
 #include "gcn/gcn.h"
 #endif
 
-#if (defined(SKY))
+#if (defined (SKY))
 #include "sky/sky.h"
 #include "sky/skyregisterpipes.h"
 #endif
 
-#if (defined(_XBOX))
+#if (defined (_XBOX))
 
 #include "xbox/xbox.h"
 
 #else
-#if (defined(WIN32))
-#include "win32/win.h"
-#endif
+   #if (defined (WIN32)) 
+   #include "win32/win.h"
+   #endif
 #endif
 
 
@@ -70,7 +70,7 @@
 namespace RWS
 {
    namespace StartUp
-   {
+   {     
       namespace
       {
 #ifndef NDEBUG
@@ -115,7 +115,8 @@ namespace RWS
          RwUInt32 ArenaSize,
          RwVideoMode &rVideoMode,
          const RwUInt32 ZBufferDepth,
-         void *pDisplayID)
+         void* pDisplayID
+         )
       {
          RWS_FUNCTION("Startup::Open");
          RWS_PRE(!gIsInited);
@@ -127,11 +128,12 @@ namespace RWS
          if (!memfuncs)
          {
             static RwMemoryFunctions pDefMemFuncs =
-               {
-                  RWSMalloc,
-                  RWSFree,
-                  RWSReAlloc,
-                  RWSCalloc};
+            {
+               RWSMalloc,
+               RWSFree,
+               RWSReAlloc,
+               RWSCalloc
+            };
 
             memfuncs = &pDefMemFuncs;
          }
@@ -139,7 +141,7 @@ namespace RWS
          // Initialize Time toolkit
          //
          Time::Open();
-
+         
          RWS::FunctionProfile::CProfileManager::OpenProfiler(10000, RWS::Time::GetTime);
 
          if (RwEngineInit(memfuncs, 0, ArenaSize))
@@ -156,14 +158,14 @@ namespace RWS
 
                   if (AttachPlugins())
                   {
-                     RwEngineOpenParams openParams = {pDisplayID};
+                     RwEngineOpenParams openParams = { pDisplayID };
 
                      if (RwEngineOpen(&openParams))
                      {
-                        if (SelectVideoMode(rVideoMode.width,
-                                            rVideoMode.height,
-                                            rVideoMode.depth,
-                                            rVideoMode.flags,
+                        if (SelectVideoMode(rVideoMode.width, 
+                                            rVideoMode.height, 
+                                            rVideoMode.depth, 
+                                            rVideoMode.flags, 
                                             ZBufferDepth))
                         {
                            if (RwEngineStart())
@@ -194,7 +196,7 @@ namespace RWS
 #endif
          RWS_RETURN(result);
       }
-
+      
       /**
       *
       *  \ingroup StartUp
@@ -217,7 +219,7 @@ namespace RWS
          RwEngineClose();
          RwEngineTerm();
 
-         // Close the file system manager down
+         // Close the file system manager down         
          RtFSManagerClose();
 
 #ifndef NDEBUG

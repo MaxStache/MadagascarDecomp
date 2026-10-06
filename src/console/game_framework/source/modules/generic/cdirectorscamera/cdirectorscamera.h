@@ -47,29 +47,29 @@ namespace RWS
       * rendering behavior when the directors camera is enabled.
       *
       */
-      class CDirectorsCamera : public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class CDirectorsCamera: public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
-      public:
-         RWS_MAKENEWCLASS(CDirectorsCamera);
-         RWS_DECLARE_CLASSID(CDirectorsCamera);
-         RWS_CATEGORY("Generic");
-         RWS_DESCRIPTION("Directors Camera", "Pipes the global camera (Directors Camera) to a render event");
+         public:
+            RWS_MAKENEWCLASS(CDirectorsCamera);
+            RWS_DECLARE_CLASSID(CDirectorsCamera);
+            RWS_CATEGORY("Generic");
+            RWS_DESCRIPTION("Directors Camera", "Pipes the global camera (Directors Camera) to a render event");
+         
+            virtual void HandleEvents(CMsg &pMsg);
+            virtual void HandleAttributes(const CAttributePacket& attr);
+            
+            CDirectorsCamera(const CAttributePacket& rAttr);
+            ~CDirectorsCamera();
 
-         virtual void HandleEvents(CMsg& pMsg);
-         virtual void HandleAttributes(const CAttributePacket& attr);
+            RWS_BEGIN_COMMANDS
 
-         CDirectorsCamera(const CAttributePacket& rAttr);
-         ~CDirectorsCamera();
+               RWS_MESSAGE  (CMD_RenderOut, "Transmit Render Camera Event","When the iMsgDoRenderDirectorsCamera event is received then this event is sent.",TRANSMIT , RwCamera*,"iMsgDoRender")
 
-         RWS_BEGIN_COMMANDS
+            RWS_END_COMMANDS;
 
-         RWS_MESSAGE(CMD_RenderOut, "Transmit Render Camera Event", "When the iMsgDoRenderDirectorsCamera event is received then this event is sent.", TRANSMIT, RwCamera*, "iMsgDoRender")
+         protected:
 
-         RWS_END_COMMANDS;
-
-      protected:
-
-         CEventId m_Render_Out;        /**< Send Render Event.*/
+            CEventId m_Render_Out;        /**< Send Render Event.*/
       };
    }//namespace CDirectorsCamera
 }//namespace RWS

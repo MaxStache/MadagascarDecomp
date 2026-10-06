@@ -34,7 +34,7 @@
 namespace RWS
 {
    namespace FPS
-   {
+   { 
       RWS_REGISTERCLASS(FPSExamplePickup);
    }
 }

@@ -35,8 +35,8 @@
 #include "rpworld.h"
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -72,31 +72,31 @@ namespace RWS
          CFXBaseEnvironmentMap(void);
          ~CFXBaseEnvironmentMap(void);
 
-         static void SetMatFXDefaultEnvFrameForAtomic(CFXBaseEnvironmentMap *pObject, const RpAtomic *pAtomic);
-         static void SetMatFXDefaultEnvFrameForClump(CFXBaseEnvironmentMap *pObject, const RpClump *pClump);
-         static void SetMatFXDefaultEnvFrameForWorld(CFXBaseEnvironmentMap *pObject, const RpWorld *pWorld);
-         static void DeleteMatFXDefaultEnvFrame(void);
-         static RwFrame *GetDefaultEnvFrame();
+         static void    SetMatFXDefaultEnvFrameForAtomic (CFXBaseEnvironmentMap *pObject, const RpAtomic *pAtomic);
+         static void    SetMatFXDefaultEnvFrameForClump  (CFXBaseEnvironmentMap *pObject, const RpClump *pClump);
+         static void    SetMatFXDefaultEnvFrameForWorld  (CFXBaseEnvironmentMap *pObject, const RpWorld *pWorld);
+         static void    DeleteMatFXDefaultEnvFrame       (void);
+         static RwFrame *GetDefaultEnvFrame              ();
 
-         virtual void MaterialConstructEvent(const RpMaterial *pMaterial);
-         virtual void MaterialCopyEvent(const RpMaterial *pSrcMaterial, const RpMaterial *pDstMaterial);
-         virtual void MaterialDestroyEvent(const RpMaterial *pMaterial);
-      protected:
+         virtual void   MaterialConstructEvent           (const RpMaterial *pMaterial);
+         virtual void   MaterialCopyEvent                (const RpMaterial *pSrcMaterial, const RpMaterial *pDstMaterial);
+         virtual void   MaterialDestroyEvent             (const RpMaterial *pMaterial);
+      protected:                                         
+                                                         
+         void                 ProcessAttachments         (const CAttributePacket& attr, RwFrame *EnvFrame);
+         static RpMaterial    *MaterialCallback          (RpMaterial *pMaterial, void *pCallBackData);
+         static RpAtomic      *AtomicCallback            (RpAtomic   *pAtomic, void *pCallBackData);
+         static RpClump       *ClumpCallback             (RpClump *pClump, void *pCallBackData);
+         static RpWorldSector *WorldSectorCallback       (RpWorldSector *pWorldSector, void *pCallBackData);
+         static void          SetMatFXEnvFrameForAtomic  (CFXBaseEnvironmentMap *pObject, const RpAtomic *pAtomic, RwFrame  *pEnvMapFrame);
+         static void          SetMatFXEnvFrameForClump   (CFXBaseEnvironmentMap *pObject, const RpClump *pClump, RwFrame  *pEnvMapFrame);
+         static void          SetMatFXEnvFrameForWorld   (CFXBaseEnvironmentMap *pObject, const RpWorld *pWorld, RwFrame  *pEnvMapFrame);
 
-         void ProcessAttachments(const CAttributePacket &attr, RwFrame *EnvFrame);
-         static RpMaterial *MaterialCallback(RpMaterial *pMaterial, void *pCallBackData);
-         static RpAtomic *AtomicCallback(RpAtomic *pAtomic, void *pCallBackData);
-         static RpClump *ClumpCallback(RpClump *pClump, void *pCallBackData);
-         static RpWorldSector *WorldSectorCallback(RpWorldSector *pWorldSector, void *pCallBackData);
-         static void SetMatFXEnvFrameForAtomic(CFXBaseEnvironmentMap *pObject, const RpAtomic *pAtomic, RwFrame *pEnvMapFrame);
-         static void SetMatFXEnvFrameForClump(CFXBaseEnvironmentMap *pObject, const RpClump *pClump, RwFrame *pEnvMapFrame);
-         static void SetMatFXEnvFrameForWorld(CFXBaseEnvironmentMap *pObject, const RpWorld *pWorld, RwFrame *pEnvMapFrame);
-
-         static RwFrame *m_DefaultEnvFrame;        /**< Default environment map frame */
+         static RwFrame       *m_DefaultEnvFrame;        /**< Default environment map frame */
       };
 
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

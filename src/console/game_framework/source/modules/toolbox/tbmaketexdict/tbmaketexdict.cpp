@@ -37,7 +37,7 @@
 #include <rtpitexd.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rtpitexd.lib")
+#pragma comment (lib, "rtpitexd.lib")
 #endif
 
 //#define RWS_CALLSTACKENABLE
@@ -65,19 +65,19 @@ namespace RWS
       *
       *  \param rAttr Reference to a CAttributePacket.
       */
-      ATBMakeTexDict::ATBMakeTexDict(const CAttributePacket &rAttr) :
-         InitCEventHandler(0)
+      ATBMakeTexDict::ATBMakeTexDict(const CAttributePacket& rAttr)
+         : InitCEventHandler(0)
       {
       }
-
+      
       /**
       *
       *  Destroy ATBMakeTexDict object.
       */
       ATBMakeTexDict::~ATBMakeTexDict()
       {
-         UnLinkMsg(m_MakeTexDict);
-         UnRegisterMsg(m_MakeTexDict);
+          UnLinkMsg(m_MakeTexDict);
+          UnRegisterMsg(m_MakeTexDict);
       }
 
       /**
@@ -89,68 +89,68 @@ namespace RWS
       void ATBMakeTexDict::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("ATBMakeTexDict::HandleEvents");
-
+         
          if (pMsg.Id == m_MakeTexDict)
          {
             RWS_TRACE("ATBMakeTexDict::HandleEvents");
 
-            RwTexDictionary *pTexDict = RwTexDictionaryGetCurrent();
+            RwTexDictionary *pTexDict = RwTexDictionaryGetCurrent ();
 
             if (pTexDict)
             {
                RwMemory memory;
 
-               if (RwStream *pStream = RwStreamOpen(rwSTREAMMEMORY, rwSTREAMWRITE, &memory))
+               if (RwStream *pStream = RwStreamOpen (rwSTREAMMEMORY, rwSTREAMWRITE, &memory))
                {
 #if defined(_WINDOWS)
-                  RtPITexDictionaryStreamWrite(pTexDict, pStream);
+                  RtPITexDictionaryStreamWrite (pTexDict, pStream);
 #else
-                  RwTexDictionaryStreamWrite(pTexDict, pStream);
+                  RwTexDictionaryStreamWrite (pTexDict, pStream);
 #endif
 
-                  RwStreamClose(pStream, &memory);
+                  RwStreamClose (pStream, &memory);
                }
 
-#if defined(_WINDOWS)
+   #if defined(_WINDOWS)
                NetTools::SendFile("pcTextDict.rws", "Platform Independent Texture Dictionary", memory.start, memory.length);
-#elif defined(_XBOX)
+   #elif defined (_XBOX)
                NetTools::SendFile("xboxTextDict.rx1", "XBOX Texture Dictionary", memory.start, memory.length);
-#elif defined(SKY)
-               NetTools::SendFile("ps2TextDict.rp2", "PS2 Texture Dictionary", memory.start, memory.length);
-#elif defined(DOLPHIN)
+   #elif defined (SKY)
+               NetTools::SendFile("ps2TextDict.rp2", "PS2 Texture Dictionary", memory.start, memory.length); 
+   #elif defined (DOLPHIN)
                NetTools::SendFile("gcnTextDict.rg1", "GCN Texture Dictionary", memory.start, memory.length);
-#endif
+   #endif
                RwFree(memory.start);
             }
          }
 
          RWS_RETURNVOID();
       }
-
+      
       /**
       *
       *  Handle Attributes for ATBMakeTexDict object.
       *
       *  \param rAttr Reference to a CAttributePacket.
       */
-      void ATBMakeTexDict::HandleAttributes(const CAttributePacket &rAttr)
+      void ATBMakeTexDict::HandleAttributes(const CAttributePacket& rAttr)
       {
          RWS_FUNCTION("ATBMakeTexDict::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(rAttr);
-
+         
          CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(ATBMakeTexDict));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
-            case CMD_GenerateTextDict:
+                case CMD_GenerateTextDict:
 
-               RWS_TRACE("ATBMakeTexDict::HandleAttributes");
+                   RWS_TRACE("ATBMakeTexDict::HandleAttributes");
 
-               ReplaceLinkedMsg(m_MakeTexDict, attrIt->GetAs_RwChar_ptr(), 0);
-               break;
+                   ReplaceLinkedMsg(m_MakeTexDict, attrIt->GetAs_RwChar_ptr(), 0);
+                   break;
             }
             ++attrIt;
          }

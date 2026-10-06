@@ -64,7 +64,7 @@ namespace RWS
       class CGCNStandardControlDevice : public CEventHandler
       {
       public:
-         static CGCNStandardControlDevice *new_Instance();
+         static CGCNStandardControlDevice* new_Instance();
          static void delete_Instance(void);
          static PADStatus *GetGCNPad(unsigned int device_num);
 
@@ -79,26 +79,24 @@ namespace RWS
 
       private:
 
-         enum
-         {
-            NUM_GAME_CONTROLLERS = PAD_MAX_CONTROLLERS
-         };
+         enum {NUM_GAME_CONTROLLERS = PAD_MAX_CONTROLLERS};
 
          //-----------------------------------------------------------------------------------------
 
          static unsigned int refcount;
-         static CGCNStandardControlDevice *_instance;
+         static CGCNStandardControlDevice* _instance;
          static PADStatus g_Gamepads[NUM_GAME_CONTROLLERS];
 
          //-----------------------------------------------------------------------------------------
 
          // Initialize game controllers
          //
-         static BOOL GCNInput_CreateGamepads(void);
+         static BOOL GCNInput_CreateGamepads( void );
 
          // Scan for input
          //
          void GCNInput_GetInput(void);
+
       };
 
       //-----------------------------------------------------------------------------------------
@@ -106,8 +104,7 @@ namespace RWS
       class CInput
       {
       public:
-         CInput() :
-            m_value(0) {};
+         CInput() : m_value(0) {};
 
          CEventId m_Inq;    // Inquire Button value -1 or 1
 
@@ -140,7 +137,7 @@ namespace RWS
 
       //-----------------------------------------------------------------------------------------
 
-      class CAJoystickInput : public CInput
+      class CAJoystickInput: public CInput
       {
       public:
          void CalcAnalogueJoystickValue(s8 &var);
@@ -165,10 +162,10 @@ namespace RWS
          RWS_DESCRIPTION("Generic GameCube Pad Handler", "Maps all buttons and pads to inquire events, return value of each is always (1 to -1)");
 
 
-         virtual void HandleAttributes(const CAttributePacket &attr);
+         virtual void HandleAttributes(const CAttributePacket& attr);
          virtual void HandleEvents(CMsg &pMsg);
 
-         CGCNStandardController(const CAttributePacket &);
+         CGCNStandardController(const CAttributePacket&);
          ~CGCNStandardController(void);
 
          /*
@@ -193,59 +190,36 @@ namespace RWS
 
          RWS_BEGIN_COMMANDS
 
-         RWS_ATTRIBUTE(CMD_m_PortSelect, "Port Select", "Select which Game Pad", LIST, RwUInt32, LIST("Pad 1|Pad 2|Pad 3|Pad 4"))
+            RWS_ATTRIBUTE(CMD_m_PortSelect, "Port Select", "Select which Game Pad", LIST, RwUInt32, LIST("Pad 1|Pad 2|Pad 3|Pad 4"))
 
-         RWS_MESSAGE(CMD_m_Inq_Start, "Inquire Start Pause Button", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_LeftX, "Inquire Left Joystick X", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_ACTN_TURN")
-         RWS_MESSAGE(CMD_m_Inq_LeftY, "Inquire Left Joystick Y", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_ACTN_FWD")
-         RWS_MESSAGE(CMD_m_Inq_CX, "Inquire C Joystick X", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_ACTN_STRAFE")
-         RWS_MESSAGE(CMD_m_Inq_CY, "Inquire C Joystick Y", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_CAMERA_PITCH")
+            RWS_MESSAGE( CMD_m_Inq_Start, "Inquire Start Pause Button","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_LeftX, "Inquire Left Joystick X","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_ACTN_TURN")
+            RWS_MESSAGE( CMD_m_Inq_LeftY, "Inquire Left Joystick Y","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_ACTN_FWD")
+            RWS_MESSAGE( CMD_m_Inq_CX, "Inquire C Joystick X","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_ACTN_STRAFE")
+            RWS_MESSAGE( CMD_m_Inq_CY, "Inquire C Joystick Y","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_CAMERA_PITCH")
 
-         RWS_MESSAGE(CMD_m_Inq_A, "Inquire Button A", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_ACTN_FIRE")
-         RWS_MESSAGE(CMD_m_Inq_B, "Inquire Button B", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, "INQ_ACTN_JUMP")
-         RWS_MESSAGE(CMD_m_Inq_X, "Inquire Button X", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_Y, "Inquire Button Y", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_Z, "Inquire Button Z Trigger", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_A, "Inquire Button A","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_ACTN_FIRE")
+            RWS_MESSAGE( CMD_m_Inq_B, "Inquire Button B","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, "INQ_ACTN_JUMP")
+            RWS_MESSAGE( CMD_m_Inq_X, "Inquire Button X","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_Y, "Inquire Button Y","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_Z, "Inquire Button Z Trigger","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
 
-         RWS_MESSAGE(CMD_m_Inq_L, "Inquire Button L Shoulder", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_R, "Inquire Button R Shoulder", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_L, "Inquire Button L Shoulder","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_R, "Inquire Button R Shoulder","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
 
-         RWS_MESSAGE(CMD_m_Inq_DPadUp, "Inquire Directional Pad Up", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_DPadDown, "Inquire Directional Pad Down", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_DPadLeft, "Inquire Directional Pad Left", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
-         RWS_MESSAGE(CMD_m_Inq_DPadRight, "Inquire Directional Pad Right", "return's +-1.0 depending on state of this input device", RECEIVE, return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_DPadUp,    "Inquire Directional Pad Up","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_DPadDown,  "Inquire Directional Pad Down","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_DPadLeft,  "Inquire Directional Pad Left","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
+            RWS_MESSAGE( CMD_m_Inq_DPadRight, "Inquire Directional Pad Right","return's +-1.0 depending on state of this input device",RECEIVE,return RwReal, 0)
 
          RWS_END_COMMANDS;
 
       private:
 
-         enum
-         {
-            GCN_AJOYSTICK_LeftX,
-            GCN_AJOYSTICK_LeftY,
-            GCN_AJOYSTICK_CX,
-            GCN_AJOYSTICK_CY,
-            GCN_AJOYSTICK_MAX
-         };
-         enum
-         {
-            GCN_DBUTTON_DPadDown,
-            GCN_DBUTTON_DPadLeft,
-            GCN_DBUTTON_DPadRight,
-            GCN_DBUTTON_DPadUp,
-            GCN_DBUTTON_A,
-            GCN_DBUTTON_B,
-            GCN_DBUTTON_X,
-            GCN_DBUTTON_Y,
-            GCN_DBUTTON_Z,
-            GCN_DBUTTON_MAX
-         };
-         enum
-         {
-            GCN_ABUTTON_L,
-            GCN_ABUTTON_R,
-            GCN_ABUTTON_MAX
-         };
+         enum { GCN_AJOYSTICK_LeftX, GCN_AJOYSTICK_LeftY, GCN_AJOYSTICK_CX, GCN_AJOYSTICK_CY, GCN_AJOYSTICK_MAX };
+         enum { GCN_DBUTTON_DPadDown, GCN_DBUTTON_DPadLeft, GCN_DBUTTON_DPadRight, GCN_DBUTTON_DPadUp,
+                GCN_DBUTTON_A, GCN_DBUTTON_B, GCN_DBUTTON_X, GCN_DBUTTON_Y, GCN_DBUTTON_Z, GCN_DBUTTON_MAX };
+         enum { GCN_ABUTTON_L, GCN_ABUTTON_R, GCN_ABUTTON_MAX };
 
          void LinkEvent(CEventId &eventId, const RwChar *event_name);
 
@@ -264,6 +238,6 @@ namespace RWS
 }//namespace RWS
 
 #else
-#pragma message("CGCNStandardController design for GameCube only");
+#pragma message ("CGCNStandardController design for GameCube only");
 #endif
 #endif //__CGCNSTANDARDCONTROLLER_H__

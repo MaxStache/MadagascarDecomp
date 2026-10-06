@@ -42,12 +42,12 @@ namespace
    // Select Video Mode, Width
    //
    const RwUInt32 kScreenWidth = 640;
-
+   
    // Select Video Mode, Height
    //
-#if defined(VIDEO_MODE_PAL)
+#if defined (VIDEO_MODE_PAL)
    const RwUInt32 kScreenHeight = 576;
-#elif defined(VIDEO_MODE_NTSC)
+#elif defined (VIDEO_MODE_NTSC)
    const RwUInt32 kScreenHeight = 480;
 #else
    const RwUInt32 kScreenHeight = 480;
@@ -60,14 +60,14 @@ namespace
    // Select Video Mode, color depth
    //
    const RwUInt32 kBitDepth = 32;
-
+   
    // Select Video Mode, z-buffer depth
    //
    const RwUInt32 kZBitDepth = 32;
 
    // Select Video Mode, mode.
    //
-   const RwVideoModeFlag kFlags = static_cast<RwVideoModeFlag>(rwVIDEOMODEEXCLUSIVE);
+   const RwVideoModeFlag kFlags = static_cast<RwVideoModeFlag>(rwVIDEOMODEEXCLUSIVE); 
 
    // Globals
    RwTextureCallBackRead pOriginalTextureReadCallBack = 0;
@@ -81,8 +81,8 @@ namespace
    */
    RwTexture* XboxTextureReadCallBack(const RwChar* name, const RwChar* maskName)
    {
-      RwTexture* pTexture = RwXboxDDSTextureRead(name, maskName);
-      return pTexture ? pTexture : pOriginalTextureReadCallBack(name, maskName);
+       RwTexture* pTexture = RwXboxDDSTextureRead(name, maskName);
+       return pTexture ? pTexture : pOriginalTextureReadCallBack(name, maskName);
    }
 }
 
@@ -98,8 +98,8 @@ namespace RWS
    RwBool
    psInstallFileSystem(void)
    {
-      RtFileSystem* xfs;
-      RwChar* deviceName = "d:";
+      RtFileSystem *xfs;
+      RwChar *deviceName = "d:";
 
       if ((xfs = RtXboxFSystemInit(MAX_NB_FILES_PER_FS, deviceName, "xbox")) != 0)
       {
@@ -142,10 +142,10 @@ int main()
    videoModeInfo.flags = kFlags;
 
    if (StartUp::Open(0,
-                     0,
-                     (8 << 20),
-                     videoModeInfo,
-                     kZBitDepth, 0))
+      0,
+      (8 << 20),
+      videoModeInfo,
+      kZBitDepth, 0))
    {
       // Hook in native texture support
       pOriginalTextureReadCallBack = RwTextureGetReadCallBack();
@@ -155,7 +155,7 @@ int main()
 
 #define RWS_BOOTUP_FILE "d:\\bootup.dff"
 
-#pragma message("RWS_DESIGN not defined booting from file, RWS_BOOTUP_FILE")
+#pragma message ("RWS_DESIGN not defined booting from file, RWS_BOOTUP_FILE")
 
       StartUp::LoadGameDatabaseFile(RWS_BOOTUP_FILE);
 #endif

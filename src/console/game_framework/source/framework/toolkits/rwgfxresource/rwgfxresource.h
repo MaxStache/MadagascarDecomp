@@ -48,14 +48,14 @@
 #include <rt2danim.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
-#pragma comment(lib, "rphanim.lib")
-#pragma comment(lib, "rtanim.lib")
-#pragma comment(lib, "rpskin.lib")
-#pragma comment(lib, "rpmatfx.lib")
-#pragma comment(lib, "rt2d.lib")
-#pragma comment(lib, "rt2danim.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
+#pragma comment (lib, "rphanim.lib")
+#pragma comment (lib, "rtanim.lib")
+#pragma comment (lib, "rpskin.lib")
+#pragma comment (lib, "rpmatfx.lib")
+#pragma comment (lib, "rt2d.lib")
+#pragma comment (lib, "rt2danim.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -74,60 +74,61 @@ namespace RWS
    *  Resource handler for handling Renderware resources.
    *
    */
-   class CRenderwareResource : public CResourceHandler
+   class CRenderwareResource: public CResourceHandler
    {
-   public:
+      public:
 
-      virtual void *Load(const RwChar *psName, const RwChar *psType, const RwChar *psResourcePath, RwStream *pStream, RwUInt32 uiStreamSize, RwUInt32 &uiResourceSize);
+         virtual void *Load(const RwChar *psName, const RwChar *psType, const RwChar *psResourcePath, RwStream* pStream, RwUInt32 uiStreamSize, RwUInt32 &uiResourceSize);
 
-      virtual RwBool UnLoad(const RwChar *pStrType, void *pResource);
+         virtual RwBool UnLoad(const RwChar *pStrType, void *pResource);
 
-      virtual RwBool IsHandled(const RwChar *psType);
+         virtual RwBool IsHandled(const RwChar *psType);
 
-      virtual void Update(const void *pResData,
-                          const void *pData,
-                          const RwChar *pStrType) {};
+         virtual void Update(const void *pResData,
+                             const void *pData,
+                             const RwChar *pStrType) {};
 
-   private:
+      private:
 
          // RpWorld Load/Unload
          //
-      RpWorld *WorldStreamRead(RwStream *stream);
+         RpWorld* WorldStreamRead (RwStream *stream);
 
          // RpTexture Load/Unload
          //
-      RwTexture *ReadTextureFromImage(RwStream *stream);
+         RwTexture* ReadTextureFromImage (RwStream *stream);
 
          // RpAtomic
          //
-      RpAtomic *AtomicStreamRead(RwStream *stream);
+         RpAtomic* AtomicStreamRead (RwStream *stream);
 
          // RpClump
          //
-      RpClump *ClumpStreamRead(RwStream *stream);
+         RpClump *ClumpStreamRead (RwStream *stream);
 
          // Rt2dMaestro
          //
-      Rt2dMaestro *MaestroStreamRead(RwStream *stream);
+         Rt2dMaestro *MaestroStreamRead (RwStream *stream);
 
          // Rt2dFont
          //
-      Rt2dFont *FontStreamRead(RwStream *pStream);
+         Rt2dFont *FontStreamRead (RwStream *pStream);
 
          // RwTexDictionary
          //
-      RwTexDictionary *TexDictionaryStreamRead(RwStream *stream);
+         RwTexDictionary* TexDictionaryStreamRead (RwStream *stream);
 
          // RwTexDictionary (Platform independent)
          //
-      RwTexDictionary *PiTexDictionaryStreamRead(RwStream *stream);
+         RwTexDictionary* PiTexDictionaryStreamRead (RwStream *stream);
 
          // RpMTEffectDict Multi Texture Effect Dictionary
          //
 #if defined(DOLPHIN) || defined(_XBOX)
-      RpMTEffectDict *MTEffectDictionaryStreamRead(RwStream *stream);
+         RpMTEffectDict* MTEffectDictionaryStreamRead (RwStream *stream);
 
 #endif
+         
    };
 }
 

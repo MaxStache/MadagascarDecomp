@@ -43,7 +43,7 @@
 #include "cfxreflectenvironment.h"
 
 namespace RWS
-{
+{                    
 
    namespace FX
    {
@@ -72,7 +72,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FX::CFXReflectEnvironmentSky::~CFXReflectEnvironmentSky");
 
-         RwRasterDestroy(m_RasterZ);
+         RwRasterDestroy( m_RasterZ );
 
          RWS_RETURNVOID();
       }
@@ -94,39 +94,39 @@ namespace RWS
          RwCamera *pCamera;
          RwRaster *pFrameRaster;
 
-         if (!(pCamera = RWS::MainLoop::Render::GetCamera()))
+         if ( !(pCamera = RWS::MainLoop::Render::GetCamera() ) )
          {
             RWS_RETURNVOID();
          }
 
          RWS_ASSERT(!RwCameraGetCurrentCamera(), "UpdateTextureFromDisplay can not be called between \
                                                   RwCameraBeginUpdate() and RwCameraEndUpdate()");
-
+  
          // create the frame raster.
          if (RwCameraBeginUpdate(pCamera))
          {
             RwRect rect = {0, 0, 0, 0};
-
+   
             pFrameRaster = RwRasterCreate(0, 0, 0, rwRASTERTYPECAMERATEXTURE | rwRASTERDONTALLOCATE);
             RWS_ASSERT(pFrameRaster, "Unable to create raster");
 
-            rect.w = RwRasterGetWidth(RwCameraGetRaster(pCamera));
-            rect.h = RwRasterGetHeight(RwCameraGetRaster(pCamera));
+            rect.w = RwRasterGetWidth (RwCameraGetRaster( pCamera ));
+            rect.h = RwRasterGetHeight(RwCameraGetRaster( pCamera ));
 
-            if (!RwRasterSubRaster(pFrameRaster, RwCameraGetRaster(pCamera), &rect))
+            if ( !RwRasterSubRaster(pFrameRaster, RwCameraGetRaster( pCamera ), &rect) )
             {
                RWS_ASSERT(0, "Unable to create sub raster");
             }
+       
+            RwReal      RasterWidth, RasterHeight;
+            RwReal    UAdjust, VAdjust;
 
-            RwReal RasterWidth, RasterHeight;
-            RwReal UAdjust, VAdjust;
-
-            RasterWidth = RwRasterGetWidth(pFrameRaster);
+            RasterWidth  = RwRasterGetWidth (pFrameRaster);
             RasterHeight = RwRasterGetHeight(pFrameRaster);
 
             // calculate the scale values need to adjust to the PS2 coordinate system.
-            UAdjust = (1.0f / RasterWidth) * rect.w;
-            VAdjust = (1.0f / RasterHeight) * rect.h;
+            UAdjust = (1.0f / RasterWidth  ) * rect.w;
+            VAdjust = (1.0f / RasterHeight ) * rect.h;
 
             RwCameraEndUpdate(pCamera);
 
@@ -137,41 +137,41 @@ namespace RWS
             RWS_ASSERT(pCam, "Unable to create camera");
 
             RwFrame *pFrame = RwFrameCreate();
+                   
+            RwFrameSetIdentity( pFrame );
+   
+            RwCameraSetFrame ( pCam, pFrame );
 
-            RwFrameSetIdentity(pFrame);
+            RwCameraSetRaster  ( pCam, const_cast<RwRaster*>(pRaster) );
+            RwCameraSetZRaster ( pCam, m_RasterZ );
 
-            RwCameraSetFrame(pCam, pFrame);
-
-            RwCameraSetRaster(pCam, const_cast<RwRaster *>(pRaster));
-            RwCameraSetZRaster(pCam, m_RasterZ);
-
-            RwCameraSetProjection(pCam, rwPARALLEL);
+            RwCameraSetProjection ( pCam, rwPARALLEL );
 
             const RwReal ZNear = 0.01f;
-            const RwReal ZFar = 10000.0f;
+            const RwReal ZFar  = 10000.0f;
 
-            RwCameraSetNearClipPlane(pCam, ZNear);
-            RwCameraSetFarClipPlane(pCam, ZFar);
+            RwCameraSetNearClipPlane ( pCam, ZNear );
+            RwCameraSetFarClipPlane  ( pCam, ZFar );
 
-            RwV2d ViewWindow;
+            RwV2d  ViewWindow;
 
-            ViewWindow.x = static_cast<RwReal>(RwTan((rwPI * ((90.0f) / 180.0f)) * 0.5f));
-            ViewWindow.y = ViewWindow.x / (ENV_MAP_WIDTH / ENV_MAP_HEIGHT);
-
-            RwCameraSetViewWindow(pCam, &ViewWindow);
+            ViewWindow.x = static_cast<RwReal>(RwTan ( (rwPI * ((90.0f) / 180.0f)) * 0.5f));
+            ViewWindow.y = ViewWindow.x / ( ENV_MAP_WIDTH / ENV_MAP_HEIGHT);
+   
+            RwCameraSetViewWindow ( pCam, &ViewWindow );
 
             // create the quad needed to render the selected back buffer area to pRaster
-            const RwV2d Vx[] = {{0.0f, 1.0f}, {1.0f, 0.0f}};
-            RwV2d Uvs[] = {{TopLeftUV.x * UAdjust, TopLeftUV.y * VAdjust},
-                           {BottomRightUV.x * UAdjust, BottomRightUV.y * VAdjust}};
+            const RwV2d Vx[]  =  {  {0.0f, 1.0f}, {1.0f, 0.0f} };
+            RwV2d Uvs[]       =  {  {TopLeftUV.x * UAdjust, TopLeftUV.y * VAdjust },
+                                    {BottomRightUV.x * UAdjust, BottomRightUV.y * VAdjust } };
             CFXReflectEnvironment::EnvMapRasterRender(pFrameRaster, Vx, Uvs, pCam);
 
-            RwCameraDestroy(pCam);
+            RwCameraDestroy( pCam );
 
             // destroy the frame raster
             RwRasterDestroy(pFrameRaster);
 
-            RwFrameDestroy(pFrame);
+            RwFrameDestroy (pFrame);
          }
 
          RWS_RETURNVOID();

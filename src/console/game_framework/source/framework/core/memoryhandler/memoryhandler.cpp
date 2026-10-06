@@ -83,7 +83,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_LOG 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_LOG 1 // Version used for documentation only, MUST be kept at 1.
                          // One which effects code is below.
 
 /**
@@ -108,7 +108,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_INC_MEM_SYS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_INC_MEM_SYS 1 // Version used for documentation only, MUST be kept at 1.
                                  // One which effects code is below.
 
 /**
@@ -133,7 +133,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_LEAK_CHECK 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_LEAK_CHECK 1 // Version used for documentation only, MUST be kept at 1.
                                 // One which effects code is below.
 
 /**
@@ -159,7 +159,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_REPORT_STD 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_REPORT_STD 1 // Version used for documentation only, MUST be kept at 1.
                                 // One which effects code is below.
 
 /**
@@ -185,7 +185,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_BOUNDS_CHECK 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_BOUNDS_CHECK 1 // Version used for documentation only, MUST be kept at 1.
                                   // One which effects code is below.
 
 /**
@@ -212,7 +212,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_BASIC_METRICS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_BASIC_METRICS 1 // Version used for documentation only, MUST be kept at 1.
                                    // One which effects code is below.
 
 /**
@@ -238,7 +238,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_FILE_METRICS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_FILE_METRICS 1 // Version used for documentation only, MUST be kept at 1.
                                   // One which effects code is below.
 
 /**
@@ -265,7 +265,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_LINE_METRICS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_LINE_METRICS 1 // Version used for documentation only, MUST be kept at 1.
                                   // One which effects code is below.
 /**
  *
@@ -295,7 +295,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_USER_TYPE_METRICS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_USER_TYPE_METRICS 1 // Version used for documentation only, MUST be kept at 1.
                                        // One which effects code is below.
 /**
  *
@@ -321,7 +321,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_USER_PEAK_METRICS 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_USER_PEAK_METRICS 1 // Version used for documentation only, MUST be kept at 1.
                                        // One which effects code is below.
 /**
  *
@@ -355,7 +355,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_INIT_VALUE 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_INIT_VALUE 1 // Version used for documentation only, MUST be kept at 1.
                                 // One which effects code is below.
 /**
  *
@@ -371,7 +371,7 @@ using namespace std;
  *
  */
 
-#define RWS_MEMORY_ASSERT_ON_ERROR 1 // Version used for documentation only, MUST be kept at 1. \
+#define RWS_MEMORY_ASSERT_ON_ERROR 1 // Version used for documentation only, MUST be kept at 1.
                                      // One which effects code is below.
 #else
 
@@ -1166,19 +1166,19 @@ private:
    {
       const char *pFilename; /**< Pointer to filename or zero. System uses the stored __FILE__ static values. */
       RwUInt32 lineNum,      /**< File line number where allocated from or MH_NO_LINE if unavailable. */
-         memAddr,           /**< Stored for informational purposes and to sort the records.
+          memAddr,           /**< Stored for informational purposes and to sort the records.
                                   This is the address RETURNED TO THE CALLER, and NOT the internal header address. */
-         size,              /**< This is the block size - the value RETURNED TO THE CALLER, NOT including
+          size,              /**< This is the block size - the value RETURNED TO THE CALLER, NOT including
                                   header size, trailer size, etc. */
-         errData            /**< The MH_MLI_... flags for each error type. Used by the boundary checking code */
+          errData            /**< The MH_MLI_... flags for each error type. Used by the boundary checking code */
 
 #if RWS_MEMORY_USER_TYPE_METRICS
 
-         ,
-         userTypeNum; /**< The user specified memory type at the time of allocation. Either user value
+          ,
+          userTypeNum; /**< The user specified memory type at the time of allocation. Either user value
                             offset from RWS_MEMORY_TYPE_USER or a RenderWare value. */
 #else
-         ;
+          ;
 #endif
 
       RwUInt8 nestLevel; /**< This holds the 'start' & 'end' nesting level. Used in "during-run" leak tests. */
@@ -1264,9 +1264,9 @@ private:
    {
    public:
       RwUInt32 m_cur, /**< Current amount of memory allocated in bytes. */
-         m_total,    /**< Cumulative allocated memory count in bytes for type. */
-         m_peak,     /**< Peak amount of memory allocated in bytes. */
-         m_num;      /**< Number of allocation calls made. Rolling count. */
+          m_total,    /**< Cumulative allocated memory count in bytes for type. */
+          m_peak,     /**< Peak amount of memory allocated in bytes. */
+          m_num;      /**< Number of allocation calls made. Rolling count. */
 
       /**
        *
@@ -1413,11 +1413,11 @@ private:
                            global new alloc. */
 #if RWS_MEMORY_USER_TYPE_METRICS
 
-         ,
-         m_userTypeNum; /**< The user specified type number, supplied at allocation time. Either
+          ,
+          m_userTypeNum; /**< The user specified type number, supplied at allocation time. Either
                               a user value offset from RWS_MEMORY_TYPE_USER or a RenderWare value. */
 #else
-         ;
+          ;
 #endif
 
       /**
@@ -1507,7 +1507,7 @@ private:
    MemLogItem *m_pRootMemLog, /**<  Memory item used root.
                                     If using RWS_MEMORY_LEAK_CHECK. */
 
-      *m_pFreeMemLog; /**<  Memory item free root.
+       *m_pFreeMemLog; /**<  Memory item free root.
                              If using RWS_MEMORY_LEAK_CHECK. */
 
    NestName m_nestNames[RWS_MEMORY_NEST_LEVELS]; /**<  Name of nested levels.
@@ -1732,8 +1732,7 @@ public:
  *
  */
 
-CMemHandler::CMemHandler(void) :
-   m_doingMsg(false)
+CMemHandler::CMemHandler(void) : m_doingMsg(false)
 {
    // Initialize the base memory handler (may be user function).
 
@@ -2126,11 +2125,11 @@ void CMemHandler::CheckAndReport(void)
 
                GetRef().m_lineMetArray[lineMatchCount].m_outputFlag = true;
                curs[GetRef().m_lineMetArray[lineMatchCount].m_type] +=
-                  GetRef().m_lineMetArray[lineMatchCount].m_cur;
+                   GetRef().m_lineMetArray[lineMatchCount].m_cur;
                totals[GetRef().m_lineMetArray[lineMatchCount].m_type] +=
-                  GetRef().m_lineMetArray[lineMatchCount].m_total;
+                   GetRef().m_lineMetArray[lineMatchCount].m_total;
                numCalls[GetRef().m_lineMetArray[lineMatchCount].m_type] +=
-                  GetRef().m_lineMetArray[lineMatchCount].m_num;
+                   GetRef().m_lineMetArray[lineMatchCount].m_num;
             }
          }
 
@@ -2824,8 +2823,8 @@ void CMemHandler::SetupLeakData(void *pAllocMem, RwUInt32 userSize, const char *
 #if RWS_MEMORY_LOG && RWS_MEMORY_LEAK_CHECK
 
    MemLogItem *pLogEntry,
-      *pCheckEntry,
-      *pPrevEntry = 0;
+       *pCheckEntry,
+       *pPrevEntry = 0;
 
    // Unlink new log entry from head of freelist. If run out, increase size of 'RWS_MEMORY_MAX_MEM_LOGS'.
 
@@ -2901,7 +2900,7 @@ bool CMemHandler::CheckLeakData(void *pAllocMem, bool headerOkay, bool trailerOk
 #if RWS_MEMORY_LOG && RWS_MEMORY_LEAK_CHECK
 
    MemLogItem *pLogEntry,
-      *pPrevEntry = 0;
+       *pPrevEntry = 0;
    RwUInt32 errData = 0;
 
 #if RWS_MEMORY_BOUNDS_CHECK
@@ -3197,7 +3196,7 @@ void *CMemHandler::SetupFileLineMetrics(const char *pFilename, RwUInt32 lineNum,
 #if RWS_MEMORY_LOG && RWS_MEMORY_FILE_METRICS && !RWS_MEMORY_LINE_METRICS
 
    FileMetricItem *pFileMetric,
-      *pEndMetric = GetRef().m_fileMetArray + GetRef().m_numFileMetrics;
+       *pEndMetric = GetRef().m_fileMetArray + GetRef().m_numFileMetrics;
 
    // Search to see if the file has been added for this memory type...
 
@@ -3244,7 +3243,7 @@ void *CMemHandler::SetupFileLineMetrics(const char *pFilename, RwUInt32 lineNum,
 #if RWS_MEMORY_LOG && RWS_MEMORY_LINE_METRICS
 
    LineMetricItem *pLineMetric,
-      *pEndLineMetric = GetRef().m_lineMetArray + GetRef().m_numLineMetrics;
+       *pEndLineMetric = GetRef().m_lineMetArray + GetRef().m_numLineMetrics;
 
    // Search to see if the file/line has been added for this memory type...
 
@@ -3395,7 +3394,7 @@ void *CMemHandler::SetupInfo(void *pAllocMem, RwUInt32 userSize, const char *pFi
    Test(type < MHMT_TOTAL, "illegal memory type");
 
    void *pUserMem,
-      *pFileLineData;
+       *pFileLineData;
    RwUInt32 metSize;
 
    // Setup information blocks for the metrics.
@@ -3450,7 +3449,7 @@ void *CMemHandler::CloseInfo(void *pUserMem, RwUInt32 *pUserSize)
             metSize,
             userTypeNum = RWS_MEMORY_TYPE_UNKNOWN;
    bool headerOkay,
-      trailerOkay;
+       trailerOkay;
 
    // Get the information...
 
@@ -3650,12 +3649,12 @@ RwUInt32 CMemHandler::CheckAllocatedBounds(RwUInt8 minLevel)
    while (pCur)
    {
       bool headerOkay,
-         trailerOkay;
+          trailerOkay;
       RwUInt32 userSize;
       mem_type type;
       void *pFileLineData;
       void *pUserMem,
-         *pAllocMem;
+          *pAllocMem;
 
       // Get the information... Need two pointers as 'CheckAndExtractHeader' will modify the
       // pointer passed into it to point to the allocation address instead of the user address.
@@ -3836,7 +3835,7 @@ void *CMemHandler::Alloc(size_t userSize, mem_type type, RwUInt32 hint, const ch
 
 {
    void *pAllocMem,
-      *pUserMem;
+       *pUserMem;
 
    // Allocate the memory block - use of 'GetRef' will cause system to initialize.
 
@@ -3943,8 +3942,8 @@ void *CMemHandler::ReAlloc(void *pUserMem, size_t userSize, mem_type type, RwUIn
 
 {
    void *pAllocMem,
-      *pNewAlloc,
-      *pNewUser;
+       *pNewAlloc,
+       *pNewUser;
 
    // Doing a free or a new allocation ?
 
@@ -4130,7 +4129,7 @@ void *CMemHandler::Calloc(size_t num, size_t size, mem_type type, RwUInt32 hint,
 
 {
    void *pAllocMem,
-      *pUserMem;
+       *pUserMem;
    size_t allocSize;
 
    // Allocating in blocks, so if extra size is needed, calculate it in blocks. Check that the

@@ -45,7 +45,7 @@ namespace RWS
 {
    namespace
    {
-#define ZERO_THRESHOLD 0.00001f
+      #define ZERO_THRESHOLD  0.00001f
 
       /*
       *  Test whether a 2D line intersects a circle.
@@ -57,8 +57,8 @@ namespace RWS
       *
       *  \return The number of intersections found with the circle.
       */
-      RwUInt32 LineCircleIntersect(const RwV2d* pStart, const RwV2d* pEnd,
-                                   const RwV2d* pCenter, RwReal Radius, RwReal* paRatios)
+      RwUInt32 LineCircleIntersect( const RwV2d * pStart, const RwV2d * pEnd, 
+                                    const RwV2d * pCenter, RwReal Radius, RwReal * paRatios )
       {
          RWS_FUNCTION("RWS::NULL::LineCircleIntersect");
 
@@ -80,7 +80,7 @@ namespace RWS
             FourAC = (FourAC * FourAC);
             Root = ((Radius * Radius) * AlongMagSqr) - FourAC;
 
-            if (Root < (-ZERO_THRESHOLD))
+            if (Root < ( - ZERO_THRESHOLD))
             {
                // Imaginary roots to the equation - line does not intersect.
                RWS_RETURN(0);
@@ -118,8 +118,8 @@ namespace RWS
       /*
       *  Constructor
       */
-      ATCylinder::ATCylinder(const CAttributePacket& attr) :
-         ATBase(attr)
+      ATCylinder::ATCylinder( const CAttributePacket& attr )
+         : ATBase(attr)
       {
       }
 
@@ -136,7 +136,7 @@ namespace RWS
       *  \param pWorldPoint Point to test, in world space.
       *  \return TRUE if the point is inside the cylinder, FALSE otherwise.
       */
-      RwBool ATCylinder::PointInsideGeometry(const RwV3d* pPoint)
+      RwBool ATCylinder::PointInsideGeometry( const RwV3d * pPoint )
       {
          RWS_FUNCTION("ATCylinder::PointInsideGeometry");
 
@@ -144,15 +144,15 @@ namespace RWS
          RwV3d LocalPoint;
          RwV3dTransformPoints(&LocalPoint, pPoint, 1, &m_InvMatrix);
 
-         // Note: locally, the cylinder is at (0,0,0) so the vector from
-         //       the center of the cylinder to the point is the same
+         // Note: locally, the cylinder is at (0,0,0) so the vector from 
+         //       the center of the cylinder to the point is the same 
          //       as LocalPoint.
          if (LocalPoint.y < 0.5f && LocalPoint.y > -0.5f)
          {
             LocalPoint.y = 0.0f;
 
             RwReal fDist = RwV3dLength(&LocalPoint);
-            if (fDist < 0.5f)
+            if ( fDist < 0.5f )
             {
                RWS_RETURN(TRUE);
             }
@@ -167,22 +167,22 @@ namespace RWS
       *  \param pLine Line to test, in world space.
       *  \return TRUE if the point is inside the cylinder, FALSE otherwise.
       */
-      RwBool ATCylinder::LineIntersectGeometry(const RwLine* pLine)
+      RwBool ATCylinder::LineIntersectGeometry( const RwLine * pLine )
       {
          RWS_FUNCTION("ATCylinder::LineIntersectGeometry");
 
          RwLine LocalLine;
          RwV2d LineStart2D;
          RwV2d LineEnd2D;
-         RwV2d Center = {0.0f, 0.0f};
+         RwV2d Center = { 0.0f, 0.0f };
          RwReal Ratios[2];
          RwUInt32 NumIntersections;
          RwUInt32 Loop;
 
          // Transform from world to local co-ordinates
-         RwV3dTransformPoints(reinterpret_cast<RwV3d*>(&LocalLine),
-                              reinterpret_cast<const RwV3d*>(pLine),
-                              2, &m_InvMatrix);
+         RwV3dTransformPoints(   reinterpret_cast<RwV3d*>(&LocalLine),
+                                 reinterpret_cast<const RwV3d*>(pLine),
+                                 2, &m_InvMatrix);
 
          // Clip the line to the end planes of the cylinder.
          // Note: using a unit cylinder with its center at (0,0,0).
@@ -199,16 +199,16 @@ namespace RWS
          }
          else
          {
-            if (LocalLine.start.y < -0.5f)
+            if (LocalLine.start.y < - 0.5f)
             {
-               if (LocalLine.end.y < -0.5f)
-               {
+               if (LocalLine.end.y < - 0.5f)
+               {                  
                   // Both ends of the line are outside the bottom end of the
                   // cylinder, so it can't intersect.
                   RWS_RETURN(FALSE);
                }
 
-               LocalLine.start.y = -0.5f;
+               LocalLine.start.y = - 0.5f;
             }
          }
 
@@ -218,9 +218,9 @@ namespace RWS
          }
          else
          {
-            if (LocalLine.end.y < -0.5f)
+            if (LocalLine.end.y < - 0.5f)
             {
-               LocalLine.end.y = -0.5f;
+               LocalLine.end.y = - 0.5f;
             }
          }
 
@@ -256,9 +256,9 @@ namespace RWS
 #if defined(RWS_DEBUGTOOLS)
 
          DebugTools::WireCylinder(&m_Matrix, 255, 255, 0);
-
+         
 #endif // RWS_DEBUGTOOLS
-
+         
          RWS_RETURNVOID();
       }
 

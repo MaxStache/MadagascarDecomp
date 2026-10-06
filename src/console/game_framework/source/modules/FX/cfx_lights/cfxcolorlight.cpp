@@ -44,7 +44,7 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CFXColorLight);
       RWS_REGISTERCLASS(CFXColorLight);
-
+      
       /**
       *
       *	Handle attributes.
@@ -53,11 +53,11 @@ namespace RWS
       void CFXColorLight::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FX::CFXColorLight::HandleAttributes");
-
+         
          CFXBaseLight::HandleAttributes(attr);
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CFXColorLight));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -66,19 +66,19 @@ namespace RWS
                {
                   RwRGBA Color = attrIt->GetAs_RwRGBA();
                   RwRGBAReal t_color;
-                  RwRGBARealFromRwRGBA(&t_color, &Color);
+                  RwRGBARealFromRwRGBA  (&t_color, &Color);  
 
                   // Set light
-                  RpLightSetColor(m_pLight, &t_color);
+                  RpLightSetColor(m_pLight, &t_color);                                  
                }
                break;
             }
             ++attrIt;
          }
-
+         
          // Need to make sure the light is attached to the world, because CFXBaseLight doesn't handle that
          AddLightToWorld();
-
+         
          RWS_RETURNVOID();
       }
 

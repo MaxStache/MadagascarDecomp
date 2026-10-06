@@ -38,14 +38,11 @@ namespace RWS
       // Storage for RpSkin callback data
       struct SkinCallbackData
       {
-         SkinCallbackData(RpSkinCallBack callback, void* pData) :
-            m_callback(callback),
-            m_pData(pData)
-         {
-         }
+         SkinCallbackData(RpSkinCallBack callback, void* pData)
+            : m_callback(callback), m_pData(pData) {}
 
          RpSkinCallBack m_callback;
-         void* m_pData;
+         void*          m_pData;
       };
 
       /**
@@ -63,10 +60,10 @@ namespace RWS
          RWS_PRE(pData);
 
          RpSkin* pSkin = RpSkinAtomicGetSkin(pAtomic);
-         if (pSkin)
+         if(pSkin)
          {
             SkinCallbackData& cbData = *static_cast<SkinCallbackData*>(pData);
-            if (0 == cbData.m_callback(pSkin, cbData.m_pData)) pAtomic = 0;
+            if(0 == cbData.m_callback(pSkin,cbData.m_pData)) pAtomic = 0;
          }
 
          RWS_RETURN(pAtomic);
@@ -83,12 +80,12 @@ namespace RWS
       *  \param pData void pointer to custom data, passed to the callback function.
       *
       */
-      void ForAllSkins(RpClump& clump, RpSkinCallBack callback, void* pData)
+      void ForAllSkins( RpClump& clump, RpSkinCallBack callback, void* pData )
       {
          RWS_FUNCTION("RWS::SkinHelper::ForAllSkins");
 
-         SkinCallbackData cbData(callback, pData);
-         RpClumpForAllAtomics(&clump, ForAllSkinsCallback, &cbData);
+         SkinCallbackData cbData(callback,pData);
+         RpClumpForAllAtomics(&clump,ForAllSkinsCallback,&cbData);
 
          RWS_RETURNVOID();
       }
@@ -110,9 +107,9 @@ namespace RWS
          RWS_FUNCTION("RWS::SkinHelper::FindFirstSkin");
 
          RpSkin* pSkin = 0;
-         ForAllSkins(clump, FindFirstSkinCallback, &pSkin);
+         ForAllSkins(clump,FindFirstSkinCallback,&pSkin);
 
-         RWS_RETURN(pSkin);
+         RWS_RETURN (pSkin);
       }
 
       /**

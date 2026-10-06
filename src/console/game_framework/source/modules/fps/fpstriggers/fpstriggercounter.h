@@ -67,63 +67,63 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSTriggerCounter);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Counter Trigger", "Counts (count) input events before sending trigger event");
+         
+         
+         RWS_BEGIN_COMMANDS            
+            RWS_MESSAGE( CMD_targetname,
+               "Target name",
+               "Receive Event",
+               RECEIVE , 0     , 0           )
 
+            RWS_MESSAGE( CMD_target    ,
+               "Target",
+               "Transmit Event, if num received>count send Transmit",
+               TRANSMIT, 0     , 0           )
 
-         RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname,
-                     "Target name",
-                     "Receive Event",
-                     RECEIVE, 0, 0)
+            RWS_MESSAGE( CMD_killtarget,
+               "Kill target",
+               "Removes CEventHandlers linked to this event",
+               TRANSMIT, 0     , 0           )
 
-         RWS_MESSAGE(CMD_target,
-                     "Target",
-                     "Transmit Event, if num received>count send Transmit",
-                     TRANSMIT, 0, 0)
+            RWS_ATTRIBUTE( CMD_delay   ,
+               "Delay",
+               "Delay before action is triggered (seconds)",
+               SLIDER  , RwReal, RANGE(0,0,2))
 
-         RWS_MESSAGE(CMD_killtarget,
-                     "Kill target",
-                     "Removes CEventHandlers linked to this event",
-                     TRANSMIT, 0, 0)
+            RWS_ATTRIBUTE( CMD_count,
+               "Count",
+               "This parameter decided how many times the trigger_counter should"
+               "be triggered before it triggers it target",
+               SLIDER, RwUInt32, RANGE(1,2,3))
 
-         RWS_ATTRIBUTE(CMD_delay,
-                       "Delay",
-                       "Delay before action is triggered (seconds)",
-                       SLIDER, RwReal, RANGE(0, 0, 2))
-
-         RWS_ATTRIBUTE(CMD_count,
-                       "Count",
-                       "This parameter decided how many times the trigger_counter should"
-                       "be triggered before it triggers it target",
-                       SLIDER, RwUInt32, RANGE(1, 2, 3))
-
-         RWS_END_COMMANDS;
-
+            RWS_END_COMMANDS;
+         
          FPSTriggerCounter(const CAttributePacket&);
          ~FPSTriggerCounter(void);
-
-         virtual void HandleEvents(CMsg& pMsg);
+         
+         virtual void HandleEvents(CMsg &pMsg);  
          virtual void HandleAttributes(const CAttributePacket& attr);
-         void TriggerEvent(void);
-         void WaitThenSend(void);
-
+         void TriggerEvent( void );
+         void WaitThenSend( void );
+         
       protected:
          // Define entity states
          enum State
          {
             State_Waiting,
-            State_Delayed
+               State_Delayed
          };
-
+         
          RwUInt32 m_state;
-
+         
          CEventId m_target;      /**< Sent when m_targetname received */
          CEventId m_targetname;  /**< Received to triggers this FPSTriggerOnce */
          CEventId m_killtarget;  /**< Send to kill all CEventHandlers linked to m_killtarget */
-
+         
          RwUInt32 m_count;       /**< Number of rx messages required to trigger */
-         RwUInt32 m_rx_count;    /**< Number of rx messages currently received */
+         RwUInt32 m_rx_count;    /**< Number of rx messages currently received */        
          RwUInt32 m_delay;       /**< Required delay */
-         RwUInt32 m_delay_count; /**< Temp, delay counter, starts at 0 when reaches m_delay trigger is fired */
+         RwUInt32 m_delay_count; /**< Temp, delay counter, starts at 0 when reaches m_delay trigger is fired */        
          CAtomicPtr m_pAtomic;
       };
    }

@@ -20,18 +20,18 @@
 #define __SKYIOP_H__
 
 #if (defined(CDROM) || defined(DVDROM))
-#define IOP_MODULEPATH_CDROM "\\"
-#define IOP_RWSCOMMSPATH_CDROM "\\"
-#define RWS_MODULEPATH_CDROM "\\"
+#define IOP_MODULEPATH_CDROM    "\\"
+#define IOP_RWSCOMMSPATH_CDROM  "\\"
+#define RWS_MODULEPATH_CDROM    "\\"
 #endif // #if (defined(CDROM) || defined(DVDROM))
 
 #ifdef WITH_VISUALIZER
-#define IOP_MODULEPATH "modules/"
-#define IOP_RWSCOMMSPATH "modules/"
+#define IOP_MODULEPATH          "modules/"
+#define IOP_RWSCOMMSPATH        "modules/"
 #else
 // Sony IOP Modules
 //
-#define IOP_MODULEPATH "/usr/local/sce/iop/modules/"
+#define IOP_MODULEPATH          "/usr/local/sce/iop/modules/"
 // RenderWare Studio network IOP modules, the IOP modules are typically built to the following folder
 // (INSTALL)/console/game_framework/bin/modules/ Due to the empty framework linking using the gfCore
 // (which is within the game framework folders) a relative path CANNOT be used. If it were the empty
@@ -39,24 +39,24 @@
 // when any gfCore code loaded a module. For this reason an absolute path must be used for both the
 // empty and game frameworks.
 //
-#define IOP_RWSCOMMSPATH "/RW/Studio/Console/game_framework/bin/modules/"
+#define IOP_RWSCOMMSPATH        "/RW/Studio/Console/game_framework/bin/modules/"
 
 #endif // WITH_VISUALIZER
 
 // RenderWare Audio IOP modules
 //
 #ifdef RWADEBUG
-#define RWS_AUDIO_MODULEPATH "/rw/audio/lib/ps2/debug/"
-#elif RWAMETRICS
-#define RWS_AUDIO_MODULEPATH "/rw/audio/lib/ps2/metrics/"
+#define  RWS_AUDIO_MODULEPATH   "/rw/audio/lib/ps2/debug/"
+#elif  RWAMETRICS
+#define  RWS_AUDIO_MODULEPATH   "/rw/audio/lib/ps2/metrics/"
 #else
-#define RWS_AUDIO_MODULEPATH "/rw/audio/lib/ps2/release/"
+#define  RWS_AUDIO_MODULEPATH   "/rw/audio/lib/ps2/release/"
 #endif // RWDEBUG
 
 namespace RWS
 {
-   const char* GetRootFileServerPath();
-   void SetRootFileServerPath(const char* szRootFileServerPath);
+   const char * GetRootFileServerPath();
+   void SetRootFileServerPath( const char * szRootFileServerPath );
 }
 
 #endif // __SKYIOP_H__

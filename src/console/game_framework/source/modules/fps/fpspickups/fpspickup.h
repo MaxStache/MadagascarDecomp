@@ -33,7 +33,7 @@
 namespace RWS
 {
    namespace FPS
-   {
+   { 
       /**
       *
       *  \ingroup Mod_FPS
@@ -102,19 +102,19 @@ namespace RWS
       {
       public:
          RWS_DECLARE_CLASSID(FPSPickup);
-
-         FPSPickup(const CAttributePacket& attr);
-         ~FPSPickup(void);
-
+         
+         FPSPickup (const CAttributePacket& attr);
+         ~FPSPickup (void);
+         
          // Process messages/events
          //
-         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleEvents(CMsg &pMsg);
          void HandleAttributes(const CAttributePacket& rAttr);
 
       protected:
-         void Set_m_msg_response_tx(const RwChar* p);
-
-         CAtomicPtr m_pAtomic;            /**< \ref CAtomicPtr */
+         void Set_m_msg_response_tx(const RwChar *p);
+         
+         CAtomicPtr m_pAtomic;            /**< \ref CAtomicPtr */         
          static CEventId m_msg_rx;        /**< Receive Message, with pointer to entity */
          CEventId m_msg_response_tx;      /**< Transmit Message, sent the entity specified by m_msg_rx. */
       };

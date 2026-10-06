@@ -43,14 +43,14 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 // Unexposed RenderWare function...used to update atomic to sector info, this is needed otherwise
 // collision tests don't work until after a RwCameraBeginUpdate, I believe this is being exposed in
 // 3.2 release.
-extern "C"
+extern "C" 
 {
    RwBool _rwFrameSyncDirty(void);
 }
@@ -69,10 +69,10 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSDoor);
       RWS_REGISTERCLASS(FPSDoor);
-
+      
       CEventId FPSDoor::m_Inq_FPS_func_door;
-
-
+      
+      
       /**
       *
       * \ref FPSDoor(). Constructor for FPSDoor
@@ -80,70 +80,68 @@ namespace RWS
       * \see ~FPSDoor
       *
       */
-      FPSDoor::FPSDoor(const CAttributePacket &attr) :
-         FPSToggle(attr, 0, 8, 0, 100),
-         m_bStartOpen(false),
+      FPSDoor::FPSDoor(const CAttributePacket& attr) :
+      FPSToggle(attr, 0, 8, 0, 100),
+         m_bStartOpen (false),
          pLinked(0)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::FPSDoor");
-
-         // Initial state is State_off
+         
+         // Initial state is State_off           
          Set_m_msg_rx_off_to_on("ACTN_PLAYERTOUCH");              // Receive Message off to on
          m_num_msg_rx_off_to_on = 1;                              // Number of messages off to on required to trigger
-
+         
          Set_m_msg_rx_on_to_off(iMsgRunningTick);
-         m_num_msg_rx_on_to_off = (3 * RWS::MainLoop::Logic::Rate); // Number of messages on to off required to trigger
+         m_num_msg_rx_on_to_off = (3*RWS::MainLoop::Logic::Rate); // Number of messages on to off required to trigger
          Set_m_msg_rx_on_to_off_cancel("ACTN_PLAYERTOUCH");       // Receive Message off to on Reverse Event
-
+         
          // This event is sent to a touching object (once it has been positioned) to determine
          // if it is a FPSDoor, pData is set to the sender, and the receiver stores this and sets it to its
          // this pointer, both doors then have a pointer to the other door stored in pLinked.
          //
          UnRegisterMsg(m_Inq_FPS_func_door);
          RegisterMsg(m_Inq_FPS_func_door, "m_Inq_FPS_func_door", "FPSDoor* - return FPSDoor*");
-
+         
          LinkMsg(iMsgOnDeleteEntity, "CEventHandler*");
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref ~FPSDoor(). Destructor for FPSDoor
       *      
       * \see FPSDoor
       *
-      */
+      */                
       FPSDoor::~FPSDoor(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::~FPSDoor");
-
+         
          UnRegisterMsg(m_Inq_FPS_func_door);
-
+         
          UnLinkMsg(iMsgOnDeleteEntity);
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       class CollisionData
       {
       public:
-
-         CollisionData(RwBBox tbbox, FPSDoor *pFPS_func_door, FPSDoor **pLinked) :
-            bbox(tbbox),
-            pFPS_func_door(pFPS_func_door),
-            pLinked(pLinked) {};
-
+         
+         CollisionData(RwBBox tbbox, FPSDoor *pFPS_func_door,FPSDoor **pLinked) :
+            bbox(tbbox), pFPS_func_door(pFPS_func_door), pLinked(pLinked) {};
+         
          RwBBox bbox;
-
+         
          FPSDoor *pFPS_func_door;
-
+         
          FPSDoor **pLinked;
       };
-
-
+      
+      
       /**
       *
       * \ref CheckIfTouching().  callback to check if 2 doors are touching.
@@ -176,48 +174,48 @@ namespace RWS
       * \see SearchForLinks, ClearLinks
       *
       */
-      RpAtomic *FPSDoor::CheckIfTouching(RpIntersection *intersection,
-                                         RpWorldSector *sector,
-                                         RpAtomic *atomic,
-                                         RwReal distance,
-                                         void *data)
+      RpAtomic   *FPSDoor::CheckIfTouching(RpIntersection * intersection,
+         RpWorldSector * sector,
+         RpAtomic * atomic,
+         RwReal distance,
+         void *data)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::CheckIfTouching");
-
+         
          // Check if the bounding box's overlap,
-         CollisionData *pdata = reinterpret_cast<CollisionData *>(data);
-
+         CollisionData *pdata = reinterpret_cast<CollisionData*>(data);
+         
          // Does overlap
-         CEventHandler *pCEventHandler = RpAtomicToEventHandler::GetEventHandler((*atomic));
-
-         if (pCEventHandler && pCEventHandler != static_cast<CEventHandler *>(pdata->pFPS_func_door))
+         CEventHandler *pCEventHandler = RpAtomicToEventHandler::GetEventHandler( (*atomic) );
+         
+         if (pCEventHandler && pCEventHandler != static_cast<CEventHandler*>(pdata->pFPS_func_door))
          {
             CMsg msg(m_Inq_FPS_func_door, pdata->pFPS_func_door);
-
+            
             // Note: need to force use of RWS::SendMsgToEventHandler otherwise
             // picks up RWS::CEventHandler::SendMsgToEventHandler
             //
             RWS::SendMsgToEventHandler(msg, pCEventHandler);
-
+            
             if (msg.pData != pdata->pFPS_func_door)
             {
                RWS_TRACE("FPSDoor::CheckIfTouching Linking Doors");
-
+               
                // Store pointer to other
-               *pdata->pLinked = static_cast<FPSDoor *>(msg.pData);
-
+               *pdata->pLinked = static_cast<FPSDoor*>(msg.pData); 
+               
                RWS_TRACE("FPSDoor::CheckIfTouching Door overlaps, setting linkage from "
-                         << RWS_HEX(pdata->pFPS_func_door) << " to " << RWS_HEX(*pdata->pLinked));
-
+                  <<RWS_HEX(pdata->pFPS_func_door)<<" to "<<RWS_HEX(*pdata->pLinked));
+               
                // Don't search any further
-               RWS_RETURN(0);
+               RWS_RETURN( 0 );   
             }
          }
-
-         RWS_RETURN(atomic);
+         
+         RWS_RETURN( atomic );
       }
-
-
+      
+      
       /**
       *
       * \ref SearchForLinks(). Check if this object overlaps any others as doors that overlap
@@ -238,32 +236,32 @@ namespace RWS
       void FPSDoor::SearchForLinks(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::SearchForLinks");
-
+         
          // Clear any existing linkage
          ClearLinks();
-
+         
          // Only search if necessary
          if (!NotLinked())
-         {
+         {               
             RwBBox bbox;
-
+            
             CalculateBoundingBox(m_pAtomic, &bbox);
-
+            
             CollisionData data(bbox, this, &pLinked);
-
+            
             RpIntersection i;
             i.type = rpINTERSECTBOX;
             i.t.box = bbox;
-
+            
             // Fix for testing collisions before the atomic has been rendered
-            _rwFrameSyncDirty();
-
-            RpWorldForAllAtomicIntersections(RpAtomicGetWorld(m_pAtomic), &i, CheckIfTouching, &data);
+            _rwFrameSyncDirty(); 
+            
+            RpWorldForAllAtomicIntersections( RpAtomicGetWorld(m_pAtomic), &i, CheckIfTouching, &data );
          }
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref ClearLinks()
@@ -273,17 +271,17 @@ namespace RWS
       void FPSDoor::ClearLinks(void)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::ClearLinks");
-
+         
          if (pLinked)
          {
             pLinked->pLinked = 0;
             pLinked = 0;
          }
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *       
       * \ref StartsOpen().  Check if the door starts open.
@@ -296,13 +294,13 @@ namespace RWS
       RwBool FPSDoor::StartsOpen()
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::StartsOpen");
-
+         
          RwBool result = (0 != (Get_m_spawnflags() & Door_Starts_Open));
-
+         
          RWS_RETURN(result);
       }
-
-
+      
+      
       /**
       *
       * \ref NotLinked().  Check if the door is linked to another door.
@@ -315,13 +313,13 @@ namespace RWS
       RwBool FPSDoor::NotLinked()
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::NotLinked");
-
+         
          RwBool result = (0 != (Get_m_spawnflags() & Door_Not_Linked));
-
+         
          RWS_RETURN(result);
       }
-
-
+      
+      
       /**
       *
       * \ref ApplyOpenTranslation().  Open the doors. Uses \ref GetAngleTransform
@@ -331,9 +329,9 @@ namespace RWS
       void FPSDoor::ApplyOpenTranslation(RwReal scale)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::ApplyOpenTranslation")
-
-         RwFrame *pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
-
+            
+            RwFrame* pFrame = RpAtomicGetFrame(m_pAtomic.ptr());
+         
          if (pFrame)
          {
             RwV3d openXLation;
@@ -341,11 +339,11 @@ namespace RWS
             RwV3dScale(&openXLation, &openXLation, scale);
             RwFrameTranslate(pFrame, &openXLation, rwCOMBINEPOSTCONCAT);
          }
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *     
       * \ref HandleAttributes().  Handle Attributes for this behavior
@@ -353,20 +351,20 @@ namespace RWS
       * \param attr Standard Attribute Package       
       *
       */
-      void FPSDoor::HandleAttributes(const CAttributePacket &attr)
+      void FPSDoor::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::HandleAttributes");
-
+         
          // Give base class first dibs
          FPSToggleInterface::HandleAttributes(attr);
-
+         
          // Work through the effects of any load matrix command - it could
          // affect linkage to other doors and/or the door may have been
          // reset from its initial open position
          RwBool doSearchForLinks = false;
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CSystemCommands));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -377,7 +375,7 @@ namespace RWS
                   // been overwritten by the load matrix command, so we need
                   // to re-open it
                   if (StartsOpen()) ApplyOpenTranslation(1.0f);
-
+                  
                   // Search for links (NB: deferred until end of handler for
                   // efficiency - other commands could trigger a linkage search
                   // too)
@@ -387,29 +385,29 @@ namespace RWS
             }
             ++attrIt;
          }
-
+         
          // Now handle FPSDoor commands
          attrIt = CAttributeCommandIterator(attr, RWS_CLASSID_OF(FPSDoor));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
             case CMD_targetname:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_targetname");
-
+               
                {
                   const RwChar *name;
-
+                  
                   attrIt->GetCommandData(&name);
-
+                  
                   Set_m_msg_rx_off_to_on(name);
                }
                break;
-
+               
             case CMD_angle:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_angle");
-
+               
                // This is likely to change the direction in which the door opens,
                // so if the door is already open, return it to its closed position,
                // change the angle and re-open. This could also affect linkage, so
@@ -426,16 +424,16 @@ namespace RWS
                   Set_m_angle(*attrIt);
                }
                break;
-
+               
             case CMD_wait:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_wait");
-
+               
                Set_m_wait(*attrIt);
                break;
-
+               
             case CMD_lip:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_lip");
-
+               
                // As for CMD_angle, this can change the open position.
                if (StartsOpen())
                {
@@ -449,33 +447,33 @@ namespace RWS
                   Set_m_lip(*attrIt);
                }
                break;
-
+               
             case CMD_speed:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_speed");
-
+               
                Set_m_speed(*attrIt);
-
+               
                GenerateAngleTransform();
                break;
-
+               
             case CMD_spawnflags:
                RWS_TRACE("FPSDoor::HandleAttributes CMD_spawnflags");
                {
                   RwUInt32 spawnflags;
-
+                  
                   attrIt->GetCommandData(spawnflags);
-
+                  
                   // Check if door is linked
-                  if ((spawnflags & Door_Not_Linked) == Door_Not_Linked)
+                  if ( (spawnflags&Door_Not_Linked) == Door_Not_Linked )
                   {
                      ClearLinks();
                   }
-
+                  
                   // Check if door starts open
-                  if ((spawnflags & Door_Starts_Open) != Door_Starts_Open)   // Starts Open not set i.e. starts closed
+                  if ( (spawnflags&Door_Starts_Open) != Door_Starts_Open )   // Starts Open not set i.e. starts closed
                   {
                      // Was Starts Open, need to remove transform
-                     if (StartsOpen())
+                     if (StartsOpen()) 
                      {
                         ApplyOpenTranslation(-1.0f);
                         doSearchForLinks = true;
@@ -484,13 +482,13 @@ namespace RWS
                   else   // Starts Open
                   {
                      // Was Start closed, need to apply transform
-                     if (!StartsOpen())
+                     if (!StartsOpen()) 
                      {
                         ApplyOpenTranslation(1.0f);
                         doSearchForLinks = true;
                      }
                   }
-
+                  
                   // Update spawnflags
                   Set_m_spawnflags(*attrIt);
                }
@@ -498,14 +496,14 @@ namespace RWS
             }
             ++attrIt;
          }
-
+          
          // Search for links, if necessary
          if (doSearchForLinks) SearchForLinks();
-
+          
          RWS_RETURNVOID();
       }
-
-
+       
+       
       /**
       *
       * \ref HandleEvents(). Handle events       
@@ -517,46 +515,46 @@ namespace RWS
       void FPSDoor::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSDoor::HandleEvents");
-
-         RWS_TRACE("FPSDoor " << this << " " << pMsg.Id->p_msgname << " " << Get_m_state());
-
+         
+         RWS_TRACE("FPSDoor " << this << " " <<pMsg.Id->p_msgname << " "<< Get_m_state());
+         
          // Query Door Object ?
          if (pMsg.Id == m_Inq_FPS_func_door)
          {
-            pLinked = static_cast<FPSDoor *>(pMsg.pData);
-
-            RWS_TRACE("FPSDoor::HandleEvents link from " << RWS_HEX(this) << " to " << pLinked);
-
+            pLinked = static_cast<FPSDoor*>(pMsg.pData);
+            
+            RWS_TRACE("FPSDoor::HandleEvents link from "<<RWS_HEX(this)<<" to "<<pLinked);
+            
             pMsg.pData = this;
-
+            
             // Processing complete
-            RWS_RETURNVOID();
+            RWS_RETURNVOID(); 
          }
-
+         
          // Because this event handler maintains a pointer to another eventhandler, it needs to
          // monitor the iMsgOnDeleteEntity
          if (pMsg.Id == iMsgOnDeleteEntity)
          {
-            if (pMsg.pData == pLinked)
+            if (pMsg.pData == pLinked) 
                pLinked = 0;
-
+            
             // Processing complete
-            RWS_RETURNVOID();
+            RWS_RETURNVOID();  
          }
-
+         
          switch (Get_m_state())
          {
          case State_off:
             // If this door is triggered, pass on event to other door
-            if (pMsg.Id == Get_m_msg_rx_off_to_on())
+            if (pMsg.Id == Get_m_msg_rx_off_to_on()) 
             {
                GenerateAngleTransform();
-
+               
                // pLinked points to another FPSDoor, need to make the other door
                // believe it has received a m_msg_rx_off_to_on event, note we could
                // send a m_msg_rx_off_to_on event to the other door, but it would then
                // relay that event back to this door.
-               if (pLinked)
+               if (pLinked) 
                {
                   pLinked->GenerateAngleTransform();
                   pLinked->State_off_Proc_m_msg_rx();
@@ -575,7 +573,7 @@ namespace RWS
                // If the door is closing, and the m_msg_rx_on_to_off_cancel event occurs
                // i.e. the player is blocking the door, then the door cancels the close
                // movement, this is emulated in the linked door by simulating a m_msg_rx_on_to_off_cancel
-               // event.
+               // event.                   
                if (pLinked)
                {
                   pLinked->State_on_to_off_proc_m_msg_rx_on_to_off_cancel();
@@ -585,10 +583,10 @@ namespace RWS
          case State_on_to_off_reverse:
             break;
          }
-
+         
          // Pass events to base class...
          FPSToggle::HandleEvents(pMsg);
-
+         
          RWS_RETURNVOID();
       }
    }//namespace FPS

@@ -39,10 +39,10 @@ namespace RWS
 {
    namespace NetTools
    {
-#if defined(RWS_DESIGN)
-      void SendTransform(RwFrame *frame, RWSGUID *pEntityID = 0);
-      void SendDebugMessage(const char *message);
-      void SendFile(const char *szFilename, const char *szCategory, const void *pData, RwUInt32 nDataSize);
+#if defined (RWS_DESIGN)
+         void SendTransform(RwFrame *frame, RWSGUID *pEntityID = 0);
+         void SendDebugMessage( const char * message );
+         void SendFile( const char * szFilename, const char * szCategory, const void * pData, RwUInt32 nDataSize );
 #else
 #define SendTransform(InstanceID, frame)
 #define SendDebugMessage(message)

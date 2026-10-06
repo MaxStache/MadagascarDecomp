@@ -62,13 +62,13 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwUInt8DefaultReg(CSeqInterpolBase::MakeNew,
-                                              CSeqInterpolBase::MaxSize, RWSTRING("RwUInt8"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwUInt8"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwUInt8InterpolReg(CSeqInterpolLinearRwUInt8::MakeNew,
-                                               CSeqInterpolLinearRwUInt8::MaxSize, RWSTRING("RwUInt8"),
-                                               INTERPOL_TYPE_LINEAR_NAME, FALSE);
+         CSeqInterpolLinearRwUInt8::MaxSize, RWSTRING("RwUInt8"),
+         INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       ///////////////////////////////////////
       //
@@ -114,12 +114,12 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwUInt8::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwUInt8),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwUInt8), 
+            "Memory buffer too small");
 
          // Use placement new to create the object within the memory buffer...
 
-         CSeqInterpolLinearRwUInt8 *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwUInt8 *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwUInt8(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -171,13 +171,15 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->DataSize(), "End key's data size invalid.");
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
-         const RwUInt8 *pEndVal = reinterpret_cast<const RwUInt8 *>(rData.EndKey()->Data()),
-                       *pStartVal = reinterpret_cast<const RwUInt8 *>(rData.LastKey()->Data());
+         const RwUInt8 *pEndVal = reinterpret_cast<const RwUInt8 *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwUInt8 *>
+               (rData.LastKey()->Data());
 
          // Calculate per-millisecond step values...
 
          m_scaledStep = (static_cast<RwUInt32>(*pEndVal - *pStartVal) << 24) /
-                        rData.LengthTime();
+            rData.LengthTime();
 
          RWS_RETURNVOID();
       }
@@ -209,11 +211,10 @@ namespace RWS
       */
 
       inline RwUInt8 CalcValue(const RwUInt8 *pStartVal, RwUInt32 scaledStep,
-                               RwUInt32 nowTime, RwUInt32 startTime)
+         RwUInt32 nowTime, RwUInt32 startTime)
       {
-         return (*pStartVal + static_cast<RwUInt8>((scaledStep *
-                                                    (nowTime - startTime)) >>
-                                                   24));
+         return(*pStartVal + static_cast<RwUInt8>((scaledStep *
+            (nowTime - startTime)) >> 24));
       }
 
       /**
@@ -230,7 +231,8 @@ namespace RWS
          RWS_ASSERT(rData.LastKey()->DataSize(), "Last key's data size invalid.");
          RWS_ASSERT(rData.LastKey()->Data(), "Last key's data pointer invalid.");
 
-         const RwUInt8 *pStartVal = reinterpret_cast<const RwUInt8 *>(rData.LastKey()->Data());
+         const RwUInt8 *pStartVal = reinterpret_cast<const RwUInt8 *>
+               (rData.LastKey()->Data());
          RwUInt8 *pCalcVal;
 
          // Calculate the current value & insert into attribute data...
@@ -275,9 +277,9 @@ namespace RWS
       inline RwUInt8 CalcValue(const RwUInt8 *pStartVal, const RwUInt8 *pEndVal, RwReal delta)
       {
          RwReal realStartVal = static_cast<RwReal>(*pStartVal),
-                realEndVal = static_cast<RwReal>(*pEndVal);
+            realEndVal = static_cast<RwReal>(*pEndVal);
 
-         return (static_cast<RwUInt8>(realStartVal + (realEndVal - realStartVal) * delta));
+         return(static_cast<RwUInt8>(realStartVal + (realEndVal - realStartVal) * delta));
       }
 
       /**
@@ -297,8 +299,9 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta is out of range.");
 
-         const RwUInt8 *pStartVal = reinterpret_cast<const RwUInt8 *>(rData.LastKey()->Data()),
-                       *pEndVal = reinterpret_cast<const RwUInt8 *>(rData.EndKey()->Data());
+         const RwUInt8 *pStartVal = reinterpret_cast<const RwUInt8 *>
+               (rData.LastKey()->Data()),
+            *pEndVal =  reinterpret_cast<const RwUInt8 *>(rData.EndKey()->Data());
          RwUInt8 *pCalcVal;
 
          // Calculate the current value & insert into attribute data...

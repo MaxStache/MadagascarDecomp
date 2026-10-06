@@ -38,36 +38,38 @@ namespace RWS
       *
       *  This behavior builds upon FPSPickup and makes the pickup spin.
       */
-      class FPSSpinningPickup : public FPSPickup, public LinearAllocationPolicy
+      class FPSSpinningPickup: public FPSPickup, public LinearAllocationPolicy
       {
-      public:
-         RWS_MAKENEWCLASS(FPSSpinningPickup);
-         RWS_DECLARE_CLASSID(FPSSpinningPickup);
-         RWS_CATEGORY("FPS");
-         RWS_DESCRIPTION("Spinning Pickup", "A spinning pickup.");
+         public:
+            RWS_MAKENEWCLASS(FPSSpinningPickup);
+            RWS_DECLARE_CLASSID(FPSSpinningPickup);
+            RWS_CATEGORY("FPS");
+            RWS_DESCRIPTION("Spinning Pickup", "A spinning pickup.");
 
-         RWS_BEGIN_COMMANDS
-         RWS_ATTRIBUTE(CMD_Set_Spin_Rate,
-                       "Spin Rate",
-                       "Set pickup spin rate.",
-                       SLIDER,
-                       RwReal,
-                       RANGE(0, 8, 50))
-         RWS_END_COMMANDS;
+            RWS_BEGIN_COMMANDS
+                RWS_ATTRIBUTE(CMD_Set_Spin_Rate,
+                     "Spin Rate",
+                     "Set pickup spin rate.",
+                     SLIDER,
+                     RwReal,
+                     RANGE(0,8,50))
+            RWS_END_COMMANDS;
 
-         FPSSpinningPickup(const CAttributePacket& attr);
-         ~FPSSpinningPickup();
+            FPSSpinningPickup(const CAttributePacket& attr);
+            ~FPSSpinningPickup();
 
-         void HandleEvents(CMsg& pMsg);
-         void HandleAttributes(const CAttributePacket& attr);
+            void HandleEvents(CMsg &pMsg);
+            void HandleAttributes(const CAttributePacket& attr);
 
-      protected:
+         protected:
 
-         RwMatrix m_pRotation;
+            RwMatrix m_pRotation;
 
-      private:
-         RwReal m_RotRate;
-         RwUInt32 m_count;             /**< Counts the number of frame before matrix normalize occurs. */
+         private:
+            RwReal m_RotRate;
+            RwUInt32 m_count;             /**< Counts the number of frame before matrix normalize occurs. */
+
+
       };
    }
 }

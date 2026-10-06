@@ -42,10 +42,10 @@ namespace RWS
 {
    namespace Audio
    {
-      extern CEventId iMsgAudioGroupFadeDownGroup;    /**< Fade down event.*/
-      extern CEventId iMsgAudioGroupFadeUpGroup;      /**< Fade up event.*/
-      extern CEventId iMsgAudioGroupDisableGroup;     /**< Disable group event.*/
-      extern CEventId iMsgAudioGroupEnableGroup;      /**< Enable group event.*/
+      extern CEventId        iMsgAudioGroupFadeDownGroup;    /**< Fade down event.*/ 
+      extern CEventId        iMsgAudioGroupFadeUpGroup;      /**< Fade up event.*/ 
+      extern CEventId        iMsgAudioGroupDisableGroup;     /**< Disable group event.*/ 
+      extern CEventId        iMsgAudioGroupEnableGroup;      /**< Enable group event.*/ 
 
       /**
       *
@@ -63,7 +63,8 @@ namespace RWS
       * \see CSystemCommands
       *
       */
-      class AudioGroup : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class AudioGroup : public CSystemCommands, public CAttributeHandler , public CEventHandler, 
+                         public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(AudioGroup);
@@ -71,53 +72,53 @@ namespace RWS
          RWS_CATEGORY("Audio");
          RWS_DESCRIPTION("AudioGroup", "Define Wave dictionary group");
 
-         RWS_BEGIN_COMMANDS
-         RWS_SEPARATOR("Group Voice Fade", 1)
-         RWS_MESSAGE(CMD_FadeUp,
-                     "Fade group up",
-                     "Event to fade group up.",
-                     RECEIVE,
-                     RwUInt32*,
-                     0)
+         RWS_BEGIN_COMMANDS   
+                RWS_SEPARATOR("Group Voice Fade", 1)
+                RWS_MESSAGE  (CMD_FadeUp,
+                              "Fade group up",
+                              "Event to fade group up.",
+                              RECEIVE ,
+                              RwUInt32*,
+                              0)
 
-         RWS_MESSAGE(CMD_FadeDown,
-                     "Fade group down",
-                     "Event to fade group down.",
-                     RECEIVE,
-                     RwUInt32*,
-                     0)
+                RWS_MESSAGE  (CMD_FadeDown,
+                              "Fade group down",
+                              "Event to fade group down.",
+                              RECEIVE,
+                              RwUInt32*,
+                              0)
 
-         RWS_SEPARATOR("Group Voice Enable/Disable", 1)
-         RWS_MESSAGE(CMD_Enable,
-                     "Enable group voices.",
-                     "Enable all voices attached to this group.",
-                     RECEIVE,
-                     RwUInt32*,
-                     0)
+                RWS_SEPARATOR("Group Voice Enable/Disable", 1)
+                RWS_MESSAGE  (CMD_Enable,
+                              "Enable group voices.",
+                              "Enable all voices attached to this group.",
+                              RECEIVE ,
+                              RwUInt32*,
+                              0)
 
-         RWS_MESSAGE(CMD_Disable,
-                     "Disable group voices",
-                     "Disable all voices attached to this group.",
-                     RECEIVE,
-                     RwUInt32*,
-                     0)
+                RWS_MESSAGE  (CMD_Disable,
+                              "Disable group voices",
+                              "Disable all voices attached to this group.",
+                              RECEIVE,
+                              RwUInt32*,
+                              0)
 
-         RWS_END_COMMANDS;
+         RWS_END_COMMANDS;    
 
          AudioGroup(const CAttributePacket& attr);
          ~AudioGroup(void);
 
-         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
       private:
-         RwsAudio::DictionaryId m_DictionaryId;   /**< Id of wave dictionary.*/
-         RwaWaveDict* m_pDictionary;             /**< Pointer to a RenderWare Audio wave dictionary in the 
+         RwsAudio::DictionaryId    m_DictionaryId;   /**< Id of wave dictionary.*/
+         RwaWaveDict     *m_pDictionary;             /**< Pointer to a RenderWare Audio wave dictionary in the 
                                                           resource manager.*/
-         CEventId m_FadeDown;                 /**< Fade down event.*/
-         CEventId m_FadeUp;                   /**< Fade up event.*/
-         CEventId m_Disable;                  /**< Disable group event.*/
-         CEventId m_Enable;                   /**< Enable group event.*/
+         CEventId        m_FadeDown;                 /**< Fade down event.*/ 
+         CEventId        m_FadeUp;                   /**< Fade up event.*/ 
+         CEventId        m_Disable;                  /**< Disable group event.*/ 
+         CEventId        m_Enable;                   /**< Enable group event.*/ 
       };
    }
 }

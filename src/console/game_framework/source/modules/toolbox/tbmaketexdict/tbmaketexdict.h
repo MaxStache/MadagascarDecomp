@@ -58,29 +58,29 @@ namespace RWS
       * save texture dictionaries generated on the target console back to the workspace running on the host
       * PC.
       */
-      class ATBMakeTexDict : public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
+      class ATBMakeTexDict: public CEventHandler, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
-
+         
          RWS_MAKENEWCLASS(ATBMakeTexDict);
          RWS_DECLARE_CLASSID(ATBMakeTexDict);
          RWS_CATEGORY("Tools");
          RWS_DESCRIPTION("Save Texture Dictionary", "Save the current texture dictionary from the console to the workspace.");
 
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_GenerateTextDict, "Generate Texture Dict", "Generate and save texture dictionary.", RECEIVE, 0, 0)
+            RWS_MESSAGE( CMD_GenerateTextDict, "Generate Texture Dict", "Generate and save texture dictionary.", RECEIVE ,0, 0)
          RWS_END_COMMANDS;
-
-         virtual void HandleEvents(CMsg& pMsg);
+         
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-
+         
          ATBMakeTexDict(const CAttributePacket&);
          ~ATBMakeTexDict(void);
-
+         
       private:
-
+         
          CEventId m_MakeTexDict;  /**< Event use to trigger generation of the Texture Dict */
-
+         
       protected:
       };
    }

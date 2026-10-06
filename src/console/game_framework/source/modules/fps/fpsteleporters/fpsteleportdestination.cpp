@@ -37,8 +37,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -53,8 +53,8 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(FPSTeleportDestination);
       RWS_REGISTERCLASS(FPSTeleportDestination);
-
-
+      
+      
       /**
       *
       * \ref FPSTeleportDestination. Destructor for FPSTeleportDestination.
@@ -67,8 +67,8 @@ namespace RWS
          UnRegisterMsg(m_targetname);
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -80,54 +80,54 @@ namespace RWS
       void FPSTeleportDestination::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSTeleportDestination::HandleEvents");
-
+         
          if (pMsg.Id == m_targetname)
          {
             RWS_TRACE("FPSTeleportDestination::HandleEvents");
-
-            RwFrame **pRwFrame = static_cast<RwFrame **>(pMsg.pData);
-
+            
+            RwFrame **pRwFrame = static_cast<RwFrame**>(pMsg.pData);
+            
             // Copy the position of this entity
             if (pRwFrame)
             {
                *pRwFrame = RpAtomicGetFrame(m_pAtomic.ptr());
             }
          }
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param attr reference to a CAttributePacket.
       *
-      */
-      void FPSTeleportDestination::HandleAttributes(const CAttributePacket &attr)
+      */   
+      void FPSTeleportDestination::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSTeleportDestination::HandleAttributes");
-
+         
          CAttributeHandler::HandleAttributes(attr);
          m_pAtomic.HandleSystemCommands(attr);
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSTeleportDestination));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
             {
             case CMD_targetname:
                ReplaceLinkedMsg(m_targetname, attrIt->GetAs_RwChar_ptr(), "RwFrame**");
-               RWS_TRACE("FPSTeleportDestination::HandleAttributes CMD_targetname " << attrIt->GetAs_RwChar_ptr());
-
+               RWS_TRACE("FPSTeleportDestination::HandleAttributes CMD_targetname "<<attrIt->GetAs_RwChar_ptr());
+               
                break;
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
-
+      
    }// namespace FPS
 }// namespace RWS

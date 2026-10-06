@@ -66,14 +66,14 @@ namespace RWS
    *  flexible.
    *
    */
-   typedef CAttributeHandler* (*MakeNewPtr)(const RWS::CAttributePacket&);
+   typedef CAttributeHandler *(*MakeNewPtr)(const RWS::CAttributePacket&); 
 
    /**
    *
    */
    namespace CClassFactory
    {
-      CAttributeHandler* MakeNew(const char* pClassName, const CAttributePacket& rAttr);
+      CAttributeHandler *MakeNew(const char* pClassName, const CAttributePacket& rAttr);
       size_t GetRegisteredClassSize(const char* pClassName);
 
 
@@ -93,9 +93,10 @@ namespace RWS
       */
       class CRegistrar
       {
-      public:
-         ~CRegistrar();
-         CRegistrar(const char* pClassName, MakeNewPtr makeNewFn, size_t size, RwBool UseLinearMemoryManager);
+         public:
+            ~CRegistrar();
+            CRegistrar(const char* pClassName, MakeNewPtr makeNewFn, size_t size, RwBool UseLinearMemoryManager);
+
       };
 
       /**
@@ -108,9 +109,9 @@ namespace RWS
       *
       */
 #ifdef DOXYGEN
-#define RWS_REGISTERCLASS(className)
+      #define RWS_REGISTERCLASS(className)
 #else
-#define RWS_REGISTERCLASS(className) RWS::CClassFactory::CRegistrar className##Registrar(#className, className::MakeNew, sizeof(className), className::UseLinearMemory())
+      #define RWS_REGISTERCLASS(className) RWS::CClassFactory::CRegistrar className##Registrar(#className, className::MakeNew, sizeof(className), className::UseLinearMemory())
 #endif
 
       /**
@@ -129,14 +130,9 @@ namespace RWS
          \endverbatim
       */
 #ifdef DOXYGEN
-#define RWS_MAKENEWCLASS(classname)
+      #define RWS_MAKENEWCLASS(classname)
 #else
-#define RWS_MAKENEWCLASS(classname)                                                                \
-   static RWS::CAttributeHandler* MakeNew(const RWS::CAttributePacket& attr)                       \
-   {                                                                                               \
-      RWS::CAttributeHandler* ptr = static_cast<RWS::CAttributeHandler*>(RWS_NEW classname(attr)); \
-      return ptr;                                                                                  \
-   }
+      #define RWS_MAKENEWCLASS(classname) static RWS::CAttributeHandler* MakeNew(const RWS::CAttributePacket& attr){RWS::CAttributeHandler *ptr = static_cast<RWS::CAttributeHandler*>(RWS_NEW classname(attr));return ptr;}
 #endif
 
    }

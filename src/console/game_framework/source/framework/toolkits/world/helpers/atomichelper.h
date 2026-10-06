@@ -46,9 +46,9 @@ namespace RWS
    {
       RwBool Destroy(RpAtomic* pAtomic);
 
-      void SetIsVisible(RpAtomic& atomic, bool isVisible);
+      void SetIsVisible( RpAtomic& atomic, bool isVisible );
 
-      void SetCanCollide(RpAtomic& atomic, bool canCollide);
+      void SetCanCollide( RpAtomic& atomic, bool canCollide );
 
       RpAtomic* SetEventHandlerCallback(RpAtomic* pAtomic, void* pData);
 

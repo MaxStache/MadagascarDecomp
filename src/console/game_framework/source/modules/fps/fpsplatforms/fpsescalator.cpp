@@ -55,9 +55,9 @@ namespace RWS
       */
       class EscalatorStep
       {
-      public:
-         RpAtomic* m_pAtomic;
-         RwReal m_rPosition;
+         public:
+            RpAtomic *m_pAtomic;
+            RwReal m_rPosition;
       };
 
 
@@ -72,11 +72,11 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::FPS::FPSEscalator::InitSteps");
 
-         RwFrame* _pFrame = RpClumpGetFrame(m_pClump.ptr());
+         RwFrame* _pFrame = RpClumpGetFrame( m_pClump.ptr());
 
-         RpClumpSetFrame(m_pClump.ptr(), 0);
+         RpClumpSetFrame( m_pClump.ptr(), 0);
 
-         RwFrameForAllChildren(_pFrame, FrameHelper::RemoveChildFrame, 0);
+         RwFrameForAllChildren( _pFrame, FrameHelper::RemoveChildFrame, 0);
 
          // Setting a CClumpPtr to 0 deletes any existing clump
          //
@@ -86,7 +86,7 @@ namespace RWS
 
          // Allocate the atomics etc for the clump
          //
-         m_pSteps = reinterpret_cast<EscalatorStep*>(RwMalloc(sizeof(EscalatorStep) * m_uiNumSteps, rwMEMHINTDUR_GLOBAL));
+         m_pSteps = reinterpret_cast<EscalatorStep*>( RwMalloc(sizeof(EscalatorStep)*m_uiNumSteps, rwMEMHINTDUR_GLOBAL) );
 
          // Create a clump as the master object, this contains the world
          // position of the escalator.
@@ -95,37 +95,37 @@ namespace RWS
 
          RWS_ASSERT(m_pClump, "RwClumpCreate failed");
 
-         RpClumpSetFrame(m_pClump.ptr(), _pFrame);
+         RpClumpSetFrame( m_pClump.ptr(), _pFrame );
 
          RwUInt32 _uiIndex;
          RwReal _rPosition;
 
-         for (_uiIndex = 0, _rPosition = 0.0f;
-              _uiIndex < m_uiNumSteps;
-              _uiIndex++, _rPosition += 1.0f / static_cast<RwReal>(m_uiNumSteps))
+         for ( _uiIndex = 0, _rPosition = 0.0f;
+               _uiIndex < m_uiNumSteps;
+               _uiIndex++, _rPosition += 1.0f / static_cast<RwReal>(m_uiNumSteps))
          {
             // Create the steps as atomics by cloning the template atomic, attach a frame to each
             // atomic and each of these frames attach to the clump atomic.
             //
-            m_pSteps[_uiIndex].m_pAtomic = RpAtomicClone(m_pAtomicTemplate);
+            m_pSteps[_uiIndex].m_pAtomic = RpAtomicClone( m_pAtomicTemplate);
 
             RWS_ASSERT(m_pSteps[_uiIndex].m_pAtomic, "CreateAtomicFromResource failed for step index ( "
-                                                        << _uiIndex << " )");
+                  << _uiIndex << " )");
 
             RwFrame* _pAtomicFrame = RwFrameCreate();
 
             RWS_ASSERT(_pAtomicFrame, "RwFrameCreate failed for step index ( " << _uiIndex << " )");
 
-            RwFrameSetIdentity(_pAtomicFrame);
+            RwFrameSetIdentity( _pAtomicFrame );
 
-            RpAtomicSetFrame(m_pSteps[_uiIndex].m_pAtomic, _pAtomicFrame);
+            RpAtomicSetFrame( m_pSteps[_uiIndex].m_pAtomic, _pAtomicFrame);
 
             // Add the atomic as a child of the clump, when the clump is deleted these are
             // also deleted.
             //
-            RpClumpAddAtomic(m_pClump, m_pSteps[_uiIndex].m_pAtomic);
+            RpClumpAddAtomic( m_pClump, m_pSteps[_uiIndex].m_pAtomic);
 
-            RwFrameAddChild(_pFrame, _pAtomicFrame);
+            RwFrameAddChild( _pFrame, _pAtomicFrame);
 
             m_pSteps[_uiIndex].m_rPosition = _rPosition;
          }
@@ -136,7 +136,7 @@ namespace RWS
 
          // Determine width/height of escalator using its bounding box
          //
-         RpGeometry* _geom = RpAtomicGetGeometry(m_pAtomicTemplate);
+         RpGeometry* _geom = RpAtomicGetGeometry( m_pAtomicTemplate);
 
          RWS_ASSERT(_geom, "RpAtomicGetGeometry failed");
 
@@ -187,9 +187,9 @@ namespace RWS
 
          RWS_ASSERT(_pFrame, "RwFrameCreate failed");
 
-         RwFrameSetIdentity(_pFrame);
+         RwFrameSetIdentity( _pFrame );
 
-         RpClumpSetFrame(m_pClump.ptr(), _pFrame);
+         RpClumpSetFrame( m_pClump.ptr(), _pFrame );
 
          RWS_RETURNVOID();
       }
@@ -240,34 +240,34 @@ namespace RWS
          {
             switch (attrIt->GetCommandId())
             {
-            case CMD_limitlow:
-               attrIt->GetCommandData(m_rLimitLow);
-               break;
+               case CMD_limitlow:
+                  attrIt->GetCommandData( m_rLimitLow);
+                  break;
 
-            case CMD_limithig:
-               attrIt->GetCommandData(m_rLimitHig);
-               break;
+               case CMD_limithig:
+                  attrIt->GetCommandData( m_rLimitHig);
+                  break;
 
-            case CMD_height_mod:
-               attrIt->GetCommandData(m_rHeightMod);
-               break;
+               case CMD_height_mod:
+                  attrIt->GetCommandData( m_rHeightMod);
+                  break;
 
-            case CMD_width_mod:
-               attrIt->GetCommandData(m_rWidthMod);
-               break;
+               case CMD_width_mod:
+                  attrIt->GetCommandData( m_rWidthMod);
+                  break;
 
-            case CMD_velocity:
-               attrIt->GetCommandData(m_rVelocity);
-               break;
+               case CMD_velocity:
+                  attrIt->GetCommandData( m_rVelocity);
+                  break;
 
-            case CMD_num_steps:
-               attrIt->GetCommandData(m_uiNumSteps);
-               InitSteps();
-               break;
+               case CMD_num_steps:
+                  attrIt->GetCommandData( m_uiNumSteps);
+                  InitSteps();
+                  break;
 
-            case CMD_toggle:
-               ReplaceLinkedMsg(m_ToggleEvent, attrIt->GetAs_RwChar_ptr(), 0);
-               break;
+               case CMD_toggle:
+                  ReplaceLinkedMsg(m_ToggleEvent, attrIt->GetAs_RwChar_ptr(), 0);
+                  break;
             }
             ++attrIt;
          }
@@ -275,7 +275,7 @@ namespace RWS
          // Allow the clump to handle the system commands here, so that the position of the clump
          // is set after InitSteps has been called.
          //
-         m_pClump.HandleSystemCommands(rAttr);
+         m_pClump.HandleSystemCommands( rAttr);
 
          RWS_RETURNVOID();
       }
@@ -301,33 +301,34 @@ namespace RWS
 
          // Loop over each step update its position
          //
-         for (RwUInt32 _uiIndex = 0; _uiIndex < m_uiNumSteps; _uiIndex++)
+         for (RwUInt32 _uiIndex = 0;_uiIndex<m_uiNumSteps; _uiIndex++)
          {
-            RwFrame* _pFrame = RpAtomicGetFrame(m_pSteps[_uiIndex].m_pAtomic);
+            RwFrame *_pFrame = RpAtomicGetFrame( m_pSteps[_uiIndex].m_pAtomic );
 
             m_pSteps[_uiIndex].m_rPosition += m_rVelocity;
 
             // Check whether each stair has wrapped in either direction p<0 or p>1 ?
             //
-            if (m_pSteps[_uiIndex].m_rPosition > 1.0f)
+            if (m_pSteps[_uiIndex].m_rPosition > 1.0f) 
             {
                m_pSteps[_uiIndex].m_rPosition -= 1.0f;
 
                // *1* Unlink any child frames, i.e. if a player object is on this step when it loops
                // the player object should remain where it is.
                //
-               RwFrameForAllChildren(_pFrame, FrameHelper::RemoveChildFrame, 0);
+               RwFrameForAllChildren( _pFrame, FrameHelper::RemoveChildFrame, 0);
             }
-            else if (m_pSteps[_uiIndex].m_rPosition < 0.0f)
+            else
+            if (m_pSteps[_uiIndex].m_rPosition < 0.0f) 
             {
                m_pSteps[_uiIndex].m_rPosition += 1.0f;
 
                // (see *1*)
                //
-               RwFrameForAllChildren(_pFrame, FrameHelper::RemoveChildFrame, 0);
+               RwFrameForAllChildren( _pFrame, FrameHelper::RemoveChildFrame, 0);
             }
 
-            RwReal _t = m_pSteps[_uiIndex].m_rPosition;
+            RwReal _t =  m_pSteps[_uiIndex].m_rPosition;
 
             _v.x = _t * _rWidth;
 
@@ -341,17 +342,17 @@ namespace RWS
             //    .
             //   . 0.0
             //
-            if (_t < m_rLimitLow)
+            if (_t < m_rLimitLow) 
                _t = 0;//m_rLimitLow;
             else
                _t -= m_rLimitLow;   // Clamp the bottom step of the escalator to the root frame.
 
-            if (_t > m_rLimitHig)
+            if (_t > m_rLimitHig) 
                _t = m_rLimitHig;
 
             _v.y = _t * _rHeight;
 
-            RwFrameTranslate(_pFrame, &_v, rwCOMBINEREPLACE);
+            RwFrameTranslate( _pFrame, &_v, rwCOMBINEREPLACE);
          }
 
          RWS_RETURNVOID();
@@ -366,7 +367,7 @@ namespace RWS
       *  \ref iMsgRunningTick
       *
       */
-      void FPSEscalator::HandleEvents(CMsg& pMsg)
+      void FPSEscalator::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSEscalator::HandleEvents");
 
@@ -378,20 +379,20 @@ namespace RWS
          {
             switch (eState)
             {
-            case Idle:
-               if (pMsg.Id == m_ToggleEvent)
-               {
-                  LinkMsg(iMsgRunningTick);
-                  eState = Active;
-               }
-               break;
-            case Active:
-               if (pMsg.Id == m_ToggleEvent)
-               {
-                  UnLinkMsg(iMsgRunningTick);
-                  eState = Idle;
-               }
-               break;
+               case Idle:
+                  if (pMsg.Id == m_ToggleEvent)
+                  {
+                     LinkMsg(iMsgRunningTick);
+                     eState = Active;
+                  }
+                  break;
+               case Active:
+                  if (pMsg.Id == m_ToggleEvent)
+                  {
+                     UnLinkMsg(iMsgRunningTick);
+                     eState = Idle;
+                  }
+                  break;
             }
          }
 

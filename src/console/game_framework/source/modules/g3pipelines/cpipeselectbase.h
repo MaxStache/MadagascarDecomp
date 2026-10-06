@@ -27,7 +27,7 @@
 #ifndef __CPipeSelectBase_H__
 #define __CPipeSelectBase_H__
 
-#if defined(SKY)
+#if defined (SKY)
 
 //////////////////////////////////////////////////////////////////
 //
@@ -56,43 +56,43 @@ namespace RWS
       *  Atomics, Clumps and Worlds. 
       *
       */
-      class CPipeSelectBase : public CAttributeHandler, public LinearAllocationPolicy
+      class CPipeSelectBase: public CAttributeHandler, public LinearAllocationPolicy
       {
-      public:
+         public:
 
-         RWS_IMPORT_COMMANDS(CSystemCommands);
+            RWS_IMPORT_COMMANDS(CSystemCommands);
 
-         virtual void HandleAttributes(const CAttributePacket &attr);
+            virtual void HandleAttributes(const CAttributePacket& attr);
 
-      protected:
+         protected:
 
-         CPipeSelectBase(const CAttributePacket &rAttr,
-                         RpPDSPipeID MaterialPipeID,
+            CPipeSelectBase(  const CAttributePacket& rAttr,
+                              RpPDSPipeID MaterialPipeID,
 
-                         RpPDSPipeID AtomicPipeID,
-                         RpAtomicCallBackRender AtomicCallBackRender,
+                              RpPDSPipeID AtomicPipeID,
+                              RpAtomicCallBackRender AtomicCallBackRender,
 
-                         RpPDSPipeID SectorPipeID,
-                         RpWorldSectorCallBackRender WorldSectorCallBackRender);
+                              RpPDSPipeID SectorPipeID,
+                              RpWorldSectorCallBackRender WorldSectorCallBackRender);
 
-         void AttachMaterialPipeLine(RpAtomic *pAtomic);
-         void AttachMaterialPipeLine(RpClump *pClump);
-         void AttachMaterialPipeLine(RpWorld *pWorld);
+            void AttachMaterialPipeLine(RpAtomic *pAtomic);
+            void AttachMaterialPipeLine(RpClump *pClump);
+            void AttachMaterialPipeLine(RpWorld *pWorld);
 
-         void AttachAtomicPipeLine(RpAtomic *pAtomic);
-         void AttachAtomicPipeLine(RpClump *pClump);
+            void AttachAtomicPipeLine(RpAtomic *pAtomic);
+            void AttachAtomicPipeLine(RpClump *pClump);
 
-         void AttachWorldPipeLine(RpWorld *pWorld);
+            void AttachWorldPipeLine(RpWorld *pWorld);
+ 
+            RxPipeline *m_MaterialRxPipeline;                        /**< Renderware Gfx RxPipeline for Material*/
 
-         RxPipeline *m_MaterialRxPipeline;                        /**< Renderware Gfx RxPipeline for Material*/
+            RxPipeline *m_AtomicsRxPipeline;                         /**< RenderWare Gfx RxPipeline for Atomic*/
 
-         RxPipeline *m_AtomicsRxPipeline;                         /**< RenderWare Gfx RxPipeline for Atomic*/
+            RxPipeline *m_SectorRxPipeline;                         /**< Renderware Gfx RxPipeline for Sectors*/
 
-         RxPipeline *m_SectorRxPipeline;                         /**< Renderware Gfx RxPipeline for Sectors*/
+            RpAtomicCallBackRender m_AtomicCallBackRender;           /**< RenderWare Gfx RpAtomic render callback*/
 
-         RpAtomicCallBackRender m_AtomicCallBackRender;           /**< RenderWare Gfx RpAtomic render callback*/
-
-         RpWorldSectorCallBackRender m_WorldSectorCallBackRender; /**< RenderWare Gfx RpWorldSector render callback*/
+            RpWorldSectorCallBackRender m_WorldSectorCallBackRender; /**< RenderWare Gfx RpWorldSector render callback*/
       };
    }
 }

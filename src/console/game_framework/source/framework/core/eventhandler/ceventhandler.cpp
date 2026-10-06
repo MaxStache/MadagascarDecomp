@@ -37,7 +37,7 @@
 #include "../macros/debugmacros.h"
 #include "../misc/idfromstring.h"
 
-namespace
+namespace 
 {
    /*
    *
@@ -52,24 +52,24 @@ namespace
    *   returns FALSE.
    *
    */
-   static RwBool StrIdentical(const RwUInt32 uiId1, RwUInt32 uiId2, const char *ps1, const char *ps2)
+   static RwBool StrIdentical(const RwUInt32 uiId1, RwUInt32 uiId2, const char *ps1,  const char *ps2)
    {
       RWS_FUNCTION("NULL::StrIdentical");
 
       // Optimization Check Almost Unique Id's
       //
-      if (uiId1 != uiId2) RWS_RETURN(FALSE);
+      if (uiId1 != uiId2) RWS_RETURN(FALSE); 
 
       while (*ps1 != 0 && *ps2 != 0)
       {
          if (*ps1 != *ps2) RWS_RETURN(FALSE);
-
+      
          ps1++;
          ps2++;
       }
-
+   
       if (*ps1 != *ps2) RWS_RETURN(FALSE); // Check 0 terminate
-
+   
       RWS_RETURN(TRUE);
    }
 }
@@ -89,7 +89,7 @@ namespace RWS
 #endif
 
    // Head of List, pointer to event/message headers
-   //
+   // 
    //
    static CRegisteredMsgs pRMsgs;
 
@@ -99,10 +99,7 @@ namespace RWS
    *  Constructs a CEventId object.
    *
    */
-   CEventId::CEventId(void) :
-      pEventId(0),
-      m_linked_count(0),
-      m_registered_count(0)
+   CEventId::CEventId(void) : pEventId(0), m_linked_count(0), m_registered_count(0)
    {
       RWS_FUNCTION("RWS::CEventId::CEventId");
 
@@ -130,15 +127,15 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CEventId::~CEventId");
 
-      RWS_ASSERT((m_linked_count == 0),
-                 "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname) << " not unlinked");
+      RWS_ASSERT( (m_linked_count == 0),
+         "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname) << " not unlinked" );
 
-      RWS_ASSERT((m_registered_count == 0),
-                 "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname) << " not unregistered");
+      RWS_ASSERT( (m_registered_count == 0),
+         "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname) << " not unregistered" );
 
-      RWS_ASSERT((pEventId == 0),
-                 "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname)
-                                        << " not unregistered (This should never happen).");
+      RWS_ASSERT( (pEventId == 0),
+         "CEventId::~CEventId " << RWS_VALIDSTRING(pEventId->p_msgname)
+         << " not unregistered (This should never happen)." );
 
       RWS_RETURNVOID();
    }
@@ -160,7 +157,7 @@ namespace RWS
       pEventId->Inc_registered_count();
 
       m_registered_count++;
-
+  
       RWS_ASSERT((pEventId != 0), "CEventId::Inc_registered_count pEventId==0, this should never happen.");
 
       RWS_RETURNVOID();
@@ -189,8 +186,8 @@ namespace RWS
       }
 
       RWS_ASSERT(m_registered_count >= 0,
-                 "CEventId::Dec_registered_count CEventId"
-                 " unregistered more times than it has been registered.");
+         "CEventId::Dec_registered_count CEventId"
+         " unregistered more times than it has been registered.");
 
       RWS_RETURNVOID();
    }
@@ -228,7 +225,7 @@ namespace RWS
       m_linked_count--;
 
       RWS_ASSERT(m_linked_count >= 0, "CEventId::Dec_linked_count m_linked_count < 0 for ( "
-                                         << GetName() << ")");
+            << GetName() << ")");
 
       RWS_RETURNVOID();
    }
@@ -270,7 +267,7 @@ namespace RWS
    *
    */
 
-   CEventId &CEventId::operator=(const CEventId &rhs)
+   CEventId &CEventId::operator = (const CEventId &rhs)
    {
       RWS_FUNCTION("RWS::CEventId::operator=");
 
@@ -307,29 +304,29 @@ namespace RWS
    *
    */
 
-   CEventId &CEventId::operator=(const CRegisteredMsgs *rhs)
+   CEventId &CEventId::operator = (const CRegisteredMsgs *rhs)
    {
       RWS_FUNCTION("RWS::CEventId::operator=");
 
       if (pEventId != rhs)
       {
          RWS_ASSERT((m_linked_count == 0),
-                    "CEventId::CEventId &operator= m_linked_count != 0,"
-                    "\nAssigning an CEventId to another where the first hasn't been completely "
-                    "unlinked would result in memory fragmentation. Link count "
-                       << Get_linked_count() << " Event Name " << pEventId->p_format);
+            "CEventId::CEventId &operator= m_linked_count != 0,"
+            "\nAssigning an CEventId to another where the first hasn't been completely "
+            "unlinked would result in memory fragmentation. Link count "
+            <<Get_linked_count()<<" Event Name "<<pEventId->p_format);
 
          RWS_ASSERT((m_registered_count == 0),
-                    "CEventId::CEventId &operator= m_registered_count != 0,"
-                    "\nAssigning an CEventId to another where the first hasn't been completely "
-                    "unregistered would result in memory fragmentation. Registered count "
-                       << Get_registered_count() << " Event Name " << pEventId->p_format);
-
+            "CEventId::CEventId &operator= m_registered_count != 0,"
+            "\nAssigning an CEventId to another where the first hasn't been completely "
+            "unregistered would result in memory fragmentation. Registered count "
+            <<Get_registered_count()<<" Event Name "<<pEventId->p_format);
+         
          // I want this operator to show that it doesn't change the contents of rhs, but
          // the CEventId can change the contents of rhs through other operations, so I'm
          // using a const cast.
          //
-         pEventId = const_cast<CRegisteredMsgs *>(rhs);
+         pEventId = const_cast<CRegisteredMsgs*>(rhs);
       }
 
       RWS_RETURN(*this);
@@ -376,22 +373,22 @@ namespace RWS
       RWS_FUNCTION("RWS::CEventHandler::Open");
 
       RWS_ASSERT(refCountEventHandlersCreated == 0,
-                 "Open has been called after CEventHandlers have been instanced.");
+         "Open has been called after CEventHandlers have been instanced.");
 
       // Initialize block memory allocation for associated classes.
-
+      
       CLinkedMsg::InitMemHandler(linkBlockSize);
       CRegisteredMsgs::InitMemHandler(regBlockSize);
-
-      RegisterMsg(iMsgDeleteEventHandler, iMsgDeleteEventHandlerStr, 0);
-      RegisterMsg(iMsgDeleteEntity, iMsgDeleteEntityStr, 0);
-      RegisterMsg(iMsgOnDeleteEntity, iMsgOnDeleteEntityStr, "CEventHandler*");
+      
+      RegisterMsg (iMsgDeleteEventHandler, iMsgDeleteEventHandlerStr,0);
+      RegisterMsg (iMsgDeleteEntity, iMsgDeleteEntityStr,0);
+      RegisterMsg (iMsgOnDeleteEntity, iMsgOnDeleteEntityStr,"CEventHandler*");
 
 #if defined RWS_EVENTVISUALIZATION
-      RegisterMsg(iMsgEventSend, iMsgEventSendStr, "CRegisteredMsgs*");
-      RegisterMsg(iMsgEventSent, iMsgEventSentStr, "CRegisteredMsgs*");
-      RegisterMsg(iMsgEventReceived, iMsgEventReceivedStr, "EventData*");
-      RegisterMsg(iMsgEventUnRegistered, iMsgEventUnRegisteredStr, "CRegisteredMsgs*");
+      RegisterMsg (iMsgEventSend, iMsgEventSendStr, "CRegisteredMsgs*");
+      RegisterMsg (iMsgEventSent, iMsgEventSentStr, "CRegisteredMsgs*");
+      RegisterMsg (iMsgEventReceived, iMsgEventReceivedStr, "EventData*");
+      RegisterMsg (iMsgEventUnRegistered, iMsgEventUnRegisteredStr, "CRegisteredMsgs*");
 #endif
 
       RWS_RETURNVOID();
@@ -412,26 +409,26 @@ namespace RWS
       RWS_FUNCTION("RWS::CEventHandler::Close");
 
       RWS_ASSERT(refCountEventHandlersCreated == 0,
-                 "Close has been called before all instances of CEventHandler have been deleted.");
+         "Close has been called before all instances of CEventHandler have been deleted.");
 
-      UnRegisterMsg(iMsgDeleteEventHandler);
-      UnRegisterMsg(iMsgDeleteEntity);
-      UnRegisterMsg(iMsgOnDeleteEntity);
+      UnRegisterMsg ( iMsgDeleteEventHandler ); 
+      UnRegisterMsg ( iMsgDeleteEntity );
+      UnRegisterMsg ( iMsgOnDeleteEntity );
 
 #if defined RWS_EVENTVISUALIZATION
-      UnRegisterMsg(iMsgEventSend);
-      UnRegisterMsg(iMsgEventSent);
-      UnRegisterMsg(iMsgEventReceived);
-      UnRegisterMsg(iMsgEventUnRegistered);
+      UnRegisterMsg (iMsgEventSend );
+      UnRegisterMsg (iMsgEventSent );
+      UnRegisterMsg (iMsgEventReceived );
+      UnRegisterMsg (iMsgEventUnRegistered );
 #endif
 
       // Close block memory allocation for associated classes.
       // CRegisteredMsgs::CloseMemHandler should be called before CLinkedMsg::CloseMemHandler
       // in order to assist trapping of unlinked and unregistered events.
-
+      
       CRegisteredMsgs::CloseMemHandler();
       CLinkedMsg::CloseMemHandler();
-
+      
       RWS_RETURNVOID();
    }
 
@@ -511,9 +508,9 @@ namespace RWS
    */
 
    void CEventHandler::RegisterMsg(
-      CEventId &Id,
-      const char *p_msgname,
-      const char *p_formatstring)
+                          CEventId &Id,
+                          const char *p_msgname,
+                          const char *p_formatstring)
    {
       RWS_FUNCTION("RWS::CEventHandler::RegisterMsg");
 
@@ -538,16 +535,15 @@ namespace RWS
 
       // Set That this CEventId hasn't been registered
       //
-      if (Id.Get_registered_count() > 0)
+      if (Id.Get_registered_count()>0)
       {
          // Registered with a different name ?
          //
-         if (!StrIdentical(Id->ui_msgname, ui_msgname, Id->p_msgname, p_msgname))
+         if (!StrIdentical (Id->ui_msgname, ui_msgname, Id->p_msgname, p_msgname))
          {
             RWS_ASSERT(FALSE,
-                       "CEventHandler::RegisterMsg CEventId Already registered with a different event "
-                       "name, previous name "
-                          << Id->p_msgname << " new name " << p_msgname);
+               "CEventHandler::RegisterMsg CEventId Already registered with a different event "
+               "name, previous name "<<Id->p_msgname<<" new name "<<p_msgname);
          }
          else
          {
@@ -564,9 +560,9 @@ namespace RWS
                //
                CRegisteredMsgs *pRMsg = Id;
 
-               pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW(strlen(p_formatstring) + 1));
+               pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW( strlen (p_formatstring) + 1));
 
-               strcpy(pRMsg->p_format, p_formatstring);
+               strcpy (pRMsg->p_format, p_formatstring);
             }
             else if (Id->p_format != 0)
             {
@@ -587,27 +583,26 @@ namespace RWS
                else
                {
                   RWS_ASSERT(FALSE,
-                             "CEventHandler::RegisterMsg CEventId Already registered with a different "
-                             "format string, previous format "
-                                << Id->p_format << " new format " << p_formatstring);
+                     "CEventHandler::RegisterMsg CEventId Already registered with a different "
+                     "format string, previous format "<<Id->p_format<<" new format "<<p_formatstring);
                }
             }
          }
       }
 
       // Check if this message has already been registered
-      //
+      //   
       CRegisteredMsgs *pRMsg = pRMsgs.p_next;
-
+      
       while (pRMsg)
       {
          // Check if the name matches
          //
          if (pRMsg->p_msgname != 0)
          {
-            RwBool samestring = StrIdentical(pRMsg->ui_msgname, ui_msgname, pRMsg->p_msgname, p_msgname);
-
-            if (samestring)
+            RwBool samestring = StrIdentical (pRMsg->ui_msgname, ui_msgname, pRMsg->p_msgname, p_msgname);
+      
+            if (samestring) 
             {
                if (pRMsg->p_format != 0 && p_formatstring == 0)
                {
@@ -619,18 +614,19 @@ namespace RWS
                   // from then on it must match.
                   //
                   RWS_TRACE(p_msgname << " Message Format Does Not Match Prev Declaration 0 != "
-                                      << p_formatstring << " Auto Redefine Format String");
+                     << p_formatstring << " Auto Redefine Format String");
 
-                  pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW(strlen(p_formatstring) + 1));
-
-                  strcpy(pRMsg->p_format, p_formatstring);
+                  pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW( strlen (p_formatstring) + 1));
+      
+                  strcpy (pRMsg->p_format, p_formatstring);
 
                   pRMsg->ui_format = ui_format;
                }
-               else if (pRMsg->p_format != 0 && !StrIdentical(pRMsg->ui_format, ui_format, pRMsg->p_format, p_formatstring))
+               else if (pRMsg->p_format != 0
+                  && !StrIdentical(pRMsg->ui_format, ui_format, pRMsg->p_format, p_formatstring))
                {
-                  RWS_ASSERTFAIL("RegisterMsg: " << p_msgname << " Message Format Does Not Match "
-                                                 << pRMsg->p_format << " != " << p_formatstring);
+                  RWS_ASSERTFAIL( "RegisterMsg: " << p_msgname << " Message Format Does Not Match "
+                     << pRMsg->p_format << " != " << p_formatstring );
                }
 
                // Message Already Registered
@@ -648,7 +644,7 @@ namespace RWS
       }
 
       // Message Not Registered, create a new event/message handler and register this message,
-      // if pRMsg an exception will be raised...this could be handled with a try/catch but
+      // if pRMsg an exception will be raised...this could be handled with a try/catch but 
       // I won't do that as it would have a performance hit.
       //
       pRMsg = new CRegisteredMsgs;     // Do NOT use RWS_NEW here as CRegisteredMsg has own operator new.
@@ -660,8 +656,8 @@ namespace RWS
       // this -> oldfirst
       //
       pRMsg->p_next = pRMsgs.p_next;
-
-      // this <- oldfirst
+      
+      // this <- oldfirst 
       //
       if (p_next) p_next->p_prev = pRMsg;
 
@@ -678,15 +674,15 @@ namespace RWS
       //
       // Note: "ABC" returns 3 0 terminate requires "ABC" + 0
       //
-      pRMsg->p_msgname = static_cast<char *>(::RWS_OP_NEW(strlen(p_msgname) + 1));
-
-      strcpy(pRMsg->p_msgname, p_msgname);
-
+      pRMsg->p_msgname = static_cast<char *>(::RWS_OP_NEW( strlen (p_msgname) + 1));
+   
+      strcpy (pRMsg->p_msgname, p_msgname);
+   
       if (p_formatstring)
       {
-         pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW(strlen(p_formatstring) + 1));
-
-         strcpy(pRMsg->p_format, p_formatstring);
+         pRMsg->p_format = static_cast<char *>(::RWS_OP_NEW( strlen (p_formatstring) + 1));
+      
+         strcpy (pRMsg->p_format, p_formatstring);
       }
       else
       {
@@ -752,23 +748,23 @@ namespace RWS
          //
          Id.Dec_registered_count();
 
-         if (pRMsg->iCountRegistered < 0)
+         if (pRMsg->iCountRegistered<0)
          {
             RWS_ASSERT(FALSE, "CEventHandler::UnRegisterMsg pRMsg->ref count<0");
          }
 
-         RWS_TRACE(pRMsg->p_msgname << " " << RWS_DEC(pRMsg->iCountRegistered));
+         RWS_TRACE(pRMsg->p_msgname << " " << RWS_DEC(pRMsg->iCountRegistered) );
 
          if (pRMsg->iCountRegistered == 0)
          {
             // Check if this event handler is no longer in use...
             //
             CLinkedMsg *pErm = pRMsg->Erm.p_next;
-
+   
             if (pErm)
             {
-               RWS_ASSERTFAIL("CEventHandler::UnRegisterMsg " << pRMsg->p_msgname
-                                                              << " Is still linked to CEventHandlers cannot unregister");
+               RWS_ASSERTFAIL( "CEventHandler::UnRegisterMsg " << pRMsg->p_msgname
+                  << " Is still linked to CEventHandlers cannot unregister" );
 
                RWS_RETURNVOID();
             }
@@ -779,19 +775,19 @@ namespace RWS
 
             // Free the memory associated with the name string
             //
-            operator delete(pRMsg->p_msgname);
+            operator delete (pRMsg->p_msgname);
             pRMsg->p_msgname = 0;
-
+   
             // Free the memory associated with the format string
             //
-            operator delete(pRMsg->p_format);
+            operator delete (pRMsg->p_format);
             pRMsg->p_format = 0;
-
+   
 
             // Unlink and remove the pRMsg from the system
             //
             CRegisteredMsgs *p_next = pRMsg->p_next;
-            CRegisteredMsgs *p_prev = pRMsg->p_prev;
+            CRegisteredMsgs *p_prev = pRMsg->p_prev; 
 
             if (p_prev) p_prev->p_next = p_next;
             if (p_next) p_next->p_prev = p_prev;
@@ -817,7 +813,7 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CEventHandler::~CEventHandler");
 
-      CMsg Msg(iMsgOnDeleteEntity, static_cast<CEventHandler *>(this));
+      CMsg Msg(iMsgOnDeleteEntity, static_cast<CEventHandler*>(this));
 
       SendMsg(Msg);
 
@@ -830,7 +826,7 @@ namespace RWS
       UnLinkMsg(iMsgDeleteEventHandler);
 
       //Unlink from delete
-      //
+      // 
       UnLinkMsg(iMsgDeleteEntity);
 
 #ifdef _DEBUG
@@ -838,24 +834,24 @@ namespace RWS
       // if there are then assert as unable to proceed...
       //
       CRegisteredMsgs *pRMsg = pRMsgs.p_next;
-
+   
       while (pRMsg)
       {
          // Skip first CLinkedMsg as its the head of the list
          //
          CLinkedMsg *pErm = pRMsg->Erm.p_next;
-
+      
          while (pErm != 0)
          {
             CLinkedMsg *p_next_Erm = pErm->p_next;
-
+         
             // Found message registered to this CEventHandler
             //
-            if (pErm->pCEventHandler == this)
+            if (pErm->pCEventHandler == this )
             {
-               RWS_ASSERTFAIL("CEventHandler::~CEventHandler not unlinked from [" << pRMsg->p_msgname << "]");
+               RWS_ASSERTFAIL("CEventHandler::~CEventHandler not unlinked from ["<<pRMsg->p_msgname<<"]");
             }
-
+         
             pErm = p_next_Erm;
          }
 
@@ -977,7 +973,7 @@ namespace RWS
          RWS_RETURNVOID();
       }
 
-      RWS_TRACE(Id->p_msgname);
+      RWS_TRACE( Id->p_msgname );
 
       if (Id.Get_linked_count() == 0)
       {
@@ -991,14 +987,14 @@ namespace RWS
       if (pRMsg->p_msgname != 0)
       {
          CLinkedMsg *pErm = &pRMsg->Erm;
-
+   
          while (pErm != 0)
          {
             CLinkedMsg *p_next_Erm = pErm->p_next;
-
+      
             // Found message registered to this CEventHandler
             //
-            if (pErm->pCEventHandler == this)
+            if (pErm->pCEventHandler == this )
             {
                Id.Dec_linked_count();
 
@@ -1022,12 +1018,12 @@ namespace RWS
                   else
                   {
                      CLinkedMsg *p_prev_Erm = pErm->p_prev;
-
+                     
                      // p_prev_Erm <- pErm -> p_next_Erm Linked List remove entry
                      //
                      if (p_prev_Erm) p_prev_Erm->p_next = p_next_Erm;
                      if (p_next_Erm) p_next_Erm->p_prev = p_prev_Erm;
-
+                     
                      delete pErm;
 
                      RWS_RETURNVOID();
@@ -1056,22 +1052,22 @@ namespace RWS
    */
 
    void CEventHandler::DeleteEventHandlers(
-      const CMsg *p_Msg)
+                              const CMsg *p_Msg)
    {
       RWS_FUNCTION("RWS::CEventHandler::DeleteEventHandlers");
 
       RWS_ASSERT(p_Msg, "CEventHandler::DeleteEventHandlers p_Msg = 0");
 
       RWS_ASSERT(p_Msg->Id->HandlingEvent == FALSE,
-                 "ERROR::CEventHandler::DeleteEventHandlers cannot be called from within "
-                 "an EventHandler, use RegisterToDeleteEventHandlers");
+         "ERROR::CEventHandler::DeleteEventHandlers cannot be called from within "
+         "an EventHandler, use RegisterToDeleteEventHandlers");
 
       CRegisteredMsgs *pRMsg = p_Msg->Id;
-
+   
       if (pRMsg != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
          CLinkedMsg *pErm = pRMsg->Erm.p_next; // First Entity Registered Message
-
+   
          while (pErm != 0)
          {
             delete pErm->pCEventHandler;
@@ -1104,10 +1100,10 @@ namespace RWS
       if (Id != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
          CMsg iMsg(Id);
-
+   
          // Send message
          //
-         DeleteEventHandlers(&iMsg);
+         DeleteEventHandlers (&iMsg);
       }
 
       RWS_RETURNVOID();
@@ -1127,22 +1123,22 @@ namespace RWS
    */
 
    void CEventHandler::RegisterToDeleteEventHandlers(
-      const CMsg *p_Msg)
+                              const CMsg *p_Msg)
    {
       RWS_FUNCTION("RWS::CEventHandler::RegisterToDeleteEventHandlers");
 
       RWS_ASSERT(p_Msg, "CEventHandler::DeleteEventHandlers p_Msg = 0");
 
       RWS_ASSERT(p_Msg->Id->HandlingEvent == FALSE,
-                 "ERROR::CEventHandler::DeleteEventHandlers cannot be called from within"
-                 "an EventHandler, use RegisterToDeleteEventHandlers");
+         "ERROR::CEventHandler::DeleteEventHandlers cannot be called from within"
+         "an EventHandler, use RegisterToDeleteEventHandlers");
 
       CRegisteredMsgs *pRMsg = p_Msg->Id;
-
+   
       if (pRMsg != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
          CLinkedMsg *pErm = pRMsg->Erm.p_next; // First Entity Registered Message
-
+   
          while (pErm != 0)
          {
             pErm->pCEventHandler->Delete();
@@ -1169,7 +1165,7 @@ namespace RWS
    */
 
    void CEventHandler::RegisterToDeleteEventHandlers(
-      const CEventId &Id)
+                                const CEventId &Id)
    {
       RWS_FUNCTION("RWS::RegisterToDeleteEventHandlers");
 
@@ -1177,7 +1173,7 @@ namespace RWS
       {
          CMsg iMsg(Id);
 
-         RegisterToDeleteEventHandlers(&iMsg);
+         RegisterToDeleteEventHandlers (&iMsg);
       }
 
       RWS_RETURNVOID();
@@ -1294,24 +1290,24 @@ namespace RWS
    */
 
    RwBool CEventHandler::LinkMsgToEventHandler(
-      CEventHandler *pCEventHandler,
-      CEventId &Id,
-      const char *p_formatstring,
-
-
-      RwUInt16 priority)
+                        CEventHandler *pCEventHandler,
+                        CEventId &Id,                 
+                        const char *p_formatstring,   
+                                                      
+                                                      
+                        RwUInt16 priority)      
    {
       RWS_PRE(pCEventHandler);
 
-      RWS_FUNCTION("RWS::CEventHandler::LinkMsgToEventHandler");
+      RWS_FUNCTION("RWS::CEventHandler::LinkMsgToEventHandler" );
 
       if (Id != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
          CRegisteredMsgs *pRMsg = Id;
 
-         if (Id.Get_linked_count() > 0)
+         if (Id.Get_linked_count()>0)
          {
-            RWS_TRACE("Warning CEventId linked multiple times, ref count " << Id.Get_linked_count());
+            RWS_TRACE( "Warning CEventId linked multiple times, ref count " << Id.Get_linked_count());
          }
 
          Id.Inc_linked_count();
@@ -1319,26 +1315,26 @@ namespace RWS
          // Check if this event handler has already been linked to this event,
          // if it has increment the reference count and return.
          //
-         CLinkedMsg *pErm = Id->Erm.p_next;
+         CLinkedMsg *pErm = Id->Erm.p_next;   
 
          while (pErm != 0)
          {
-            if (pErm->pCEventHandler == pCEventHandler)
+            if (pErm->pCEventHandler == pCEventHandler) 
             {
-               RWS_ASSERT((priority == pErm->m_priority),
-                          "CEventHandler::LinkMsgToEventHandler has been called to link to an event,"
-                          " that this event handler is already linked to but with a different priority."
-                          " Prev Priority "
-                             << RWS_DEC(priority) << " New Priority " << RWS_DEC(pErm->m_priority));
+               RWS_ASSERT( ( priority == pErm->m_priority ),
+                  "CEventHandler::LinkMsgToEventHandler has been called to link to an event,"
+                  " that this event handler is already linked to but with a different priority."
+                  " Prev Priority "
+                  << RWS_DEC(priority) << " New Priority " << RWS_DEC(pErm->m_priority) );
 
                // Increment reference count
                //
                pErm->iCountLinked += 1;
 
-               RWS_TRACE(RWS_HEX(pCEventHandler) << " already linked to event "
-                                                 << Id->p_msgname << ", incrementing reference count");
+               RWS_TRACE( RWS_HEX(pCEventHandler) << " already linked to event "
+                  << Id->p_msgname << ", incrementing reference count");
 
-               RWS_RETURN(TRUE);
+               RWS_RETURN( TRUE );
             }
             pErm = pErm->p_next;
          }
@@ -1353,8 +1349,8 @@ namespace RWS
             {
                // No format string was specified when the event was registered, i.e. its just a signal
                // so the receiver will always receive NULL as the parameter
-               RWS_TRACE("(Warning) Format string specified by receiver, but no format was"
-                         " specified by the sender.");
+               RWS_TRACE( "(Warning) Format string specified by receiver, but no format was"
+                          " specified by the sender.");
             }
             else
             {
@@ -1364,37 +1360,38 @@ namespace RWS
                //
                if (!StrIdentical(pRMsg->ui_format, ui_format, pRMsg->p_format, p_formatstring))
                {
-                  RWS_ASSERTFAIL("CEventHandler::LinkMsgToEntity Message Format for event "
-                                 << pRMsg->p_msgname << " does not match "
-                                 << pRMsg->p_format << "!=" << p_formatstring);
-
+                  RWS_ASSERTFAIL( "CEventHandler::LinkMsgToEntity Message Format for event "
+                     << pRMsg->p_msgname << " does not match "
+                     << pRMsg->p_format << "!=" << p_formatstring );
+                  
                   RWS_RETURN(FALSE);
                }
             }
          }
-
+         
          // Allocate the CEventHandlerRegisteredMsg which links the event to the event
          // handler and add it onto the event list
          // Do NOT use RWS_NEW here as CEventHandlerRegisteredMsg has own operator new.
          //
          CLinkedMsg *pNewErm = new CLinkedMsg(pCEventHandler, priority);
-
+         
          if (!pNewErm)
          {
             RWS_ASSERT(pNewErm, "CEventHandler::LinkMsgToEventHandler Unable to allocate CLinkedMsg struct");
 
             RWS_RETURN(FALSE);
          }
-
+ 
          // Insertion Sort...
          //
 
-         CLinkedMsg *pheadErm = const_cast<CLinkedMsg *>(&Id->Erm);  // Head of list
+         CLinkedMsg *pheadErm = const_cast<CLinkedMsg*>(&Id->Erm);  // Head of list
          CLinkedMsg *ptailErm = Id->Erm.p_next;  // Tail of list
 
          while (ptailErm)
          {
-            if (pheadErm->m_priority >= priority && ptailErm->m_priority <= priority)
+            if ( pheadErm->m_priority >= priority
+            &&  ptailErm->m_priority <= priority )
             {
                // Insert into list
                //
@@ -1440,11 +1437,11 @@ namespace RWS
 
       // Check if this event handler has already been linked to this event,
       //
-      CLinkedMsg *pErm = Id->Erm.p_next;
+      CLinkedMsg *pErm = Id->Erm.p_next;   
 
       while (pErm != 0)
       {
-         if (pErm->pCEventHandler == this)
+         if (pErm->pCEventHandler == this) 
          {
             RWS_RETURN(TRUE);
          }
@@ -1475,11 +1472,11 @@ namespace RWS
 
       // Check if this event handler has already been linked to this event,
       //
-      CLinkedMsg *pErm = Id->Erm.p_next;
+      CLinkedMsg *pErm = Id->Erm.p_next;   
 
       while (pErm != 0)
       {
-         if (pErm->pCEventHandler == this)
+         if (pErm->pCEventHandler == this) 
          {
             RWS_RETURN(pErm->m_priority);
          }
@@ -1554,8 +1551,8 @@ namespace RWS
    */
 
    void CEventHandler::ReplaceRegisteredMsg(CEventId &Id,
-                                            const char *p_msgname,
-                                            const char *p_formatstring)
+      const char *p_msgname,
+      const char *p_formatstring)
    {
       RWS_FUNCTION("RWS::CEventHandler::ReplaceRegisteredMsg");
 
@@ -1592,8 +1589,8 @@ namespace RWS
    */
 
    void CEventHandler::ReplaceLinkedMsg(CEventId &Id,
-                                        const char *p_msgname,
-                                        const char *p_formatstring)
+      const char *p_msgname,
+      const char *p_formatstring)
    {
       RWS_FUNCTION("RWS::CEventHandler::ReplaceLinkedMsg");
 
@@ -1620,7 +1617,7 @@ namespace RWS
    */
 
    void CEventHandler::ReplaceLinkedMsg(CEventHandler &rEventHand, CEventId &Id, const char *p_msgname,
-                                        const char *p_formatstring, RwUInt16 priority)
+      const char *p_formatstring, RwUInt16 priority)
    {
       RWS_FUNCTION("RWS::CEventHandler::ReplaceLinkedMsg (static)");
 
@@ -1647,8 +1644,8 @@ namespace RWS
    *
    */
 
-   void CEventHandler::SetLinkPriority(CEventHandler &rEventHand, CEventId &Id,
-                                       const char *p_formatString, RwUInt16 priority)
+   void CEventHandler::SetLinkPriority(CEventHandler &rEventHand, CEventId &Id, 
+      const char *p_formatString, RwUInt16 priority)
    {
       RWS_FUNCTION("RWS::CEventHandler::SetLinkPriority");
 
@@ -1671,24 +1668,24 @@ namespace RWS
    *
    */
    RwBool _SendMsg(
-      CMsg &p_Msg)
+                   CMsg &p_Msg)
    {
       RWS_FUNCTION("RWS::CEventHandler::_SendMsg");
 
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
       CEventVisualization::EventSend(*p_Msg.Id);
 #endif
 
       // Get a pointer to the first entity registered message
       //
-      CLinkedMsg *pErm = p_Msg.Id->Erm.p_next;
-
-      if (!pErm)
+      CLinkedMsg *pErm = p_Msg.Id->Erm.p_next; 
+   
+      if (!pErm) 
       {
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
          CEventVisualization::EventSent(*p_Msg.Id);
 #endif
-         RWS_RETURN(FALSE);
+         RWS_RETURN( FALSE );
       }
 
       // This is the event we are currently processing, this is important in order to process
@@ -1707,7 +1704,7 @@ namespace RWS
          //      - Behavior1
          //        - Behavior2
          //
-         // Then if Behavior2 is unlinked within Behaviors HandleEvents()
+         // Then if Behavior2 is unlinked within Behaviors HandleEvents() 
          // its pErm->pCEventHandler will be set to 0, pending it being properly unlinked
          // after this while loop.
          //
@@ -1717,14 +1714,14 @@ namespace RWS
          }
 
 #ifdef RWS_EVENTVISUALIZATION
-         EventData _EventData(0, // Src
-                              pErm->pCEventHandler,  // Dst
-                              p_Msg.Id); // The event
-
+         EventData   _EventData( 0, // Src
+                                 pErm->pCEventHandler,  // Dst
+                                 p_Msg.Id); // The event
+         
          CEventVisualization::EventReceived(_EventData);
 #endif
-
-         pErm = pErm->p_next;
+         
+         pErm = pErm->p_next;  
       } while (pErm != 0);
 
       p_Msg.Id->HandlingEvent = FALSE;
@@ -1736,11 +1733,11 @@ namespace RWS
          p_Msg.Id->PendingUnlink = FALSE;
       }
 
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
       CEventVisualization::EventSent(*p_Msg.Id);
 #endif
 
-      RWS_RETURN(TRUE);
+      RWS_RETURN( TRUE );
    }
 
  /**
@@ -1763,19 +1760,19 @@ namespace RWS
       while (pErm != 0)
       {
          CLinkedMsg *p_next_Erm = pErm->p_next;
-
+   
          // Found pending unlink
          //
-         if (pErm->pCEventHandler == 0)
+         if (pErm->pCEventHandler == 0 )
          {
-            CLinkedMsg *p_prev_Erm = pErm->p_prev;
+              CLinkedMsg *p_prev_Erm = pErm->p_prev;
 
               // p_prev_Erm <- pErm -> p_next_Erm Linked List remove entry
               //
-            if (p_prev_Erm) p_prev_Erm->p_next = p_next_Erm;
-            if (p_next_Erm) p_next_Erm->p_prev = p_prev_Erm;
+              if (p_prev_Erm) p_prev_Erm->p_next = p_next_Erm;
+              if (p_next_Erm) p_next_Erm->p_prev = p_prev_Erm;
 
-            delete pErm;
+              delete pErm;
          }
          pErm = p_next_Erm;
       }
@@ -1809,25 +1806,25 @@ namespace RWS
 
       // Get a pointer to the first entity registered message
       //
-      CLinkedMsg *pErm = p_Msg.Id->Erm.p_next;
-
-      if (!pErm)
+      CLinkedMsg *pErm = p_Msg.Id->Erm.p_next; 
+   
+      if (!pErm) 
       {
          CEventVisualization::EventSent(*p_Msg.Id);
 
-         RWS_RETURN(FALSE);
+         RWS_RETURN( FALSE );
       }
 
       p_Msg.Id->HandlingEvent = TRUE;
 
       do
       {
-         EventData _EventData(this, // Src
-                              pErm->pCEventHandler,  // Dst
-                              p_Msg.Id); // The event
+         EventData   _EventData(this, // Src
+                                pErm->pCEventHandler,  // Dst
+                                p_Msg.Id); // The event
 
          CEventVisualization::EventReceived(_EventData);
-
+ 
          // Translate the message
          //
          // pErm-pCEventHandler may be 0 here, so need to check before attempting the function call.
@@ -1837,7 +1834,7 @@ namespace RWS
          //      - Behavior1
          //        - Behavior2
          //
-         // Then if Behavior2 is unlinked within Behaviors HandleEvents()
+         // Then if Behavior2 is unlinked within Behaviors HandleEvents() 
          // its pErm->pCEventHandler will be set to 0, pending it being properly unlinked
          // after this while loop.
          //
@@ -1860,7 +1857,7 @@ namespace RWS
 
       CEventVisualization::EventSent(*p_Msg.Id);
 
-      RWS_RETURN(TRUE);
+      RWS_RETURN( TRUE );
    }
 #endif
 
@@ -1875,14 +1872,14 @@ namespace RWS
    */
 
    void SendMsgToEventHandler(
-      CMsg &p_Msg,
-      CEventHandler *pCEventHandler)
+                          CMsg &p_Msg,                   
+                          CEventHandler *pCEventHandler) 
    {
       RWS_FUNCTION("RWS::CEventHandler::SendMsgToEventHandler");
 
       if (pCEventHandler && p_Msg.Id != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
          CEventVisualization::EventSend(*p_Msg.Id);
 #endif
 
@@ -1891,9 +1888,9 @@ namespace RWS
             p_Msg.Id->HandlingEvent = TRUE;
 
 #ifdef RWS_EVENTVISUALIZATION
-            EventData _EventData(0, // Src
-                                 pCEventHandler,  // Dst
-                                 p_Msg.Id); // The event
+            EventData   _EventData(0, // Src
+                                   pCEventHandler,  // Dst
+                                   p_Msg.Id); // The event
 
             CEventVisualization::EventReceived(_EventData);
 #endif
@@ -1910,7 +1907,7 @@ namespace RWS
                p_Msg.Id->PendingUnlink = FALSE;
             }
          }
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
          CEventVisualization::EventSent(*p_Msg.Id);
 #endif
       }
@@ -1928,8 +1925,8 @@ namespace RWS
    */
 
    void SendMsgToEventHandler(
-      const CEventId &Id,
-      CEventHandler *pCEventHandler)
+                            const CEventId &Id,
+                            CEventHandler *pCEventHandler)
    {
       RWS_FUNCTION("RWS::CEventHandler::SendMsgToEventHandler");
 
@@ -1953,14 +1950,14 @@ namespace RWS
    */
 
    void CEventHandler::SendMsgToEventHandler(
-      CMsg &p_Msg,
-      CEventHandler *pCEventHandler)
+                          CMsg &p_Msg,
+                          CEventHandler *pCEventHandler)
    {
       RWS_FUNCTION("RWS::CEventHandler::SendMsgToEventHandler");
 
       if (pCEventHandler && p_Msg.Id != ERROR_NOT_A_VALID_MESSAGE_ID)
       {
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
          CEventVisualization::EventSend(*p_Msg.Id);
 #endif
          if (pCEventHandler->m_Active)
@@ -1968,9 +1965,9 @@ namespace RWS
             p_Msg.Id->HandlingEvent = TRUE;
 
 #ifdef RWS_EVENTVISUALIZATION
-            EventData _EventData(this, // Src
-                                 pCEventHandler,  // Dst
-                                 p_Msg.Id); // The event
+            EventData   _EventData(this, // Src
+                                   pCEventHandler,  // Dst
+                                   p_Msg.Id); // The event
 
             CEventVisualization::EventReceived(_EventData);
 #endif
@@ -1987,7 +1984,7 @@ namespace RWS
                p_Msg.Id->PendingUnlink = FALSE;
             }
          }
-#ifdef RWS_EVENTVISUALIZATION
+#ifdef RWS_EVENTVISUALIZATION      
          CEventVisualization::EventSent(*p_Msg.Id);
 #endif
       }
@@ -2005,8 +2002,8 @@ namespace RWS
    */
 
    void CEventHandler::SendMsgToEventHandler(
-      const CEventId &Id,
-      CEventHandler *pCEventHandler)
+                            const CEventId &Id,
+                            CEventHandler *pCEventHandler)
    {
       RWS_FUNCTION("RWS::CEventHandler::SendMsgToEventHandler");
 
@@ -2071,10 +2068,10 @@ namespace RWS
    }
 
 #ifndef NDEBUG
-   void CLinkedMsg::CheckFreeListEmptyCallBack(void *pMem, void *pData)
+   void CLinkedMsg::CheckFreeListEmptyCallBack(void *pMem, void *pData) 
    {
       RWS_FUNCTION("RWS::CLinkedMsg::CheckFreeListEmptyCallBack");
-
+      
       // At this point we only have a CLinkedMsg, from this we can determine the behavior
       // linked to the message, pEHRMsg->pCEventHandler, but not the name of the event. This
       // should never happen.
@@ -2098,7 +2095,7 @@ namespace RWS
       if (pFreeList)
       {
 #ifndef NDEBUG
-         RwFreeListForAllUsed(pFreeList, CheckFreeListEmptyCallBack, 0);
+         RwFreeListForAllUsed  ( pFreeList, CheckFreeListEmptyCallBack, 0);
 #endif
          RwFreeListDestroy(pFreeList);
          pFreeList = 0;
@@ -2139,7 +2136,7 @@ namespace RWS
       // Note cannot return 0 as ProDG for gamecube generates a warning
       // this function is basically used to prevent operator new[] from being used.
       //
-      RWS_RETURN(reinterpret_cast<void *>(-1));
+      RWS_RETURN(reinterpret_cast<void*>(-1));
    }
 
  /**
@@ -2214,15 +2211,14 @@ namespace RWS
    }
 
 #ifndef NDEBUG
-   void CRegisteredMsgs::CheckFreeListEmptyCallBack(void *pMem, void *pData)
+   void CRegisteredMsgs::CheckFreeListEmptyCallBack(void *pMem, void *pData) 
    {
       RWS_FUNCTION("RWS::CRegisteredMsgs::CheckFreeListEmptyCallBack");
 
-      CRegisteredMsgs *pRMsg = reinterpret_cast<CRegisteredMsgs *>(pMem);
+      CRegisteredMsgs *pRMsg = reinterpret_cast<CRegisteredMsgs*>(pMem);
 
       RWS_ASSERTFAIL("The following event hasn't been UnRegistered before calling"
-                     " CRegisteredMsgs::CloseMemHandler ["
-                     << RWS_VALIDSTRING(pRMsg->p_msgname) << "]");
+         " CRegisteredMsgs::CloseMemHandler [" << RWS_VALIDSTRING(pRMsg->p_msgname) << "]");
 
       RWS_RETURNVOID();
    }
@@ -2241,7 +2237,7 @@ namespace RWS
       if (pFreeList)
       {
 #ifndef NDEBUG
-         RwFreeListForAllUsed(pFreeList, CheckFreeListEmptyCallBack, 0);
+         RwFreeListForAllUsed  ( pFreeList, CheckFreeListEmptyCallBack, 0);
 #endif
 
          RwFreeListDestroy(pFreeList);
@@ -2284,7 +2280,7 @@ namespace RWS
       // Note cannot return 0 as ProDG for gamecube generates a warning
       // this function is basically used to prevent operator new[] from being used.
       //
-      RWS_RETURN(reinterpret_cast<void *>(-1));
+      RWS_RETURN(reinterpret_cast<void*>(-1));
    }
 
  /**
@@ -2350,7 +2346,7 @@ namespace RWS
          */
          struct PluginData
          {
-            RWS::CEventHandler *m_pEventHandler;
+            RWS::CEventHandler* m_pEventHandler;
          };
 
          /**
@@ -2369,7 +2365,7 @@ namespace RWS
          *
          *  \return A pointer to the RpAtomicToEventHandlerPluginData data.
          */
-         inline PluginData *GetPluginData(RpAtomic &atomic)
+         inline PluginData* GetPluginData( RpAtomic& atomic )
          {
             RWS_FUNCTION("RWS::RpAtomicToEventHandler::NULL::GetPluginData");
 
@@ -2378,7 +2374,7 @@ namespace RWS
             const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&atomic);
             const RwUInt32 pluginAddr = baseAddr + iPlugin_Offset;
 
-            RWS_RETURN(reinterpret_cast<PluginData *>(pluginAddr));
+            RWS_RETURN(reinterpret_cast<PluginData*>(pluginAddr));
          }
 
          /**
@@ -2390,7 +2386,7 @@ namespace RWS
          *
          *  \return A pointer to the RpAtomicToEventHandlerPluginData data.
          */
-         inline const PluginData *GetPluginData(const RpAtomic &atomic)
+         inline const PluginData *GetPluginData( const RpAtomic& atomic )
          {
             RWS_FUNCTION("RWS::RpAtomicToEventHandler::NULL::GetPluginData");
 
@@ -2399,7 +2395,7 @@ namespace RWS
             const RwUInt32 baseAddr = reinterpret_cast<RwUInt32>(&atomic);
             const RwUInt32 pluginAddr = baseAddr + iPlugin_Offset;
 
-            RWS_RETURN(reinterpret_cast<const PluginData *>(pluginAddr));
+            RWS_RETURN(reinterpret_cast<const PluginData*>(pluginAddr));
          }
 
          /**
@@ -2413,13 +2409,13 @@ namespace RWS
          *
          *  \return Returns pointer to the constructed object.
          */
-         void *Plugin_Constructor(void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject)
+         void* Plugin_Constructor(void* pObject, RwInt32 offsetInObject, RwInt32 sizeInObject)
          {
             RWS_FUNCTION("RWS::RpAtomicToEventHandler::NULL::Plugin_Constructor");
 
             RWS_PRE(pObject);
 
-            PluginData &pluginData = *GetPluginData(*reinterpret_cast<RpAtomic *>(pObject));
+            PluginData& pluginData = *GetPluginData(*reinterpret_cast<RpAtomic*>(pObject));
             pluginData.m_pEventHandler = 0;
 
             RWS_RETURN(pObject);
@@ -2435,17 +2431,17 @@ namespace RWS
          *  \param offset The byte offset from object pointers to plug-in data.
          *  \param size The size of plug-in data to copy.
          */
-         void *Plugin_Copy(void *pDstObject, const void *pSrcObject, RwInt32 offset, RwInt32 size)
+         void* Plugin_Copy(void* pDstObject, const void* pSrcObject, RwInt32 offset, RwInt32 size)
          {
             RWS_FUNCTION("RWS::RpAtomicToEventHandler::NULL::Plugin_Copy");
 
             RWS_PRE(pDstObject);
             RWS_PRE(pSrcObject);
 
-            PluginData &srcData = *GetPluginData(
-               *reinterpret_cast<RpAtomic *>(const_cast<void *>(pSrcObject)));
+            PluginData& srcData = *GetPluginData(
+               *reinterpret_cast<RpAtomic*>(const_cast<void*>(pSrcObject)));
 
-            PluginData &dstData = *GetPluginData(*reinterpret_cast<RpAtomic *>(pDstObject));
+            PluginData& dstData = *GetPluginData(*reinterpret_cast<RpAtomic*>(pDstObject));
 
             dstData = srcData;
 
@@ -2479,13 +2475,14 @@ namespace RWS
          iPlugin_Offset = RpAtomicRegisterPlugin(
             sizeof(PluginData),
             MAKECHUNKID(rwVENDORID_CRITERIONRM, PluginID),
-            Plugin_Constructor,
+            Plugin_Constructor,  
             0, // NOT USED
-            Plugin_Copy);
+            Plugin_Copy
+            );
 
          RWS_POST(iPlugin_Offset);
 
-         RWS_RETURN(0 != iPlugin_Offset);
+         RWS_RETURN (0 != iPlugin_Offset);
       }
 
       /**
@@ -2496,11 +2493,11 @@ namespace RWS
       *  \param atomic A reference to an RpAtomic object.
       *  \param pEventHandler A pointer to a CEventHandler object.
       */
-      void SetEventHandler(RpAtomic &atomic, CEventHandler *pEventHandler)
+      void SetEventHandler( RpAtomic& atomic, CEventHandler* pEventHandler )
       {
          RWS_FUNCTION("RWS::RpAtomicToEventHandler::SetEventHandler");
 
-         RWS_PRE(iPlugin_Offset);
+         RWS_PRE( iPlugin_Offset );
 
          GetPluginData(atomic)->m_pEventHandler = pEventHandler;
 
@@ -2516,12 +2513,12 @@ namespace RWS
       *
       *  \return A pointer to the CEventHandler that manages this atomic, otherwise 0.
       */
-      CEventHandler *GetEventHandler(const RpAtomic &atomic)
+      CEventHandler* GetEventHandler( const RpAtomic& atomic )
       {
          RWS_FUNCTION("RWS::RpAtomicToEventHandler::GetEventHandler");
 
-         RWS_PRE(iPlugin_Offset);
-
+         RWS_PRE( iPlugin_Offset );
+      
          RWS_RETURN(GetPluginData(atomic)->m_pEventHandler);
       }
    } // namespace RpAtomicToEventHandler

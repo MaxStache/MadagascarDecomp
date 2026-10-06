@@ -35,10 +35,10 @@
 #include "CFXReflectEnvironmentGCN.h"
 #include "framework/core/resourcemanager/cresourcemanager.h"
 
-extern GXRenderModeObj *_RwDlRenderMode;  /* Display mode info ( defined in RenderWare )*/
+extern GXRenderModeObj  *_RwDlRenderMode;  /* Display mode info ( defined in RenderWare )*/
 
 namespace RWS
-{
+{                    
 
    namespace FX
    {
@@ -70,15 +70,15 @@ namespace RWS
       void CFXReflectEnvironmentGCN::CameraTextureFlush(const RwRaster *raster, RwBool boxFilter, RwUInt32 X,
                                                         RwUInt32 Y, RwUInt32 Width, RwUInt32 Height)
       {
-         RwUInt32 offset = 0;
-         RwRaster *dstParent;
-         RwGameCubeRasterExtension *dstRasExt;
+         RwUInt32                    offset = 0;
+         RwRaster                    *dstParent;
+         RwGameCubeRasterExtension   *dstRasExt;
 
          RWS_FUNCTION("RWS::FX::CFXReflectEnvironmentGCN::CameraTextureFlush");
          RWS_ASSERT(raster != 0, "Raster object pointer invalid.");
-         RWS_ASSERTE(((raster->parent == raster) &&
+         RWS_ASSERTE (((raster->parent == raster) &&
                       !(rwRASTERDONTALLOCATE & raster->cFlags)) ||
-                     ((raster->parent != raster) &&
+                      ((raster->parent != raster) &&
                       (rwRASTERDONTALLOCATE & raster->cFlags)));
 
          dstParent = RwRasterGetParent(raster);
@@ -87,15 +87,15 @@ namespace RWS
 #if defined(RWDEBUG)
          if ((0x01 & raster->nOffsetX) ||
              (0x01 & raster->nOffsetY))
-         {
-            RWS_ASSERT(0, RWSTRING("X & Y Offset must be a multiple of 2"));
-         }
+            {
+               RWS_ASSERT( 0, RWSTRING("X & Y Offset must be a multiple of 2") );
+            }
 
          if ((0x01 & RwRasterGetWidth(raster)) ||
-             (0x01 & RwRasterGetHeight(raster)))
-         {
-            RWS_ASSERT(0, RWSTRING("Width & Height must be a multiple of 2"));
-         }
+            (0x01 & RwRasterGetHeight(raster)))
+            {
+               RWS_ASSERT(0, RWSTRING("Width & Height must be a multiple of 2") );
+            }
 #endif /* defined(RWDEBUG) */
 
          /*
@@ -107,27 +107,27 @@ namespace RWS
          /* Src rect to copy from EFB */
          if (boxFilter)
          {
-            GXSetTexCopySrc(
-               X << 1,
-               Y << 1,
-               Width << 1,
-               Height << 1);
+             GXSetTexCopySrc(
+                 X << 1,
+                 Y << 1,
+                 Width  << 1,
+                 Height << 1);
          }
          else
          {
-            GXSetTexCopySrc(
-               X,
-               Y,
-               Width,
-               Height);
+             GXSetTexCopySrc(
+                 X,
+                 Y,
+                 Width,
+                 Height );
          }
 
          /* Destination raster */
          GXSetTexCopyDst(
-            RwRasterGetWidth(dstParent),
-            RwRasterGetHeight(dstParent),
-            (GXTexFmt)dstRasExt->format,
-            (GXBool)boxFilter);
+             RwRasterGetWidth(dstParent),
+             RwRasterGetHeight(dstParent),
+             (GXTexFmt)dstRasExt->format,
+             (GXBool)boxFilter);
 
 
          GXCopyTex(dstRasExt->pixels + offset, FALSE);//(GXBool)_RwDlCopyClear);
@@ -149,7 +149,7 @@ namespace RWS
          /* Invalidate the texture cache */
          if (dstRasExt->region)
          {
-            GXInvalidateTexRegion((GXTexRegion *)dstRasExt->region);
+            GXInvalidateTexRegion( (GXTexRegion*)dstRasExt->region);
          }
          else
          {
@@ -178,16 +178,16 @@ namespace RWS
 
          RwEngineGetVideoModeInfo(&VideoMode, RwEngineGetCurrentVideoMode());
 
-         RwUInt32 X, Y;
+         RwUInt32 X,     Y;
          RwUInt32 Width, Height;
 
-         X = static_cast<RwUInt32>((static_cast<float>(VideoMode.width) * TopLeftUV.x));
-         Y = static_cast<RwUInt32>((static_cast<float>(VideoMode.height) * TopLeftUV.y));
+         X      = static_cast<RwUInt32> ( (static_cast<float>(VideoMode.width ) * TopLeftUV.x) );
+         Y      = static_cast<RwUInt32> ( (static_cast<float>(VideoMode.height) * TopLeftUV.y) );
 
-         Width = static_cast<RwUInt32>(((static_cast<float>(VideoMode.width) * BottomRightUV.x)) - X);
-         Height = static_cast<RwUInt32>(((static_cast<float>(VideoMode.height) * BottomRightUV.y)) - Y);
+         Width  = static_cast<RwUInt32> ( ( (static_cast<float>(VideoMode.width ) * BottomRightUV.x) ) - X );
+         Height = static_cast<RwUInt32> ( ( (static_cast<float>(VideoMode.height) * BottomRightUV.y) ) - Y );
 
-         CameraTextureFlush(pRaster, FALSE, X & 0xfffffffc, Y & 0xfffffffc, Width & 0xfffffffc, Height & 0xfffffffc);
+         CameraTextureFlush(pRaster, FALSE, X & 0xfffffffc, Y & 0xfffffffc, Width & 0xfffffffc, Height & 0xfffffffc  );
 
 
          RWS_RETURNVOID();

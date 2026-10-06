@@ -48,15 +48,16 @@ namespace RWS
          RWS_CATEGORY("AreaTriggers");
          RWS_DESCRIPTION("Sphere Area Trigger", "An area trigger that uses a sphere for collision tests.");
 
-         ATSphere(const CAttributePacket& attr);
+         ATSphere( const CAttributePacket& attr );
          virtual ~ATSphere();
-
-         RwBool PointInsideGeometry(const RwV3d* pPoint);
-         RwBool LineIntersectGeometry(const RwLine* pLine);
+   
+         RwBool PointInsideGeometry( const RwV3d * pPoint );
+         RwBool LineIntersectGeometry( const RwLine * pLine );
 
          void DebugToolsRender();
 
       protected:
+   
       };
 
    } // namespace AreaTrigger

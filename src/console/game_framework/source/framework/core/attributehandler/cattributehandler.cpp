@@ -29,7 +29,7 @@
 //#define RWS_TRACEENABLE
 
 #ifdef _MSC_VER
-#pragma warning(disable : 4786)
+#pragma warning (disable: 4786)
 #endif
 
 #include "cattributehandler.h"
@@ -54,12 +54,12 @@ namespace RWS
       */
       struct RWSGUIDless : std::binary_function<const RWSGUID, const RWSGUID, bool>
       {
-         bool operator()(const RWSGUID x, const RWSGUID y) const
+         bool operator() (const RWSGUID x, const RWSGUID y) const
          {
             return (x) < (y);
          }
       };
-
+      
       /**
       *
       *  A global map relating RenderWare Studio Workspace instance IDs to 
@@ -67,7 +67,7 @@ namespace RWS
       *  for an instance Id, fast searching is key to the operation of the sequencer.
       *
       */
-      typedef std::map<RWSGUID, RWS::CAttributeHandler *, RWSGUIDless> Id2AttributeHandler_Map;
+      typedef std::map< RWSGUID , RWS::CAttributeHandler*, RWSGUIDless > Id2AttributeHandler_Map;
 
       Id2AttributeHandler_Map theMap;
 
@@ -75,7 +75,7 @@ namespace RWS
       *  A global list of CAttributeHandlers added to allow CAttributeHandler::Purge
       *  to delete entities in reverse order to the creation order.
       */
-      typedef std::list<RWS::CAttributeHandler *> CAttributeHandler_List;
+      typedef std::list< RWS::CAttributeHandler* > CAttributeHandler_List;
 
       CAttributeHandler_List theList;
    }
@@ -88,8 +88,7 @@ namespace RWS
    *
    */
 
-   enum ChunkType
-   {
+   enum ChunkType {
       CLASSID = 0x80000000,         /**<  This chunk identifies the target class for any commands
                                           that follow the chunk. [CLASSID][Size][String] */
 
@@ -110,7 +109,7 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CAttributeDataChunk::IsEndChunk");
 
-      RWS_RETURN(0 == size_);
+      RWS_RETURN( 0 == size_ );
    }
 
    /**
@@ -119,13 +118,13 @@ namespace RWS
    *
    */
 
-   const CAttributeDataChunk *CAttributeDataChunk::pNextChunk() const
+   const CAttributeDataChunk* CAttributeDataChunk::pNextChunk() const
    {
       RWS_FUNCTION("RWS::CAttributeDataChunk::pNextChunk");
 
       RWS_PRE(!IsEndChunk());
 
-      RWS_RETURN(reinterpret_cast<CAttributeDataChunk *>(reinterpret_cast<RWS_DWORD>(this) + size_));
+      RWS_RETURN( reinterpret_cast<CAttributeDataChunk*>(reinterpret_cast<RWS_DWORD>(this) + size_) );
    }
 
    /**
@@ -142,8 +141,8 @@ namespace RWS
       // creation packet is the first in the sequence. However, we still
       // use an iterator to access it because the sequence COULD be empty.
       CAttributeDataChunkIterator chunkIt(firstChunk_);
-
-      RWS_RETURN(!chunkIt.IsFinished() && CREATECLASSID == chunkIt->type_);
+      
+      RWS_RETURN( !chunkIt.IsFinished() && CREATECLASSID == chunkIt->type_ );
    }
 
    /**
@@ -152,7 +151,7 @@ namespace RWS
    *
    */
 
-   const char *CAttributePacket::GetNameOfClassToCreate() const
+   const char* CAttributePacket::GetNameOfClassToCreate() const
    {
       RWS_FUNCTION("RWS::CAttributePacket::GetNameOfClassToCreate");
 
@@ -160,7 +159,7 @@ namespace RWS
 
       CAttributeDataChunkIterator chunkIt(firstChunk_);
 
-      RWS_RETURN(reinterpret_cast<const char *>(&chunkIt->data_));
+      RWS_RETURN( reinterpret_cast<const char*>(&chunkIt->data_) );
    }
 
    /**
@@ -191,14 +190,14 @@ namespace RWS
 
          if (INSTANCEID == chunkIt->type_)
          {
-            result = *reinterpret_cast<const RWSGUID *>(&chunkIt->data_);
+            result = *reinterpret_cast<const RWSGUID *>(&chunkIt->data_);            
             found = true;
          }
 
          ++chunkIt;
       }
 
-      RWS_RETURN(result);
+      RWS_RETURN( result );
    }
 
    /**
@@ -212,7 +211,7 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CAttributeCommand::GetCommandId");
 
-      RWS_RETURN(*(reinterpret_cast<const unsigned int *>(&chunk_.type_)));
+      RWS_RETURN( *(reinterpret_cast<const unsigned int*>(&chunk_.type_)) );
    }
 
    /**
@@ -224,10 +223,8 @@ namespace RWS
    *
    */
 
-   CAttributeDataChunkIterator::CAttributeDataChunkIterator(const CAttributeDataChunk &begin) :
-      pCurrChunk_(&begin)
-   {
-   }
+   CAttributeDataChunkIterator::CAttributeDataChunkIterator(const CAttributeDataChunk& begin)
+      : pCurrChunk_(&begin) {}
 
    /**
    *
@@ -240,7 +237,7 @@ namespace RWS
    {
       RWS_FUNCTION("RWS::CAttributeDataChunkIterator::IsFinished");
 
-      RWS_RETURN(pCurrChunk_->IsEndChunk());
+      RWS_RETURN( pCurrChunk_->IsEndChunk() );
    }
 
    /**
@@ -251,7 +248,7 @@ namespace RWS
    *
    */
 
-   CAttributeDataChunkIterator &CAttributeDataChunkIterator::operator++()
+   CAttributeDataChunkIterator& CAttributeDataChunkIterator::operator++()
    {
       RWS_PRE(!IsFinished());
       pCurrChunk_ = pCurrChunk_->pNextChunk();
@@ -266,7 +263,7 @@ namespace RWS
    *
    */
 
-   const CAttributeDataChunk &CAttributeDataChunkIterator::operator*() const
+   const CAttributeDataChunk& CAttributeDataChunkIterator::operator*() const
    {
       RWS_PRE(!IsFinished());
       return *pCurrChunk_;
@@ -280,7 +277,7 @@ namespace RWS
    *
    */
 
-   const CAttributeDataChunk *CAttributeDataChunkIterator::operator->() const
+   const CAttributeDataChunk* CAttributeDataChunkIterator::operator->() const
    {
       RWS_PRE(!IsFinished());
       return pCurrChunk_;
@@ -300,10 +297,11 @@ namespace RWS
    */
 
    CAttributeCommandIterator::CAttributeCommandIterator(
-      const CAttributePacket &packet,
-      const RwChar *targetClass) :
-      chunkIt_(packet.firstChunk_),
-      pTargetClass_(targetClass)
+      const CAttributePacket& packet,
+      const RwChar *targetClass
+      )
+      :  chunkIt_(packet.firstChunk_),
+         pTargetClass_(targetClass)
    {
       // Skip to the first attribute command - the only valid
       // states for this iterator are to point at an attribute
@@ -335,7 +333,7 @@ namespace RWS
    *
    */
 
-   void CAttributeCommandIterator::SkipToNextAttributeCommand(bool lastClassIdChunkWasForTargetClass)
+   void CAttributeCommandIterator::SkipToNextAttributeCommand( bool lastClassIdChunkWasForTargetClass )
    {
       RWS_FUNCTION("RWS::CAttributeCommandIterator::SkipToNextAttributeCommand");
 
@@ -344,24 +342,24 @@ namespace RWS
       {
          switch (chunkIt_->type_)
          {
-         case INSTANCEID:
-         case CREATECLASSID:
+            case INSTANCEID:
+            case CREATECLASSID:
                // Skip
-            ++chunkIt_;
-            break;
-         case CLASSID:
+               ++chunkIt_;
+               break;
+            case CLASSID:
                // Record whether it matches the target class and skip
-            lastClassIdChunkWasForTargetClass =
-               (0 == rwstrcmp(pTargetClass_, reinterpret_cast<const char *>(&chunkIt_->data_)));
-            ++chunkIt_;
-            break;
-         default:
+               lastClassIdChunkWasForTargetClass = 
+                  (0 == rwstrcmp(pTargetClass_, reinterpret_cast<const char*>(&chunkIt_->data_)));
+               ++chunkIt_;
+               break;
+            default:
                // Must be an attribute command. If our target class was
                // the last CLASSID chunk encountered then we've found our
                // chunk. If not then skip.
-            if (lastClassIdChunkWasForTargetClass) found = true;
-            else ++chunkIt_;
-            break;
+               if (lastClassIdChunkWasForTargetClass) found = true;
+               else ++chunkIt_;
+               break;
          }
       }
       RWS_RETURNVOID();
@@ -375,10 +373,10 @@ namespace RWS
    *
    */
 
-   CAttributeCommandIterator &CAttributeCommandIterator::operator++()
+   CAttributeCommandIterator& CAttributeCommandIterator::operator++()
    {
       RWS_PRE(!IsFinished());
-
+      
       ++chunkIt_;
 
       // We WERE pointing to an attribute command for the target class,
@@ -396,11 +394,11 @@ namespace RWS
    *
    */
 
-   const CAttributeCommand &CAttributeCommandIterator::operator*() const
+   const CAttributeCommand& CAttributeCommandIterator::operator*() const
    {
       RWS_PRE(!IsFinished());
 
-      return *reinterpret_cast<const CAttributeCommand *>(&(*chunkIt_));
+      return *reinterpret_cast<const CAttributeCommand*>(&(*chunkIt_));
    }
 
    /**
@@ -410,11 +408,11 @@ namespace RWS
    *  \return Returns a reference to the CAttributeCommand.
    */
 
-   const CAttributeCommand *CAttributeCommandIterator::operator->() const
+   const CAttributeCommand* CAttributeCommandIterator::operator->() const
    {
       RWS_PRE(!IsFinished());
 
-      return reinterpret_cast<const CAttributeCommand *>(&(*chunkIt_));
+      return reinterpret_cast<const CAttributeCommand*>(&(*chunkIt_));
    }
 
    /**
@@ -422,7 +420,7 @@ namespace RWS
    *  Deconstruct a CAttributeHandler object.
    *
    */
-
+   
    CAttributeHandler::~CAttributeHandler()
    {
       RWS_FUNCTION("RWS::CAttributeHandler::~CAttributeHandler");
@@ -439,19 +437,19 @@ namespace RWS
    *  \param instanceId The instance Id of this CAttributeHandler.
    *
    */
-
-   void CAttributeHandler::Add(const RWSGUID &instanceId)
+   
+   void CAttributeHandler::Add(const RWSGUID & instanceId)
    {
       RWS_FUNCTION("RWS::CAttributeHandler::Add");
-
-      RWS_ASSERT(!Find(instanceId), "Instance ID (" << instanceId << ") already in use");
+      
+      RWS_ASSERT( !Find(instanceId), "Instance ID (" << instanceId << ") already in use" );
 
       m_InstanceId = instanceId;
 
       theMap.insert(Id2AttributeHandler_Map::value_type(instanceId, this));
 
-      theList.push_front(this);
-
+      theList.push_front (this);
+      
       RWS_RETURNVOID();
    }
 
@@ -464,10 +462,10 @@ namespace RWS
    *
    */
 
-   void CAttributeHandler::Remove(const RWSGUID &instanceId)
+   void CAttributeHandler::Remove(const RWSGUID & instanceId)
    {
       RWS_FUNCTION("RWS::CAttributeHandler::Remove");
-
+      
       CAttributeHandler *pCAttributeHandler = CAttributeHandler::Find(instanceId);
 
       if (pCAttributeHandler)
@@ -487,7 +485,7 @@ namespace RWS
 
          theMap.erase(instanceId);
       }
-
+      
       RWS_RETURNVOID();
    }
 
@@ -503,15 +501,15 @@ namespace RWS
    *
    */
 
-   CAttributeHandler *CAttributeHandler::Find(const RWSGUID &instanceId)
+   CAttributeHandler* CAttributeHandler::Find(const RWSGUID & instanceId)
    {
       RWS_FUNCTION("RWS::CAttributeHandler::Find");
 
-      CAttributeHandler *pResult = 0;
+      CAttributeHandler* pResult = 0;
       const Id2AttributeHandler_Map::iterator it = theMap.find(instanceId);
       if (it != theMap.end()) pResult = it->second;
-
-      RWS_RETURN(pResult);
+      
+      RWS_RETURN( pResult );
    }
 
 
@@ -548,8 +546,8 @@ namespace RWS
             if (pRWSGUID)
             {
                const Id2AttributeHandler_Map::iterator mapit = theMap.find(*pRWSGUID);
-
-               if (mapit != theMap.end())
+               
+               if (mapit != theMap.end()) 
                {
                   theMap.erase(mapit);
                }
@@ -578,27 +576,27 @@ namespace RWS
    void CAttributeHandler::PurgeAll()
    {
       RWS_FUNCTION("RWS::CAttributeHandler::PurgeAll");
-
+      
       CAttributeHandler_List::iterator it = theList.begin();
-
+      
       while (it != theList.end())
       {
          CAttributeHandler *pCAttributeHandler = *it;
-
+         
          const RWSGUID *pRWSGUID = pCAttributeHandler->InqInstanceId();
-
+         
          if (pRWSGUID)
          {
             const Id2AttributeHandler_Map::iterator mapit = theMap.find(*pRWSGUID);
-
-            if (mapit != theMap.end())
+            
+            if (mapit != theMap.end()) 
             {
                theMap.erase(mapit);
             }
          }
-
+         
          it = theList.erase(it);
-
+         
          delete pCAttributeHandler;
       }
       RWS_RETURNVOID();
@@ -614,7 +612,7 @@ namespace RWS
    *  contain a member variable called m_debug which can be used by any class derived from CAttributeHandler.
    *
    */
-   void CAttributeHandler::HandleAttributes(const CAttributePacket &attr)
+   void CAttributeHandler::HandleAttributes(const CAttributePacket& attr)
    {
 #ifdef RWS_DESIGN
       CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CAttributeHandler));
@@ -623,16 +621,16 @@ namespace RWS
       {
          switch (attrIt->GetCommandId())
          {
-         case CMD_SetDebug:
-            if (attrIt->GetAs_RwUInt32())
-            {
-               m_Flags |= uATTRIBUTEHANDLER_FLAG_DEBUG;
-            }
-            else
-            {
-               m_Flags &= ~uATTRIBUTEHANDLER_FLAG_DEBUG;
-            }
-            break;
+            case CMD_SetDebug:
+               if (attrIt->GetAs_RwUInt32())
+               {
+                  m_Flags |= uATTRIBUTEHANDLER_FLAG_DEBUG;
+               }
+               else
+               {
+                  m_Flags &= ~uATTRIBUTEHANDLER_FLAG_DEBUG;
+               }
+               break;
          }
          ++attrIt;
       }
@@ -655,7 +653,7 @@ namespace RWS
 #ifdef _DEBUG
       // Check contents of packet, just displays the contents of the original packet.
       //
-      CAttributeDataChunkIterator CheckIttr(this->firstChunk_);
+      CAttributeDataChunkIterator CheckIttr(this->firstChunk_); 
 
       while (!CheckIttr.IsFinished())
       {
@@ -663,17 +661,17 @@ namespace RWS
 
          switch (pCheckChunk->type_)
          {
-         case INSTANCEID:
-            RWS_TRACE("INSTANCEID " << (reinterpret_cast<const RWSGUID>(&pCheckChunk->data_)));
+            case INSTANCEID:
+               RWS_TRACE("INSTANCEID "<<(reinterpret_cast<const RWSGUID>(&pCheckChunk->data_)));
             break;
-         case CREATECLASSID:
-            RWS_TRACE("CREATECLASSID " << (reinterpret_cast<const RwChar *>(&pCheckChunk->data_)));
+            case CREATECLASSID:
+               RWS_TRACE("CREATECLASSID "<<(reinterpret_cast<const RwChar*>(&pCheckChunk->data_)));
             break;
-         case CLASSID:
-            RWS_TRACE("CLASSID " << (reinterpret_cast<const RwChar *>(&pCheckChunk->data_)));
+            case CLASSID:
+               RWS_TRACE("CLASSID "<<(reinterpret_cast<const RwChar*>(&pCheckChunk->data_)));
             break;
-         default:
-            RWS_TRACE("PARAM " << pCheckChunk->type_);
+            default:
+               RWS_TRACE("PARAM "<<pCheckChunk->type_);
             break;
          }
          ++CheckIttr;
@@ -683,14 +681,14 @@ namespace RWS
       // DatatChunkIttr is just used to traverse over the data, but we need to know the size of it
       // so that we can copy it.
       //
-      const void *pStart = static_cast<const void *>(DatatChunkIttr.GetDataChunk());
-
+      const void *pStart = static_cast<const void*>(DatatChunkIttr.GetDataChunk());
+     
       while (!DatatChunkIttr.IsFinished())
       {
          ++DatatChunkIttr;
       }
 
-      const void *pEnd = static_cast<const void *>(DatatChunkIttr.GetDataChunk());
+      const void *pEnd = static_cast<const void*>(DatatChunkIttr.GetDataChunk());
 
       // pStart, and pEnd point to the start and end of the data, use these to calculate the size
       //
@@ -701,7 +699,7 @@ namespace RWS
       //
       size += sizeof(RWS_DWORD);
 
-      CAttributePacket *pAttr = reinterpret_cast<CAttributePacket *>(RwMalloc(size, rwMEMHINTDUR_GLOBAL));
+      CAttributePacket *pAttr = reinterpret_cast<CAttributePacket*>(RwMalloc(size, rwMEMHINTDUR_GLOBAL));
 
       RWS_ASSERT(pAttr, "Failed to allocate memory for attribute packet.");
 
@@ -711,9 +709,9 @@ namespace RWS
       memcpy(pAttr, pStart, size);
 #endif
 
-      RWS_TRACE("Total size of Cloned Packet " << size);
+      RWS_TRACE("Total size of Cloned Packet "<<size);
 
-      RWS_RETURN(pAttr);
+      RWS_RETURN (pAttr);
    }
 
    /**
@@ -729,12 +727,12 @@ namespace RWS
    CAttributePacket *CAttributePacket::Update(const CAttributePacket &rAttr)
    {
       RWS_FUNCTION("RWS::CAttributePacket::Update");
-
+      
       CAttributePacket *pAttr = 0;
-
+      
       // First determine the size of the updated attribute packet
       //
-
+      
       // This is tricky as it requires in depth knowledge of the packet structure
       // used by CAttributePacket, be careful with any modifications.
       //
@@ -742,36 +740,36 @@ namespace RWS
          // The original attribute packet, (Must have been cloned)
          //
          CAttributeDataChunkIterator CloneIttr(this->firstChunk_);
-
+         
          RwUInt32 size = 0;   // Size of new Attribute packet
-
+         
          const RwChar *CloneClassId = 0; // Name of class, attributes are for this class
-
-         RwBool copyClone;  // flag indicates whether data is taken from original or update.
-
+         
+         RwBool copyClone;  // flag indicates whether data is taken from original or update. 
+         
          while (!CloneIttr.IsFinished())
          {
             const CAttributeDataChunk *pCloneChunk = CloneIttr.GetDataChunk();
             const CAttributeDataChunk *pUpdateChunk = 0;
-
+            
             // Assume we will be copying from the original.
             //
             copyClone = true;
-
+            
             switch (pCloneChunk->type_)
             {
             case INSTANCEID:
-               RWS_TRACE("INSTANCEID " << (reinterpret_cast<const RWSGUID>(&pCloneChunk->data_)));
+               RWS_TRACE("INSTANCEID "<<(reinterpret_cast<const RWSGUID>(&pCloneChunk->data_)));
                break;
             case CREATECLASSID:
-               RWS_TRACE("CREATECLASSID " << (reinterpret_cast<const RwChar *>(&pCloneChunk->data_)));
+               RWS_TRACE("CREATECLASSID "<<(reinterpret_cast<const RwChar*>(&pCloneChunk->data_)));
                break;
             case CLASSID:
-               RWS_TRACE("CLASSID " << (reinterpret_cast<const RwChar *>(&pCloneChunk->data_)));
-               CloneClassId = reinterpret_cast<const RwChar *>(&pCloneChunk->data_);
+               RWS_TRACE("CLASSID "<<(reinterpret_cast<const RwChar*>(&pCloneChunk->data_)));
+               CloneClassId = reinterpret_cast<const RwChar*>(&pCloneChunk->data_);
                break;
             default:
-               RWS_TRACE("PARAM " << pCloneChunk->type_);
+               RWS_TRACE("PARAM "<<pCloneChunk->type_);
                // Check update attribute packet, does it replace original packet ?
                //
                if (CloneClassId)
@@ -788,7 +786,7 @@ namespace RWS
                      if (UpdatekIttr->GetCommandId() == pCloneChunk->type_)
                      {
                         pUpdateChunk = UpdatekIttr.GetDataChunk();
-
+                        
                         // Update contains newer data, flag that we should copy from the update
                         //
                         copyClone = false;
@@ -799,7 +797,7 @@ namespace RWS
                }
                break;
             }
-
+            
             // If copyClone is true we need to copy the data from the original cloned
             // attribute packet.
             //
@@ -811,25 +809,25 @@ namespace RWS
             {
                size = size + pUpdateChunk->size_;
             }
-
+            
             ++CloneIttr;
          }
-
+         
          // Need to add terminator to end of new attribute packet, size = 0, type = not_required,
          // data = not_required
          //
          const RwUInt32 TerminatorSize = sizeof(RWS_DWORD);
          size = size + TerminatorSize;
-
-         RWS_TRACE("Total size of Updated Packet " << size);
-
-         pAttr = reinterpret_cast<CAttributePacket *>(RwMalloc(size, rwMEMHINTDUR_GLOBAL));
-
+         
+         RWS_TRACE("Total size of Updated Packet "<<size);
+         
+         pAttr = reinterpret_cast<CAttributePacket*>(RwMalloc(size, rwMEMHINTDUR_GLOBAL ));
+         
          RWS_ASSERT(pAttr, "Unable to allocate memory for updated attribute packet");
       }
 
       /*==================================================================================================*/
-
+      
       // Now do the copy of the attribute data.
       //
       //
@@ -837,36 +835,36 @@ namespace RWS
          // The original attribute packet, (Must have been cloned)
          //
          CAttributeDataChunkIterator CloneIttr(this->firstChunk_);
-
+         
          RwUInt32 size = 0;   // Size of new Attribute packet
-
+         
          const RwChar *CloneClassId = 0; // Name of class, attributes are for this class
-
-         RwBool copyClone;  // flag indicates whether data is taken from original or update.
-
+         
+         RwBool copyClone;  // flag indicates whether data is taken from original or update. 
+         
          while (!CloneIttr.IsFinished())
          {
             const CAttributeDataChunk *pCloneChunk = CloneIttr.GetDataChunk();
             const CAttributeDataChunk *pUpdateChunk = 0;
-
+            
             // Assume we will be copying from the original.
             //
             copyClone = true;
-
+            
             switch (pCloneChunk->type_)
             {
             case INSTANCEID:
-               RWS_TRACE("INSTANCEID " << (reinterpret_cast<const RWSGUID>(&pCloneChunk->data_)));
+               RWS_TRACE("INSTANCEID "<<(reinterpret_cast<const RWSGUID>(&pCloneChunk->data_)));
                break;
             case CREATECLASSID:
-               RWS_TRACE("CREATECLASSID " << (reinterpret_cast<const RwChar *>(&pCloneChunk->data_)));
+               RWS_TRACE("CREATECLASSID "<<(reinterpret_cast<const RwChar*>(&pCloneChunk->data_)));
                break;
             case CLASSID:
-               RWS_TRACE("CLASSID " << (reinterpret_cast<const RwChar *>(&pCloneChunk->data_)));
-               CloneClassId = reinterpret_cast<const RwChar *>(&pCloneChunk->data_);
+               RWS_TRACE("CLASSID "<<(reinterpret_cast<const RwChar*>(&pCloneChunk->data_)));
+               CloneClassId = reinterpret_cast<const RwChar*>(&pCloneChunk->data_);
                break;
             default:
-               RWS_TRACE("PARAM " << pCloneChunk->type_);
+               RWS_TRACE("PARAM "<<pCloneChunk->type_);
                // Check update attribute packet, does it replace original packet ?
                //
                if (CloneClassId)
@@ -883,7 +881,7 @@ namespace RWS
                      if (UpdatekIttr->GetCommandId() == pCloneChunk->type_)
                      {
                         pUpdateChunk = UpdatekIttr.GetDataChunk();
-
+                        
                         // Update contains newer data, flag that we should copy from the update
                         //
                         copyClone = false;
@@ -894,61 +892,61 @@ namespace RWS
                }
                break;
             }
-
+            
             // If copyClone is true we need to copy the data from the original cloned
             // attribute packet.
             //
             if (copyClone)
             {
                RWS_TRACE("Copying attribute from original.");
-
-               const char *pSrc = reinterpret_cast<const char *>(pCloneChunk);
-               char *pDst = reinterpret_cast<char *>(pAttr) + size;
-
+               
+               const char *pSrc = reinterpret_cast<const char*>(pCloneChunk);
+               char *pDst = reinterpret_cast<char*>(pAttr) + size;
+               
 #if defined(DOLPHIN) && defined(__MWERKS__)
-               std::memcpy(const_cast<char *>(pDst), pSrc, size);
+               std::memcpy(const_cast<char*>(pDst), pSrc, size);
 #else
-               memcpy(const_cast<char *>(pDst), pSrc, pCloneChunk->size_);
+               memcpy(const_cast<char*>(pDst), pSrc, pCloneChunk->size_);
 #endif
                size = size + pCloneChunk->size_;
             }
             else
             {
                RWS_TRACE("Copying attribute from update.");
-
-               const char *pSrc = reinterpret_cast<const char *>(pUpdateChunk);
-               char *pDst = reinterpret_cast<char *>(pAttr) + size;
-
+               
+               const char *pSrc = reinterpret_cast<const char*>(pUpdateChunk);
+               char *pDst = reinterpret_cast<char*>(pAttr) + size;
+               
 #if defined(DOLPHIN) && defined(__MWERKS__)
-               std::memcpy(const_cast<char *>(pDst), pSrc, size);
+               std::memcpy(const_cast<char*>(pDst), pSrc, size);
 #else
-               memcpy(const_cast<char *>(pDst), pSrc, pUpdateChunk->size_);
+               memcpy(const_cast<char*>(pDst), pSrc, pUpdateChunk->size_);
 #endif
                size = size + pUpdateChunk->size_;
             }
-
+            
             ++CloneIttr;
          }
-
+         
          // Need to add terminator to end of new attribute packet, size = 0, type = not_required,
          // data = not_required
          //
          {
             const RwUInt32 TerminatorSize = sizeof(RWS_DWORD);
-
-            char *pDst = reinterpret_cast<char *>(pAttr) + size;
-
+            
+            char *pDst = reinterpret_cast<char*>(pAttr) + size;
+            
 #if defined(DOLPHIN) && defined(__MWERKS__)
-            std::memset(const_cast<char *>(pDst), 0, TerminatorSize);
+            std::memset(const_cast<char*>(pDst), 0, TerminatorSize);
 #else
-            memset(const_cast<char *>(pDst), 0, TerminatorSize);
+            memset(const_cast<char*>(pDst), 0, TerminatorSize);
 #endif
             size = size + TerminatorSize;
          }
       }
-
+      
       RwFree(this);        // Free old AttributePacket
-
+      
       RWS_RETURN(pAttr);   // Return new AttributePacket
    }
 
@@ -971,45 +969,46 @@ namespace RWS
       // Get Instance Id
       //
       RWSGUID InstanceId = GetInstanceId();
-
-      // Check if it is already in use, if it is release it and delete
+      
+      // Check if it is already in use, if it is release it and delete 
       // the AttributeHandler/Behavior
       //
       CAttributeHandler *pCAttributeHandler = CAttributeHandler::Find(InstanceId);
       delete pCAttributeHandler;
 
       const char *cclassname = GetNameOfClassToCreate();
-
+      
       // Create a new instance of a class
       //
-      RWS_TRACE("Create Instance Of [" << cclassname << "] Id [" << InstanceId << "]");
-
+      RWS_TRACE("Create Instance Of ["<<cclassname<<"] Id ["<<InstanceId<<"]"); 
+      
 #ifdef RWS_DESIGN
 
       try
       {
 
 #endif
-         pAttrHand = CClassFactory::MakeNew(cclassname, *this);
-
+         pAttrHand =  CClassFactory::MakeNew(cclassname, *this);
+         
          if (pAttrHand)
          {
             pAttrHand->Add(InstanceId);
             CAttributeHandler::NewAttributeHandlerCreated();
          }
-
+         
 #ifdef RWS_DESIGN
+
       }
-      catch (...)
+      catch(...)
       {
          // Placeholder for code that will send back the Id to the workspace for bug reporting...
          //
          RWS_DEBUGSTREAM("RWS::NULL::CreateEntity failed, entity Id "
-                         << InstanceId << " behavior type " << cclassname << std::endl);
+            << InstanceId << " behavior type " << cclassname << std::endl);
       }
 
 #endif
-
+      
       RWS_RETURN(pAttrHand);
    }
 
@@ -1080,7 +1079,7 @@ namespace RWS
    */
 
    RwUInt32 CAttributePacket::BuildClassIdChunk(const RwChar *pClassID,
-                                                void *pBuffer)
+      void *pBuffer)
    {
       RWS_FUNCTION("RWS::CAttributePacket::BuildClassIdChunk");
       RWS_ASSERT(pClassID, "Invalid class ID.");
@@ -1133,7 +1132,7 @@ namespace RWS
    */
 
    RwUInt32 CAttributePacket::BuildCreateClassIdChunk(const RwChar *pClassID,
-                                                      void *pBuffer)
+      void *pBuffer)
    {
       RWS_FUNCTION("RWS::CAttributePacket::BuildCreateClassIdChunk");
       RWS_ASSERT(pClassID, "Invalid class ID.");
@@ -1198,7 +1197,7 @@ namespace RWS
    */
 
    RwUInt32 CAttributePacket::BuildCommandDataChunk(RwUInt32 commandID, const void *pData,
-                                                    RwUInt32 dataSize, void *pBuffer, RwUInt32 *pDataOffset)
+      RwUInt32 dataSize, void *pBuffer, RwUInt32 *pDataOffset)
    {
       RWS_FUNCTION("RWS::CAttributePacket::BuildCommandDataChunk");
       RWS_ASSERT(commandID != CLASSID, "Invalid command ID, clashes with system value.")
@@ -1264,7 +1263,7 @@ namespace RWS
    * \return The number of bytes that were (or would be) used in the buffer.
    *
    */
-
+   
    RwUInt32 CAttributePacket::BuildTerminatorChunk(void *pBuffer)
    {
       RWS_FUNCTION("RWS::CAttributePacket::BuildCommandDataChunk");

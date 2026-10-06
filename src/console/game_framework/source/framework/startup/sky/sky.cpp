@@ -42,7 +42,7 @@
 #include "../loadgamedatabase.h"
 #include "skyiop.h"
 
-#if defined(CDROM) || defined(DVDROM)
+#if defined (CDROM) || defined (DVDROM)
 /* 
 *  If this file cannot be found you need to add a #include path
 *  to the project settings for the common\include directory under
@@ -64,27 +64,27 @@ namespace RWS
 
    // Select Video Mode, Height
    //
-#if defined(VIDEO_MODE_PAL)
-   const RwInt32 kScreenHeight = 512;
-#elif defined(VIDEO_MODE_NTSC)
-   const RwInt32 kScreenHeight = 448;
-#else
-   const RwInt32 kScreenHeight = 448;
-#endif
+   #if defined (VIDEO_MODE_PAL)
+      const RwInt32 kScreenHeight = 512;
+   #elif defined (VIDEO_MODE_NTSC)
+      const RwInt32 kScreenHeight = 448;
+   #else
+      const RwInt32 kScreenHeight = 448;
+   #endif   
 
-#if defined(CDROM) || defined(DVDROM)
-#define READ_BUFFER_SIZE SKY_IOP_SECTORSIZE
-#define MAX_NB_IOP_FILES (5)
-#else
-#define READ_BUFFER_SIZE (64 * 1024)
-#endif
+   #if defined (CDROM) || defined (DVDROM)
+   #define READ_BUFFER_SIZE SKY_IOP_SECTORSIZE
+   #define MAX_NB_IOP_FILES   (5)
+   #else
+   #define READ_BUFFER_SIZE (64 * 1024)
+   #endif
 
-#if defined(CDROM) || defined(DVDROM)
-   const RwChar *FS_MODULE_PATH = "cdrom0:\\RTFSSIOP.IRX;1";
-#else
-   const RwChar *FS_MODULE_PATH = "host0:../../rwsdk/tool/fsyst/sky2/iop/rtfssiop.irx";
-#endif
-
+   #if defined(CDROM) || defined (DVDROM)
+      const RwChar * FS_MODULE_PATH = "cdrom0:\\RTFSSIOP.IRX;1";
+   #else
+      const RwChar * FS_MODULE_PATH = "host0:../../rwsdk/tool/fsyst/sky2/iop/rtfssiop.irx";
+   #endif
+   
    const RwInt32 MAX_NB_FILES_PER_FS = 5;
 
    // Select Video Mode, color depth
@@ -104,7 +104,7 @@ namespace RWS
    char g_szRootFileServerPath[256] = "";
 
    // Buffer used by the filesystem
-   //
+   // 
    RwChar hBuffer[MAX_NB_FILES_PER_FS * READ_BUFFER_SIZE] __attribute__((aligned(64)));
 
    /*
@@ -114,50 +114,50 @@ namespace RWS
    *  PS2 only: Loads a single IRX
    *
    */
-   void LoadModule(const char *pModuleName)
+   void LoadModule(const char* pModuleName)
    {
       RWS_FUNCTION("LoadModule");
       RWS_PRE(pModuleName);
 
       char szModule[251];
-      sprintf(szModule, "%s%s", RWS::GetRootFileServerPath(), pModuleName);
-
+      sprintf( szModule, "%s%s", RWS::GetRootFileServerPath(), pModuleName );
+      
       if (sceSifLoadModule(szModule, 0, "") < 0)
       {
          RWS_ASSERTFAIL("Cannot load module " << szModule << "\nPlease check the definitions of IOP_MODULEPATH, IOP_RWSCOMMSPATH, RWS_AUDIO_MODULEPATH in core\\StartUp\\skyiop.h");
       }
-
+      
       RWS_RETURNVOID();
    }
 
-#if defined(CDROM) || defined(DVDROM)
+#if defined (CDROM) || defined (DVDROM)
    /*
    *  \ingroup Sky
    *
    *  PS2 only: Reboots IOP replacing default modules
    *
    */
-   void RebootIOP(const char *pFileName)
+   void RebootIOP(const char * pFileName)
    {
       RWS_FUNCTION("RebootIOP");
       RWS_PRE(pFileName);
 
       char szIOPFile[70];
-      sprintf(szIOPFile, "%s%s", RWS::GetRootFileServerPath(), pFileName);
-
-      RWS_TRACE("Attempting to reboot IOP with file " << szIOPFile);
-      while (!sceSifRebootIop(szIOPFile))
+      sprintf( szIOPFile, "%s%s", RWS::GetRootFileServerPath(), pFileName );
+      
+      RWS_TRACE ("Attempting to reboot IOP with file " << szIOPFile);
+      while (!sceSifRebootIop (szIOPFile))
       {
          continue;
       }
-
-      RWS_TRACE("Syncing IOP");
-      while (!sceSifSyncIop())
+      
+      RWS_TRACE ("Syncing IOP");
+      while (!sceSifSyncIop ())
       {
          continue;
       }
-
-
+      
+      
       RWS_RETURNVOID();
    }
 #else
@@ -175,7 +175,7 @@ namespace RWS
    {
       RWS_FUNCTION("LoadPadIRXs");
 
-#if defined(CDROM) || defined(DVDROM)
+#if defined (CDROM) || defined (DVDROM)
 
       LoadModule(IOP_MODULEPATH_CDROM "SIO2MAN.IRX;1");
       LoadModule(IOP_MODULEPATH_CDROM "PADMAN.IRX;1");
@@ -185,12 +185,12 @@ namespace RWS
 
       LoadModule(IOP_MODULEPATH "sio2man.irx");
       LoadModule(IOP_MODULEPATH "padman.irx");
-
+      
 #endif // #if defined (CDROM) || defined (DVDROM)
 
       RWS_RETURNVOID();
    }
-
+ 
    /*
    *  
    *  \ingroup Sky
@@ -201,21 +201,21 @@ namespace RWS
 #ifdef WITH_AUDIO
    void LoadAudioIRXs()
    {
-      RWS_FUNCTION("LoadAudioIRXs");
+     RWS_FUNCTION("LoadAudioIRXs");
 
-#if defined(CDROM) || defined(DVDROM)
-      LoadModule(IOP_MODULEPATH_CDROM "LIBSD.IRX;1");
-      LoadModule(IOP_MODULEPATH_CDROM "SDRDRV.IRX;1");
-      LoadModule(RWS_MODULEPATH_CDROM "RWA.IRX;1");
+#if defined (CDROM) || defined (DVDROM)
+     LoadModule(IOP_MODULEPATH_CDROM "LIBSD.IRX;1");
+     LoadModule(IOP_MODULEPATH_CDROM "SDRDRV.IRX;1");
+     LoadModule(RWS_MODULEPATH_CDROM "RWA.IRX;1");      
 
 #else // #if defined (CDROM) || defined (DVDROM)
-      LoadModule(IOP_MODULEPATH "libsd.irx");
-      LoadModule(IOP_MODULEPATH "sdrdrv.irx");
-      LoadModule(RWS_AUDIO_MODULEPATH "rwa.irx");
+     LoadModule(IOP_MODULEPATH "libsd.irx");
+     LoadModule(IOP_MODULEPATH "sdrdrv.irx");
+     LoadModule(RWS_AUDIO_MODULEPATH  "rwa.irx");      
+     
+#endif // #if defined (CDROM) || defined (DVDROM) 
 
-#endif // #if defined (CDROM) || defined (DVDROM)
-
-      RWS_RETURNVOID();
+     RWS_RETURNVOID();
    }
 #else
 #define LoadAudioIRXs()
@@ -224,7 +224,7 @@ namespace RWS
 }
 
 
-namespace RWS
+namespace RWS 
 {
    /*
    *
@@ -234,7 +234,7 @@ namespace RWS
    *              on the local CD/DVD.
    *
    */
-   const char *GetRootFileServerPath()
+   const char * GetRootFileServerPath()
    {
       return &g_szRootFileServerPath[0];
    }
@@ -247,11 +247,11 @@ namespace RWS
    *  PS2 only: Set the root path for fileserving on the PS2. Usually host0: for devkit builds, cdrom0: for CD/DVD builds.
    *
    */
-   void SetRootFileServerPath(const char *szRootFileServerPath)
+   void SetRootFileServerPath( const char * szRootFileServerPath )
    {
-      strncpy(g_szRootFileServerPath, szRootFileServerPath, sizeof(g_szRootFileServerPath));
+      strncpy(g_szRootFileServerPath, szRootFileServerPath, sizeof(g_szRootFileServerPath) );
    }
-
+   
    /*
    *  
    *  \ingroup Sky
@@ -265,16 +265,16 @@ namespace RWS
       RtFileSystem *fs;
       RwChar deviceName[5];
       RwChar fsName[RTFS_MAX_NAME_LENGTH];
-
+      
 #if defined(CDROM) || defined(DVDROM)
       int ret;
       rwstrcpy(deviceName, "dvd:");
       rwstrcpy(fsName, "dvd");
-
-      if ((ret = sceSifLoadModule(FS_MODULE_PATH, 0, "")) < 0)
+      
+      if ((ret = sceSifLoadModule(FS_MODULE_PATH, 0, "")) < 0) 
       {
          RwDebugSendMessage(rwDEBUGMESSAGE, __FUNCTION__,
-                            "Module rtfsiop cannot be loaded");
+            "Module rtfsiop cannot be loaded");
       }
 #ifdef WITH_AUDIO
       RwBool setCmdBuffer = FALSE;
@@ -283,27 +283,27 @@ namespace RWS
 #endif
 
       // Init and register the DVD file system
-      if ((fs = RtSkyIOPFSystemInit(MAX_NB_FILES_PER_FS, MAX_NB_IOP_FILES, hBuffer, READ_BUFFER_SIZE,
+      if ((fs = RtSkyIOPFSystemInit(MAX_NB_FILES_PER_FS, MAX_NB_IOP_FILES, hBuffer, READ_BUFFER_SIZE, 
                                     deviceName, fsName, setCmdBuffer, RTFSDEVICE_DVD)) != NULL)
-#elif defined(ATWINMON)
+#elif defined (ATWINMON)
       rwstrcpy(fsName, "atm");
-      if ((fs = RtSkyATMonFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE,
-                                      RWS::GetRootFileServerPath(), fsName)) != NULL)
-#elif defined(HDD)
+      if ((fs = RtSkyATMonFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE, 
+                                      RWS::GetRootFileServerPath(), fsName)) != NULL)      
+#elif defined (HDD)
       rwstrcpy(deviceName, "hdd0:");
       rwstrcpy(fsName, "hdd");
-
+      
       // Init the Hard Disk File System
-      if ((fs = RtSkyHDDFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE,
+      if ((fs = RtSkyHDDFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE, 
                                     deviceName, fsName, "pfs0:", "test", "fpasswd")) != NULL)
 #else
       rwstrcpy(deviceName, "hfs:");
       rwstrcpy(fsName, "hst");
-
+      
       // Init and register the host file system
       if ((fs = RtSkyHSTFSystemInit(MAX_NB_FILES_PER_FS, hBuffer, READ_BUFFER_SIZE, deviceName, fsName)) != NULL)
 #endif
-      {
+      {    
          // Register the file system
          if (RtFSManagerRegister(fs) == FALSE)
          {
@@ -340,12 +340,12 @@ int main(int argc, char *argv[])
 #if (defined(__MWERKS__))
    mwInit();
 #endif
-
+    
    // if the framework was run via atwinmon, the required fileserver root will be passed in argv[0]
    //    so parse it here and set the global fileserver root appropriately.
    if (argc == 0)
    {
-#if (defined(CDROM) || defined(DVDROM))
+#if (defined (CDROM) || defined (DVDROM))
       RWS::SetRootFileServerPath("cdrom0:");
 #else // #if defined (CDROM) || defined (DVDROM)
       RWS::SetRootFileServerPath("host0:");
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
    {
       if (strnicmp(argv[0], "atfile", 6) == 0)
       {
-         char *strptr = argv[0];
+         char * strptr = argv[0];
 
          while (*strptr != ',')
          {
@@ -368,21 +368,21 @@ int main(int argc, char *argv[])
       }
       else
       {
-#if (defined(CDROM) || defined(DVDROM))
+#if (defined (CDROM) || defined (DVDROM))
          RWS::SetRootFileServerPath("cdrom0:");
 #else // #if defined (CDROM) || defined (DVDROM)
          RWS::SetRootFileServerPath("host0:");
 #endif // #if defined (CDROM) || defined (DVDROM)
       }
    }
-
+   
    sceSifInitRpc(0);
    sceSifInitIopHeap();
-
+   
    // ----------------------------------------------------------------------------------------------
-   // Initialise CDROM
+   // Initialise CDROM 
    // ----------------------------------------------------------------------------------------------
-#if defined(CDROM)
+#if defined (CDROM)
    sceCdInit(SCECdINIT);
    sceCdMmode(SCECdCD);
 #endif // #ifdef CDROM
@@ -390,13 +390,13 @@ int main(int argc, char *argv[])
    // ----------------------------------------------------------------------------------------------
    // Initialise DVDROM
    // ----------------------------------------------------------------------------------------------
-#if defined(DVDROM)
-#pragma message("CDROM Defined")
+#if defined (DVDROM)
+#pragma message ("CDROM Defined")
    sceCdInit(SCECdINIT);
    sceCdMmode(SCECdDVD);
 #endif
 
-   RebootIOP(IOP_MODULEPATH_CDROM IOP_IMAGE_FILE ";1");
+   RebootIOP (IOP_MODULEPATH_CDROM IOP_IMAGE_FILE ";1");
 
    // ----------------------------------------------------------------------------------------------
 
@@ -406,14 +406,14 @@ int main(int argc, char *argv[])
    sceSifInitIopHeap();
 
    // ----------------------------------------------------------------------------------------------
-   // Re-Initialise CDROM
+   // Re-Initialise CDROM 
    // ----------------------------------------------------------------------------------------------
 #if (defined(CDROM))
    sceCdInit(SCECdINIT);
    sceCdMmode(SCECdCD);
 #endif
    // ----------------------------------------------------------------------------------------------
-   // Re-Initialise DVDROM
+   // Re-Initialise DVDROM 
    // ----------------------------------------------------------------------------------------------
 #if (defined(DVDROM))
    sceCdInit(SCECdINIT);
@@ -426,28 +426,28 @@ int main(int argc, char *argv[])
    LoadAudioIRXs();
 
    // ----------------------------------------------------------------------------------------------
-
+   
 #if defined(SN_TARGET_PS2) & defined(RWS_DESIGN)
-   // Initialise the SN Systems profile module.
+   // Initialise the SN Systems profile module. 
    //   Note: Only a rough per-function profile, used via the profile window in the debugger.
    //          Need to build with debug symbols so debugger can get at the function names.
-   static unsigned long profdata[2048] __attribute__((aligned(16))); // quad word aligned, // 4K to 64K bytes
+   static unsigned long profdata[2048] __attribute__((aligned(16))); // quad word aligned, // 4K to 64K bytes 
 
-#if defined(CDROM) || defined(DVDROM)
+#if defined (CDROM) || defined (DVDROM)
 
    LoadModule(IOP_MODULEPATH_CDROM "SNPROFIL.IRX;1");
 
 #else
 
-   LoadModule(IOP_MODULEPATH "SNProfil.irx");
+   LoadModule( IOP_MODULEPATH "SNProfil.irx" );
 
 #endif
 
-   int nRetVal = snProfInit(_4KHZ, profdata, sizeof(profdata));
+   int nRetVal = snProfInit( _4KHZ, profdata, sizeof(profdata) );
 
-   if (nRetVal != 0)
+   if ( nRetVal != 0 )
    {
-      printf("Profiler init failed : code %d\n", nRetVal); // see SN_PRF in LIBSN.H
+      printf("Profiler init failed : code %d\n", nRetVal ); // see SN_PRF in LIBSN.H 
    }
 #endif
 
@@ -461,22 +461,22 @@ int main(int argc, char *argv[])
    videoModeInfo.flags = static_cast<RwVideoModeFlag>(kFlags);
 
    if (RWS::StartUp::Open(
-          0,
-          0, // Use Defaults
-          (8 << 20), // Arena Size 8 Meg
-          videoModeInfo,
-          kZBitDepth,
-          0))
+      0,
+      0, // Use Defaults
+      (8 << 20), // Arena Size 8 Meg
+      videoModeInfo,
+      kZBitDepth,
+      0))
    {
 #ifndef RWS_DESIGN
 
-#if defined(CDROM) || defined(DVDROM)
-#define RWS_BOOTUP_FILE "\\BOOTUP.DFF;1"
+#if defined (CDROM) || defined (DVDROM)
+    #define RWS_BOOTUP_FILE "\\BOOTUP.DFF;1"
 #else
-#define RWS_BOOTUP_FILE "\\BOOTUP.DFF"
+    #define RWS_BOOTUP_FILE "\\BOOTUP.DFF"
 #endif
       char szBootupFile[256];
-      sprintf(szBootupFile, "%s%s", RWS::GetRootFileServerPath(), RWS_BOOTUP_FILE);
+      sprintf( szBootupFile, "%s%s", RWS::GetRootFileServerPath(), RWS_BOOTUP_FILE );
       StartUp::LoadGameDatabaseFile(szBootupFile);
 #endif
 
@@ -499,4 +499,4 @@ int main(int argc, char *argv[])
 
    RWS_RETURN(0);
 }
-
+ 

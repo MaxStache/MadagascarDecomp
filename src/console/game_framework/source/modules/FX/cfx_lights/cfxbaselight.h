@@ -34,8 +34,8 @@
 #include "rpworld.h"
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ namespace RWS
       *
       */
 
-      class CFXBaseLight : public CSystemCommands, public CAttributeHandler, public LinearAllocationPolicy
+      class CFXBaseLight:  public CSystemCommands, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
          RWS_DECLARE_CLASSID(CFXBaseLight);
@@ -71,33 +71,33 @@ namespace RWS
          RWS_DESCRIPTION("Base Light", "");
 
          RWS_BEGIN_COMMANDS
-         RWS_ATTRIBUTE(CMD_Set_t_Light_Type,
-                       "Type",
-                       "Set light type, see RpLightCreate",
-                       RADIO_BUTTON,
-                       RwUInt32,
-                       LIST("No Light|Directional|Ambient|Point|Spot|Soft Spot"))
+            RWS_ATTRIBUTE(CMD_Set_t_Light_Type,     
+                          "Type",        
+                          "Set light type, see RpLightCreate",   
+                          RADIO_BUTTON,    
+                          RwUInt32,   
+                          LIST("No Light|Directional|Ambient|Point|Spot|Soft Spot"))
 
-         RWS_ATTRIBUTE(CMD_Set_t_LightConeAngle,
-                       "Cone angle",
-                       "Set light cone angle, see RpLightSetConeAngle",
-                       SLIDER,
-                       RwReal,
-                       RANGE(0, 45, 180))
+            RWS_ATTRIBUTE(CMD_Set_t_LightConeAngle, 
+                          "Cone angle",  
+                          "Set light cone angle, see RpLightSetConeAngle",   
+                          SLIDER,  
+                          RwReal,     
+                          RANGE(0, 45, 180))
 
-         RWS_ATTRIBUTE(CMD_Set_t_radius,
-                       "Radius",
-                       "Set light radius, see RpLightSetRadius",
-                       SLIDER,
-                       RwReal,
-                       RANGE(0, 1000, 5000))
+            RWS_ATTRIBUTE(CMD_Set_t_radius,         
+                          "Radius",      
+                          "Set light radius, see RpLightSetRadius",   
+                          SLIDER,  
+                          RwReal,     
+                          RANGE(0, 1000, 5000))
 
-         RWS_ATTRIBUTE(CMD_Set_t_flag,
-                       "Flag",
-                       "Set light flags, see RpLightSetFlags",
-                       LIST,
-                       RwUInt32,
-                       LIST("Atomics+World|Atomics|World"))
+            RWS_ATTRIBUTE(CMD_Set_t_flag,           
+                          "Flag",        
+                          "Set light flags, see RpLightSetFlags",   
+                          LIST,    
+                          RwUInt32,   
+                          LIST("Atomics+World|Atomics|World"))
          RWS_END_COMMANDS;
 
          virtual void HandleAttributes(const CAttributePacket& attr);
@@ -111,7 +111,7 @@ namespace RWS
          void Create();
          void Destroy();
 
-         void SetType(RwUInt32 type);
+         void SetType( RwUInt32 type );
 
          void AddLightToWorld();
          void RemoveLightFromWorld();
@@ -122,7 +122,7 @@ namespace RWS
       };
 
    } // namespace FX
-
+   
 } // namespace RWS
 
 #endif

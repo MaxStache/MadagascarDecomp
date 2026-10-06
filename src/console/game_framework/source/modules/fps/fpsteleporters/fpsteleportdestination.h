@@ -57,31 +57,30 @@ namespace RWS
          RWS_DECLARE_CLASSID(FPSTeleportDestination);
          RWS_CATEGORY("FPS");
          RWS_DESCRIPTION("Teleport End Point", "Specifies a teleport destination, see also FPSTeleport");
-
-         FPSTeleportDestination(const CAttributePacket& attr) :
-            InitCEventHandler(&m_pAtomic)
+         
+         FPSTeleportDestination(const CAttributePacket& attr) : InitCEventHandler(&m_pAtomic)
          {
             // Can't use initializer ('this' isn't valid) so...
             m_pAtomic = CreateAtomicInWorldFromResource(attr, this);
-
+            
             RWS_ASSERT(m_pAtomic, "Failed to create atomic");
          }
-
+         
          ~FPSTeleportDestination(void);
-
+         
          RWS_BEGIN_COMMANDS
-         RWS_MESSAGE(CMD_targetname, "Target name", "Returns Position", RECEIVE, RwFrame**, 0)
+            RWS_MESSAGE( CMD_targetname,    "Target name", "Returns Position", RECEIVE, RwFrame**, 0)                               
          RWS_END_COMMANDS;
-
-         virtual void HandleEvents(CMsg& pMsg);
+         
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
-
+         
       protected:
          CEventId m_targetname;
          CAtomicPtr m_pAtomic;
       };
-
-
+      
+      
    }// namespace FPS
 }// namespace RWS
 #endif

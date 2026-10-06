@@ -45,7 +45,7 @@ namespace RWS
    *  A template with which to create more specific smart pointers.
    *
    */
-   template <class T>
+   template<class T>
    class CRwObjectPtr
    {
    public:
@@ -55,20 +55,14 @@ namespace RWS
       *  Constructs a 'NULL' smart pointer
       *
       */
-      CRwObjectPtr() :
-         p_(0)
-      {
-      }
+      CRwObjectPtr() : p_(0) {}
 
       /**
       *
       *  Constructs a smart pointer to manage the given RwObject
       *
       */
-      CRwObjectPtr(T* p) :
-         p_(p)
-      {
-      }
+      CRwObjectPtr(T* p) : p_(p) {}
 
       /**
       *
@@ -106,11 +100,7 @@ namespace RWS
       *  \return A pointer to the managed RwObject
       *
       */
-      T* operator->() const
-      {
-         RWS_PRE(*this);
-         return p_;
-      }
+      T* operator->() const { RWS_PRE(*this); return p_; }
 
       /**
       *
@@ -119,11 +109,7 @@ namespace RWS
       *  \return A reference to the managed RwObject
       *
       */
-      T& operator*() const
-      {
-         RWS_PRE(*this);
-         return *p_;
-      }
+      T& operator*() const { RWS_PRE(*this); return *p_; }
 
       /**
       *
@@ -137,7 +123,7 @@ namespace RWS
       * Force update of pointer to the managed RwObject
       *
       */
-      void setptr(T* p) { p_ = p; }
+      void setptr(T* p) {p_ = p;}
 
    protected:
 

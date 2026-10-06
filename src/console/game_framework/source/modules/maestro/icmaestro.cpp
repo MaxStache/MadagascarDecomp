@@ -71,7 +71,7 @@ namespace RWS
       *
       *  \see ~iCMaestro
       */
-      iCMaestro::iCMaestro() :
+      iCMaestro::iCMaestro():
          m_pMatrix(0),
          m_rScale(0.0f),
          m_MaxScale(1.0f), // Maximum scale should correspond to max range for CMD_SetPosZ
@@ -104,7 +104,7 @@ namespace RWS
          RWS_RETURNVOID();
       }
 
-
+      
       /**
       *
       *
@@ -137,10 +137,10 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimGoToFrame(Rt2dMaestro *pMaestro,
-                                           Rt2dAnim *pAnim,
-                                           Rt2dAnimProps *pProps,
-                                           void *pData)
+      static Rt2dMaestro* AllAnimGoToFrame(  Rt2dMaestro *pMaestro,
+                                             Rt2dAnim *pAnim,
+                                             Rt2dAnimProps *pProps,
+                                             void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimRestart");
 
@@ -159,7 +159,7 @@ namespace RWS
 
          message.messageType = rt2dMESSAGETYPEGOTOFRAME;
          message.index = g_iCurrentAnimation;
-         message.intParam1 = iFrame;
+         message.intParam1 = iFrame; 
          message.intParam2 = 0;
 
          // Post the message and process.
@@ -181,7 +181,7 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimRestart(Rt2dMaestro *pMaestro, Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
+      static Rt2dMaestro* AllAnimRestart(Rt2dMaestro *pMaestro, Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimRestart");
 
@@ -211,7 +211,7 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimStop(Rt2dMaestro *pMaestro, Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
+      static Rt2dMaestro* AllAnimStop(Rt2dMaestro *pMaestro, Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimStop");
 
@@ -241,8 +241,8 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimPlay(Rt2dMaestro *pMaestro,
-                                      Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
+      static Rt2dMaestro* AllAnimPlay(Rt2dMaestro *pMaestro,
+         Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimPlay");
 
@@ -272,8 +272,8 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimActivateButton(Rt2dMaestro *pMaestro,
-                                                Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
+      static Rt2dMaestro* AllAnimActivateButton(Rt2dMaestro *pMaestro,
+         Rt2dAnim *pAnim, Rt2dAnimProps *pProps, void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimActivateButton");
 
@@ -304,8 +304,8 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimSetInterpolate(Rt2dMaestro *pMaestro,
-                                                Rt2dAnim *pAnim, Rt2dAnimProps *pProps __RWUNUSED__, void *pData)
+      static Rt2dMaestro* AllAnimSetInterpolate(Rt2dMaestro *pMaestro,
+         Rt2dAnim *pAnim, Rt2dAnimProps *pProps __RWUNUSED__, void *pData)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimSetInterpolate");
 
@@ -314,7 +314,7 @@ namespace RWS
          RWS_RETURN(pMaestro);
       }
 
-
+      
       /**
       *
       *
@@ -327,18 +327,18 @@ namespace RWS
       *
       *  \return A Pointer to the Maestro object.
       */
-      static Rt2dMaestro *AllAnimCountAnims(Rt2dMaestro *pMaestro,
-                                            Rt2dAnim *pAnim __RWUNUSED__,
-                                            Rt2dAnimProps *pProps __RWUNUSED__,
-                                            void *pData __RWUNUSED__)
+      static Rt2dMaestro* AllAnimCountAnims(Rt2dMaestro *pMaestro,
+         Rt2dAnim *pAnim __RWUNUSED__,
+         Rt2dAnimProps *pProps __RWUNUSED__,
+         void *pData __RWUNUSED__)
       {
          RWS_FUNCTION("RWS::Maestro::AllAnimCountAnims");
 
-         g_iNum_Anims++;
+         g_iNum_Anims++;  
 
          RWS_RETURN(pMaestro);
       }
-
+   
 #ifdef DUMP_MAESTRO_MESSAGE
       /**
       *
@@ -357,221 +357,223 @@ namespace RWS
 
          switch (pMessage->messageType)
          {
-         case rt2dMESSAGETYPEPLAY:
+            case rt2dMESSAGETYPEPLAY:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEPLAY"));
+                              RWSTRING("rt2dMESSAGETYPEPLAY"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPESTOP:
+            case rt2dMESSAGETYPESTOP:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPESTOP"));
+                              RWSTRING("rt2dMESSAGETYPESTOP"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
+
             }
             break;
-         case rt2dMESSAGETYPENEXTFRAME:
+            case rt2dMESSAGETYPENEXTFRAME:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPENEXTFRAME"));
+                              RWSTRING("rt2dMESSAGETYPENEXTFRAME"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEPREVFRAME:
+            case rt2dMESSAGETYPEPREVFRAME:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEPREVFRAME"));
+                              RWSTRING("rt2dMESSAGETYPEPREVFRAME"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEGOTOFRAME:
+            case rt2dMESSAGETYPEGOTOFRAME:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEGOTOFRAME"));
+                              RWSTRING("rt2dMESSAGETYPEGOTOFRAME"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  frame %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEGOTOLABEL:
+            case rt2dMESSAGETYPEGOTOLABEL:
             {
                Rt2dStringLabel *stringLabel;
                const RwChar *labelName;
 
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEGOTOLABEL"));
+                              RWSTRING("rt2dMESSAGETYPEGOTOLABEL"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
-               stringLabel = Rt2dMaestroGetStringLabelByIndex(pMaestro,
-                                                              static_cast<RwInt32>(pMessage->intParam1));
+                              str);
+               stringLabel = Rt2dMaestroGetStringLabelByIndex(pMaestro, 
+                              static_cast<RwInt32>(pMessage->intParam1));
 
                labelName = Rt2dMaestroGetStringLabelName(
-                  pMaestro,
-                  stringLabel);
+                              pMaestro,
+                              stringLabel);
 
                rwsprintf(str, RWSTRING("  frame name %s"), labelName);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
+
             }
             break;
-         case rt2dMESSAGETYPEGETURL:
+            case rt2dMESSAGETYPEGETURL:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEGETURL"));
+                              RWSTRING("rt2dMESSAGETYPEGETURL"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEDOACTION:
+            case rt2dMESSAGETYPEDOACTION:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEDOACTION"));
+                              RWSTRING("rt2dMESSAGETYPEDOACTION"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEFOREIGN:
+            case rt2dMESSAGETYPEFOREIGN:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEFOREIGN"));
+                              RWSTRING("rt2dMESSAGETYPEFOREIGN"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPEMOUSEMOVETO:
+            case rt2dMESSAGETYPEMOUSEMOVETO:
             {
-#ifdef DUMP_MOUSE_MESSAGE
+            #ifdef DUMP_MOUSE_MESSAGE
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEMOUSEMOVETO"));
+                              RWSTRING("rt2dMESSAGETYPEMOUSEMOVETO"));
+
+               rwsprintf(str, RWSTRING("  anim %d"),pMessage->index);
+               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
+                              str);
+
+               rwsprintf(str, RWSTRING("  Move To %d,%d"),pMessage->intParam1,pMessage->intParam2);
+               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
+                              str);
+            #endif
+            }
+            break;
+            case rt2dMESSAGETYPEMOUSEBUTTONSTATE:
+            {
+            #ifdef DUMP_MOUSE_MESSAGE
+               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
+                              RWSTRING("rt2dMESSAGETYPEMOUSEBUTTONSTATE"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
-
-               rwsprintf(str, RWSTRING("  Move To %d,%d"), pMessage->intParam1, pMessage->intParam2);
-               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
-#endif
-            }
-            break;
-         case rt2dMESSAGETYPEMOUSEBUTTONSTATE:
-            {
-#ifdef DUMP_MOUSE_MESSAGE
-               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPEMOUSEBUTTONSTATE"));
-
-               rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
-               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                if (pMessage->intParam1 == static_cast<RwInt32>(TRUE))
                {
-                  rwsprintf(str, RWSTRING("  Button Down"));
+                   rwsprintf(str, RWSTRING("  Button Down"));
                }
                else
                {
-                  rwsprintf(str, RWSTRING("  Button Up"));
+                   rwsprintf(str, RWSTRING("  Button Up"));
                }
-               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"), str);
-#endif
+               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),str);
+            #endif
             }
             break;
-         case rt2dMESSAGETYPESPECIALTELLTARGET:
+            case rt2dMESSAGETYPESPECIALTELLTARGET:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("rt2dMESSAGETYPESPECIALTELLTARGET"));
+                              RWSTRING("rt2dMESSAGETYPESPECIALTELLTARGET"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
-         case rt2dMESSAGETYPENULL:
-            RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                               RWSTRING("rt2dMESSAGETYPENULL"));
-         default:
+            case rt2dMESSAGETYPENULL:
+               RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
+                              RWSTRING("rt2dMESSAGETYPENULL"));
+            default:
             {
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  RWSTRING("Unknown pMessage type"));
+                              RWSTRING("Unknown pMessage type"));
 
                rwsprintf(str, RWSTRING("  anim %d"), pMessage->index);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
 
                rwsprintf(str, RWSTRING("  param1 %d"), pMessage->intParam1);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
                rwsprintf(str, RWSTRING("  param2 %d"), pMessage->intParam2);
                RwDebugSendMessage(rwDEBUGMESSAGE, RWSTRING("Message :"),
-                                  str);
+                              str);
             }
             break;
          }
@@ -579,7 +581,7 @@ namespace RWS
          RWS_RETURNVOID();
       }
 #endif
-
+            
       /**
       *
       *
@@ -592,7 +594,7 @@ namespace RWS
       *
       *  \return A pointer to the resultant message.
       */
-      Rt2dMessage *MessageHandler(Rt2dMaestro *pMaestro, Rt2dMessage *pMessage)
+      Rt2dMessage* MessageHandler(Rt2dMaestro *pMaestro, Rt2dMessage *pMessage)
       {
          RWS_FUNCTION("RWS::Maestro::MessageHandler");
 
@@ -649,7 +651,7 @@ namespace RWS
 
          if (GetButtonLabelIndexFromEventName(pMsgName, &iParam1))
          {
-            Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimActivateButton, (void *)iParam1);
+            Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimActivateButton, (void*)iParam1);
          }
 
          RWS_RETURN(TRUE);
@@ -697,6 +699,7 @@ namespace RWS
          Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimPlay, 0);
 
          RWS_RETURN(TRUE);
+
       }
 
 
@@ -721,16 +724,16 @@ namespace RWS
          }
 
          if (0 == Rt2dMaestroFindStringLabel(m_pMaestro,
-                                             rt2dANIMLABELTYPEANIM,
-                                             cRootAnimName,
-                                             &iRootAnimLabel))
+                                       rt2dANIMLABELTYPEANIM,
+                                       cRootAnimName,
+                                       &iRootAnimLabel))
          {
             RWS_RETURN(FALSE);
          }
 
          iParam1 = iRootAnimLabel;
 
-         Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimRestart, (void *)iParam1);
+         Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimRestart, (void*)iParam1);
 
          RWS_RETURN(TRUE);
       }
@@ -758,7 +761,7 @@ namespace RWS
 
          iParam1 = iFrame;
 
-         Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimGoToFrame, (void *)iParam1);
+         Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimGoToFrame, (void*)iParam1);
 
          RWS_RETURN(TRUE);
       }
@@ -811,7 +814,7 @@ namespace RWS
             RWS_RETURN(FALSE);
          }
 
-         Rt2dMaestroForAllAnimations(m_pMaestro, AllAnimSetInterpolate, (void *)m_bInterpolate);
+         Rt2dMaestroForAllAnimations(m_pMaestro, AllAnimSetInterpolate, (void*)m_bInterpolate);
 
          RWS_RETURN(TRUE);
       }
@@ -910,7 +913,7 @@ namespace RWS
             }
          }
 
-         RWS_RETURNVOID();
+          RWS_RETURNVOID();
       }
 
 
@@ -932,17 +935,17 @@ namespace RWS
          if (pObject)
          {
             // We found some Maestro data - assume it's compatible with any existing target
-            pMaestro = static_cast<const Rt2dMaestro *>(pObject);
+            pMaestro = static_cast<const Rt2dMaestro*>(pObject);
          }
 
          if (0 != pMaestro)
          {
-            Rt2dBBox *pBBox;
+            Rt2dBBox *pBBox;            
             Rt2dPath *pPath;
             Rt2dBrush *pStrokeBrush;
             RwRGBA Red = {255, 0, 0, 255}; // 0: Red
 
-            m_pMaestro = (Rt2dMaestro *)pMaestro;
+            m_pMaestro = (Rt2dMaestro *) pMaestro;
             m_pScene = Rt2dMaestroGetScene(m_pMaestro);
 
             // bounding box of all objects in scene
@@ -1020,8 +1023,8 @@ namespace RWS
             m_iWinWidth = RwRasterGetWidth(pRaster);
             m_iWinHeight = RwRasterGetHeight(pRaster);
 
-            rScaledWinHeight = m_iWinHeight * vYStep.y + m_iWinHeight * vYStep.x;
-            rScaledWinWidth = m_iWinWidth * vXStep.x + m_iWinWidth * vXStep.y;
+            rScaledWinHeight = m_iWinHeight*vYStep.y + m_iWinHeight*vYStep.x;
+            rScaledWinWidth = m_iWinWidth*vXStep.x + m_iWinWidth*vXStep.y;
 
             rScaleH = static_cast<RwReal>(rScaledWinHeight) / (pBBox->h);
             rScaleW = static_cast<RwReal>(rScaledWinWidth) / (pBBox->w);
@@ -1031,18 +1034,18 @@ namespace RWS
             // Scale and position scene
             Rt2dObjectMTMScale(m_pScene, rScale, rScale);
             Rt2dObjectMTMTranslate(m_pScene,
-                                   (m_iWinWidth * vXStep.x / rScale - pBBox->w) / 2.0f,
-                                   pBBox->h + (m_iWinHeight * vYStep.y / rScale - pBBox->h) / 2.0f);
+                                  (m_iWinWidth * vXStep.x / rScale - pBBox->w) / 2.0f,
+                                  pBBox->h + (m_iWinHeight * vYStep.y / rScale - pBBox->h) / 2.0f);
 
             // Scale and position bounding box
             Rt2dObjectMTMScale(m_pBBox, rScale, rScale);
             Rt2dObjectMTMTranslate(m_pBBox,
-                                   (m_iWinWidth * vXStep.x / rScale - pBBox->w) / 2.0f,
-                                   (m_iWinHeight * vYStep.y / rScale - pBBox->h) / 2.0f);
+                              (m_iWinWidth * vXStep.x / rScale - pBBox->w) / 2.0f,
+                              (m_iWinHeight * vYStep.y / rScale - pBBox->h) / 2.0f);
 
             Rt2dSceneUpdateLTM(m_pScene);
 
-
+            
             // Only create the 2 matrices if they have not already been created
             if (!m_pMatrix)
             {
@@ -1052,11 +1055,12 @@ namespace RWS
 
             // Reset the view
             m_bViewChanged = TRUE;
-
+         
             RwMatrixCopy(m_pMatrix, Rt2dObjectGetMTM(m_pScene));
             RwMatrixCopy(m_pBBoxMatrix, Rt2dObjectGetMTM(m_pBBox));
 
             Rt2dCTMSetIdentity();
+
          }
 
          RWS_RETURNVOID();
@@ -1107,11 +1111,11 @@ namespace RWS
          // Look up the object in the global store
          const RwChar *ResourceType;
          const RwChar *ResourceName;
-         const void *pObject = RWS::CResourceManager::FindById(pResourceId, &ResourceType, 0, &ResourceName);
+         const void *pObject = RWS::CResourceManager::FindById (pResourceId, &ResourceType, 0, &ResourceName);
 
          if (pObject)
          {
-            if (!rwstrcmp("rwID_2DMAESTRO", ResourceType))
+            if (!rwstrcmp ("rwID_2DMAESTRO", ResourceType))
             {
                Add(pObject);
             }
@@ -1131,7 +1135,7 @@ namespace RWS
       * \param rPos  Amount to move Maestro object by.
       *
       */
-      void iCMaestro::SetPositionX(RwReal rPos)
+      void iCMaestro::SetPositionX( RwReal rPos )
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::SetPositionX");
 
@@ -1149,7 +1153,7 @@ namespace RWS
          m_vPosition.x = rPos;
 
          m_bViewChanged = TRUE;
-
+         
          RWS_RETURNVOID();
       }
 
@@ -1164,7 +1168,7 @@ namespace RWS
       *  \param rPos  Amount to move Maestro object by.
       *
       */
-      void iCMaestro::SetPositionY(RwReal rPos)
+      void iCMaestro::SetPositionY( RwReal rPos )
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::SetPositionY");
 
@@ -1182,7 +1186,7 @@ namespace RWS
          m_vPosition.y = rPos;
 
          m_bViewChanged = TRUE;
-
+         
          RWS_RETURNVOID();
       }
 
@@ -1197,7 +1201,7 @@ namespace RWS
       *  \param rScale  Amount to scale Maestro object by.
       *
       */
-      void iCMaestro::SetPositionZ(RwReal rScale)
+      void iCMaestro::SetPositionZ( RwReal rScale )
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::SetPositionZ");
 
@@ -1222,13 +1226,13 @@ namespace RWS
          else
          {
             // Scale down
-            d_scale = (1.0f) / (1.0f) + (rScale);
+            d_scale = (1.0f) / (1.0f) + (rScale);            
          }
 
          m_rScale = d_scale;
 
          m_bViewChanged = TRUE;
-
+         
          RWS_RETURNVOID();
       }
 
@@ -1250,7 +1254,7 @@ namespace RWS
          RwBool ret = FALSE;
 
          if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_UP")) == 0 &&
-             (m_iController_State & eController_Up) == 0)
+            (m_iController_State & eController_Up) == 0)
          {
             // Up button activated
 
@@ -1259,7 +1263,7 @@ namespace RWS
             *pButIndex = m_iButUp;
          }
          else if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_DOWN")) == 0 &&
-                  (m_iController_State & eController_Down) == 0)
+             (m_iController_State & eController_Down) == 0)
          {
             // Down button activated
 
@@ -1268,7 +1272,7 @@ namespace RWS
             *pButIndex = m_iButDown;
          }
          else if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_LEFT")) == 0 &&
-                  (m_iController_State & eController_Left) == 0)
+             (m_iController_State & eController_Left) == 0)
          {
             // Down button activated
 
@@ -1277,7 +1281,7 @@ namespace RWS
             *pButIndex = m_iButLeft;
          }
          else if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_RIGHT")) == 0 &&
-                  (m_iController_State & eController_Right) == 0)
+             (m_iController_State & eController_Right) == 0)
          {
             // Down button activated
 
@@ -1286,7 +1290,7 @@ namespace RWS
             *pButIndex = m_iButRight;
          }
          else if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_SELECT")) == 0 &&
-                  (m_iController_State & eController_Select) == 0)
+             (m_iController_State & eController_Select) == 0)
          {
             // Select button activated
 
@@ -1295,7 +1299,7 @@ namespace RWS
             *pButIndex = m_iButSelect;
          }
          else if (rwstrcmp(pMsgName, RWSTRING("INQ_MENU_BTN_CANCEL")) == 0 &&
-                  (m_iController_State & eController_Cancel) == 0)
+             (m_iController_State & eController_Cancel) == 0)
          {
             // Cancel button activated
 
@@ -1348,18 +1352,18 @@ namespace RWS
             m_iController_State_Reset_Timer++;
          }
 
-         RwReal input = *(reinterpret_cast<RwReal *>(&pMsg->pData));
+         RwReal input = *(reinterpret_cast<RwReal*>(&pMsg->pData));
 
          if (input > 0)
          {
             if (GetButtonLabelIndexFromEventName(pMsgName, &iParam1))
             {
-               Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimActivateButton, (void *)iParam1);
+               Rt2dMaestroForAllVisibleAnimations(m_pMaestro, AllAnimActivateButton, (void*)iParam1);
             }
          }
 
          RWS_RETURNVOID();
-      }
+      }         
 
 
       /**
@@ -1383,7 +1387,7 @@ namespace RWS
 
          Rt2dDeviceSetCamera(m_pCamera);
 
-         Rt2dMaestroAddDeltaTime(m_pMaestro, rDeltaTime * m_rSpeed);
+         Rt2dMaestroAddDeltaTime(m_pMaestro,  rDeltaTime * m_rSpeed);
          Rt2dMaestroUpdateAnimations(m_pMaestro);
 
          Rt2dMaestroProcessMessages(m_pMaestro);
@@ -1427,7 +1431,7 @@ namespace RWS
             RWS_RETURNVOID();
          }
 
-         RwCamera *m_pCamera = (reinterpret_cast<RwCamera *>(pMsg->pData));
+         RwCamera *m_pCamera = (reinterpret_cast<RwCamera*>(pMsg->pData));
 
          if (m_pCamera)
          {
@@ -1442,8 +1446,8 @@ namespace RWS
             RwCameraSetFarClipPlane(m_pCamera, 500.0f);
 
             // Add camera to world
-            RpWorldAddCamera(CLevel::GetOpaqueWorld(), m_pCamera);
-
+            RpWorldAddCamera (CLevel::GetOpaqueWorld(), m_pCamera);
+            
 
             // Begin camera update
             if (RwCameraBeginUpdate(m_pCamera))
@@ -1455,19 +1459,19 @@ namespace RWS
                RwBool VertexAlpha;
                RwCullMode CullMode;
 
-               RwRenderStateGet(rwRENDERSTATEZWRITEENABLE, (void *)&ZWrite);
-               RwRenderStateGet(rwRENDERSTATEZTESTENABLE, (void *)&ZTest);
-               RwRenderStateGet(rwRENDERSTATESHADEMODE, (void *)&ShadeMode);
-               RwRenderStateGet(rwRENDERSTATETEXTUREFILTER, (void *)&TextureFilterMode);
-               RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)&VertexAlpha);
-               RwRenderStateGet(rwRENDERSTATECULLMODE, (void *)&CullMode);
+               RwRenderStateGet(rwRENDERSTATEZWRITEENABLE, (void *) &ZWrite);
+               RwRenderStateGet(rwRENDERSTATEZTESTENABLE, (void *) &ZTest);
+               RwRenderStateGet(rwRENDERSTATESHADEMODE, (void *) &ShadeMode);
+               RwRenderStateGet(rwRENDERSTATETEXTUREFILTER, (void *) &TextureFilterMode);
+               RwRenderStateGet(rwRENDERSTATEVERTEXALPHAENABLE, (void *) &VertexAlpha);
+               RwRenderStateGet(rwRENDERSTATECULLMODE, (void*) &CullMode);
 
-               RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *)FALSE);
-               RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)FALSE);
-               RwRenderStateSet(rwRENDERSTATESHADEMODE, (void *)rwSHADEMODEGOURAUD);
-               RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void *)rwFILTERLINEAR);
-               RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)TRUE);
-               RwRenderStateSet(rwRENDERSTATECULLMODE, (void *)rwCULLMODECULLNONE);
+               RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *) FALSE);
+               RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *) FALSE);
+               RwRenderStateSet(rwRENDERSTATESHADEMODE, (void *) rwSHADEMODEGOURAUD);
+               RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void *) rwFILTERLINEAR);
+               RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *) TRUE);
+               RwRenderStateSet(rwRENDERSTATECULLMODE, (void*)rwCULLMODECULLNONE );
 
                Rt2dCTMPush();
 
@@ -1493,20 +1497,20 @@ namespace RWS
                Rt2dCTMPop();
 
                // Restore the previous renderstates
-               RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *)ZWrite);
-               RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *)ZTest);
-               RwRenderStateSet(rwRENDERSTATESHADEMODE, (void *)ShadeMode);
-               RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void *)TextureFilterMode);
-               RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *)VertexAlpha);
-               RwRenderStateSet(rwRENDERSTATECULLMODE, (void *)CullMode);
+               RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void *) ZWrite);
+               RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void *) ZTest);
+               RwRenderStateSet(rwRENDERSTATESHADEMODE, (void *) ShadeMode);
+               RwRenderStateSet(rwRENDERSTATETEXTUREFILTER, (void *) TextureFilterMode);
+               RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void *) VertexAlpha);
+               RwRenderStateSet(rwRENDERSTATECULLMODE, (void*) CullMode);
 
                // End camera update
-               RwCameraEndUpdate(m_pCamera);
+               RwCameraEndUpdate (m_pCamera);
 
             } //RwCameraBeginUpdate
 
             // Remove Camera from world
-            RpWorldRemoveCamera(CLevel::GetOpaqueWorld(), m_pCamera);
+            RpWorldRemoveCamera (CLevel::GetOpaqueWorld(), m_pCamera);
 
             // Restore clipping planes just in case
             RwCameraSetNearClipPlane(m_pCamera, rNearClip);
@@ -1527,7 +1531,7 @@ namespace RWS
       *  \return A pointer to the camera used to render the Maestro object.
       *
       */
-      RwCamera *iCMaestro::GetCamera(void)
+      RwCamera* iCMaestro::GetCamera(void)
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::GetCamera");
          RWS_RETURN(m_pCamera);
@@ -1544,7 +1548,7 @@ namespace RWS
       *  \return A pointer to the scene of the Maestro object.
       *
       */
-      Rt2dObject *iCMaestro::GetScene(void)
+      Rt2dObject* iCMaestro::GetScene(void)
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::GetScene");
          RWS_RETURN(m_pScene);
@@ -1559,18 +1563,18 @@ namespace RWS
       *  \param attr  Reference to a CAttributePacket.
       *
       */
-      void iCMaestro::HandleSystemCommands(const CAttributePacket &attr)
+      void iCMaestro::HandleSystemCommands( const CAttributePacket& attr )
       {
          RWS_FUNCTION("RWS::Maestro::iCMaestro::HandleSystemCommands");
 
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CSystemCommands));
-
+         
          while (!attrIt.IsFinished())
          {
             // Intercept CMD_AttachResource's only
             if (CMD_AttachResource == attrIt->GetCommandId())
             {
-               const RWSGUID *pResourceId;
+               const RWSGUID * pResourceId;
                attrIt->GetCommandData(&pResourceId);
 
                AddResource(pResourceId);

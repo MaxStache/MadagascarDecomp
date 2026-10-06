@@ -64,7 +64,7 @@ namespace RWS
 
 #ifdef RWS_DESIGN
       CEventHandler::RegisterMsg(iMsgAudioDictionaryDelete,
-                                 iMsgAudioDictionaryDeleteStr, "RwUInt32 GroupIndex");
+         iMsgAudioDictionaryDeleteStr, "RwUInt32 GroupIndex");
 #endif
 
       RWS_RETURNVOID();
@@ -98,33 +98,33 @@ namespace RWS
    * \see AddDictionary
    *
    */
-   RwaWaveDict *CAudioResource::WaveDictStreamRead(const RwStream *const pRwStream)
+   RwaWaveDict* CAudioResource::WaveDictStreamRead(const RwStream* const pRwStream)
    {
       RWS_FUNCTION("RWS::CAudioResource::WaveDictStreamRead")
 
       RwaWaveDict *pDictionary;
-      void *pUpLoadBuffer; // Memory area for uploading waves.
-      void *pUpLoadAlign;  // Aligned area for uploading.
-
+      void        *pUpLoadBuffer; // Memory area for uploading waves.
+      void        *pUpLoadAlign;  // Aligned area for uploading.
+      
       // Allocate memory for the upload buffer.
       pUpLoadBuffer = RwCalloc(RwsAudio::WAVEUPLOADBUFFSIZE + RwsAudio::WAVEDATAALIGNMENT, 1, rwMEMHINTDUR_FUNCTION);
 
       // Align the read buffer pointer.
-      pUpLoadAlign = (void *)rwaAlign(pUpLoadBuffer, RwsAudio::WAVEDATAALIGNMENT);
+      pUpLoadAlign = (void*)rwaAlign(pUpLoadBuffer, RwsAudio::WAVEDATAALIGNMENT);
 
       // Point the wave dictionary loader to use this buffer.
       RwaWaveDictSetStreamIOBuffer(pUpLoadAlign, RwsAudio::WAVEUPLOADBUFFSIZE);
-
-      // Find the wave dictionary in the stream.
-      if (RwStreamFindChunk(const_cast<RwStream *>(pRwStream), rwaID_WAVEDICT, 0, 0))
-      {
-         pDictionary = RwaWaveDictStreamReadUsingObject(0, const_cast<RwStream *>(pRwStream),
-                                                        reinterpret_cast<RwaObj *>(RwsAudio::GetOutputObject()), 0, 0);
+    
+      // Find the wave dictionary in the stream. 
+      if (RwStreamFindChunk(const_cast<RwStream*>(pRwStream), rwaID_WAVEDICT, 0, 0))
+      {          
+         pDictionary = RwaWaveDictStreamReadUsingObject(0, const_cast<RwStream*>(pRwStream), 
+                                                        reinterpret_cast<RwaObj*>(RwsAudio::GetOutputObject()), 0, 0);
 
          RWS_ASSERT(pDictionary, "Wave Dictionary Invalid");
       }
 
-      RwFree(pUpLoadBuffer);
+      RwFree (pUpLoadBuffer);
 
       RWS_RETURN(pDictionary)
    }
@@ -150,29 +150,29 @@ namespace RWS
    void *CAudioResource::Load(const RwChar *psName,
                               const RwChar *psType,
                               const RwChar *psResourcePath,
-                              RwStream *pStream,
+                              RwStream* pStream,
                               RwUInt32 uiStreamSize,
                               RwUInt32 &uiResourceSize)
    {
       RWS_FUNCTION("RWS::CAudioResource::Load");
-
+      
       RWS_PRE(pStream);
-
+      
       if (uiStreamSize == 0)
       {
          RWS_RETURN(0);
       }
 
-      RwaWaveDict *temp;
+      RwaWaveDict* temp;
 
       if (!rwstrcmp(psType, RWSTRING("rwaID_WAVEDICT")))
-      {
+      {     
          temp = WaveDictStreamRead(pStream);
          RwsAudio::AddDictionary(temp);
 
-         RWS_RETURN(temp)
+         RWS_RETURN (temp)
       }
-
+   
       RWS_RETURN(0);
    }
 
@@ -190,7 +190,7 @@ namespace RWS
    RwBool CAudioResource::UnLoad(const RwChar *pStrType, void *pResource)
    {
       RWS_FUNCTION("RWS::CAudioResource::UnLoad");
-      RwaWaveDict *dict = static_cast<RwaWaveDict *>(pResource);
+      RwaWaveDict *dict = static_cast<RwaWaveDict*>(pResource);
 
 #ifdef RWS_DESIGN
       // When we delete a dictionary from a group, we have to make sure no
@@ -198,8 +198,8 @@ namespace RWS
       //
       RwUInt32 DictionaryId = RwsAudio::FindDictionaryId(dict);
 
-      CMsg msg(iMsgAudioDictionaryDelete, reinterpret_cast<void *>(DictionaryId));
-
+      CMsg msg (iMsgAudioDictionaryDelete, reinterpret_cast<void*> (DictionaryId));
+         
       SendMsg(msg);
 #endif
 
@@ -235,10 +235,7 @@ namespace RWS
    * Create an instance of the Audio Resource handler, this is required in order to register the handler.
    *
    */
-   namespace
-   {
-      CAudioResource gCAudioResource;
-   }
+   namespace { CAudioResource gCAudioResource; }
 }
 #endif
 

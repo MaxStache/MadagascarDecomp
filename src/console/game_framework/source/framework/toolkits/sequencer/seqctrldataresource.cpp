@@ -145,12 +145,12 @@ namespace RWS
    */
 
    void *CSeqCtrlDataResource::Load(const RwChar *psName, const RwChar *psType,
-                                    const RwChar *psResourcePath, RwStream *pStream, RwUInt32 uiStreamSize,
-                                    RwUInt32 &uiResourceSize)
+      const RwChar *psResourcePath, RwStream* pStream, RwUInt32 uiStreamSize,
+      RwUInt32 &uiResourceSize)
    {
       RWS_FUNCTION("RWS::CSeqCtrlDataResource::Load");
       RWS_ASSERT(pStream, "Stream pointer is invalid.");
-
+      
       // Is there something to load?
 
       if (uiStreamSize == 0)
@@ -182,7 +182,7 @@ namespace RWS
          }
          sm_pDataRoot = pSeqNode;
          uiResourceSize = sizeof(CSeqCtrlData);
-
+         
          RWS_RETURN(static_cast<void *>(pSeqData));
       }
 
@@ -205,7 +205,7 @@ namespace RWS
       if (IsHandled(pStrType))
       {
          CSeqCtrlDataNode *pNode = sm_pDataRoot,
-                          *pLast = 0;
+            *pLast = 0;
          CSeqCtrlData *pRefData = static_cast<CSeqCtrlData *>(pResource);
 
          // Find a resource with the same address in the link list...
@@ -234,7 +234,7 @@ namespace RWS
 
                RWS_RETURN(TRUE);
             }
-
+            
             pLast = pNode;
             pNode = pNode->Next();
          }
@@ -242,7 +242,7 @@ namespace RWS
 
       RWS_RETURN(FALSE);
    }
-
+   
    /**
    *
    * Called to provide live update of information - this resource does not support this.
@@ -270,7 +270,7 @@ namespace RWS
 
       CSeqCtrlDataNode *pCur = sm_pDataRoot;
 
-      while (pCur)
+      while(pCur)
       {
          if (!rwstrcmp(pCur->Data()->Name(), psName))
          {

@@ -51,9 +51,9 @@ namespace RWS
       RwBool Destroy(RpLight* pLight)
       {
          RWS_FUNCTION("RWS::CLightPtr::Destroy");
-
+   
          RWS_PRE(pLight);
-
+         
          RwFrame* pFrame = RpLightGetFrame(pLight);
          if (pFrame)
          {
@@ -62,22 +62,22 @@ namespace RWS
             // for us to simply detach them and let them 'float off')
             //
             RwFrameForAllChildren(pFrame, FrameHelper::RemoveChildFrame, 0);
-
+            
             // If this frame is itself attached to another, detach it
             //
             if (RwFrameGetParent(pFrame)) RwFrameRemoveChild(pFrame);
-
+            
             RpLightSetFrame(pLight, 0);
             FrameHelper::FrameDestroy(pFrame);
          }
-
+         
          // Remove light from world
-         RpWorld* pWorld = RpLightGetWorld(pLight);
+         RpWorld* pWorld = RpLightGetWorld (pLight);
          if (pWorld) RpWorldRemoveLight(pWorld, pLight);
-
+         
          // RenderWare destroy light
          RwBool ret = RpLightDestroy(pLight);
-
+         
          RWS_RETURN(ret);
       }
 
@@ -94,7 +94,7 @@ namespace RWS
       */
       void HandleSystemCommands(RpLight& rLight, const CAttributePacket& rAttr)
       {
-         RWS_FUNCTION("RWS::LightHelper::HandleSystemCommands");
+         RWS_FUNCTION ("RWS::LightHelper::HandleSystemCommands");
 
          CAttributeCommandIterator attrIt(rAttr, RWS_CLASSID_OF(CSystemCommands));
          while (!attrIt.IsFinished())
@@ -104,7 +104,7 @@ namespace RWS
                RwFrame* pFrame = RpLightGetFrame(&rLight);
                if (pFrame) CSystemCommands::UpdateFrame(*pFrame, *attrIt);
             }
-
+         
             ++attrIt;
          }
 

@@ -32,8 +32,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 namespace RWS
@@ -48,7 +48,7 @@ namespace RWS
    namespace MaterialHelper
    {
 
-      class CMaterialListNode;
+      class  CMaterialListNode;
       struct CMaterialEventPlugin;
 
       /**
@@ -60,20 +60,20 @@ namespace RWS
       *  
       *
       */
-      class CMaterialList
+      class  CMaterialList
       {
-      private:
-         CMaterialListNode *m_Head;
+         private:
+         CMaterialListNode  *m_Head;
 
-      public:
+         public:
          CMaterialList();
 
-         void DeleteList();
-         void DeleteFromMaterialList(const RpMaterial *pMaterial);
-         void ForAllMaterials(RpMaterialCallBack pCallback, void *pData);
-         CMaterialListNode *FindNodeWithMaterial(const RpMaterial *pMaterial);
-         RwBool AddToList(const RpMaterial *pMaterial);
-         void DeleteNodeFromList(CMaterialListNode *pDeleteNode);
+         void               DeleteList             ();
+         void               DeleteFromMaterialList (const RpMaterial  *pMaterial);
+         void               ForAllMaterials        (RpMaterialCallBack pCallback, void *pData);
+         CMaterialListNode *FindNodeWithMaterial   (const RpMaterial  *pMaterial);
+         RwBool             AddToList              (const RpMaterial  *pMaterial);
+         void               DeleteNodeFromList     (CMaterialListNode *pDeleteNode);
       };
 
       /**
@@ -86,27 +86,27 @@ namespace RWS
       */
       class CMaterialEvent
       {
-      public:
+         public:
+         
+            CMaterialEvent();
+            virtual ~CMaterialEvent();
 
-         CMaterialEvent();
-         virtual ~CMaterialEvent();
+            static RwBool           MaterialEventPluginAttach       (void);
+            static void             SetObjectToReceiveEvent         (RpMaterial *pMaterial, CMaterialEvent *pObject);
+            CMaterialList           m_MatList;
 
-         static RwBool MaterialEventPluginAttach(void);
-         static void SetObjectToReceiveEvent(RpMaterial *pMaterial, CMaterialEvent *pObject);
-         CMaterialList m_MatList;
+         private:
 
-      private:
-
-         static void *MaterialEventPlugin_Constructor(void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject);
-         static void *MaterialEventPlugin_Copy(void *pDstObject, const void *pSrcObject, RwInt32 offset, RwInt32 size);
-         static void *MaterialEventPlugin_Destroy(void *pObject, RwInt32 offset, RwInt32 size);
-         static CMaterialEventPlugin *GetPluginData(RpMaterial &Material);
-         virtual void MaterialConstructEvent(const RpMaterial *pMaterial) = 0;
-         virtual void MaterialCopyEvent(const RpMaterial *pSrcMaterial, const RpMaterial *pDstMaterial) = 0;
-         virtual void MaterialDestroyEvent(const RpMaterial *pMaterial) = 0;
+            static void            *MaterialEventPlugin_Constructor (void *pObject, RwInt32 offsetInObject, RwInt32 sizeInObject);
+            static void            *MaterialEventPlugin_Copy        (void *pDstObject, const void *pSrcObject, RwInt32 offset, RwInt32 size);
+            static void            *MaterialEventPlugin_Destroy     (void *pObject, RwInt32 offset, RwInt32 size);
+            static CMaterialEventPlugin  *GetPluginData             (RpMaterial &Material);
+            virtual void            MaterialConstructEvent          (const RpMaterial *pMaterial) = 0;
+            virtual void            MaterialCopyEvent               (const RpMaterial *pSrcMaterial, const RpMaterial *pDstMaterial) = 0;
+            virtual void            MaterialDestroyEvent            (const RpMaterial *pMaterial) = 0;
       };
    }
-
+   
 } //namespace
 
 #endif

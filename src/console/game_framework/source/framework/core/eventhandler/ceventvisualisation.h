@@ -61,9 +61,9 @@ namespace RWS
 
    class CEventVisualization
    {
-   public:
+      public:
 
-      virtual ~CEventVisualization(void) {}
+         virtual ~CEventVisualization(void) {}
 
          /**
          *  
@@ -77,19 +77,19 @@ namespace RWS
          *  false.
          *
          */
-      virtual RwV3d *GetWorldPos(void) { return 0; }
+         virtual RwV3d *GetWorldPos(void) {return 0;}
 
-      static void EventSend(CRegisteredMsgs &rCRegisteredMsgs);
+         static void EventSend(CRegisteredMsgs &rCRegisteredMsgs);
 
-      static void EventSent(CRegisteredMsgs &rCRegisteredMsgs);
+         static void EventSent(CRegisteredMsgs &rCRegisteredMsgs);
 
-      static void EventReceived(EventData &pEventData);
+         static void EventReceived(EventData &pEventData);
 
-      static void EventUnRegistered(CRegisteredMsgs &rCRegisteredMsgs);
+         static void EventUnRegistered(CRegisteredMsgs &rCRegisteredMsgs);
 
-   private:
+      private:
 
-      static RwBool m_bVisualizingEvent;  /**< This is used to prevent the event visualization event
+         static RwBool m_bVisualizingEvent;  /**< This is used to prevent the event visualization event
                                                 visualizing themselves.*/
    };
 }

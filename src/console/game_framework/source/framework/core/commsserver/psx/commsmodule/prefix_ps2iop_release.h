@@ -6,4 +6,4 @@
 
 #include <prefix_ps2iop.h>
 
-#define NDEBUG
+#define  NDEBUG

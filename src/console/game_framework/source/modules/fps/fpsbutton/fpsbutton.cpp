@@ -39,8 +39,8 @@
 #include <rpworld.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -52,10 +52,10 @@
 namespace RWS
 {
    namespace FPS
-   {
+   { 
       RWS_IMPLEMENT_CLASSID(FPSButton);
       RWS_REGISTERCLASS(FPSButton);
-
+      
       /**
       *
       * \ref FPSButton. Constructor for FPSButton
@@ -63,45 +63,44 @@ namespace RWS
       * \see ~FPSButton
       *
       */
-      FPSButton::FPSButton(const CAttributePacket &attr) :
-         FPSToggle(attr, 0, 4, 0, 40) // angle,lip,height,speed
+      FPSButton::FPSButton(const CAttributePacket& attr)  : FPSToggle(attr, 0, 4, 0, 40) // angle,lip,height,speed
       {
          RWS_FUNCTION("RWS::FPS::FPSButton::FPSButton");
-
+         
          // Receive Message off to on
-         Set_m_msg_rx_off_to_on("ACTN_PLAYERTOUCH");
-
+         Set_m_msg_rx_off_to_on("ACTN_PLAYERTOUCH");         
+         
          // Number of messages off to on required to trigger
-         m_num_msg_rx_off_to_on = 1;
-
+         m_num_msg_rx_off_to_on = 1;    
+         
          Set_m_msg_rx_on_to_off(iMsgRunningTick);
-
+         
          // Number of messages on to off required to trigger
-         m_num_msg_rx_on_to_off = (RWS::MainLoop::Logic::Rate);
-
+         m_num_msg_rx_on_to_off = (RWS::MainLoop::Logic::Rate);    
+         
          // Receive Message off to on Reverse Event
-         Set_m_msg_rx_on_to_off_cancel("ACTN_PLAYERTOUCH");
-
+         Set_m_msg_rx_on_to_off_cancel("ACTN_PLAYERTOUCH");  
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleAttributes. Handle attribute updates.
       *
       * \param Attr reference to a CAttributePacket.
       *
-      */
-      void FPSButton::HandleAttributes(const CAttributePacket &attr)
+      */  
+      void FPSButton::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::FPS::FPSButton::HandleAttributes");
-
+         
          // Initialize base class first
          FPSToggleInterface::HandleAttributes(attr);
-
+         
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(FPSButton));
-
+         
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -113,7 +112,7 @@ namespace RWS
                   Set_m_msg_rx_off_to_on(name);
                }
                break;
-
+               
             case CMD_target:
                {
                   const RwChar *name;
@@ -121,19 +120,19 @@ namespace RWS
                   Set_m_msg_tx_finished_off_to_on(name);
                }
                break;
-
+               
             case CMD_angle:
                Set_m_angle(*attrIt);
                break;
-
+               
             case CMD_wait:
                Set_m_wait(*attrIt);
                break;
-
+               
             case CMD_lip:
                Set_m_lip(*attrIt);
                break;
-
+               
             case CMD_speed:
                Set_m_speed(*attrIt);
                GenerateAngleTransform();
@@ -141,11 +140,11 @@ namespace RWS
             }
             ++attrIt;
          }
-
+         
          RWS_RETURNVOID();
       }
-
-
+      
+      
       /**
       *
       * \ref HandleEvents(). Handle events.    
@@ -157,18 +156,18 @@ namespace RWS
       void FPSButton::HandleEvents(CMsg &pMsg)
       {
          RWS_FUNCTION("RWS::FPS::FPSButton::HandleEvents");
-
+         
          // Need to generate the transform for the platforms movement
          if (Get_m_state() == State_off)
          {
-            if (pMsg.Id == Get_m_msg_rx_off_to_on())
+            if (pMsg.Id == Get_m_msg_rx_off_to_on()) 
             {
                GenerateAngleTransform();
             }
          }
-
+         
          FPSToggle::HandleEvents(pMsg);
-
+         
          RWS_RETURNVOID();
       }
    }// namespace FPS

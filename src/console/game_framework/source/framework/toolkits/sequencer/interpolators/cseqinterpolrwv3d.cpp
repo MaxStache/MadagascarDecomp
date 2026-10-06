@@ -67,17 +67,17 @@ namespace RWS
       // Default - ALL type groups MUST have one of these.
 
       CSeqInterpolRegister gRwV3dDefaultReg(CSeqInterpolBase::MakeNew,
-                                            CSeqInterpolBase::MaxSize, RWSTRING("RwV3d"), 0, FALSE);
+         CSeqInterpolBase::MaxSize, RWSTRING("RwV3d"), 0, FALSE);
 
       // Interpolator specific ones...
 
       CSeqInterpolRegister gRwV3dLinearInterpolReg(CSeqInterpolLinearRwV3d::MakeNew,
-                                                   CSeqInterpolLinearRwV3d::MaxSize, RWSTRING("RwV3d"),
-                                                   INTERPOL_TYPE_LINEAR_NAME, FALSE);
+         CSeqInterpolLinearRwV3d::MaxSize, RWSTRING("RwV3d"),
+         INTERPOL_TYPE_LINEAR_NAME, FALSE);
 
       CSeqInterpolRegister gRwV3dRotationInterpolReg(CSeqInterpolRotationRwV3d::MakeNew,
-                                                     CSeqInterpolRotationRwV3d::MaxSize, RWSTRING("RwV3d"),
-                                                     INTERPOL_TYPE_ROTATION_NAME, FALSE);
+         CSeqInterpolRotationRwV3d::MaxSize, RWSTRING("RwV3d"),
+         INTERPOL_TYPE_ROTATION_NAME, FALSE);
 
       /////////////////////////////////////
       //
@@ -122,10 +122,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolLinearRwV3d::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwV3d),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolLinearRwV3d), 
+            "Memory buffer too small");
 
-         CSeqInterpolLinearRwV3d *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolLinearRwV3d *pNew = new(rData.GetInterpolMem())
             CSeqInterpolLinearRwV3d(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -177,8 +177,10 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->DataSize(), "End key's data size invalid.");
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
-         const RwV3d *pEndVal = reinterpret_cast<const RwV3d *>(rData.EndKey()->Data()),
-                     *pStartVal = reinterpret_cast<const RwV3d *>(rData.LastKey()->Data());
+         const RwV3d *pEndVal = reinterpret_cast<const RwV3d *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwV3d *>
+               (rData.LastKey()->Data());
 
          // Calculate step values per millisecond for each element of the vector.
 
@@ -218,7 +220,7 @@ namespace RWS
       */
 
       inline void CalcLinearValue(RwV3d *pOutVal, const RwV3d *pStartVal, RwReal xInc,
-                                  RwReal yInc, RwReal zInc, RwReal delta)
+         RwReal yInc, RwReal zInc, RwReal delta)
       {
          pOutVal->x = pStartVal->x + xInc * delta;
          pOutVal->y = pStartVal->y + yInc * delta;
@@ -241,7 +243,7 @@ namespace RWS
          RWS_ASSERT(rData.LastKey()->Data(), "Last key's data pointer invalid.");
 
          RwReal mSecsSinceStart = static_cast<RwReal>(nowTime - rData.StartTime()),
-                delta = mSecsSinceStart * m_oneOverSeqTime;
+            delta = mSecsSinceStart * m_oneOverSeqTime;
          Step(rData, delta);
 
          RWS_RETURNVOID();
@@ -263,7 +265,8 @@ namespace RWS
          RWS_ASSERT(rData.LastKey()->Data(), "Last key's data pointer invalid.");
          RWS_ASSERT(delta >= 0.0f && delta <= 1.0f, "Delta is out of range.");
 
-         const RwV3d *pStartVal = reinterpret_cast<const RwV3d *>(rData.LastKey()->Data());
+         const RwV3d *pStartVal = reinterpret_cast<const RwV3d *>
+               (rData.LastKey()->Data());
          RwV3d *pCalcVal;
 
          // Calculate the current value & insert into attribute data...
@@ -338,10 +341,10 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CSeqInterpolRotationRwV3d::MakeNew");
          RWS_ASSERT(rData.GetInterpolMem(), "Memory buffer is invalid");
-         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolRotationRwV3d),
-                    "Memory buffer too small");
+         RWS_ASSERT(rData.GetInterpolMemSize() >= sizeof(CSeqInterpolRotationRwV3d), 
+            "Memory buffer too small");
 
-         CSeqInterpolRotationRwV3d *pNew = new (rData.GetInterpolMem())
+         CSeqInterpolRotationRwV3d *pNew = new(rData.GetInterpolMem())
             CSeqInterpolRotationRwV3d(rData);
          RWS_ASSERT(pNew, "Could not allocate new object.");
 
@@ -393,8 +396,10 @@ namespace RWS
          RWS_ASSERT(rData.EndKey()->DataSize(), "End key's data size invalid.");
          RWS_ASSERT(rData.EndKey()->Data(), "End key's data pointer invalid.");
 
-         const RwV3d *pEndVal = reinterpret_cast<const RwV3d *>(rData.EndKey()->Data()),
-                     *pStartVal = reinterpret_cast<const RwV3d *>(rData.LastKey()->Data());
+         const RwV3d *pEndVal = reinterpret_cast<const RwV3d *>
+               (rData.EndKey()->Data()),
+            *pStartVal = reinterpret_cast<const RwV3d *>
+               (rData.LastKey()->Data());
          RwV3d startNorm,
             endNorm;
          RwReal cosAngle,
@@ -457,7 +462,7 @@ namespace RWS
       */
 
       inline void CalcRotationalValue(RwV3d *pOutVal, const RwV3d *pStartVal, const RtQuat &curQuat,
-                                      const RwReal startLength, const RwReal lengthInc, const RwReal delta)
+         const RwReal startLength, const RwReal lengthInc, const RwReal delta)
       {
          // Rotate start vector by this quaternion to get output vector, then
          // scale to be correct length.
@@ -482,7 +487,8 @@ namespace RWS
 
       inline void CSeqInterpolRotationRwV3d::CalcAndStoreValue(CSeqItem &rData, RwReal delta)
       {
-         const RwV3d *pStartVal = reinterpret_cast<const RwV3d *>(rData.LastKey()->Data());
+         const RwV3d *pStartVal = reinterpret_cast<const RwV3d *>
+            (rData.LastKey()->Data());
          RwV3d *pCalcVal;
          RtQuat curQuat;
          RwReal curAngle;
@@ -503,14 +509,14 @@ namespace RWS
             if (pCalcVal)
             {
                CalcRotationalValue(pCalcVal, pStartVal, curQuat, m_startLength,
-                                   m_lengthInc, delta);
+                  m_lengthInc, delta);
                rData.BuffSlot()->DirectUpdate(pCalcVal);
             }
             else
             {
                RwV3d calcVal;
-               CalcRotationalValue(&calcVal, pStartVal, curQuat, m_startLength,
-                                   m_lengthInc, delta);
+               CalcRotationalValue(&calcVal, pStartVal, curQuat, m_startLength, 
+                  m_lengthInc, delta);
                rData.BuffSlot()->DirectUpdate(&calcVal);
             }
          }
@@ -540,7 +546,7 @@ namespace RWS
          if (m_degAngle > 0.0f)
          {
             RwReal timeStep = static_cast<RwReal>(nowTime - rData.StartTime()),
-                   delta;
+               delta;
 
             // Calculate the delta & call setup code.
 

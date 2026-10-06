@@ -50,7 +50,7 @@ namespace RWS
    *  Sent when RWS::strfunc_StopSystem is received, usually at the start of a 'large' stream.
    */
    RWS_DEFINE_EVENT(iMsgStopSystem,
-                    0, "Sent when a \'stop system\' message is received.");
+      0, "Sent when a \'stop system\' message is received.");
 
    /**
    *  \ingroup SystemEvents
@@ -59,7 +59,7 @@ namespace RWS
    *  Sent when RWS::strfunc_StartSystem is received, usually at the end of a 'large' stream.
    */
    RWS_DEFINE_EVENT(iMsgStartSystem,
-                    0, "Sent when a \'start system\' message is received.");
+      0, "Sent when a \'start system\' message is received.");
 
    /**
    *

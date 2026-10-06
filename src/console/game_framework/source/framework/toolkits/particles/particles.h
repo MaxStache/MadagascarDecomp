@@ -23,7 +23,7 @@
 *
 *****************************************************************************/
 
-#include <rpptank.h>
+#include <rpptank.h> 
 #include <string.h>
 
 #include "framework/toolkits/world/smartptrs/catomicptr.h"
@@ -39,8 +39,7 @@ namespace RWS
 {
    namespace Particle
    {
-      template <class T>
-      class CycPartBuff;
+      template<class T> class CycPartBuff;
 
       /**
       *
@@ -61,7 +60,7 @@ namespace RWS
       public:
 
          RwUInt32 internalA,           /**< Internal value, private. Used by buffer class only. */
-            internalB;              /**< Internal value, private. Used by buffer class only. */
+               internalB;              /**< Internal value, private. Used by buffer class only. */
          bool inUsedList;              /**< Internal value, private. Used to indicate which list is being parsed. */
 
          // ---------
@@ -69,8 +68,8 @@ namespace RWS
          RwUInt32 blockNum,            /**< Block being used (for linkage to local data). This is used by the 
                                             base particle class select the appropriate data blocks from it's
                                             internal arrays, lists, etc... */
-            numInBlock,             /**< Total number of particles in the block. */
-            numActive;              /**< Number of particles in block which are marked as active. */
+               numInBlock,             /**< Total number of particles in the block. */
+               numActive;              /**< Number of particles in block which are marked as active. */
          RwUInt32 index;               /**< Use depends on call, used to pass data back, etc... */
          RwUInt32 *pLifeTimes;         /**< Lifetime values for each particle. Caller must update these. */
          bool *pActiveFlags;           /**< Deactivate / activate via call to CycPartBuff functions ONLY. */
@@ -91,7 +90,7 @@ namespace RWS
       *
       */
 
-      const RwUInt32 CPB_BP_ANIM_ACCEL = 0x00000001;
+      const RwUInt32 CPB_BP_ANIM_ACCEL   = 0x00000001;
 
       /**
       *
@@ -115,7 +114,7 @@ namespace RWS
       *
       */
 
-      const RwUInt32 CPB_BP_ANIM_DRAG = 0x00000004;
+      const RwUInt32 CPB_BP_ANIM_DRAG    = 0x00000004;
 
       /**
       *
@@ -127,7 +126,7 @@ namespace RWS
       *
       */
 
-      const RwUInt32 CPB_BP_ANIM_COL = 0x00000008;
+      const RwUInt32 CPB_BP_ANIM_COL     = 0x00000008;
 
       /**
       *
@@ -139,7 +138,7 @@ namespace RWS
       *
       */
 
-      const RwUInt32 CPB_BP_ANIM_SIZE = 0x00000010;
+      const RwUInt32 CPB_BP_ANIM_SIZE    = 0x00000010;
 
       /**
       *
@@ -222,19 +221,19 @@ namespace RWS
             RwV3d m_Vel;
             RwUInt32 m_flags;       /**< ORed 'CPB_BP_ANIM_...' values. */
             RwReal m_accel,         /**< Acceleration. Used on each frame (if animating). */
-               m_grav,           /**< Gravity. Used on each frame (animated or not). */
-               m_gravMod,        /**< Gravity modification value. Applied to grav on each frame. */
-               m_drag,           /**< Drag factor. Used on each frame (animated or not). */
-               m_dragMod;        /**< Drag modification value. Applied to drag on each frame. */
+                  m_grav,           /**< Gravity. Used on each frame (animated or not). */
+                  m_gravMod,        /**< Gravity modification value. Applied to grav on each frame. */
+                  m_drag,           /**< Drag factor. Used on each frame (animated or not). */
+                  m_dragMod;        /**< Drag modification value. Applied to drag on each frame. */
 
             RwInt16 m_r,           /**< Red component of animated color. RwReal needed as step can be < 1 */
-               m_rMod,           /**< Red animation step value, applied each frame (if animating). */
-               m_g,              /**< Green component of animated color. RwReal needed as step can be < 1 */
-               m_gMod,           /**< Green animation step value, applied each frame (if animating). */
-               m_b,              /**< Blue component of animated color. RwReal needed as step can be < 1 */
-               m_bMod,           /**< Blue animation step value, applied each frame (if animating). */
-               m_a,              /**< Alpha component of animated color. RwReal needed as step can be < 1 */
-               m_aMod;           /**< Alpha animation step value, applied each frame (if animating). */
+                  m_rMod,           /**< Red animation step value, applied each frame (if animating). */
+                  m_g,              /**< Green component of animated color. RwReal needed as step can be < 1 */
+                  m_gMod,           /**< Green animation step value, applied each frame (if animating). */                    
+                  m_b,              /**< Blue component of animated color. RwReal needed as step can be < 1 */
+                  m_bMod,           /**< Blue animation step value, applied each frame (if animating). */                    
+                  m_a,              /**< Alpha component of animated color. RwReal needed as step can be < 1 */
+                  m_aMod;           /**< Alpha animation step value, applied each frame (if animating). */                    
 
             RwReal m_sizeMod;       /**< Size animation step value, applied each frame (if animating). */
          };
@@ -256,20 +255,20 @@ namespace RWS
          public:
 
             RwUInt32 m_partFlags,   /**< Ored 'CPB_BP_ANIM...' values. Primary start stage MUST have all flags. */
-               m_red,            /**< Base red value (0 -> 255). */
-               m_redSpread,      /**< Red randomness (0 -> 255). */
-               m_green,          /**< Base green value (0 -> 255). */
-               m_greenSpread,    /**< Green randomness (0 -> 255). */
-               m_blue,           /**< Base blue value (0 -> 255). */
-               m_blueSpread,     /**< Blue randomness (0 -> 255). */
-               m_alpha,          /**< Base alpha value (0 -> 255). */
-               m_alphaSpread;    /**< Alpha randomness (0 -> 255). */
+                  m_red,            /**< Base red value (0 -> 255). */
+                  m_redSpread,      /**< Red randomness (0 -> 255). */
+                  m_green,          /**< Base green value (0 -> 255). */
+                  m_greenSpread,    /**< Green randomness (0 -> 255). */
+                  m_blue,           /**< Base blue value (0 -> 255). */
+                  m_blueSpread,     /**< Blue randomness (0 -> 255). */
+                  m_alpha,          /**< Base alpha value (0 -> 255). */
+                  m_alphaSpread;    /**< Alpha randomness (0 -> 255). */
             RwReal m_accel,         /**< Continuous acceleration or one of boost value. */
-               m_accelSpread,    /**< Randomness for acceleration or boost. */
-               m_gravity,        /**< Gravity value. */
-               m_drag,           /**< Drag factor value (0 -> 1). */
-               m_size,           /**< Base size value. */
-               m_sizeSpread;     /**< Randomness for size. */
+                  m_accelSpread,    /**< Randomness for acceleration or boost. */
+                  m_gravity,        /**< Gravity value. */
+                  m_drag,           /**< Drag factor value (0 -> 1). */
+                  m_size,           /**< Base size value. */
+                  m_sizeSpread;     /**< Randomness for size. */
             RwRGBA m_col;           /**< Base color value, used when no randomness. */
          };
 
@@ -292,15 +291,15 @@ namespace RWS
 
             bool *m_pActive;                 /**< Pointer to list of active flags for block being processed. */
             RwUInt32 m_numFree,              /**< Number of free items in the block being processed. */
-               m_index;                   /**< Index of item being manipulated in block. */
+                  m_index;                   /**< Index of item being manipulated in block. */
             RpPTankLockStruct m_posLock,     /**< Positional access structure for current block. */
-               m_colLock;                 /**< Color access structure for current block. */
+                  m_colLock;                 /**< Color access structure for current block. */
             RwV3d *m_pPos;                   /**< Pointer to current position in vertex array for block. */
             RwV2d *m_pSize;                  /**< Pointer to current size in particle data block. */
             RwRGBA *m_pCol;                  /**< Pointer to current color in particle data block. */
             RwUInt32 *m_pLife;               /**< Pointer to current lifetime in lifetimes block. */
             AnimData *m_pAnimBlock,          /**< Pointer to animation array for current block. */
-               *m_pAnim;                  /**< Pointer to current animation in animation array for block. */
+                  *m_pAnim;                  /**< Pointer to current animation in animation array for block. */
 
             /**
             *
@@ -309,7 +308,7 @@ namespace RWS
             */
 
             PartAccess(void) :
-               m_numFree(0)
+                  m_numFree(0)
             {
             }
 
@@ -396,11 +395,11 @@ namespace RWS
          public:
 
             RwV3d m_partXAxis,            /**< Particle direction X axis. */
-               m_partYAxis,            /**< Particle direction Y axis. This is direction of particle movement. */
-               m_partZAxis;            /**< Particle direction Z axis. */
+                  m_partYAxis,            /**< Particle direction Y axis. This is direction of particle movement. */
+                  m_partZAxis;            /**< Particle direction Z axis. */
             RwReal m_inputLen,            /**< Size of incoming vector in unit vectors, i.e. particle's velocity. */
-               m_minAng,               /**< Minimum deflection angle for particle. */
-               m_angDiff;              /**< Difference between min & max deflection angle - the range. */
+                  m_minAng,               /**< Minimum deflection angle for particle. */
+                  m_angDiff;              /**< Difference between min & max deflection angle - the range. */
 
             /**
             *
@@ -462,11 +461,11 @@ namespace RWS
 
                   RwV3dCrossProduct(&m_partZAxis, &m_partYAxis, &m_partXAxis);
 
-                  return (true);
+                  return(true);
                }
                else
                {
-                  return (false);
+                  return(false);
                }
             }
          };
@@ -477,9 +476,9 @@ namespace RWS
          RwReal EmitSetup(CPB_Marker &marker, PartAccess &access);
          void SecEmitSetup(PartAccess &addAccess, PartAccess &access, PartAxis &partAxis, CPB_Marker &addMarker);
          void DoStdPartSetup(const StateData &state, RwRGBA *pCol, RwV2d *pSize,
-                             AnimData *pAnim, bool isNormVect, bool isInitAccel);
+               AnimData *pAnim, bool isNormVect, bool isInitAccel);
          void DoPartAnimSetup(const StateData &state, const RwRGBA *pCol, const RwV2d *pSize,
-                              AnimData *pAnim, RwReal animFrames);
+               AnimData *pAnim, RwReal animFrames);
 
          virtual bool CreateNewPtrArray(RwUInt32 newNumBlocks);
          virtual void CopyPtrArrayElement(RwUInt32 index);
@@ -491,47 +490,47 @@ namespace RWS
 
          StateData m_states[BPS_TOTAL];/**< Array (size BPS_TOTAL) of states of the particles system */
          bool m_secStageOn,            /**< Flag indicating if the secondary stage of system is enabled */
-            m_enabled;              /**< Flag indicating if the system as a whole is enabled */
+               m_enabled;              /**< Flag indicating if the system as a whole is enabled */
          RwUInt32 m_rate,              /**< Full output rate in particles per frame */
-            m_rateSpread,           /**< Randomness added to output rate per frame */
-            m_useRate,              /**< Rate used per frame. Is rate modified by % message, etc... */
-            m_useRateSpread,        /**< Rate randomness used per frame. Is modified by % message, etc */
-            m_lifeTime,             /**< Maximum lifetime of particle, i.e. base + max randomness */
-            m_baseLife,             /**< Base lifetime of particle */
-            m_lifeSpread,           /**< Randomness added to lifetime of particle */
-            m_secLifeAdj,           /**< Randomness for value added to particle lifetime as enters 2nd stage */
+               m_rateSpread,           /**< Randomness added to output rate per frame */     
+               m_useRate,              /**< Rate used per frame. Is rate modified by % message, etc... */
+               m_useRateSpread,        /**< Rate randomness used per frame. Is modified by % message, etc */
+               m_lifeTime,             /**< Maximum lifetime of particle, i.e. base + max randomness */
+               m_baseLife,             /**< Base lifetime of particle */
+               m_lifeSpread,           /**< Randomness added to lifetime of particle */
+               m_secLifeAdj,           /**< Randomness for value added to particle lifetime as enters 2nd stage */
                                        /**< NOTE: This ONLY applies to particles EMITTED in 2nd stage.*/
-            m_secLifeTime,          /**< Life time at which 1st to 2nd stage change occurs */
-            m_secEmit,              /**< Full number of particles emitted in 2nd stage per primary particle */
-            m_secUseEmit,           /**< Used number of particles emitted in 2nd stage. Modified by % message, etc */
-            m_secEmitSpread,        /**< Full variance of number particles emitted in 2nd stage */
-            m_secUseEmitSpread,     /**< Used variance of number particles in 2nd stage. Modified by % message, etc */
-            m_numBlocks,            /**< Total number of blocks held in m_ppVectBlocks and m_ppAnimBlocks */
-            m_blockSize;            /**< Number of particles in each block m_ppVectBlocks & m_ppAnimBlocks point to */
+               m_secLifeTime,          /**< Life time at which 1st to 2nd stage change occurs */
+               m_secEmit,              /**< Full number of particles emitted in 2nd stage per primary particle */
+               m_secUseEmit,           /**< Used number of particles emitted in 2nd stage. Modified by % message, etc */
+               m_secEmitSpread,        /**< Full variance of number particles emitted in 2nd stage */ 
+               m_secUseEmitSpread,     /**< Used variance of number particles in 2nd stage. Modified by % message, etc */
+               m_numBlocks,            /**< Total number of blocks held in m_ppVectBlocks and m_ppAnimBlocks */
+               m_blockSize;            /**< Number of particles in each block m_ppVectBlocks & m_ppAnimBlocks point to */
          RwV3d m_basePos,              /**< The 3D location in the world of the particle at 1st stage creation */
-            m_yAxisVect,            /**< Particle vector at creation (without velocity applied). The up vector. */
-            m_xAxisVect,            /**< Vector used for local X axis (right) */
-            m_zAxisVect;            /**< Vector used for local Z axis (forward or look-at) */
+               m_yAxisVect,            /**< Particle vector at creation (without velocity applied). The up vector. */
+               m_xAxisVect,            /**< Vector used for local X axis (right) */
+               m_zAxisVect;            /**< Vector used for local Z axis (forward or look-at) */
          RwReal m_xAngSpread,          /**< Angular spread at creation (randomly applied in range) along X axis */
-            m_zAngSpread,           /**< Angular spread at creation (randomly applied in range) along Y axis */
-            m_emitSpreadX,          /**< Base position adjustment on X axis (randomly applied in range) */
-            m_emitSpreadY,          /**< Base position adjustment on Y axis (randomly applied in range) */
-            m_emitSpreadZ,          /**< Base position adjustment on Z axis (randomly applied in range) */
-            m_secEmitMinAng,        /**< Secondary stage, minimum angle offset (randomly applied min to max) */
-            m_secEmitMaxAng,        /**< Secondary stage, maximum angle offset */
-            m_rateAdjust;           /**< Value from 0 to 1 */
+               m_zAngSpread,           /**< Angular spread at creation (randomly applied in range) along Y axis */
+               m_emitSpreadX,          /**< Base position adjustment on X axis (randomly applied in range) */
+               m_emitSpreadY,          /**< Base position adjustment on Y axis (randomly applied in range) */
+               m_emitSpreadZ,          /**< Base position adjustment on Z axis (randomly applied in range) */
+               m_secEmitMinAng,        /**< Secondary stage, minimum angle offset (randomly applied min to max) */
+               m_secEmitMaxAng,        /**< Secondary stage, maximum angle offset */
+               m_rateAdjust;           /**< Value from 0 to 1 */
 
          AnimData **m_ppNewAnimBlocks; /**< Used temporarily during a resize operation. Holds new pointer array. */
 
          PartAccess m_etAccess,        /**< Access structure used with the ET_... Emit / Tick processing functions. */
-            m_etAddAccess;          /**< Access structure used with the ET_... Emit / Tick proc func - use to add. */
+               m_etAddAccess;          /**< Access structure used with the ET_... Emit / Tick proc func - use to add. */
          bool *m_etpFlag;              /**< Active flag pointer used with the ET_... Emit/Tick processing functions. */
          PartAxis m_etPartAxis;        /**< Particle generated axis used with ET_... Emit/Tick processing functions. */
 
          bool m_etActiveFlags[CPB_MAX_PARTICLES_IN_BLOCK];  /**< Copy of flags used during Tick processing. */
 
 #if defined(SKY)
-         AnimData *m_pAnimOriginalAddr;
+         AnimData * m_pAnimOriginalAddr;
 #endif
 
       public:
@@ -542,7 +541,7 @@ namespace RWS
          virtual ~CPB_BasePart(void);
          virtual void DoAtomicSetup(RpAtomic *pAtomic, void *pParamData);
 
-
+         
          /**
          *
          * Sets the FULL particle emitter rate per frame. The value is modified by the rate adjustment.
@@ -613,7 +612,7 @@ namespace RWS
 
          bool IsEnabled(void)
          {
-            return (m_enabled);
+            return(m_enabled);
          }
 
          /**
@@ -1559,10 +1558,10 @@ namespace RWS
                pAnim->m_b += pAnim->m_bMod;
                pAnim->m_a += pAnim->m_aMod;
 
-               pCol->red = (pAnim->m_r >> 8);
-               pCol->green = (pAnim->m_g >> 8);
-               pCol->blue = (pAnim->m_b >> 8);
-               pCol->alpha = (pAnim->m_a >> 8);
+               pCol->red = ( pAnim->m_r >> 8 );
+               pCol->green = ( pAnim->m_g >> 8 );
+               pCol->blue = ( pAnim->m_b >> 8 );
+               pCol->alpha = ( pAnim->m_a >> 8 );
             }
 
             return;
@@ -1579,7 +1578,7 @@ namespace RWS
 
          virtual RwUInt32 GetCreateFlags(void)
          {
-            return (rpPTANKDFLAGPOSITION | rpPTANKDFLAGCOLOR);
+            return(rpPTANKDFLAGPOSITION | rpPTANKDFLAGCOLOR);
          }
 
          /**
@@ -1604,7 +1603,7 @@ namespace RWS
 
 #if defined(SKY)
             // Copy other per-particle data to the scratchpad
-            ET_TransferToSPR(marker);
+            ET_TransferToSPR( marker );
 #else
             // Flag states change during processing, so must ensure only process flags which are set
             // at the time of entry. To ensure this, copy the number and flag values...
@@ -1612,7 +1611,7 @@ namespace RWS
             memcpy(m_etActiveFlags, marker.pActiveFlags, sizeof(bool) * marker.numInBlock);
             m_etpFlag = m_etActiveFlags;
 #endif
-
+            
             return;
          }
 
@@ -1628,13 +1627,13 @@ namespace RWS
          * \param marker The marker object being used for scanning the particles in the block.
          *
          */
-
-         void ET_CleanupBlock(CPB_Marker &marker)
+         
+         void ET_CleanupBlock( CPB_Marker& marker )
          {
 
 #if defined(SKY)
             // Transfer the data on the scratchpad back into main memory.
-            ET_TransferFromSPR(marker);
+            ET_TransferFromSPR( marker );
 #else
             // Currently no tidying up needed on other platforms.
 #endif
@@ -1652,11 +1651,11 @@ namespace RWS
          *  \see ET_TransferFromSPR
          */
 
-         void ET_TransferToSPR(CPB_Marker &marker)
+         void ET_TransferToSPR( CPB_Marker &marker )
          {
 
             // Before transferring any data to the scratchpad, make sure
-            //  main memory is in sync with any data currently waiting
+            //  main memory is in sync with any data currently waiting 
             //  to be written back in the data cache.
             FlushCache(WRITEBACK_DCACHE);
 
@@ -1665,14 +1664,14 @@ namespace RWS
             RwUInt32 uSPRDest = RWDMA_SCRATCHPAD;
             RwUInt32 uQWords;
 
-            uQWords = (((sizeof(bool) * marker.numInBlock) + 15) >> 4);
-            m_etpFlag = Sky::CScratchPad::Upload(uSPRDest, marker.pActiveFlags, uQWords);
-            uSPRDest = (uSPRDest + (uQWords << 4));
-
+            uQWords = ( ( ( sizeof(bool) * marker.numInBlock ) + 15 ) >> 4 );
+            m_etpFlag = Sky::CScratchPad::Upload( uSPRDest, marker.pActiveFlags, uQWords );
+            uSPRDest = ( uSPRDest + ( uQWords << 4 ));
+            
             // Move some of the data used in the update loop onto the scratchpad
-            uQWords = (((marker.numInBlock * sizeof(AnimData)) + 15) >> 4);
+            uQWords = ( ( ( marker.numInBlock * sizeof(AnimData) ) + 15 ) >> 4 );
             m_pAnimOriginalAddr = m_etAccess.m_pAnimBlock;
-            m_etAccess.m_pAnimBlock = Sky::CScratchPad::Upload(uSPRDest, m_etAccess.m_pAnimBlock, uQWords);
+            m_etAccess.m_pAnimBlock = Sky::CScratchPad::Upload( uSPRDest, m_etAccess.m_pAnimBlock, uQWords );
             m_etAccess.m_pAnim = m_etAccess.m_pAnimBlock;
 
             // Wait until all data has been transferred before continuing.
@@ -1681,9 +1680,9 @@ namespace RWS
             return;
          }
 #endif
+         
 
-
-#if defined(SKY)
+#if defined(SKY)         
          /**
          *
          *  Copy back from the scratchpad data that was updated during the update
@@ -1694,11 +1693,11 @@ namespace RWS
          *
          */
 
-         void ET_TransferFromSPR(CPB_Marker &marker)
+         void ET_TransferFromSPR( CPB_Marker &marker )
          {
 
-            RwUInt32 uQWords = (((marker.numInBlock * sizeof(AnimData)) + 15) >> 4);
-            Sky::CScratchPad::Download(m_pAnimOriginalAddr, m_etAccess.m_pAnimBlock, uQWords);
+            RwUInt32 uQWords = ( ( ( marker.numInBlock * sizeof(AnimData) ) + 15 ) >> 4 );
+            Sky::CScratchPad::Download( m_pAnimOriginalAddr, m_etAccess.m_pAnimBlock, uQWords );
             Sky::CScratchPad::WaitOnDownload();
             m_pAnimOriginalAddr = 0;
 
@@ -1719,7 +1718,7 @@ namespace RWS
 
          bool ET_IsCurActive(void)
          {
-            return (*m_etpFlag);
+            return(*m_etpFlag);
          }
 
          /**
@@ -1753,7 +1752,7 @@ namespace RWS
 
          RwUInt32 ET_GetCurIndex(void)
          {
-            return (m_etAccess.m_index);
+            return(m_etAccess.m_index);
          }
 
          /**
@@ -1769,7 +1768,7 @@ namespace RWS
 
          bool ET_IsCurAtSecStage(void)
          {
-            return (m_secStageOn && *m_etAccess.m_pLife == m_secLifeTime);
+            return(m_secStageOn && *m_etAccess.m_pLife == m_secLifeTime);
          }
 
          /**
@@ -1790,11 +1789,11 @@ namespace RWS
 
             if (*m_etAccess.m_pLife >= m_lifeTime)
             {
-               return (1.0f);
+               return(1.0f);
             }
             else
             {
-               return (static_cast<RwReal>(m_lifeTime - *m_etAccess.m_pLife));
+               return(static_cast<RwReal>(m_lifeTime - *m_etAccess.m_pLife));
             }
          }
 
@@ -1831,9 +1830,9 @@ namespace RWS
             // Do other setups...
 
             DoStdPartSetup(m_states[BPS_SECONDARY_START], m_etAccess.m_pCol, m_etAccess.m_pSize,
-                           m_etAccess.m_pAnim, false, false);
+                  m_etAccess.m_pAnim, false, false);
             DoPartAnimSetup(m_states[BPS_SECONDARY_END], m_etAccess.m_pCol, m_etAccess.m_pSize, m_etAccess.m_pAnim,
-                            animFrames);
+                  animFrames);
 
             return;
          }
@@ -1861,10 +1860,10 @@ namespace RWS
 
                m_etAddAccess.m_numFree = 0;
 
-               return (true);
+               return(true);
             }
 
-            return (false);
+            return(false);
          }
 
          /**
@@ -1882,11 +1881,11 @@ namespace RWS
 
             if (m_secUseEmitSpread)
             {
-               return (m_secUseEmit + (rand() % (m_secUseEmitSpread + 1)));
+               return(m_secUseEmit + (rand() % (m_secUseEmitSpread + 1)));
             }
             else
             {
-               return (m_secUseEmit);
+               return(m_secUseEmit);
             }
          }
 
@@ -1909,7 +1908,7 @@ namespace RWS
             // If the marker being setup is the one that has partially
             // been moved onto the scratchpad, then patch the necessary
             // pointers
-            if (m_etAddAccess.m_pAnimBlock == m_pAnimOriginalAddr)
+            if ( m_etAddAccess.m_pAnimBlock == m_pAnimOriginalAddr )
             {
                m_etAddAccess.m_pAnimBlock = m_etAccess.m_pAnimBlock;
                m_etAddAccess.m_pAnim = m_etAddAccess.m_pAnimBlock;
@@ -1933,7 +1932,7 @@ namespace RWS
 
          RwUInt32 ET_NumFreeInAddBlock(void)
          {
-            return (m_etAddAccess.m_numFree);
+            return(m_etAddAccess.m_numFree);
          }
 
          /**
@@ -1967,9 +1966,9 @@ namespace RWS
 
             SecEmitSetup(m_etAddAccess, m_etAccess, m_etPartAxis, marker);
             DoStdPartSetup(m_states[BPS_SECONDARY_START], m_etAddAccess.m_pCol,
-                           m_etAddAccess.m_pSize, m_etAddAccess.m_pAnim, false, false);
+                  m_etAddAccess.m_pSize, m_etAddAccess.m_pAnim, false, false);
             DoPartAnimSetup(m_states[BPS_SECONDARY_END], m_etAddAccess.m_pCol, m_etAddAccess.m_pSize,
-                            m_etAddAccess.m_pAnim, animFrames);
+                  m_etAddAccess.m_pAnim, animFrames);
 
             return;
          }
@@ -1987,7 +1986,7 @@ namespace RWS
 
          bool ET_NeedToKillCur(void)
          {
-            return (*m_etAccess.m_pLife >= m_lifeTime);
+            return(*m_etAccess.m_pLife >= m_lifeTime);
          }
 
          /**
@@ -2082,10 +2081,10 @@ namespace RWS
 
                m_etAddAccess.m_numFree = 0;
 
-               return (true);
+               return(true);
             }
 
-            return (false);
+            return(false);
          }
 
          /**
@@ -2104,11 +2103,11 @@ namespace RWS
 
             if (m_useRateSpread)
             {
-               return (m_useRate + (rand() % (m_useRateSpread + 1)));
+               return(m_useRate + (rand() % (m_useRateSpread + 1)));
             }
             else
             {
-               return (m_useRate);
+               return(m_useRate);
             }
          }
 
@@ -2139,7 +2138,7 @@ namespace RWS
 
             // Setup the object...
 
-            return (EmitSetup(marker, m_etAddAccess));
+            return(EmitSetup(marker, m_etAddAccess));
          }
       };
 
@@ -2177,9 +2176,9 @@ namespace RWS
 
             bool m_countUp;            /**< Flag indicating direction of sub-texture animation. */
             RwReal m_subTexIndex,      /**< The sub-texture index & Particle increment. Converts to integer for index. */
-               m_subTexStep,        /**< The step value, per tick, for the sub-texture index. Uses loop value too. */
-               m_subTexEnd,         /**< End index, used when looping to check for overrun. Inclusive of looping. */
-               m_subTexStart;       /**< Start index, used when looping (when overruns) to reset value to start.
+                  m_subTexStep,        /**< The step value, per tick, for the sub-texture index. Uses loop value too. */
+                  m_subTexEnd,         /**< End index, used when looping to check for overrun. Inclusive of looping. */
+                  m_subTexStart;       /**< Start index, used when looping (when overruns) to reset value to start.
                                             Inclusive of looping (first value). */
          };
 
@@ -2201,10 +2200,10 @@ namespace RWS
          public:
 
             RwUInt32 m_minSubTex,      /**< Minimum sub-texture index used for selection in stage. */
-               m_maxSubTex;         /**< Maximum sub-texture index used for selection in stage. */
+                  m_maxSubTex;         /**< Maximum sub-texture index used for selection in stage. */
             RwReal m_subTexLoops,      /**< Number of times sub-texture is looped between start & end.
                                             Only used on end stages. It is possible to part loops (0.5, etc). */
-               m_subTexRndLoops;    /**< Number of randomly applied loops between start & end. Partial
+                  m_subTexRndLoops;    /**< Number of randomly applied loops between start & end. Partial
                                             values can be used (0.5, etc). */
          };
 
@@ -2225,7 +2224,7 @@ namespace RWS
             RpPTankLockStruct m_texUVsLock;  /**< Texture UV access structure for current block. */
             RwV2d *m_pTexUVs;                /**< Current Texture UV pointer for current block. */
             TexAnimData *m_pTexAnim,         /**< Current textured animation data pointer for current block. */
-               *m_pTexAnimBlock;          /**< Pointer to animation array for current block. */
+                  *m_pTexAnimBlock;          /**< Pointer to animation array for current block. */
 
             /**
             *
@@ -2268,15 +2267,15 @@ namespace RWS
 
          TexStateData m_texStates[BPS_TOTAL];/**< Array (size BPS_TOTAL) of states of the particles system. */
          TexAnimData **m_ppTexAnimBlocks,    /**< Array of pointers to arrays holding animation data of particles. */
-            **m_ppNewTexAnimBlocks;       /**< Temporary array of pointers. Used during resizing operations. */
+               **m_ppNewTexAnimBlocks;       /**< Temporary array of pointers. Used during resizing operations. */
          RwUInt32 m_numSubTextures,          /**< Number of sub-textures within the currently set texture. */
-            m_numSubTexOnRow;             /**< Number of sub-textures on a line in the current texture. */
+               m_numSubTexOnRow;             /**< Number of sub-textures on a line in the current texture. */
          RwReal m_uScale,                    /**< The u scaling applied to UV position setting for sub-textures. */
-            m_vScale;                     /**< The v scaling applied to UV position setting for sub-textures. */
+               m_vScale;                     /**< The v scaling applied to UV position setting for sub-textures. */
          RwTexture *m_pCurTex;               /**< A pointer to the currently used texture - used to check for changes. */
 
          TexAccess m_etTexAccess,            /**< Access structure used during ET_... functions for tick & emit. */
-            m_etTexAddAccess;             /**< Access structure used during ET_... functions for tick & emit, adding. */
+               m_etTexAddAccess;             /**< Access structure used during ET_... functions for tick & emit, adding. */
 
 
          bool CreateNewPtrArray(RwUInt32 newNumBlocks);
@@ -2302,7 +2301,7 @@ namespace RWS
          {
 
             RwUInt32 row,
-               col;
+                  col;
 
             // Clip...
 
@@ -2393,13 +2392,13 @@ namespace RWS
          */
 
          CPB_TexPart(RwUInt32 numBlocks, RwUInt32 blockSize) :
-            CPB_BasePart(numBlocks, blockSize),
-            m_ppTexAnimBlocks(0),
-            m_numSubTextures(1),
-            m_numSubTexOnRow(1),
-            m_uScale(1.0f),
-            m_vScale(1.0f),
-            m_pCurTex(0)
+               CPB_BasePart(numBlocks, blockSize),
+               m_ppTexAnimBlocks(0),
+               m_numSubTextures(1),
+               m_numSubTexOnRow(1),
+               m_uScale(1.0f),
+               m_vScale(1.0f),
+               m_pCurTex(0)
          {
 
             // Initialize the state data.
@@ -2544,7 +2543,7 @@ namespace RWS
 
          RwUInt32 GetCreateFlags(void)
          {
-            return (rpPTANKDFLAGPOSITION | rpPTANKDFLAGCOLOR | rpPTANKDFLAGVTX2TEXCOORDS);
+            return(rpPTANKDFLAGPOSITION | rpPTANKDFLAGCOLOR | rpPTANKDFLAGVTX2TEXCOORDS);
          }
 
          /**
@@ -2579,14 +2578,14 @@ namespace RWS
          *
          */
 
-         void ET_CleanupBlock(CPB_Marker &marker)
+         void ET_CleanupBlock( CPB_Marker& marker )
          {
 
             // Clean up the extra data for textured particles first.
             // Note : nothing to do
 
             // Clean up base particle data
-            CPB_BasePart::ET_CleanupBlock(marker);
+            CPB_BasePart::ET_CleanupBlock( marker );
 
             return;
          }
@@ -2610,9 +2609,9 @@ namespace RWS
             // Do additional stuff for textured particles...
 
             DoTexPartSetup(this->m_states[BPS_SECONDARY_START], m_texStates[BPS_SECONDARY_START], m_etTexAccess.m_pTexUVs,
-                           m_etTexAccess.m_pTexAnim);
+                  m_etTexAccess.m_pTexAnim);
             DoTexAnimSetup(m_states[BPS_SECONDARY_END], m_texStates[BPS_SECONDARY_END], m_etTexAccess.m_pTexAnim,
-                           animFrames);
+                  animFrames);
 
             return;
          }
@@ -2661,9 +2660,9 @@ namespace RWS
 
             SecEmitSetup(m_etTexAddAccess, m_etTexAccess, marker);
             DoTexPartSetup(m_states[BPS_SECONDARY_START], m_texStates[BPS_SECONDARY_START], m_etTexAddAccess.m_pTexUVs,
-                           m_etTexAddAccess.m_pTexAnim);
+                  m_etTexAddAccess.m_pTexAnim);
             DoTexAnimSetup(m_states[BPS_SECONDARY_END], m_texStates[BPS_SECONDARY_END], m_etTexAddAccess.m_pTexAnim,
-                           animFrames);
+                  animFrames);
 
             return;
          }
@@ -2729,14 +2728,14 @@ namespace RWS
             // Setup pointers...
 
             m_etTexAddAccess.m_pTexUVs = reinterpret_cast<RwV2d *>(m_etTexAddAccess.m_texUVsLock.data +
-                                                                   m_etTexAddAccess.m_texUVsLock.stride * marker.index);
+                  m_etTexAddAccess.m_texUVsLock.stride * marker.index);
 
             // Do extra work for textured...
 
             DoTexPartSetup(m_states[BPS_PRIMARY_START], m_texStates[BPS_PRIMARY_START], m_etTexAddAccess.m_pTexUVs,
-                           m_etTexAddAccess.m_pTexAnim + marker.index);
+                  m_etTexAddAccess.m_pTexAnim + marker.index);
             DoTexAnimSetup(m_states[BPS_PRIMARY_END], m_texStates[BPS_PRIMARY_END],
-                           m_etTexAddAccess.m_pTexAnim + marker.index, animFrames);
+                  m_etTexAddAccess.m_pTexAnim + marker.index, animFrames);
          }
       };
 
@@ -2751,8 +2750,7 @@ namespace RWS
       *
       */
 
-      template <class T>
-      class CycPartBuff
+      template<class T> class CycPartBuff
       {
       public:
 
@@ -2789,12 +2787,12 @@ namespace RWS
             bool *m_pActiveFlags;      /**< Array of flags indicating if each particle is active or not (true = active) */
             RwUInt32 *m_pLifeTimes;    /**< Array of lifetimes, one for each particle */
             CPB_Node *m_pNext,         /**< Pointer to next CPB_Node in free or used list (as appropriate) */
-               *m_pPrev;            /**< Pointer to previous CPB_Node in free or used list (as appropriate) */
+                  *m_pPrev;            /**< Pointer to previous CPB_Node in free or used list (as appropriate) */
             RwUInt32 m_numHeld,        /**< Number of particles held within the arrays / pTank object */
-               m_numActive,         /**< Number of currently active particles within the node */
-               m_blockNum,          /**< Block number, used for CycPartBuff -> Base Particle system
+                  m_numActive,         /**< Number of currently active particles within the node */
+                  m_blockNum,          /**< Block number, used for CycPartBuff -> Base Particle system
                                             connection. Fixed at creation time, do NOT change. */
-               m_lockCount;         /**< The number of times this node had been locked by GetFirstFree,
+                  m_lockCount;         /**< The number of times this node had been locked by GetFirstFree,
                                             GetFree, GetNextFree, etc... */
 
             /**
@@ -2817,7 +2815,7 @@ namespace RWS
 
                m_pTankAtomic = RpPTankAtomicCreate(size, flags | rpPTANKDFLAGSIZE, 0);
                RWS_ASSERT(m_pTankAtomic, "Failed to create ptank atomic");
-
+ 
                RwFrame *pFrame = RwFrameCreate();
 
                RwMatrixSetIdentity(RwFrameGetMatrix(pFrame));
@@ -2826,7 +2824,7 @@ namespace RWS
                // Setup basic particle information...
 
                RpPTankAtomicSetActiveParticlesCount(m_pTankAtomic,
-                                                    RpPTankAtomicGetMaximumParticlesCount(m_pTankAtomic));
+                     RpPTankAtomicGetMaximumParticlesCount(m_pTankAtomic));
 
                // Allocate other arrays.
 
@@ -2968,12 +2966,12 @@ namespace RWS
          };
 
          CPB_Node *m_pFreeRoot,        /**< Pointer to the head of the non-processed, free, particle blocks. */
-            *m_pUsedRoot;           /**< Pointer to the head of the processed & displayed particle blocks. */
+               *m_pUsedRoot;           /**< Pointer to the head of the processed & displayed particle blocks. */
          T *m_pBase;                   /**< Pointer to the base particle processing object, called to do work. */
          RwUInt32 m_maxParticles;      /**< The maximum number of particles the buffer can hold. */
          RENDER_MODE m_renderMode;     /**< The currently selected rendering mode. */
          RwBlendFunction m_srcBlend,   /**< The currently selected source blending mode. */
-            m_destBlend;            /**< The currently selected destination blending mode. */
+               m_destBlend;            /**< The currently selected destination blending mode. */
 
       public:
 
@@ -2995,9 +2993,9 @@ namespace RWS
          */
 
          CycPartBuff(RwUInt32 maxParticles, void *pParamData) :
-            m_renderMode(RM_NO_Z_WRITE),
-            m_srcBlend(rwBLENDSRCALPHA),
-            m_destBlend(rwBLENDINVSRCALPHA)
+               m_renderMode(RM_NO_Z_WRITE),
+               m_srcBlend(rwBLENDSRCALPHA),
+               m_destBlend(rwBLENDINVSRCALPHA)
          {
 
             RwUInt32 numBlocks;
@@ -3076,9 +3074,9 @@ namespace RWS
                if (newSize < m_maxParticles)
                {
                   RwUInt32 numNodeKills = 0,
-                           numPartKills,
-                           binRemainder,
-                           firstKillBinIdent;
+                        numPartKills,
+                        binRemainder,
+                        firstKillBinIdent;
                   CPB_Node *pNode;
 
                   // Smaller, so reduce number of bins / resize them. Must adjust / remove highest numbered
@@ -3192,7 +3190,7 @@ namespace RWS
                      // so new one will be 'empty'. Particle already unlinked above.
 
                      pNewNode = ::RWS_NEW CPB_Node(pNode->m_numHeld - numPartKills, m_pBase->GetCreateFlags(),
-                                                   pNode->m_blockNum);
+                           pNode->m_blockNum);
                      RWS_ASSERT(pNewNode, "Cannot change number of particles in bin");
 
                      delete pNode;
@@ -3203,8 +3201,8 @@ namespace RWS
                else
                {
                   RwUInt32 lastBinSpace,
-                     numExtra,
-                     lastBinIdent;
+                        numExtra,
+                        lastBinIdent;
 
                   // Must be larger (since not same size), so increase number of bins / resize them.
                   // Is the last bin at full size ? If it's completely empty it means that is doesn't
@@ -3217,7 +3215,7 @@ namespace RWS
                   if (lastBinSpace && lastBinSpace != CPB_MAX_PARTICLES_IN_BLOCK)
                   {
                      CPB_Node *pNode,
-                        *pNewNode;
+                           *pNewNode;
                      RwUInt32 reqdSize;
 
                      // Increase the size of the last bin, find it first...
@@ -3318,7 +3316,7 @@ namespace RWS
 
          T *GetBase(void)
          {
-            return (m_pBase);
+            return(m_pBase);
          }
 
          /**
@@ -3341,7 +3339,7 @@ namespace RWS
             while (found)
             {
                RwUInt32 numProcessed = 0,
-                        numActive;
+                     numActive;
 
 
                // Setup block pointers, etc...
@@ -3556,11 +3554,11 @@ namespace RWS
                marker.inUsedList = true;
 
                RWS_ASSERT(CheckActive(marker), "invalid active particles");
-               return (true);
+               return(true);
             }
             else
             {
-               return (false);
+               return(false);
             }
          }
 
@@ -3606,7 +3604,7 @@ namespace RWS
                marker.inUsedList = true;
 
                RWS_ASSERT(CheckActive(marker), "invalid active particles");
-               return (true);
+               return(true);
             }
             else if (m_pFreeRoot)
             {
@@ -3628,11 +3626,11 @@ namespace RWS
                marker.inUsedList = false;
 
                RWS_ASSERT(CheckActive(marker), "invalid active particles");
-               return (true);
+               return(true);
             }
             else
             {
-               return (false);
+               return(false);
             }
          }
 
@@ -3660,7 +3658,7 @@ namespace RWS
          bool GetNextActive(CPB_Marker &marker)
          {
             CPB_Node *pCur = reinterpret_cast<CPB_Node *>(marker.internalA),
-                     *pNext = reinterpret_cast<CPB_Node *>(marker.internalB);
+                  *pNext = reinterpret_cast<CPB_Node *>(marker.internalB);
 
             // UNlock previous atomic's data.
 
@@ -3689,11 +3687,11 @@ namespace RWS
                marker.pTankAtomic = pCur->m_pTankAtomic;
 
                RWS_ASSERT(CheckActive(marker), "invalid active particles");
-               return (true);
+               return(true);
             }
             else
             {
-               return (false);
+               return(false);
             }
          }
 
@@ -3721,7 +3719,7 @@ namespace RWS
          bool GetNext(CPB_Marker &marker)
          {
             CPB_Node *pCur = reinterpret_cast<CPB_Node *>(marker.internalA),
-                     *pNext = reinterpret_cast<CPB_Node *>(marker.internalB);
+                  *pNext = reinterpret_cast<CPB_Node *>(marker.internalB);
 
             // UNlock previous atomic's data.
 
@@ -3760,11 +3758,11 @@ namespace RWS
                marker.pTankAtomic = pCur->m_pTankAtomic;
 
                RWS_ASSERT(CheckActive(marker), "invalid active particles");
-               return (true);
+               return(true);
             }
             else
             {
-               return (false);
+               return(false);
             }
          }
 
@@ -3783,7 +3781,7 @@ namespace RWS
          bool CheckActive(CPB_Marker &marker)
          {
 #if 0
-#pragma RWS_COMP_WARN(CycPartBuff::CheckActive is compiled in(DEBUG &SLOW))
+#pragma RWS_COMP_WARN(CycPartBuff::CheckActive is compiled in (DEBUG & SLOW))
 
             RwUInt32 count;
 
@@ -3799,7 +3797,7 @@ namespace RWS
 
             return(true);
 #else
-            return (true);
+            return(true);
 #endif
          }
 
@@ -3835,7 +3833,7 @@ namespace RWS
             // Decrement the active count on the block and check to see if still has any active in it.
 
             CPB_Node *pCur = reinterpret_cast<CPB_Node *>(marker.internalA);
-
+            
             RWS_ASSERT(marker.numActive, "Active count is zero BEFORE decrement");
 
             marker.numActive--;
@@ -3898,7 +3896,7 @@ namespace RWS
 
                   RWS_ASSERT(CheckFree(marker), "free Particle check failed");
 
-                  return (true);
+                  return(true);
                }
                pCur = pCur->m_pNext;
             }
@@ -3931,11 +3929,11 @@ namespace RWS
 
                RWS_ASSERT(CheckFree(marker), "free Particle check failed");
 
-               return (true);
+               return(true);
             }
             else
             {
-               return (false);
+               return(false);
             }
          }
 
@@ -3953,7 +3951,7 @@ namespace RWS
          bool CheckFree(CPB_Marker &marker)
          {
 #if 0
-#pragma RWS_COMP_WARN(CycPartBuff::CheckFree is compiled in(DEBUG &SLOW))
+#pragma RWS_COMP_WARN(CycPartBuff::CheckFree is compiled in (DEBUG & SLOW))
 
             RwUInt32 countActive = 0,
                   count;
@@ -3976,7 +3974,7 @@ namespace RWS
                return(false);
             }
 #else
-            return (true);
+            return(true);
 #endif
          }
 
@@ -4025,7 +4023,7 @@ namespace RWS
             marker.pActiveFlags[marker.index] = true;
 
             CPB_Node *pCur = reinterpret_cast<CPB_Node *>(marker.internalA);
-
+            
             RWS_ASSERT(marker.numActive <= marker.numInBlock, "Active already at maximum BEFORE increment");
 
             marker.numActive++;
@@ -4047,9 +4045,9 @@ namespace RWS
             if (m_pUsedRoot)
             {
                const RwBool trueVal = TRUE,
-                            falseVal = FALSE;
+                     falseVal = FALSE;
                RwBool writeState,
-                  testState;
+                     testState;
                CPB_Node *pCur;
 
                // Get current modes...
@@ -4061,15 +4059,15 @@ namespace RWS
 
                if (m_renderMode == RM_NO_Z_WRITE || m_renderMode == RM_DUAL_PASS)
                {
-                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void *>(trueVal));
-                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void *>(falseVal));
+                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void*>(trueVal));
+                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void*>(falseVal));
                }
                else
                {
                   // must be z-write mode...
 
-                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void *>(trueVal));
-                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void *>(trueVal));
+                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void*>(trueVal));
+                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void*>(trueVal));
                }
 
                // Render (First pass)...
@@ -4088,8 +4086,8 @@ namespace RWS
                {
                   // Set modes so data is written to z-buffer ONLY - no change in color / alpha buffers.
 
-                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void *>(trueVal));
-                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void *>(trueVal));
+                  RwRenderStateSet(rwRENDERSTATEZTESTENABLE, reinterpret_cast<void*>(trueVal));
+                  RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, reinterpret_cast<void*>(trueVal));
 
                   // Render...
 

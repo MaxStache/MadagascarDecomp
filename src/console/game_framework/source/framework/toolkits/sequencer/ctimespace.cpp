@@ -108,7 +108,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CTimeSpace::SetRelativeSpeed");
          RWS_ASSERT(relativeSpeed >= 0.0f,
-                    "Time cannot flow backwards, relative speed must be >= 0.");
+            "Time cannot flow backwards, relative speed must be >= 0.");
 
          m_relativeSpeed = relativeSpeed;
 
@@ -173,7 +173,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::SEQUENCE::CTimeSpace::Update");
          RWS_ASSERT(globalNowTime >= m_lastGlobalTime,
-                    "The global (real world) clock cannot flow backwards.");
+            "The global (real world) clock cannot flow backwards.");
 
          // Is this 'space' running ?
 

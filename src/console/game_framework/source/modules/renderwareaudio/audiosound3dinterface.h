@@ -53,18 +53,18 @@ namespace RWS
       * \see CSystemCommands
       *
       */
-      class AudioSound3DInterface : public CSystemCommands, public CAttributeHandler, public LinearAllocationPolicy
+      class AudioSound3DInterface: public CSystemCommands, public CAttributeHandler, public LinearAllocationPolicy
       {
       public:
          AudioSound3DInterface(const CAttributePacket&);
          ~AudioSound3DInterface();
-
-         virtual void HandleAttributes(const CAttributePacket& attr);
-         void SetVirtualVoicePosition(const RwMatrix* const pMatrix);
-      protected:
-         RwaOsWave* m_pOsWave;      /**< Pointer to selected sound.*/
-         CAtomicPtr m_pAtomic;      /**< Behaviors atomic.*/
-         RwaVirtualVoice* m_pVoice;       /**< Pointer to a virtual voice that this entity uses
+           
+         virtual void HandleAttributes(const CAttributePacket& attr);     
+         void SetVirtualVoicePosition(const RwMatrix* const pMatrix);            
+        protected:
+         RwaOsWave       *m_pOsWave;      /**< Pointer to selected sound.*/
+         CAtomicPtr       m_pAtomic;      /**< Behaviors atomic.*/
+         RwaVirtualVoice *m_pVoice;       /**< Pointer to a virtual voice that this entity uses
                                                to play a sound.*/
       };
    }

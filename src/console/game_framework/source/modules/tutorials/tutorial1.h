@@ -47,7 +47,7 @@ namespace RWS
       *  \see CAtomicPtr
       *
       */
-      class CTutorial1 : public CSystemCommands, public CAttributeHandler, public CEventHandler, public LinearAllocationPolicy
+      class CTutorial1 : public CSystemCommands, public CAttributeHandler , public CEventHandler, public LinearAllocationPolicy
       {
       public:
          RWS_MAKENEWCLASS(CTutorial1);
@@ -58,12 +58,12 @@ namespace RWS
          CTutorial1(const CAttributePacket& attr);
          ~CTutorial1(void);
 
-         virtual void HandleEvents(CMsg& pMsg);
+         virtual void HandleEvents(CMsg &pMsg);
          virtual void HandleAttributes(const CAttributePacket& attr);
 
       protected:
          CAtomicPtr m_pAtomic; /**< Behaviors atomic. */
       };
-
+      
    }//namespace Tutorial
 }//namespace RWS

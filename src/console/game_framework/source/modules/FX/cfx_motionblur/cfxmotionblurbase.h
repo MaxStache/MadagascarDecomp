@@ -53,23 +53,24 @@ namespace RWS
          CFXMotionBlurBase();
          ~CFXMotionBlurBase();
 
-         RwReal m_BlurAmount;   /**<  amount of alpha used to blend frames. */
-         RwReal m_OffsetX;      /**<  offset applied to the blend poly. */
-         RwReal m_OffsetY;
-         RwReal m_ScaleX;       /**<  scale in x applied to the blend poly. */
-         RwReal m_ScaleY;       /**<  scale in y applied to the blend poly. */
-         RwReal m_Scale;        /**<  overall scale applied to the blend poly. */
-         RwReal m_Angle;        /**<  angle of the blend poly. */
-         RwBool m_UpdateBlendPoly;
+         RwReal        m_BlurAmount;   /**<  amount of alpha used to blend frames. */
+         RwReal        m_OffsetX;      /**<  offset applied to the blend poly. */
+         RwReal        m_OffsetY;
+         RwReal        m_ScaleX;       /**<  scale in x applied to the blend poly. */
+         RwReal        m_ScaleY;       /**<  scale in y applied to the blend poly. */
+         RwReal        m_Scale;        /**<  overall scale applied to the blend poly. */
+         RwReal        m_Angle;        /**<  angle of the blend poly. */
+         RwBool        m_UpdateBlendPoly;
 
-         RwV3d TransformMotionVert(RwMatrix *RotMat, float x, float y, float z);
-         void CalcTransformationMatrix(RwMatrix *pMatrix, RwReal HalfWidth, RwReal HalfHeight);
+         RwV3d TransformMotionVert     (RwMatrix *RotMat, float x, float y, float z);
+         void  CalcTransformationMatrix(RwMatrix *pMatrix, RwReal HalfWidth, RwReal HalfHeight);
 
       protected:
-         RwMatrix *m_RotMat;       /**< Stores the rotation matrix used to transform the blend polygon. */
+         RwMatrix     *m_RotMat;       /**< Stores the rotation matrix used to transform the blend polygon. */
+
       };
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

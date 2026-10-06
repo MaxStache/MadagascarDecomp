@@ -22,7 +22,7 @@
  * RenderWare is a trademark of Canon Inc.
  *
  *****************************************************************************/
-#if (defined(_XBOX))
+#if (defined (_XBOX))
 
 #ifndef __CFXXBOXPIXELSHADER_H__
 #define __CFXXBOXPIXELSHADER_H__
@@ -36,8 +36,8 @@
 
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
-#pragma comment(lib, "rpworld.lib")
+#pragma comment (lib, "rwcore.lib")
+#pragma comment (lib, "rpworld.lib")
 #endif
 
 //////////////////////////////////////////////////////////////////
@@ -64,23 +64,23 @@ namespace RWS
       *  SetAtomicMaterialsPixelShader or SetClumpMaterialsPixelShader will apply the pixel shader to all the materials
       *  used by the clump or atomic that was attach to the behaviour.
       */
-      class CFXXBoxPixelShader : public LinearAllocationPolicy
+      class CFXXBoxPixelShader:  public LinearAllocationPolicy
       {
 
       public:
-         static RpAtomic *AtomicCallBack(RpAtomic *pAtomic, void *pData);
-         static RpMaterial *MaterialCallBack(RpMaterial *pMaterial, void *pData);
+         static RpAtomic     *AtomicCallBack       (RpAtomic *pAtomic, void *pData);
+         static RpMaterial   *MaterialCallBack     (RpMaterial *pMaterial, void *pData);
 
-         RwBool AtomicSetPixelShader(const RpAtomic *pAtomic, RpXboxPixelShader *pPixelShader);
-         RwBool ClumpSetPixelShader(const RpClump *pClump, RpXboxPixelShader *pPixelShader);
+         RwBool               AtomicSetPixelShader (const RpAtomic *pAtomic, RpXboxPixelShader  *pPixelShader);
+         RwBool               ClumpSetPixelShader  (const RpClump  *pClump, RpXboxPixelShader  *pPixelShader);
 
       protected:
-         CFXXBoxPixelShader() {};
-         virtual ~CFXXBoxPixelShader() {};
+         CFXXBoxPixelShader(){};
+         virtual ~CFXXBoxPixelShader(){};
       };
 
    } // namespace FX
-
+      
 } // namespace RWS
 
 #endif

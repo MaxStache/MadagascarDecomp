@@ -40,18 +40,18 @@ namespace RWS
    *
    */
 
-   RwReal DegAngDiff(RwReal a0, RwReal a1)
+   RwReal DegAngDiff(RwReal a0, RwReal a1) 
    {
       RWS_FUNCTION("RWS::DegAngDiff");
 
       RwReal a2;
-
+   
       a2 = a1 - a0;
-      while (a2 < 0.0f) a2 += 360.0f;
-      while (a2 >= 360.0f) a2 -= 360.0f;
-      if (a2 >= 180.0f) a2 -= 360.0f;
-
-      RWS_RETURN(a2);
+      while(a2 < 0.0f) a2 += 360.0f;
+      while(a2 >= 360.0f) a2 -= 360.0f;
+      if(a2 >= 180.0f) a2 -= 360.0f;
+   
+      RWS_RETURN (a2);
    }
 
    /**
@@ -133,11 +133,11 @@ namespace RWS
       RwReal a2;
 
       a2 = a1 - a0;
-      while (a2 < 0.0f) a2 += (rwPI * 2.0f);
-      while (a2 >= (rwPI * 2.0f)) a2 -= (rwPI * 2.0f);
-      if (a2 >= rwPI) a2 -= (rwPI * 2.0f);
+      while(a2 < 0.0f) a2 += (rwPI*2.0f);
+      while(a2 >= (rwPI*2.0f)) a2 -= (rwPI*2.0f);
+      if(a2 >= rwPI) a2 -= (rwPI*2.0f);
 
-      RWS_RETURN(a2);
+      RWS_RETURN (a2);
    }
 
    /**
@@ -154,11 +154,11 @@ namespace RWS
    *
    */
 
-   RwReal LowPassFilter(RwReal y0, RwReal x1, RwReal k)
+   RwReal LowPassFilter(RwReal y0,RwReal x1,RwReal k)
    {
       RWS_FUNCTION("RWS::LowPassFilter");
 
-      RWS_RETURN(x1 + (y0 - x1) * k);
+      RWS_RETURN (x1+(y0-x1)*k);
    }
 
    //////////////////////////////

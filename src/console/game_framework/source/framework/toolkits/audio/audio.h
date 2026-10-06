@@ -37,30 +37,30 @@
 #include <rwcore.h>
 
 #ifdef _MSC_VER
-#pragma comment(lib, "rwcore.lib")
+#pragma comment (lib, "rwcore.lib")
 
 #ifdef WITH_AUDIO
-#pragma comment(lib, "rwacore.lib")
+#pragma comment (lib, "rwacore.lib")
 
 #ifdef _WINDOWS
-#pragma comment(lib, "rwadxaudio.lib")
+#pragma comment (lib, "rwadxaudio.lib")
 
-#pragma comment(lib, "dsound.lib")
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dmoguids.lib")
-#pragma comment(lib, "strmiids.lib")
-#pragma comment(lib, "winmm.lib")
+#pragma comment (lib, "dsound.lib")
+#pragma comment (lib, "dxguid.lib")
+#pragma comment (lib, "dmoguids.lib")
+#pragma comment (lib, "strmiids.lib")
+#pragma comment (lib, "winmm.lib")
 #endif
 
 #ifdef _XBOX
-#pragma comment(lib, "rwaxbox.lib")
+#pragma comment (lib, "rwaxbox.lib")
 
 #ifdef _DEBUG
-#pragma comment(lib, "dsoundd.lib")
-#pragma comment(lib, "dmusicd.lib")
+#pragma comment (lib, "dsoundd.lib")
+#pragma comment (lib, "dmusicd.lib")
 #else
-#pragma comment(lib, "dsound.lib")
-#pragma comment(lib, "dmusic.lib")
+#pragma comment (lib, "dsound.lib")
+#pragma comment (lib, "dmusic.lib")
 #endif
 #endif
 #endif
@@ -254,27 +254,27 @@ namespace RWS
    * \li rwacore.a and rwaax.a to the list of library files used. Note: rwacore.a should come before rwaax.a in 
    * the list.
    *
-   */
+   */ 
    namespace RwsAudio
    {
-      const RwUInt32 MAXVOICES = 15;    /** Maximum number of voices.*/
-      const RwUInt32 MAXVVOICES = 50;    /** Maximum number of virtual voices.*/
-      const RwUInt32 NUMSTREAMVOICES = 16;    /** Maximum number of channels for streams.*/
-      const RwUInt32 NUMGROUPS = 16;    /** Maximum number of wave groups.*/
+      const RwUInt32    MAXVOICES       =    15;    /** Maximum number of voices.*/
+      const RwUInt32    MAXVVOICES      =    50;    /** Maximum number of virtual voices.*/        
+      const RwUInt32    NUMSTREAMVOICES =    16;    /** Maximum number of channels for streams.*/
+      const RwUInt32    NUMGROUPS       =    16;    /** Maximum number of wave groups.*/
 
 #ifdef DOLPHIN
-      const RwUInt32 WAVEDATAALIGNMENT = 32;
+      const RwUInt32    WAVEDATAALIGNMENT = 32;
 #endif
 
 #ifdef SKY
-      const RwUInt32 WAVEDATAALIGNMENT = rwaMALLOCHWALIGN;
+      const RwUInt32    WAVEDATAALIGNMENT = rwaMALLOCHWALIGN;
 #endif
 
 #if defined(_WINDOWS) || defined(_XBOX)
-      const RwUInt32 WAVEDATAALIGNMENT = 1;
+      const RwUInt32    WAVEDATAALIGNMENT = 1;
 #endif
 
-      const RwUInt32 WAVEUPLOADBUFFSIZE = 0x40000;
+      const RwUInt32    WAVEUPLOADBUFFSIZE = 0x40000;
 
       typedef RwInt32 DictionaryId;
 
@@ -283,33 +283,33 @@ namespace RWS
       void Open(void);
       void Close(void);
 
-      RwaOsOutput* GetOutputObject(void);
+      RwaOsOutput *GetOutputObject(void);
       //
       RwBool FadeOutputObject(const RwReal Destination, const RwReal Step);
 
-      RwaEnvironment* GetEnvironment(void);
+      RwaEnvironment *GetEnvironment(void);
       //
       RwBool FadeEnvironment(const RwInt32 Destination, const RwUInt32 Step);
 
-      RwaListener* GetListener(void);
+      RwaListener *GetListener(void);
 
       void AddDictionary(RwaWaveDict* const pDict);
       void RemoveDictionary(const RwaWaveDict* const pDict);
       //
       DictionaryId FindDictionaryId(const RwChar* const pName);
       DictionaryId FindDictionaryId(const RwaWaveDict* const pDict);
-      RwaWaveDict* GetDictionary(const DictionaryId Id);
+      RwaWaveDict *GetDictionary(const DictionaryId Id);
       //
-      RwaOsWave* FindWave(const RwChar* const pName);
+      RwaOsWave *FindWave(const RwChar* const pName);
 
-      RwaVirtualVoice* AllocateVirtualVoice(void);
+      RwaVirtualVoice *AllocateVirtualVoice(void);
       void FreeVirtualVoice(RwaVirtualVoice* const pVirtualVoice);
       //
       RwBool FadeVirtualVoice(const RwReal Destination, const RwReal Step, const RwaVirtualVoice* const pVoice);
       //
       void StopAllVirtualVoices(void);
 
-      RwaOsStream* OpenStream(const RwChar* const pName);
+      RwaOsStream *OpenStream(const RwChar* const pName);
    }
 }
 #endif

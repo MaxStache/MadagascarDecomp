@@ -53,27 +53,27 @@ namespace RWS
    {
       RWS_IMPLEMENT_CLASSID(CXboxStndController);
       RWS_REGISTERCLASS(CXboxStndController);
-      const float XBOX_THUMB_DEAD_ZONE = 0.35f;
+      const float XBOX_THUMB_DEAD_ZONE = 0.35f;      
 
       //-----------------------------------------------------------------------------
       // Globals
       //-----------------------------------------------------------------------------
-
+      
       // See Singleton pattern,
       //
-      CXboxStndCntrlDevice *CXboxStndCntrlDevice::_instance;
-
+      CXboxStndCntrlDevice* CXboxStndCntrlDevice::_instance;
+   
       // Storage of raw game pad data, also maintains a handle to each device
       //
       XBGAMEPAD CXboxStndCntrlDevice::g_Gamepads[NUM_GAME_CONTROLLERS];
-
+   
       // Number of CXboxStndCntrlDevice opened, used to determine when the device can be released
       //
       unsigned int CXboxStndCntrlDevice::refcount = 0;
-
-
+  
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CalcJoystickValue | convert raw joystick values -1 to 1
       //
       //
@@ -82,17 +82,17 @@ namespace RWS
       void CJoystickInput::CalcJoystickValue(SHORT &var)
       {
          RWS_FUNCTION("RWS::InputDevices::CJoystickInput::CalcJoystickValue");
-
+         
          m_value = 1.0f - (((float)var + (float)0x8000) / 32767.5f); // -0x8000 to 7fff -> -1 to 1
-
+      
          // Hysteresis in center area
-         if (m_value > -XBOX_THUMB_DEAD_ZONE && m_value < XBOX_THUMB_DEAD_ZONE) m_value = 0.0f;
+         if (m_value >- XBOX_THUMB_DEAD_ZONE && m_value < XBOX_THUMB_DEAD_ZONE) m_value = 0.0f;   
 
          RWS_RETURNVOID();
       }
 
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CalcJoystickValue | convert raw joystick values -1 to 1
       //
       //
@@ -103,15 +103,15 @@ namespace RWS
          RWS_FUNCTION("RWS::InputDevices::CJoystickInput::CalcJoystickValueNeg");
 
          m_value = (((float)var + (float)0x8000) / 32767.5f) - 1.0f; // -0x8000 to 7fff -> -1 to 1
-
+      
          // Hysteresis in center area
-         if (m_value > -XBOX_THUMB_DEAD_ZONE && m_value < XBOX_THUMB_DEAD_ZONE) m_value = 0.0f;
+         if (m_value >- XBOX_THUMB_DEAD_ZONE && m_value < XBOX_THUMB_DEAD_ZONE) m_value = 0.0f;   
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CalcButtonValue | Convert raw button values 0 to 255, to -1 to 1
       //
       //
@@ -125,9 +125,9 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CalcButtonValue | Convert raw button values (single bit in WORD), to -1 to 1
       //
       //
@@ -137,7 +137,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::InputDevices::CButtonInput::CalcButtonValue");
 
-         if ((rawButton & maskButton) != 0)
+         if ( (rawButton&maskButton) != 0 )
          {
             m_value = 1.0f;
          }
@@ -148,9 +148,9 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CalcButtonValue | Convert raw button values (single bit in WORD), to -1 to 1
       //
       //
@@ -160,7 +160,7 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::InputDevices::CWJoystickInput::CalcJoystickValue");
 
-         if ((rawButton & maskButtonA) != 0)
+         if ( (rawButton&maskButtonA) != 0 )
          {
             m_value = 1.0f;
          }
@@ -168,8 +168,8 @@ namespace RWS
          {
             m_value = 0;
          }
-
-         if ((rawButton & maskButtonB) != 0)
+      
+         if ( (rawButton & maskButtonB) != 0 )
          {
             m_value = -1.0f;
          }
@@ -177,13 +177,13 @@ namespace RWS
          RWS_RETURNVOID();
       }
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | new_Instance | Create a single CXboxStndCntrlDevice device
       //
       //
       //
       //
-      CXboxStndCntrlDevice *CXboxStndCntrlDevice::new_Instance(void)
+      CXboxStndCntrlDevice* CXboxStndCntrlDevice::new_Instance(void)
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::new_Instance");
 
@@ -197,12 +197,12 @@ namespace RWS
          //
 //       refcount +=1;
          refcount = 1;
-
+      
          RWS_RETURN(_instance);
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | delete_Instance |  Deletes single instance of CXboxStndCntrlDevice if, reference count is 0
       //
       //
@@ -228,29 +228,28 @@ namespace RWS
          }
 */
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CXboxStndCntrlDevice | Initialize CXboxStndCntrlDevice class
       //
       //
       //
       //
-      CXboxStndCntrlDevice::CXboxStndCntrlDevice(void) :
-         InitCEventHandler(0)
+      CXboxStndCntrlDevice::CXboxStndCntrlDevice(void) : InitCEventHandler(0)
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::CXboxStndCntrlDevice");
 
          XBInput_CreateGamepads();
-
-         LinkMsg(iMsgRunningTick, 0);
-         LinkMsg(iMsgPausedTick, 0);
+      
+         LinkMsg (iMsgRunningTick, 0);
+         LinkMsg (iMsgPausedTick, 0);
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | ~CXboxStndCntrlDevice | Deconstruct CXboxStndCntrlDevice class
       //
       //
@@ -260,15 +259,15 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::~CXboxStndCntrlDevice");
 
-         UnLinkMsg(iMsgPausedTick);
-         UnLinkMsg(iMsgRunningTick);
+         UnLinkMsg (iMsgPausedTick);
+         UnLinkMsg (iMsgRunningTick);
 
          RWS_RETURNVOID();
       }
-
-
+   
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc HRESULT | XBInput_CreateGamepads | Initialize game pad devices
       //
       //
@@ -278,78 +277,78 @@ namespace RWS
       // Name: XBInput_CreateGamepads()
       // Desc: Creates the game pad devices
       //-----------------------------------------------------------------------------
-      HRESULT CXboxStndCntrlDevice::XBInput_CreateGamepads(void)
+      HRESULT CXboxStndCntrlDevice::XBInput_CreateGamepads( void )
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::XBInput_CreateGamepads");
-
+         
          static bool initialized = false;
-
+         
          if (!initialized)
          {
-
+            
             // Initialize Devices
             //
-            XInitDevices(0, 0);
-
+            XInitDevices(0, 0);    
+            
             DWORD dwDeviceMask = 0;
             DWORD count = 0;
-
+            
             while (dwDeviceMask == 0)
             {
                RWS_TRACE("CXboxStndCntrlDevice::XBInput_CreateGamepads XGetDevices( XDEVICE_TYPE_GAMEPAD )");
-
+               
                // Sleep while devices are initialized
                //
-               Sleep(100);
-
+               Sleep(100); 
+               
                // Get a mask of all currently available devices
                //
-               dwDeviceMask = XGetDevices(XDEVICE_TYPE_GAMEPAD);
-
+               dwDeviceMask = XGetDevices( XDEVICE_TYPE_GAMEPAD );
+               
                if (dwDeviceMask) break;
                else
                {
                   RWS_TRACE("Not Found :: Retry");
                }
-
-               count++;
-
-               if (count >= 100)
+               
+               count ++;
+               
+               if (count >= 100) 
                {
                   RWS_ASSERTFAIL("CXboxStndCntrlDevice::XBInput_CreateGamepads No Game pads Connected");
                }
             };
-
+            
             if (XGetPortCount() > NUM_GAME_CONTROLLERS)
             {
                RWS_ASSERT(false, "XBInput_CreateGamepads XGetPortCount() > NUM_GAME_CONTROLLERS)");
             }
-
+            
             // Open the devices
             //
-            for (DWORD i = 0; i < XGetPortCount(); i++)
+            for ( DWORD i = 0; i < XGetPortCount(); i++ )
             {
-               ZeroMemory(&g_Gamepads[i], sizeof(XBGAMEPAD));
-               if (dwDeviceMask & (1 << i))
+               ZeroMemory( &g_Gamepads[i], sizeof(XBGAMEPAD) );
+               if ( dwDeviceMask & (1<<i) ) 
                {
                   // Get a handle to the device
                   //
-                  g_Gamepads[i].hDevice = XInputOpen(XDEVICE_TYPE_GAMEPAD, i, XDEVICE_NO_SLOT, 0);
-
+                  g_Gamepads[i].hDevice = XInputOpen( XDEVICE_TYPE_GAMEPAD, i, XDEVICE_NO_SLOT, 0 );
+                  
                   // Store capabilities of the device
                   //
-                  XInputGetCapabilities(g_Gamepads[i].hDevice, &g_Gamepads[i].caps);
+                  XInputGetCapabilities( g_Gamepads[i].hDevice, &g_Gamepads[i].caps );
                }
             }
-
+            
             initialized = true;
          }
-
-         RWS_RETURN(S_OK);
+         
+         RWS_RETURN( S_OK );
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | XBInput_GetInput | Process input from game pads
       //
       //
@@ -359,62 +358,62 @@ namespace RWS
       // Name: XBInput_GetInput()
       // Desc: Processes input from the game pads
       //-----------------------------------------------------------------------------
-      void CXboxStndCntrlDevice::XBInput_GetInput(void)
+      void CXboxStndCntrlDevice::XBInput_GetInput( void)
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::XBInput_GetInput");
-
+         
          XBGAMEPAD *pGamepads = g_Gamepads;
-
+         
          // Get status about game pad insertions and removal. Note that, in order to
          // not miss devices, we will check for removed device BEFORE checking for
          // insertions
          //
          DWORD dwInsertions, dwRemovals;
-         XGetDeviceChanges(XDEVICE_TYPE_GAMEPAD, &dwInsertions, &dwRemovals);
-
+         XGetDeviceChanges( XDEVICE_TYPE_GAMEPAD, &dwInsertions, &dwRemovals );
+         
          // Loop through all game pads
          //
-         for (DWORD i = 0; i < XGetPortCount(); i++)
+         for ( DWORD i = 0; i < XGetPortCount(); i++ )
          {
             // Handle removed devices.
             //
-            if (dwRemovals & (1 << i))
+            if ( dwRemovals & (1 << i) ) 
             {
                RWS_TRACE("Pad " << i << " Removed");
-
-               XInputClose(pGamepads[i].hDevice);
+               
+               XInputClose( pGamepads[i].hDevice );
                pGamepads[i].hDevice = 0;
-
+               
                // FE Add pad remove event
             }
-
+            
             // Handle inserted devices
             //
             pGamepads[i].bInserted = FALSE;
-            if (dwInsertions & (1 << i))
+            if ( dwInsertions & (1 << i) ) 
             {
                RWS_TRACE("Pad " << i << " Inserted");
+               
+               pGamepads[i].hDevice = XInputOpen( XDEVICE_TYPE_GAMEPAD, i, XDEVICE_NO_SLOT, 0 );
 
-               pGamepads[i].hDevice = XInputOpen(XDEVICE_TYPE_GAMEPAD, i, XDEVICE_NO_SLOT, 0);
-
-               XInputGetCapabilities(g_Gamepads[i].hDevice, &g_Gamepads[i].caps);
+               XInputGetCapabilities( g_Gamepads[i].hDevice, &g_Gamepads[i].caps );
                pGamepads[i].bInserted = TRUE;
-
+               
                // FE Add pad inserted event
             }
-
+            
             // If we have a valid device, poll it's state
-            if (pGamepads[i].hDevice)
+            if ( pGamepads[i].hDevice )
             {
-               XInputGetState(pGamepads[i].hDevice, &pGamepads[i].xiState);
+               XInputGetState( pGamepads[i].hDevice, &pGamepads[i].xiState );
             }
          }
-
+         
          RWS_RETURNVOID();
       }
-
+      
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | GetXBGAMEPAD | Return XBGAMEPAD for a specified device
       //
       //
@@ -425,7 +424,7 @@ namespace RWS
          RWS_FUNCTION("RWS::InputDevices::CXboxStndCntrlDevice::GetXBGAMEPAD");
 
          if (!_instance) RWS_RETURN(0);
-
+      
          if (device_num < NUM_GAME_CONTROLLERS)
          {
             RWS_RETURN(&g_Gamepads[device_num]);
@@ -435,9 +434,9 @@ namespace RWS
             RWS_RETURN(0);
          }
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | HandleEvents | Process events
       //
       //
@@ -451,40 +450,38 @@ namespace RWS
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | CXboxStndController | Initialize controller Input
       //
       //
       //
       //
-      CXboxStndController::CXboxStndController(const CAttributePacket &) :
-         InitCEventHandler(0),
-         m_PortSelect(0)
+      CXboxStndController::CXboxStndController(const CAttributePacket&) : InitCEventHandler(0), m_PortSelect(0)
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndController::CXboxStndController");
 
          pCXboxStndCntrlDevice = CXboxStndCntrlDevice::new_Instance();
-
+      
          // Link to the running tick in order to poll controller devices
          //
-         LinkMsg(iMsgRunningTick, 0);
+         LinkMsg (iMsgRunningTick, 0);
 
          // Defaults
          //
-         ReplaceLinkedMsg(m_LJX.m_Inq, "INQ_ACTN_TURN", "return RwReal");
-         ReplaceLinkedMsg(m_LJY.m_Inq, "INQ_ACTN_FWD", "return RwReal");
-         ReplaceLinkedMsg(m_RJX.m_Inq, "INQ_ACTN_STRAFE", "return RwReal");
-         ReplaceLinkedMsg(m_RJY.m_Inq, "INQ_CAMERA_PITCH", "return RwReal");
-         ReplaceLinkedMsg(m_B[0].m_Inq, "INQ_ACTN_JUMP", "return RwReal");
-         ReplaceLinkedMsg(m_B[1].m_Inq, "INQ_ACTN_FIRE", "return RwReal");
+         ReplaceLinkedMsg(m_LJX.m_Inq,  "INQ_ACTN_TURN",   "return RwReal");
+         ReplaceLinkedMsg(m_LJY.m_Inq,  "INQ_ACTN_FWD",    "return RwReal");
+         ReplaceLinkedMsg(m_RJX.m_Inq,  "INQ_ACTN_STRAFE", "return RwReal");
+         ReplaceLinkedMsg(m_RJY.m_Inq,  "INQ_CAMERA_PITCH","return RwReal");
+         ReplaceLinkedMsg(m_B[0].m_Inq, "INQ_ACTN_JUMP",   "return RwReal");
+         ReplaceLinkedMsg(m_B[1].m_Inq, "INQ_ACTN_FIRE",   "return RwReal");
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | ~CXboxStndController | Deconstruct controller Input
       //
       //
@@ -494,56 +491,56 @@ namespace RWS
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndController::~CXboxStndController");
 
-         UnLinkMsg(m_LJX.m_Inq);
-         UnRegisterMsg(m_LJX.m_Inq);
-
-         UnLinkMsg(m_LJY.m_Inq);
-         UnRegisterMsg(m_LJY.m_Inq);
-
-         UnLinkMsg(m_RJX.m_Inq);
-         UnRegisterMsg(m_RJX.m_Inq);
-
-         UnLinkMsg(m_RJY.m_Inq);
-         UnRegisterMsg(m_RJY.m_Inq);
-
+         UnLinkMsg (m_LJX.m_Inq);
+         UnRegisterMsg (m_LJX.m_Inq);
+      
+         UnLinkMsg (m_LJY.m_Inq);
+         UnRegisterMsg (m_LJY.m_Inq);
+      
+         UnLinkMsg (m_RJX.m_Inq);
+         UnRegisterMsg (m_RJX.m_Inq);
+      
+         UnLinkMsg (m_RJY.m_Inq);
+         UnRegisterMsg (m_RJY.m_Inq);
+      
          for (int i = 0; i < 8; i++)
          {
-            UnLinkMsg(m_B[i].m_Inq);
-            UnRegisterMsg(m_B[i].m_Inq);
-
-            UnLinkMsg(m_wB[i].m_Inq);
-            UnRegisterMsg(m_wB[i].m_Inq);
+            UnLinkMsg (m_B[i].m_Inq);
+            UnRegisterMsg (m_B[i].m_Inq);
+         
+            UnLinkMsg (m_wB[i].m_Inq);
+            UnRegisterMsg (m_wB[i].m_Inq);
          }
-
-         UnLinkMsg(m_BJX.m_Inq);
-         UnRegisterMsg(m_BJX.m_Inq);
-
-         UnLinkMsg(m_BJY.m_Inq);
-         UnRegisterMsg(m_BJY.m_Inq);
-
+      
+         UnLinkMsg (m_BJX.m_Inq);
+         UnRegisterMsg (m_BJX.m_Inq);
+      
+         UnLinkMsg (m_BJY.m_Inq);
+         UnRegisterMsg (m_BJY.m_Inq);
+      
          UnLinkMsg(iMsgRunningTick);
          // Attempt to shutdown the device driver
          //
-         CXboxStndCntrlDevice::delete_Instance();
+         CXboxStndCntrlDevice::delete_Instance();  
 
          RWS_RETURNVOID();
       }
-
+   
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | HandleAttributes | Process Parameters
       //
       //
       //
       //
-      void CXboxStndController::HandleAttributes(const CAttributePacket &attr)
+      void CXboxStndController::HandleAttributes(const CAttributePacket& attr)
       {
          RWS_FUNCTION("RWS::InputDevices::CXboxStndController::HandleAttributes");
-
+      
          CAttributeHandler::HandleAttributes(attr);
 
          CAttributeCommandIterator attrIt(attr, RWS_CLASSID_OF(CXboxStndController));
-
+      
          while (!attrIt.IsFinished())
          {
             switch (attrIt->GetCommandId())
@@ -669,7 +666,7 @@ namespace RWS
          RWS_RETURNVOID();
       }
       //////////////////////////////////////////////////////////////////
-      //
+      // 
       // @mfunc void | HandleEvents | Process events
       //
       //
@@ -681,12 +678,12 @@ namespace RWS
 
          if (pMsg.Id == iMsgRunningTick)
          {
-            XBGAMEPAD *pGP = CXboxStndCntrlDevice::GetXBGAMEPAD(m_PortSelect);   // Pointer to Game Pad
-
+            XBGAMEPAD* pGP = CXboxStndCntrlDevice::GetXBGAMEPAD(m_PortSelect);   // Pointer to Game Pad
+         
             // Display Debug Stuff
             //
-#ifdef RWS_DEBUGTOOLS
-#if 0
+   #ifdef RWS_DEBUGTOOLS
+   #if 0
             if (g_GFDebugTools)
             {
                g_GFDebugTools->Printf ("wButtons 0x%x\n", (unsigned int)pGP->xiState.Gamepad.wButtons);
@@ -703,58 +700,59 @@ namespace RWS
                g_GFDebugTools->Printf ("sThumbRX 0x%x\n", (unsigned int)pGP->xiState.Gamepad.sThumbRX);
                g_GFDebugTools->Printf ("sThumbRY 0x%x\n", (unsigned int)pGP->xiState.Gamepad.sThumbRY);
             }
-#endif
-#endif
+   #endif
+   #endif
             // Convert raw button values to -1 to 1
             //
             static unsigned int mask_table[] =
-               {
-                  XINPUT_GAMEPAD_DPAD_UP,
+            {
+               XINPUT_GAMEPAD_DPAD_UP,
                   XINPUT_GAMEPAD_DPAD_DOWN,
                   XINPUT_GAMEPAD_DPAD_LEFT,
                   XINPUT_GAMEPAD_DPAD_RIGHT,
                   XINPUT_GAMEPAD_START,
                   XINPUT_GAMEPAD_BACK,
                   XINPUT_GAMEPAD_LEFT_THUMB,
-                  XINPUT_GAMEPAD_RIGHT_THUMB};
-
+                  XINPUT_GAMEPAD_RIGHT_THUMB
+            };
+          
             // Convert raw joystick values to -1 to 1
             //
-            m_LJX.CalcJoystickValue(pGP->xiState.Gamepad.sThumbLX);
-            m_LJY.CalcJoystickValueNeg(pGP->xiState.Gamepad.sThumbLY);
-            m_RJX.CalcJoystickValue(pGP->xiState.Gamepad.sThumbRX);
-            m_RJY.CalcJoystickValueNeg(pGP->xiState.Gamepad.sThumbRY);
+            m_LJX.CalcJoystickValue (pGP->xiState.Gamepad.sThumbLX);
+            m_LJY.CalcJoystickValueNeg (pGP->xiState.Gamepad.sThumbLY);
+            m_RJX.CalcJoystickValue (pGP->xiState.Gamepad.sThumbRX);
+            m_RJY.CalcJoystickValueNeg (pGP->xiState.Gamepad.sThumbRY);
 
-            m_BJX.CalcJoystickValue(pGP->xiState.Gamepad.wButtons,
-                                    XINPUT_GAMEPAD_DPAD_RIGHT, XINPUT_GAMEPAD_DPAD_LEFT);
+            m_BJX.CalcJoystickValue(pGP->xiState.Gamepad.wButtons ,
+               XINPUT_GAMEPAD_DPAD_RIGHT, XINPUT_GAMEPAD_DPAD_LEFT);
 
-            m_BJY.CalcJoystickValue(pGP->xiState.Gamepad.wButtons,
-                                    XINPUT_GAMEPAD_DPAD_UP, XINPUT_GAMEPAD_DPAD_DOWN);
-
-            for (unsigned int i = 0; i < 8; i++)
+            m_BJY.CalcJoystickValue(pGP->xiState.Gamepad.wButtons, 
+               XINPUT_GAMEPAD_DPAD_UP, XINPUT_GAMEPAD_DPAD_DOWN);
+         
+            for (unsigned int i = 0;i < 8;i++)
             {
                // Analogue Buttons
                //
-               m_B[i].CalcAnalogueButtonValue(pGP->xiState.Gamepad.bAnalogButtons[i]);
-
+               m_B[i].CalcAnalogueButtonValue (pGP->xiState.Gamepad.bAnalogButtons[i]);
+            
                // Digital Buttons
                //
-               m_wB[i].CalcButtonValue(pGP->xiState.Gamepad.wButtons, mask_table[i]);
+               m_wB[i].CalcButtonValue (pGP->xiState.Gamepad.wButtons, mask_table[i]);
             }
          }
-
+      
          // Check For Inquire Joysticks
          //
          else if (pMsg.Id == m_LJX.m_Inq) m_LJX.SendInputValue(&pMsg);
          else if (pMsg.Id == m_LJY.m_Inq) m_LJY.SendInputValue(&pMsg);
          else if (pMsg.Id == m_RJX.m_Inq) m_RJX.SendInputValue(&pMsg);
          else if (pMsg.Id == m_RJY.m_Inq) m_RJY.SendInputValue(&pMsg);
-
+      
          // Digital Joystick
          //
          else if (pMsg.Id == m_BJX.m_Inq) m_BJX.SendInputValue(&pMsg);
          else if (pMsg.Id == m_BJY.m_Inq) m_BJY.SendInputValue(&pMsg);
-
+      
          //Check for Inquire Buttons...
          //
          else
@@ -763,18 +761,10 @@ namespace RWS
             {
                // Analogue Buttons
                //
-               if (pMsg.Id == m_B[i].m_Inq)
-               {
-                  m_B[i].SendInputValue(&pMsg);
-                  break;
-               }
+               if (pMsg.Id == m_B[i].m_Inq) {m_B[i].SendInputValue(&pMsg);break;}
                // Digital Buttons
                //
-               if (pMsg.Id == m_wB[i].m_Inq)
-               {
-                  m_wB[i].SendInputValue(&pMsg);
-                  break;
-               }
+               if (pMsg.Id == m_wB[i].m_Inq) {m_wB[i].SendInputValue(&pMsg);break;}
             }
          }
 
