@@ -15,3 +15,6 @@ src/console/game_framework/win32/bin
 # Python
 .venv/
 __pycache__/
+
+
+rwsdk/
