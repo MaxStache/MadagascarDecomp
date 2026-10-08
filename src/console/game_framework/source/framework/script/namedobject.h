@@ -5,8 +5,9 @@ namespace Script
 {
     class NamedObject
     {
-        virtual char * getName() = 0;
-        virtual char * getTypeName() = 0;
+    public:
+        virtual const char* getName() = 0;
+        virtual const char* getTypeName() { return getName(); }
     };
 }
 
