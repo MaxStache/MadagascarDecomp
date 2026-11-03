@@ -568,6 +568,7 @@ void DestroyMainWindow(void)
 void RunGameFrame(void)
 {
     // TODO: Actually implement
+    RWS::MainLoop::Logic::Poll();
     RWS::MainLoop::Render::Poll();
 }
 

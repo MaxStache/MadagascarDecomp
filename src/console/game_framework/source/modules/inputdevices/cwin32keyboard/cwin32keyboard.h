@@ -124,6 +124,8 @@ namespace RWS
          RwUInt32 vKey2;
 
          CEventId m_InqKey_Msg_Id;        // Inquire Key State Message 0..0.5..1
+
+         int m_nLastFocus;    // Focus state on the previous tick (-1 = not checked yet), only used for debug logging
       };
    }//namespace InputDevices
 }//namespace RWS

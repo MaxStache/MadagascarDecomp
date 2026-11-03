@@ -40,6 +40,7 @@
 
 #include "framework/core/macros/debugmacros.h"
 #include "framework/startup/win32/win.h"
+#include "framework/decomp_helpers.h"
 
 #if defined(_WINDOWS) || defined(DOXYGEN)
 
@@ -189,11 +190,14 @@ namespace RWS
          InitCEventHandler(0),
          m_input_val(0.0f),
          vKey1(0),
-         vKey2(0)
+         vKey2(0),
+         m_nLastFocus(-1)
       {
 
          RWS_FUNCTION("RWS::InputDevices::CWin32Keyboard::CWin32Keyboard");
-            
+
+         DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] Created\n", this);
+
          LinkMsg(iMsgRunningTick, 0);   // Check Key state when game is running
          LinkMsg(iMsgPausedTick, 0); // Check Key state when game is paused
 
@@ -236,6 +240,14 @@ namespace RWS
          {
             bool hasFocus = (Win::GetMainWindow() == GetFocus());
             RwReal last_input_val = m_input_val;
+
+            if ((int)hasFocus != m_nLastFocus)
+            {
+               DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] hasFocus %d, main window %p, GetFocus %p, GetActiveWindow %p, "
+                  "GetForegroundWindow %p\n", this, hasFocus, Win::GetMainWindow(), GetFocus(),
+                  GetActiveWindow(), GetForegroundWindow());
+               m_nLastFocus = hasFocus;
+            }
          
             if ( vKey1 != vKey2 )   // Key Pair 1..0..-1 Emulates a Joystick
             {
@@ -270,6 +282,12 @@ namespace RWS
                    m_input_val = -1.0f;
                }
             }
+
+            if (m_input_val != last_input_val)
+            {
+               DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] Input %d -> %d (vKey1 0x%02x, vKey2 0x%02x)\n", this,
+                  (int)last_input_val, (int)m_input_val, vKey1, vKey2);
+            }
             RWS_RETURNVOID();
          }
          RWS_RETURNVOID();
@@ -298,18 +316,23 @@ namespace RWS
             case CMD_vKey1:
                //////////////////////////////////////////////////////////////////
                vKey1 = _string2vkcode_tble_[attrIt->GetAs_unsigned_int()];
+               DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] vKey1 index %u -> 0x%02x\n", this,
+                  attrIt->GetAs_unsigned_int(), vKey1);
                break;
             
                //////////////////////////////////////////////////////////////////
             case CMD_vKey2:
                //////////////////////////////////////////////////////////////////
                vKey2 = _string2vkcode_tble_[attrIt->GetAs_unsigned_int()];
+               DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] vKey2 index %u -> 0x%02x\n", this,
+                  attrIt->GetAs_unsigned_int(), vKey2);
                break;
 
                //////////////////////////////////////////////////////////////////
             case CMD_m_InqKey_Msg_Id:
                //////////////////////////////////////////////////////////////////
                ReplaceLinkedMsg(m_InqKey_Msg_Id, attrIt->GetAs_RwChar_ptr(), "return RwReal");
+               DECOMP_DEBUG_PRINT("[CWin32Keyboard %p] Inquire message \"%s\"\n", this, attrIt->GetAs_RwChar_ptr());
                break;
             }
             ++attrIt;
