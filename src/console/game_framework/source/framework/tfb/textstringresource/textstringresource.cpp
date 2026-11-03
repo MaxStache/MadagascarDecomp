@@ -13,10 +13,13 @@
 //
 #include "framework/core/macros/debugmacros.h"
 #include "textstringresource.h"
-#include "language.h"
+#include "../language.h"
 
 namespace RWS
 {
+   void *g_textDictBuffer = 0;
+   void *g_textDictBufferEnd = 0;
+
    /**
    *
    * Load a text string file resource.
@@ -40,9 +43,6 @@ namespace RWS
       RWS_FUNCTION("RWS::TextStringResource::Load");
       RWS_PRE(pStream);
 
-       bool bVar1;
-
-
       void * pBuffer = 0;
       
       if (uiStreamSize != 0) {
@@ -64,7 +64,7 @@ namespace RWS
       uiResourceSize = uiStreamSize;
 
       g_textDictBuffer = pBuffer;
-      g_textDictBufferEnd = pBuffer + uiStreamSize;
+      g_textDictBufferEnd = (char *)pBuffer + uiStreamSize;
 
       RWS_RETURN(pBuffer);
    }

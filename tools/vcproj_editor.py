@@ -331,6 +331,7 @@ def gui(path):
             self.tk = root
             self.proj = None
             self.dirty = False
+            self.last_dir = None
             self.show_settings = tk.BooleanVar(value=False)
             self.search = tk.StringVar()
             self.search.trace_add("write", lambda *_: self.rebuild())
@@ -462,8 +463,10 @@ def gui(path):
         def open(self):
             if not self.confirm_discard():
                 return
-            p = filedialog.askopenfilename(filetypes=[("VC++ project", "*.vcproj"), ("All", "*.*")])
+            p = filedialog.askopenfilename(initialdir=self.last_dir,
+                                           filetypes=[("VC++ project", "*.vcproj"), ("All", "*.*")])
             if p:
+                self.last_dir = os.path.dirname(p)
                 self.load(p)
 
         def save(self, ask=False):
@@ -788,10 +791,11 @@ def gui(path):
             if not self.proj:
                 return
             parent = self.target_container()
-            paths = filedialog.askopenfilenames(initialdir=self.proj.dir, title="Add files to '%s'" % (
+            paths = filedialog.askopenfilenames(initialdir=self.last_dir or self.proj.dir, title="Add files to '%s'" % (
                 self.proj.filter_path(parent) or "Files"))
             if not paths:
                 return
+            self.last_dir = os.path.dirname(paths[-1])
             last = None
             for p in paths:
                 last = self.proj.add_file(parent, self.proj.rel_path(p))

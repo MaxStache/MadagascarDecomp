@@ -38,6 +38,8 @@
 #include <map>
 #include <list>
 
+#include "framework/decomp_helpers.h"
+
 #if defined(DOLPHIN) && defined(__MWERKS__)
 using namespace std;
 #endif
@@ -612,6 +614,7 @@ namespace RWS
    *  contain a member variable called m_debug which can be used by any class derived from CAttributeHandler.
    *
    */
+   // FUNCTION: GAME 0x00410380
    void CAttributeHandler::HandleAttributes(const CAttributePacket& attr)
    {
 #ifdef RWS_DESIGN
@@ -989,7 +992,12 @@ namespace RWS
 
 #endif
          pAttrHand =  CClassFactory::MakeNew(cclassname, *this);
-         
+        
+         if (pAttrHand != NULL) {
+            DECOMP_DEBUG_PRINT("Created Instance Of [ %s ] Id [ %08x-%08x-%08x-%08x ]\n", cclassname ? cclassname : "(null)",
+                InstanceId.m_Data[0], InstanceId.m_Data[1], InstanceId.m_Data[2], InstanceId.m_Data[3]);
+         }
+      
          if (pAttrHand)
          {
             pAttrHand->Add(InstanceId);

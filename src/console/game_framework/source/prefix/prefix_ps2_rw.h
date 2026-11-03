@@ -1,5 +1,5 @@
 //	===========================================================================
-//	PREFIX_PS2_RW.h			©2000 Criterion Software Ltd. All rights reserved.
+//	PREFIX_PS2_RW.h			ï¿½2000 Criterion Software Ltd. All rights reserved.
 //	===========================================================================
 //
 

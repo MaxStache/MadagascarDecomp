@@ -109,6 +109,7 @@ namespace RWS
       *
       *  \return Returns true on success, otherwise false.
       */
+      // FUNCTION: GAME 0x00462aa0
       RwBool Open(
          const FileSystemInstaller pFSInstaller,
          const RwMemoryFunctions *memfuncs,

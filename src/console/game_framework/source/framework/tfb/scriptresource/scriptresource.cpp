@@ -39,6 +39,8 @@ namespace RWS
       RWS_FUNCTION("RWS::CScriptResource::Load");
       RWS_PRE(pStream);
       void * pBuffer = 0;
+
+      //printf("%s", psName);
   
       if (uiStreamSize > 0) {
          // TODO: Invenstiate why there are + 0x20 here

@@ -78,7 +78,7 @@
 *  These components are specified effectively as comments with the game code 
 *  thus keeping the code for the particular game component and definition of 
 *  the user interface required to use that component together. Building a user 
-*  interface from scratch or modifying it doesn’t require the RenderWare Studio 
+*  interface from scratch or modifying it doesnï¿½t require the RenderWare Studio 
 *  Framework to be compiled. The RenderWare Studio Workspace scans the source 
 *  code of the game extracting the definitions of the user interface thus 
 *  enabling them to be displayed. Modifying an attribute within the RenderWare 

@@ -293,7 +293,9 @@ void operator delete[](void *pMem);
 *
 */
 
-#ifdef RWS_DISABLE_MEMORY_CHECKING
+#if defined(__INTELLISENSE__)
+#define RWS_NEW new
+#elif defined(RWS_DISABLE_MEMORY_CHECKING)
 #define RWS_NEW new(RWS_MEMORY_TYPE_RWS)
 #else
 #define RWS_NEW new(__FILE__, __LINE__, RWS_MEMORY_TYPE_RWS)

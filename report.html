@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="data:image/png;base64,">
+    <title>Decompilation Status</title>
+    <style>
+      body {
+        background: #202020;
+        color: #f0f0f0;
+        font-family: sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .main {
+        width: 800px;
+        max-width: 100%;
+        margin: auto;
+      }
+
+      search-bar > input {
+        width: 100%;
+        box-sizing: border-box;
+        background: #303030;
+        color: #f0f0f0;
+        border: 1px #f0f0f0 solid;
+        padding: 0.5em;
+        border-radius: 0.5em;
+      }
+
+      search-bar > input::placeholder {
+        color: #b0b0b0;
+      }
+
+      #listing {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: monospace;
+      }
+
+      tr[data-address]:hover {
+        background: #404040 !important;
+      }
+
+      tr[data-address]:nth-child(odd of :not([hidden])), #listing > thead th {
+        background: #282828;
+      }
+
+      tr[data-address]:nth-child(even of :not([hidden])) {
+        background: #383838;
+      }
+
+      table#listing {
+        border: 1px #f0f0f0 solid;
+        table-layout: fixed;
+      }
+
+      #listing > thead th {
+        padding: 0.5em;
+        user-select: none;
+        text-align: left;
+      }
+
+      #listing > thead th[data-col="address"],
+      #listing > thead th[data-col="recomp"] {
+        /* enough for "0x" and 8 digit address */
+        width: 10ch;
+      }
+
+      #listing > thead th[data-col="diffs"],
+      #listing > thead th[data-col="matching"] {
+        width: 8ch;
+      }
+
+      #listing > thead th > div {
+        display: flex;
+        column-gap: 0.5em;
+      }
+
+      #listing > thead th > div > span {
+        cursor: pointer;
+      }
+
+      #listing > thead th > div > span:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      #listing > thead th:last-child > div {
+        /* Draw the sort triangle to the left of the last column. */
+        flex-direction: row-reverse;
+        justify-content: right;
+      }
+
+      .diffneg {
+        color: #FF8080;
+      }
+
+      .diffpos {
+        color: #80FF80;
+      }
+
+      .diffslug {
+        color: #8080FF;
+      }
+
+      .identical {
+        font-style: italic;
+        text-align: center;
+      }
+
+      .filters {
+        align-items: top;
+        display: flex;
+        font-size: 10pt;
+        justify-content: space-between;
+        margin: 0.5em 0 1em 0;
+      }
+
+      label, button, input[type=checkbox], input[type=radio] {
+        cursor: pointer;
+        user-select: none;
+      }
+
+      /* Spread out inputs horizontally. */
+      fieldset, search-options {
+        align-items: center;
+        display: flex;
+      }
+
+      search-options {
+        gap: 10px;
+      }
+
+      fieldset:not(#pageDisplay) {
+        gap: 10px;
+        padding-right: 20px;
+      }
+
+      table.diffTable {
+        border-collapse: collapse;
+      }
+
+      table.diffTable:not(:last-child) {
+        /* visual gap *between* diff context groups */
+        margin-bottom: 40px;
+      }
+
+      table.diffTable td, table.diffTable th {
+        border: 0 none;
+        padding: 0 10px 0 0;
+      }
+
+      table.diffTable th {
+        /* don't break address if asm line is long */
+        word-break: keep-all;
+      }
+
+      diff-display[data-option="0"] th:nth-child(1) {
+        display: none;
+      }
+
+      diff-display[data-option="0"] th:nth-child(2),
+      diff-display[data-option="1"] th:nth-child(2) {
+        display: none;
+      }
+
+      label {
+        align-items: center;
+        display: flex;
+        user-select: none;
+      }
+
+      prev-page-button > button, next-page-button > button {
+        padding: 0.25em 0.5em;
+      }
+
+      page-select > select {
+        cursor: pointer;
+        padding: 0.25em;
+        margin: 0 0.5em;
+      }
+
+      p.rowcount {
+        align-self: flex-end;
+        font-size: 1.2em;
+        margin-bottom: 0;
+      }
+
+      tr[data-diff]:not([hidden]) {
+        contain: paint;
+      }
+
+      tr[data-diff] > td {
+        border: 1px #f0f0f0 solid;
+        border-bottom: 0px none;
+        display: table-cell;
+        padding: 0.5em;
+        word-break: break-all !important;
+      }
+
+      tr[data-diff] > td > div.no-diff {
+        font-style: italic;
+        text-align: center;
+      }
+
+      tr[data-address] > td[data-col="name"]:hover {
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+
+      tr[data-address] > td:not(data-col="name"]) {
+        white-space: nowrap;
+      }
+
+      tr[data-address] > td {
+        border-top: 1px #f0f0f0 solid;
+        display: table-cell;
+        padding: 0.5em;
+        vertical-align: top;
+        white-space: nowrap;
+      }
+
+      tr[data-address] > td[data-col="name"] {
+        white-space: wrap;
+        word-break: break-all !important;
+      }
+
+      tr[data-address] > td:last-child {
+        text-align: right;
+      }
+
+      click-to-copy {
+        position: relative;
+        cursor: pointer;
+      }
+      click-to-copy::after {
+        background-color: #fff;
+        color: #222;
+        display: none;
+        font-size: 12px;
+        padding: 1px 2px;
+        width: fit-content;
+        border-radius: 1px;
+        text-align: center;
+        bottom: 120%;
+        left: 0;
+        box-shadow: 0 4px 14px 0 rgba(0,0,0,.2), 0 0 0 1px rgba(0,0,0,.05);
+        position: absolute;
+        white-space: nowrap;
+        transition: .1s;
+        content: 'Copy to clipboard';
+      }
+      click-to-copy:hover {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+      }
+      click-to-copy:hover::after {
+        display: block;
+      }
+      click-to-copy[copied]:hover::after {
+        content: 'Copied!';
+      }
+    </style>
+    <script>
+      window.global_reccmp_report = {"file":"Game.exe","format":1,"timestamp":1793652321.0,"data":[{"address":"0x4025a0","name":"std::vector<RWS::CLinearMemoryManager::LinearMemoryPool *,std::allocator<RWS::CLinearMemoryManager::LinearMemoryPool *> >::_Destroy","matching":1.0,"recomp":"0x431070","type":1},{"address":"0x4025b0","name":"std::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >","matching":1.0,"recomp":"0x43df80","type":1},{"address":"0x4025c0","name":"Script::ScriptReference::`scalar deleting destructor'","matching":0.9090909090909091,"recomp":"0x438bd0","diff":[["@@ -0x4025c0,11 +0x438bd0,11 @@",[{"both":[["0x4025c0","test byte ptr [esp + 4], 1","0x438bd0"],["0x4025c5","push esi","0x438bd5"],["0x4025c6","mov esi, ecx","0x438bd6"],["0x4025c8","mov dword ptr [esi], Script::ScriptReference::`vftable' (VTABLE)","0x438bd8"],["0x4025ce","je 0x9","0x438bde"],["0x4025d0","push esi","0x438be0"]]},{"orig":[["0x4025d1","call <OFFSET2>"]],"recomp":[["0x438be1","call RWSFree (FUNCTION)"]]},{"both":[["0x4025d6","add esp, 4","0x438be6"],["0x4025d9","mov eax, esi","0x438be9"],["0x4025db","pop esi","0x438beb"],["0x4025dc","ret 4","0x438bec"]]}]]],"type":1},{"address":"0x410380","name":"std::allocator<std::_List_nod<RWS::CResourceHandler *,std::allocator<RWS::CResourceHandler *> >::_Node *>::destroy","matching":1.0,"recomp":"0x4333c0","type":1},{"address":"0x416530","name":"Script::ScriptReference::addRef","matching":1.0,"recomp":"0x438bb0","type":1},{"address":"0x41c310","name":"RWS::TFB::CTFBWorld::HandleEvents","matching":0.13793103448275862,"recomp":"0x422b60","diff":[["@@ -0x41c310,14 +0x422b60,15 @@",[{"orig":[["0x41c310","sub esp, 8"]],"recomp":[["0x422b60","mov eax, dword ptr [esp + 4] \t(ctfbworld.cpp:73)"],["0x422b64","mov edx, dword ptr [eax]"]]},{"both":[["0x41c313","push esi","0x422b66"]]},{"orig":[["0x41c314","push edi"],["0x41c315","mov edi, dword ptr [esp + 0x14]"],["0x41c319","mov eax, dword ptr [edi]"],["0x41c31b","mov esi, ecx"],["0x41c31d","cmp eax, dword ptr [esi + 0x34]"],["0x41c320","jne 0x38"],["0x41c322","call <OFFSET1>"],["0x41c327","mov ecx, dword ptr [edi + 4]"]],"recomp":[["0x422b67","cmp edx, dword ptr [ecx + 0x24]"],["0x422b6a","jne 0x18"],["0x422b6c","mov esi, dword ptr [eax + 4] \t(ctfbworld.cpp:75)"],["0x422b6f","xor ecx, ecx"],["0x422b71","test esi, esi"],["0x422b73","setne cl"]]},{"both":[["0x41c32a","push ecx","0x422b76"]]},{"orig":[["0x41c32b","mov ecx, esi"],["0x41c32d","call <OFFSET2>"],["0x41c332","mov esi, dword ptr [esi + 0x44]"]],"recomp":[["0x422b77","push \"RENDEREVENT, has camera? %d\\n\" (STRING)"],["0x422b7c","call DecompDebugPrint (FUNCTION)"],["0x422b81","add esp, 8"],["0x422b84","pop esi"],["0x422b85","ret 4 \t(ctfbworld.cpp:82)"]]}]]],"type":1},{"address":"0x429740","name":"Script::OpContext::getTypeName","matching":1.0,"recomp":"0x4332f0","type":1},{"address":"0x429750","name":"Script::OpContext::getName","matching":1.0,"recomp":"0x4332e0","type":1},{"address":"0x42cbe0","name":"Script::ScriptReference::UNK0x18","matching":1.0,"recomp":"0x438bc0","type":1},{"address":"0x431130","name":"Script::OpCode::execute","matching":0.7012987012987013,"recomp":"0x438c60","diff":[["@@ -0x431130,34 +0x438c60,37 @@",[{"both":[["0x431130","mov eax, dword ptr [Script::tfb_current_instruction_index (DATA)] \t(opcode.cpp:14)","0x438c60"],["0x431135","push esi","0x438c65"],["0x431136","push edi","0x438c66"],["0x431137","mov edi, ecx","0x438c67"],["0x431139","mov esi, dword ptr [edi + 4]","0x438c69"],["0x43113c","shr esi, 0xb","0x438c6c"],["0x43113f","add esi, eax","0x438c6f"],["0x431141","cmp eax, esi \t(opcode.cpp:16)","0x438c71"]]},{"orig":[["0x431143","jae 0x29"]],"recomp":[["0x438c73","jae 0x37"],["0x438c75","jmp 0x9"],["0x438c77","lea esp, [esp]"],["0x438c7e","mov edi, edi"]]},{"both":[["0x431145","mov edx, dword ptr [Script::tfb_currentScript (DATA)] \t(opcode.cpp:19)","0x438c80"]]},{"orig":[],"recomp":[["0x438c86","lea ecx, [eax + 1]"],["0x438c89","mov dword ptr [Script::tfb_current_instruction_index (DATA)], ecx"],["0x438c8f","mov ecx, dword ptr [edx + 0x10]"],["0x438c92","mov eax, dword ptr [ecx + eax*4]"],["0x438c95","test eax, eax \t(opcode.cpp:20)"],["0x438c97","je 0xa"],["0x438c99","mov edx, dword ptr [eax] \t(opcode.cpp:22)"]]},{"both":[["0x43114b","mov ecx, eax","0x438c9b"]]},{"orig":[["0x43114d","inc eax"],["0x43114e","mov dword ptr [Script::tfb_current_instruction_index (DATA)], eax"],["0x431153","mov edx, dword ptr [edx + 0x10]"],["0x431156","mov ecx, dword ptr [edx + ecx*4]"],["0x431159","test ecx, ecx"],["0x43115b","je 0xd"],["0x43115d","mov eax, dword ptr [ecx]"],["0x43115f","call dword ptr [eax + 0x34]"]],"recomp":[["0x438c9d","call dword ptr [edx + 0x34]"]]},{"both":[["0x431162","dec eax","0x438ca0"],["0x431163","jne 0x1d \t(opcode.cpp:23)","0x438ca1"],["0x431165","mov eax, dword ptr [Script::tfb_current_instruction_index (DATA)] \t(opcode.cpp:16)","0x438ca3"],["0x43116a","cmp eax, esi","0x438ca8"]]},{"orig":[["0x43116c","jb -0x29"]],"recomp":[["0x438caa","jb -0x2c"]]},{"both":[["0x43116e","mov edx, dword ptr [edi + 4] \t(opcode.cpp:32)","0x438cac"],["0x431171","or edx, 0x80","0x438caf"],["0x431177","mov dword ptr [edi + 4], edx","0x438cb5"],["0x43117a","mov eax, edx \t(opcode.cpp:33)","0x438cb8"],["0x43117c","pop edi","0x438cba"],["0x43117d","and eax, 7","0x438cbb"],["0x431180","pop esi","0x438cbe"],["0x431181","ret  \t(opcode.cpp:34)","0x438cbf"],["0x431182","mov dword ptr [Script::tfb_current_instruction_index (DATA)], esi \t(opcode.cpp:25)","0x438cc0"],["0x431188","and dword ptr [edi + 4], 0xffffff7f \t(opcode.cpp:26)","0x438cc6"]]}]]],"type":1},{"address":"0x4349e0","name":"Script::OpContext::load","matching":0.0,"recomp":"0x438c40","diff":[["@@ -0x4349e0,1 +0x438c40,2 @@",[{"orig":[["0x4349e0","push -1"]],"recomp":[["0x438c40","xor al, al \t(opcontext.cpp:12)"],["0x438c42","ret 8 \t(opcontext.cpp:13)"]]}]]],"type":1},{"address":"0x436a40","name":"Script::NamedObject::getTypeName","matching":1.0,"recomp":"0x432c50","type":1},{"address":"0x43dc80","name":"RWS::CAttributeHandler::GetAttrPostUpdateFunc","matching":1.0,"recomp":"0x401050","type":1},{"address":"0x43e6f0","name":"CMemHandler::CheckAllocatedBounds","matching":1.0,"recomp":"0x4333b0","type":1},{"address":"0x447670","name":"IsCurrentLanguageName","matching":0.92,"recomp":"0x438e80","diff":[["@@ -0x447670,17 +0x438e80,17 @@",[{"orig":[["0x447670","mov eax, dword ptr [<OFFSET1>]"]],"recomp":[["0x438e80","mov eax, dword ptr [g_activeLangIndex (DATA)] \t(language.cpp:22)"]]},{"both":[["0x447675","test eax, eax","0x438e85"],["0x447677","jl 0x20","0x438e87"],["0x447679","cmp eax, 0x12","0x438e89"],["0x44767c","jge 0x1b","0x438e8c"],["0x44767e","mov ecx, dword ptr [esp + 4] \t(language.cpp:24)","0x438e8e"]]},{"orig":[["0x447682","mov eax, dword ptr [eax*4 + <OFFSET2>]"]],"recomp":[["0x438e92","mov eax, dword ptr [eax*4 + g_langNames (DATA)]"]]},{"both":[["0x447689","push ecx","0x438e99"],["0x44768a","push eax","0x438e9a"],["0x44768b","call __mbscmp (FUNCTION)","0x438e9b"],["0x447690","add esp, 8","0x438ea0"],["0x447693","neg eax","0x438ea3"],["0x447695","sbb eax, eax","0x438ea5"],["0x447697","inc eax","0x438ea7"],["0x447698","ret  \t(language.cpp:25)","0x438ea8"],["0x447699","mov ecx, dword ptr [esp + 4] \t(language.cpp:24)","0x438ea9"],["0x44769d","mov eax, \"UNKNOWN\" (STRING)","0x438ead"]]}]]],"type":1},{"address":"0x462aa0","name":"RWS::StartUp::Open","matching":0.5333333333333333,"recomp":"0x42eee0","diff":[["@@ -0x462aa0,67 +0x42eee0,83 @@",[{"both":[["0x462aa0","push ebp \t(startup.cpp:121)","0x42eee0"],["0x462aa1","push esi","0x42eee1"],["0x462aa2","mov esi, dword ptr [esp + 0x10] \t(startup.cpp:129)","0x42eee2"],["0x462aa6","xor ebp, ebp","0x42eee6"],["0x462aa8","test esi, esi","0x42eee8"],["0x462aaa","jne 0x5","0x42eeea"]]},{"orig":[["0x462aac","mov esi, <OFFSET1>"]],"recomp":[["0x42eeec","mov esi, pDefMemFuncs (DATA) \t(startup.cpp:139)"]]},{"both":[["0x462ab1","call MemHandlerEndBlock (FUNCTION) \t(startup.cpp:144)","0x42eef1"],["0x462ab6","mov eax, dword ptr [esp + 0x14] \t(startup.cpp:148)","0x42eef6"],["0x462aba","push eax","0x42eefa"],["0x462abb","push 0","0x42eefb"],["0x462abd","push esi","0x42eefd"]]},{"orig":[["0x462abe","call <OFFSET3>"]],"recomp":[["0x42eefe","call _RwEngineInit (UNK)"]]},{"both":[["0x462ac3","add esp, 0xc","0x42ef03"],["0x462ac6","test eax, eax","0x42ef06"]]},{"orig":[["0x462ac8","je 0xe6"]],"recomp":[["0x42ef08","je 0xa2"]]},{"both":[["0x462ace","push ebx","0x42ef0e"],["0x462acf","push edi","0x42ef0f"]]},{"orig":[["0x462ad0","call <OFFSET4>"]],"recomp":[]},{"both":[["0x462ad5","push -1 \t(startup.cpp:153)","0x42ef10"]]},{"orig":[["0x462ad7","call <OFFSET5>"]],"recomp":[["0x42ef12","call _RtFSManagerOpen (UNK)"]]},{"both":[["0x462adc","add esp, 4","0x42ef17"],["0x462adf","test eax, eax","0x42ef1a"]]},{"orig":[["0x462ae1","je 0xc1"],["0x462ae7","call <OFFSET6>"]],"recomp":[["0x42ef1c","je 0x82"],["0x42ef22","call RWS::psInstallFileSystem (FUNCTION) \t(startup.cpp:155)"]]},{"both":[["0x462aec","test eax, eax","0x42ef27"]]},{"orig":[["0x462aee","je 0xb4"],["0x462af4","call <OFFSET7>"]],"recomp":[["0x42ef29","je 0x79"],["0x42ef2b","call RWS::StartUp::AttachPlugins (FUNCTION) \t(startup.cpp:160)"]]},{"both":[["0x462af9","test al, al","0x42ef30"]]},{"orig":[["0x462afb","je 0xa7"]],"recomp":[["0x42ef32","je 0x70"]]},{"both":[["0x462b01","mov ecx, dword ptr [esp + 0x28] \t(startup.cpp:162)","0x42ef34"],["0x462b05","lea edx, [esp + 0x18] \t(startup.cpp:164)","0x42ef38"],["0x462b09","push edx","0x42ef3c"],["0x462b0a","mov dword ptr [esp + 0x1c], ecx","0x42ef3d"]]},{"orig":[["0x462b0e","call <OFFSET8>"]],"recomp":[["0x42ef41","call _RwEngineOpen (UNK)"]]},{"both":[["0x462b13","add esp, 4","0x42ef46"],["0x462b16","test eax, eax","0x42ef49"]]},{"orig":[["0x462b18","je 0x8a"]],"recomp":[["0x42ef4b","je 0x57"]]},{"both":[["0x462b1e","mov esi, dword ptr [esp + 0x20] \t(startup.cpp:170)","0x42ef4d"],["0x462b22","mov ebx, dword ptr [esp + 0x24]","0x42ef51"],["0x462b26","mov eax, dword ptr [esi + 0xc]","0x42ef55"],["0x462b29","mov ecx, dword ptr [esi + 8]","0x42ef58"],["0x462b2c","push ebx","0x42ef5b"],["0x462b2d","push eax","0x42ef5c"],["0x462b2e","push ecx","0x42ef5d"],["0x462b2f","lea edi, [esi + 4]","0x42ef5e"],["0x462b32","push edi","0x42ef61"],["0x462b33","push esi","0x42ef62"]]},{"orig":[["0x462b34","call <OFFSET9>"]],"recomp":[["0x42ef63","call RWS::StartUp::SelectVideoMode (FUNCTION)"]]},{"both":[["0x462b39","add esp, 0x14","0x42ef68"],["0x462b3c","test eax, eax","0x42ef6b"]]},{"orig":[["0x462b3e","je 0x63"],["0x462b40","mov ecx, dword ptr [g_pRegistry (DATA)]"],["0x462b46","push 0"],["0x462b48","push \"Settings\\\\Display\\\\FSAA\" (STRING)"],["0x462b4d","call <OFFSET12>"],["0x462b52","cmp eax, 1"],["0x462b55","jne 0xa"],["0x462b57","push 2"],["0x462b59","call <OFFSET13>"],["0x462b5e","add esp, 4"],["0x462b61","call <OFFSET14>"]],"recomp":[["0x42ef6d","je 0x30"],["0x42ef6f","call _RwEngineStart (UNK) \t(startup.cpp:172)"]]},{"both":[["0x462b66","test eax, eax","0x42ef74"]]},{"orig":[["0x462b68","jne 0x12"]],"recomp":[["0x42ef76","je 0x27"],["0x42ef78","call RWS::StartUp::RegisterImageLoaders (FUNCTION) \t(startup.cpp:174)"],["0x42ef7d","test eax, eax"],["0x42ef7f","je 0x19"],["0x42ef81","mov edx, dword ptr [edi] \t(startup.cpp:178)"],["0x42ef83","mov eax, dword ptr [esi]"],["0x42ef85","push ebx"],["0x42ef86","push edx"]]},{"both":[["0x462b6a","push eax","0x42ef87"]]},{"orig":[["0x462b6b","call <OFFSET13>"],["0x462b70","add esp, 4"]],"recomp":[["0x42ef88","call RWS::MainLoop::Open (FUNCTION)"],["0x42ef8d","add esp, 0xc"],["0x42ef90","pop edi"],["0x42ef91","pop ebx"],["0x42ef92","pop esi"],["0x42ef93","mov eax, 1 \t(startup.cpp:180)"],["0x42ef98","pop ebp"],["0x42ef99","ret  \t(startup.cpp:199)"],["0x42ef9a","call _RwEngineStop (UNK) \t(startup.cpp:184)"],["0x42ef9f","call _RwEngineClose (UNK) \t(startup.cpp:188)"],["0x42efa4","call _RwEngineTerm (UNK) \t(startup.cpp:193)"],["0x42efa9","pop edi"],["0x42efaa","pop ebx"],["0x42efab","pop esi"],["0x42efac","mov eax, ebp \t(startup.cpp:198)"],["0x42efae","pop ebp"],["0x42efaf","ret  \t(startup.cpp:199)"],["0x42efb0","pop esi"],["0x42efb1","mov eax, ebp \t(startup.cpp:198)"],["0x42efb3","pop ebp"],["0x42efb4","ret  \t(startup.cpp:199)"]]}]]],"type":1},{"address":"0x464370","name":"`anonymous namespace'::MainWndProc","matching":0.0847457627118644,"recomp":"0x432620","diff":[["@@ -0x464370,48 +,70 @@",[{"orig":[["0x464370","mov eax, dword ptr [esp + 8]"],["0x464374","cmp eax, 0x100"],["0x464379","push esi"],["0x46437a","push edi"],["0x46437b","ja 0x11c"],["0x464381","je 0xae"],["0x464387","lea ecx, [eax - 2]"],["0x46438a","cmp ecx, 0xe"],["0x46438d","ja 0x220"],["0x464393","movzx ecx, byte ptr [ecx + <OFFSET1>]"],["0x46439a","jmp dword ptr [ecx*4 + <OFFSET2>]"],["0x4643a1","call <OFFSET3>"],["0x4643a6","call <OFFSET4>"],["0x4643ab","push 0"],["0x4643ad","call dword ptr [->USER32.dll::ShowCursor (IMPORT)]"],["0x4643b3","mov al, byte ptr [g_bWindowedMode (DATA)]"],["0x4643b8","xor edx, edx"],["0x4643ba","test al, al"],["0x4643bc","mov eax, dword ptr [<OFFSET7>]"],["0x4643c1","sete dl"],["0x4643c4","lea edx, [edx + edx + 1]"],["0x4643c8","push edx"],["0x4643c9","push eax"],["0x4643ca","call dword ptr [->USER32.dll::ShowWindow (IMPORT)]"],["0x4643d0","pop edi"]],"recomp":[["0x432620","mov ecx, dword ptr [esp + 8] \t(win.cpp:248)"],["0x432624","lea eax, [ecx - 2]"],["0x432627","cmp eax, 0x1a"],["0x43262a","ja 0x63"],["0x43262c","movzx eax, byte ptr [eax + <OFFSET1>]"],["0x432633","jmp dword ptr [eax*4 + <OFFSET2>]"],["0x43263a","mov eax, dword ptr [esp + 0xc] \t(win.cpp:251)"],["0x43263e","test eax, eax"],["0x432640","sete cl"],["0x432643","mov byte ptr [minimized (DATA)], cl"]]},{"both":[["0x4643d1","xor eax, eax \t(win.cpp:262)","0x432649"]]},{"orig":[["0x4643d3","pop esi"],["0x4643d4","ret 0x10"],["0x4643d7","mov ecx, dword ptr [<OFFSET7>]"],["0x4643dd","push 6"],["0x4643df","push ecx"],["0x4643e0","call dword ptr [->USER32.dll::ShowWindow (IMPORT)]"],["0x4643e6","push 1"],["0x4643e8","call dword ptr [->USER32.dll::ShowCursor (IMPORT)]"],["0x4643ee","call <OFFSET9>"],["0x4643f3","call <OFFSET10>"],["0x4643f8","push 1"],["0x4643fa","push 0"],["0x4643fc","push 0"],["0x4643fe","call dword ptr [->USER32.dll::InvalidateRect (IMPORT)]"],["0x464404","pop edi"],["0x464405","xor eax, eax"],["0x464407","pop esi"]],"recomp":[]},{"both":[["0x464408","ret 0x10 \t(win.cpp:280)","0x43264b"],["0x46440b","push 0 \t(win.cpp:257)","0x43264e"],["0x46440d","mov byte ptr [quit (DATA)], 1","0x432650"],["0x464414","call dword ptr [->USER32.dll::PostQuitMessage (IMPORT)]","0x432657"]]},{"orig":[["0x46441a","pop edi"]],"recomp":[["0x43265d","xor eax, eax \t(win.cpp:262)"],["0x43265f","ret 0x10 \t(win.cpp:280)"],["0x432662","mov edx, dword ptr [esp + 4] \t(win.cpp:261)"],["0x432666","push 0"],["0x432668","push edx"],["0x432669","call dword ptr [->USER32.dll::ValidateRect (IMPORT)]"],["0x43266f","xor eax, eax \t(win.cpp:262)"],["0x432671","ret 0x10 \t(win.cpp:280)"],["0x432674","mov eax, dword ptr [esp + 0x10] \t(win.cpp:269)"],["0x432678","movzx ecx, ax"],["0x43267b","shr eax, 0x10 \t(win.cpp:270)"],["0x43267e","push 0x10 \t(win.cpp:272)"],["0x432680","push eax"],["0x432681","push ecx"],["0x432682","call `anonymous namespace'::Resize (FUNCTION)"],["0x432687","add esp, 0xc"],["0x43268a","xor eax, eax"],["0x43268c","ret 0x10 \t(win.cpp:280)"],["0x43268f","mov dword ptr [esp + 8], ecx \t(win.cpp:276)"],["0x432693","jmp dword ptr [USER32.dll::DefWindowProcA (IMPORT)]"],["0x432699","lea ecx, [ecx]"],["","Jump table:"],["0x43269c","start + 0x2e \t(win.cpp:280)"],["0x4326a0","start + 0x54"],["0x4326a4","start + 0x42"],["0x4326a8","start + 0x1a"],["0x4326ac","start + 0x6f"],["","Data table:"],["0x4326b0","0x0"],["0x4326b1","0x4"],["0x4326b2","0x4"],["0x4326b3","0x1"],["0x4326b4","0x4"],["0x4326b5","0x4"],["0x4326b6","0x4"],["0x4326b7","0x4"],["0x4326b8","0x4"],["0x4326b9","0x4"],["0x4326ba","0x4"],["0x4326bb","0x4"],["0x4326bc","0x4"],["0x4326bd","0x2"],["0x4326be","0x0"],["0x4326bf","0x4"],["0x4326c0","0x4"],["0x4326c1","0x4"],["0x4326c2","0x4"],["0x4326c3","0x4"],["0x4326c4","0x4"],["0x4326c5","0x4"],["0x4326c6","0x4"],["0x4326c7","0x4"],["0x4326c8","0x4"],["0x4326c9","0x4"],["0x4326ca","0x3"]]}]]],"type":1},{"address":"0x4646f0","name":"WinMain","matching":0.41081081081081083,"recomp":"0x433df0","diff":[["@@ -0x4646f0,274 +0x433df0,281 @@",[{"orig":[["0x4646f0","sub esp, 0x1a4"],["0x4646f6","push esi"]],"recomp":[["0x433df0","sub esp, 0x64 \t(win.cpp:634)"],["0x433df3","push ebp"]]},{"both":[["0x4646f7","push \"Madagascar Running\" (STRING) \t(win.cpp:637)","0x433df4"],["0x4646fc","push 0","0x433df9"],["0x4646fe","push 0","0x433dfb"],["0x464700","call dword ptr [->KERNEL32.dll::CreateMutexA (IMPORT)]","0x433dfd"]]},{"orig":[["0x464706","mov esi, eax"],["0x464708","mov dword ptr [esp + 0x5c], esi"]],"recomp":[["0x433e03","mov ebp, eax"]]},{"both":[["0x46470c","call dword ptr [->KERNEL32.dll::GetLastError (IMPORT)] \t(win.cpp:640)","0x433e05"],["0x464712","cmp eax, 0xb7","0x433e0b"]]},{"orig":[["0x464717","jne 0x18"],["0x464719","cmp esi, -1"]],"recomp":[["0x433e10","jne 0x15"],["0x433e12","cmp ebp, -1 \t(win.cpp:642)"]]},{"both":[["0x46471c","je 0x7","0x433e15"]]},{"orig":[["0x46471e","push esi"],["0x46471f","call dword ptr [<OFFSET4>]"]],"recomp":[["0x433e17","push ebp \t(win.cpp:644)"],["0x433e18","call dword ptr [g_pfnCloseHandle (DATA)]"]]},{"both":[["0x464725","xor eax, eax \t(win.cpp:646)","0x433e1e"]]},{"orig":[["0x464727","pop esi"],["0x464728","add esp, 0x1a4"]],"recomp":[["0x433e20","pop ebp"],["0x433e21","add esp, 0x64 \t(win.cpp:824)"]]},{"both":[["0x46472e","ret 0x10","0x433e24"]]},{"orig":[["0x464731","call <OFFSET5>"]],"recomp":[["0x433e27","call dword ptr [->KERNEL32.dll::AllocConsole (IMPORT)] \t(win.cpp:650)"],["0x433e2d","push <OFFSET6> \t(win.cpp:651)"],["0x433e32","push \"w\" (STRING)"],["0x433e37","push \"CONOUT$\" (STRING)"],["0x433e3c","call _freopen (UNK)"],["0x433e41","push <OFFSET10> \t(win.cpp:652)"],["0x433e46","push \"w\" (STRING)"],["0x433e4b","push \"CONOUT$\" (STRING)"],["0x433e50","call _freopen (UNK)"],["0x433e55","add esp, 0x18"],["0x433e58","call InitPlatform (FUNCTION) \t(win.cpp:655)"]]},{"both":[["0x464736","push 0 \t(win.cpp:657)","0x433e5d"],["0x464738","push \"Settings\\\\Options\\\\UnlockLevels\" (STRING)","0x433e5f"],["0x46473d","mov ecx, eax","0x433e64"],["0x46473f","mov dword ptr [g_pRegistry (DATA)], eax","0x433e66"]]},{"orig":[["0x464744","call <OFFSET8>"]],"recomp":[["0x433e6b","call CRegistry::ReadInt (FUNCTION)"]]},{"both":[["0x464749","mov ecx, dword ptr [g_pRegistry (DATA)] \t(win.cpp:660)","0x433e70"],["0x46474f","dec eax","0x433e76"],["0x464750","neg eax","0x433e77"],["0x464752","sbb al, al","0x433e79"],["0x464754","inc al","0x433e7b"],["0x464756","push 0xc","0x433e7d"],["0x464758","mov byte ptr [g_bUnlockLevels (DATA)], al","0x433e7f"],["0x46475d","lea eax, [esp + 0x10]","0x433e84"],["0x464761","push eax","0x433e88"],["0x464762","push \"800x600\" (STRING)","0x433e89"],["0x464767","push \"Settings\\\\Display\\\\Resolution\" (STRING)","0x433e8e"]]},{"orig":[["0x46476c","xor esi, esi"],["0x46476e","call <OFFSET12>"],["0x464773","mov cl, byte ptr [esp + 0xc]"]],"recomp":[["0x433e93","call CRegistry::ReadString (FUNCTION)"],["0x433e98","mov dl, byte ptr [esp + 0xc] \t(win.cpp:667)"]]},{"both":[["0x464777","mov al, 0x78","0x433e9c"]]},{"orig":[["0x464779","cmp cl, al"],["0x46477b","je 0x11"],["0x46477d","lea ecx, [ecx]"],["0x464780","cmp esi, 0xc"]],"recomp":[["0x433e9e","xor ecx, ecx"],["0x433ea0","cmp dl, al"],["0x433ea2","je 0xe"],["0x433ea4","cmp ecx, 0xc"]]},{"both":[["0x464783","jge 0x9","0x433ea7"]]},{"orig":[["0x464785","mov cl, byte ptr [esp + esi + 0xd]"],["0x464789","inc esi"],["0x46478a","cmp cl, al"]],"recomp":[["0x433ea9","mov dl, byte ptr [esp + ecx + 0xd]"],["0x433ead","inc ecx"],["0x433eae","cmp dl, al"]]},{"both":[["0x46478c","jne -0xe","0x433eb0"]]},{"orig":[],"recomp":[["0x433eb2","push esi"]]},{"both":[["0x46478e","push edi","0x433eb3"],["0x46478f","or edi, 0xffffffff \t(win.cpp:672)","0x433eb4"],["0x464792","xor eax, eax","0x433eb7"]]},{"orig":[["0x464794","sub edi, esi"],["0x464796","jmp 0x8"],["0x464798","lea esp, [esp]"],["0x46479f","nop "],["0x4647a0","cmp eax, esi"],["0x4647a2","lea ecx, [esp + eax + 0x68]"],["0x4647a6","mov byte ptr [esp + eax + 0x54], 0x20"],["0x4647ab","mov byte ptr [ecx], 0x20"]],"recomp":[["0x433eb9","sub edi, ecx"],["0x433ebb","jmp 0x3"],["0x433ebd","lea ecx, [ecx]"],["0x433ec0","cmp eax, ecx \t(win.cpp:675)"],["0x433ec2","lea esi, [esp + eax + 0x2c]"],["0x433ec6","mov byte ptr [esp + eax + 0x20], 0x20"],["0x433ecb","mov byte ptr [esi], 0x20"]]},{"both":[["0x4647ae","jge 0xa","0x433ece"]]},{"orig":[["0x4647b0","mov cl, byte ptr [esp + eax + 0x10]"],["0x4647b4","mov byte ptr [esp + eax + 0x54], cl"]],"recomp":[["0x433ed0","mov dl, byte ptr [esp + eax + 0x14] \t(win.cpp:676)"],["0x433ed4","mov byte ptr [esp + eax + 0x20], dl"]]},{"both":[["0x4647b8","jmp 0x9 \t(win.cpp:677)","0x433ed8"],["0x4647ba","jle 0x7","0x433eda"]]},{"orig":[["0x4647bc","mov dl, byte ptr [esp + eax + 0x10]"],["0x4647c0","mov byte ptr [edi + ecx], dl"]],"recomp":[["0x433edc","mov dl, byte ptr [esp + eax + 0x14] \t(win.cpp:678)"],["0x433ee0","mov byte ptr [edi + esi], dl"]]},{"both":[["0x4647c3","inc eax","0x433ee3"],["0x4647c4","cmp eax, 0xc","0x433ee4"],["0x4647c7","jl -0x29","0x433ee7"]]},{"orig":[["0x4647c9","lea eax, [esp + 0x54]"],["0x4647cd","push ebp"]],"recomp":[["0x433ee9","lea eax, [esp + 0x20] \t(win.cpp:681)"]]},{"both":[["0x4647ce","push eax","0x433eed"]]},{"orig":[["0x4647cf","call <OFFSET13>"],["0x4647d4","lea ecx, [esp + 0x70]"]],"recomp":[["0x433eee","call _atol (FUNCTION)"],["0x433ef3","lea ecx, [esp + 0x30] \t(win.cpp:682)"]]},{"both":[["0x4647d8","push ecx","0x433ef7"],["0x4647d9","mov dword ptr [g_nWindowWidth (DATA)], eax","0x433ef8"]]},{"orig":[["0x4647de","call <OFFSET13>"]],"recomp":[["0x433efd","call _atol (FUNCTION)"]]},{"both":[["0x4647e3","mov ecx, dword ptr [g_pRegistry (DATA)] \t(win.cpp:684)","0x433f02"],["0x4647e9","add esp, 8","0x433f08"],["0x4647ec","push 0","0x433f0b"],["0x4647ee","push \"Settings\\\\Display\\\\DistanceClipping\" (STRING)","0x433f0d"],["0x4647f3","mov dword ptr [g_nWindowHeight (DATA)], eax","0x433f12"]]},{"orig":[["0x4647f8","call <OFFSET8>"]],"recomp":[["0x433f17","call CRegistry::ReadInt (FUNCTION)"]]},{"both":[["0x4647fd","mov ecx, dword ptr [g_pRegistry (DATA)] \t(win.cpp:685)","0x433f1c"],["0x464803","dec eax","0x433f22"],["0x464804","neg eax","0x433f23"],["0x464806","sbb al, al","0x433f25"],["0x464808","push 0x64","0x433f27"],["0x46480a","inc al","0x433f29"],["0x46480c","push \"Settings\\\\Display\\\\Distance\" (STRING)","0x433f2b"],["0x464811","mov byte ptr [g_bDistanceClipping (DATA)], al","0x433f30"]]},{"orig":[["0x464816","call <OFFSET8>"],["0x46481b","lea edx, [esp + 0x114]"],["0x464822","push edx"],["0x464823","push -1"]],"recomp":[["0x433f35","call CRegistry::ReadInt (FUNCTION)"],["0x433f3a","mov edx, dword ptr [esp + 0x74] \t(win.cpp:711)"],["0x433f3e","mov ecx, dword ptr [g_nWindowWidth (DATA)]"]]},{"both":[["0x464825","push 0","0x433f44"]]},{"orig":[["0x464827","mov dword ptr [g_nDrawDistance (DATA)], eax"],["0x46482c","mov byte ptr [g_bWindowedMode (DATA)], 0"],["0x464833","call dword ptr [->USER32.dll::EnumDisplaySettingsA (IMPORT)]"],["0x464839","test eax, eax"],["0x46483b","mov edi, dword ptr [USER32.dll::MessageBoxA (IMPORT)]"],["0x464841","mov ebp, dword ptr [USER32.dll::ChangeDisplaySettingsA (IMPORT)]"],["0x464847","je 0x5f"],["0x464849","mov ecx, dword ptr [esp + 0x180]"],["0x464850","mov eax, dword ptr [g_nWindowWidth (DATA)]"],["0x464855","cmp eax, ecx"],["0x464857","mov ecx, dword ptr [g_nWindowHeight (DATA)]"],["0x46485d","ja 0x9"],["0x46485f","cmp ecx, dword ptr [esp + 0x184]"],["0x464866","jbe 0x40"],["0x464868","mov dword ptr [esp + 0xe4], eax"],["0x46486f","push 0"],["0x464871","lea eax, [esp + 0x7c]"],["0x464875","push eax"],["0x464876","mov dword ptr [esp + 0xf0], ecx"],["0x46487d","mov dword ptr [esp + 0xa8], 0x180000"],["0x464888","mov word ptr [esp + 0xa4], 0x9c"],["0x464892","call ebp"],["0x464894","test eax, eax"],["0x464896","je 0x10"],["0x464898","push 0"],["0x46489a","push \"Error\" (STRING)"],["0x46489f","push \"Display change failed\" (STRING)"],["0x4648a4","push 0"],["0x4648a6","call edi"],["0x4648a8","mov al, byte ptr [g_bWindowedMode (DATA)]"],["0x4648ad","mov edx, dword ptr [esp + 0x1b4]"],["0x4648b4","test al, al"],["0x4648b6","mov eax, dword ptr [g_nWindowHeight (DATA)]"],["0x4648bb","sete cl"],["0x4648be","push ecx"],["0x4648bf","mov ecx, dword ptr [g_nWindowWidth (DATA)]"]],"recomp":[]},{"both":[["0x4648c5","push 0x67","0x433f46"],["0x4648c7","push edx","0x433f48"]]},{"orig":[["0x4648c8","mov edx, dword ptr [<OFFSET26>]"]],"recomp":[]},{"both":[["0x4648ce","push `anonymous namespace'::MainWndProc (FUNCTION)","0x433f49"]]},{"orig":[],"recomp":[["0x433f4e","mov dword ptr [g_nDrawDistance (DATA)], eax"],["0x433f53","mov eax, dword ptr [g_nWindowHeight (DATA)]"]]},{"both":[["0x4648d3","push eax","0x433f58"],["0x4648d4","push ecx","0x433f59"],["0x4648d5","push 0","0x433f5a"],["0x4648d7","push 0","0x433f5c"]]},{"orig":[["0x4648d9","push \"ID_WINNAME\" (STRING)"],["0x4648de","push edx"],["0x4648df","call <OFFSET29>"],["0x4648e4","add esp, 8"],["0x4648e7","push eax"]],"recomp":[["0x433f5e","push \"Madagascar\" (STRING)"]]},{"both":[["0x4648e8","push \"RWSConsoleD3D8\" (STRING)","0x433f63"]]},{"orig":[],"recomp":[["0x433f68","mov byte ptr [g_bWindowedMode (DATA)], 1"]]},{"both":[["0x4648ed","call `anonymous namespace'::CreateMainWindow (FUNCTION)","0x433f6f"]]},{"orig":[["0x4648f2","mov eax, dword ptr [<OFFSET32>]"]],"recomp":[["0x433f74","mov eax, dword ptr [g_hMainWindow (DATA)] \t(win.cpp:713)"]]},{"both":[["0x4648f7","add esp, 0x28","0x433f79"],["0x4648fa","test eax, eax \t(win.cpp:714)","0x433f7c"],["0x4648fc","mov dword ptr [theMainWindow (DATA)], eax","0x433f7e"]]},{"orig":[["0x464901","je 0x170"]],"recomp":[["0x433f83","je 0x195"]]},{"both":[["0x464907","mov esi, dword ptr [USER32.dll::GetClientRect (IMPORT)] \t(win.cpp:717)","0x433f89"]]},{"orig":[["0x46490d","lea ecx, [esp + 0x30]"],["0x464911","push ecx"]],"recomp":[["0x433f8f","lea edx, [esp + 0x38]"],["0x433f93","push edx"]]},{"both":[["0x464912","push eax","0x433f94"],["0x464913","call esi","0x433f95"],["0x464915","mov al, byte ptr [g_bWindowedMode (DATA)] \t(win.cpp:720)","0x433f97"],["0x46491a","test al, al","0x433f9c"]]},{"orig":[["0x46491c","je 0x1e"],["0x46491e","mov eax, dword ptr [esp + 0x30]"],["0x464922","mov edx, dword ptr [esp + 0x38]"],["0x464926","mov ecx, dword ptr [esp + 0x34]"],["0x46492a","sub edx, eax"],["0x46492c","mov eax, dword ptr [esp + 0x3c]"]],"recomp":[["0x433f9e","je 0x1c"],["0x433fa0","mov ecx, dword ptr [esp + 0x38] \t(win.cpp:722)"],["0x433fa4","mov eax, dword ptr [esp + 0x40]"]]},{"both":[["0x464930","sub eax, ecx","0x433fa8"]]},{"orig":[["0x464932","mov dword ptr [esp + 0x40], edx"],["0x464936","mov dword ptr [esp + 0x44], eax"],["0x46493a","jmp 0x14"],["0x46493c","mov ecx, dword ptr [g_nWindowWidth (DATA)]"],["0x464942","mov edx, dword ptr [g_nWindowHeight (DATA)]"],["0x464948","mov dword ptr [esp + 0x40], ecx"],["0x46494c","mov dword ptr [esp + 0x44], edx"],["0x464950","mov eax, dword ptr [theMainWindow (DATA)]"]],"recomp":[["0x433faa","mov ecx, dword ptr [esp + 0x44] \t(win.cpp:723)"],["0x433fae","mov dword ptr [esp + 0x58], eax"],["0x433fb2","sub ecx, dword ptr [esp + 0x3c]"],["0x433fb6","mov dword ptr [esp + 0x5c], ecx"],["0x433fba","jmp 0x13 \t(win.cpp:725)"],["0x433fbc","mov edx, dword ptr [g_nWindowWidth (DATA)] \t(win.cpp:727)"],["0x433fc2","mov eax, dword ptr [g_nWindowHeight (DATA)] \t(win.cpp:728)"],["0x433fc7","mov dword ptr [esp + 0x58], edx"],["0x433fcb","mov dword ptr [esp + 0x5c], eax"],["0x433fcf","push 2 \t(win.cpp:737)"],["0x433fd1","push 0x1c"],["0x433fd3","mov dword ptr [esp + 0x68], 0x20"],["0x433fdb","mov dword ptr [esp + 0x6c], 0"],["0x433fe3","call operator new[](unsigned int, unsigned int) (FUNCTION)"],["0x433fe8","add esp, 8"],["0x433feb","test eax, eax"],["0x433fed","je 0x8"],["0x433fef","mov dword ptr [eax], Script::OpContext::`vftable' (VTABLE)"],["0x433ff5","jmp 0x2"],["0x433ff7","xor eax, eax"],["0x433ff9","lea ecx, [esp + 0x74] \t(win.cpp:761)"],["0x433ffd","push ecx"],["0x433ffe","push \"SCRIPT\" (STRING)"],["0x434003","mov ecx, eax"],["0x434005","mov dword ptr [esp + 0x7c], ME_Sound_Ambient_data (DATA)"],["0x43400d","call Script::OpContext::load (FUNCTION)"],["0x434012","mov edx, dword ptr [theMainWindow (DATA)] \t(win.cpp:763)"],["0x434018","push edx"],["0x434019","push 0x10"],["0x43401b","lea eax, [esp + 0x60]"]]},{"both":[["0x464955","push eax","0x43401f"]]},{"orig":[["0x464956","push 0x10"],["0x464958","lea ecx, [esp + 0x48]"],["0x46495c","push ecx"]],"recomp":[]},{"both":[["0x46495d","push 0x1000000","0x434020"],["0x464962","push 0","0x434025"],["0x464964","push 0","0x434027"]]},{"orig":[["0x464966","mov dword ptr [esp + 0x60], 0x20"],["0x46496e","mov dword ptr [esp + 0x64], 1"]],"recomp":[]},{"both":[["0x464976","call RWS::StartUp::Open (FUNCTION)","0x434029"],["0x46497b","add esp, 0x18","0x43402e"],["0x46497e","test eax, eax","0x434031"]]},{"orig":[["0x464980","je 0xf1"]],"recomp":[["0x434033","je 0xe5"]]},{"both":[["0x464986","push 0 \t(win.cpp:765)","0x434039"]]},{"orig":[["0x464988","push \"levels\\\\global.stream\" (STRING)"],["0x46498d","call <OFFSET37>"]],"recomp":[["0x43403b","push \"levels\\\\kingofny.stream\" (STRING)"],["0x434040","call RWS::StartUp::LoadGameDatabaseFile (FUNCTION)"],["0x434045","mov edx, dword ptr [theMainWindow (DATA)] \t(win.cpp:769)"]]},{"both":[["0x464992","add esp, 8","0x43404b"]]},{"orig":[["0x464995","call <OFFSET38>"],["0x46499a","lea edx, [esp + 0x20]"],["0x46499e","mov dword ptr [<OFFSET39>], eax"],["0x4649a3","mov eax, dword ptr [theMainWindow (DATA)]"]],"recomp":[["0x43404e","lea ecx, [esp + 0x48]"],["0x434052","push ecx"],["0x434053","push edx"],["0x434054","call esi"],["0x434056","mov edi, dword ptr [esp + 0x48] \t(win.cpp:772)"],["0x43405a","mov eax, dword ptr [esp + 0x50]"],["0x43405e","sub eax, edi"],["0x434060","mov edi, dword ptr [esp + 0x4c] \t(win.cpp:773)"],["0x434064","mov ecx, dword ptr [theMainWindow (DATA)] \t(win.cpp:774)"],["0x43406a","cdq "],["0x43406b","sub eax, edx"],["0x43406d","sar eax, 1"],["0x43406f","mov dword ptr [esp + 0xc], eax"],["0x434073","mov eax, dword ptr [esp + 0x54]"],["0x434077","sub eax, edi"],["0x434079","cdq "],["0x43407a","sub eax, edx"],["0x43407c","sar eax, 1"],["0x43407e","mov dword ptr [esp + 0x10], eax"],["0x434082","lea eax, [esp + 0xc]"],["0x434086","push eax"],["0x434087","push ecx"],["0x434088","call dword ptr [->USER32.dll::ClientToScreen (IMPORT)]"],["0x43408e","mov edx, dword ptr [esp + 0x10] \t(win.cpp:775)"],["0x434092","mov eax, dword ptr [esp + 0xc]"]]},{"both":[["0x4649a8","push edx","0x434096"],["0x4649a9","push eax","0x434097"]]},{"orig":[["0x4649aa","call esi"],["0x4649ac","mov edx, dword ptr [esp + 0x20]"],["0x4649b0","mov eax, dword ptr [esp + 0x28]"],["0x4649b4","sub eax, edx"],["0x4649b6","cdq "],["0x4649b7","sub eax, edx"],["0x4649b9","mov edx, dword ptr [esp + 0x24]"],["0x4649bd","sar eax, 1"],["0x4649bf","mov dword ptr [esp + 0xc], eax"],["0x4649c3","mov eax, dword ptr [esp + 0x2c]"],["0x4649c7","sub eax, edx"],["0x4649c9","cdq "],["0x4649ca","sub eax, edx"],["0x4649cc","mov edx, dword ptr [theMainWindow (DATA)]"],["0x4649d2","lea ecx, [esp + 0xc]"],["0x4649d6","push ecx"],["0x4649d7","sar eax, 1"],["0x4649d9","push edx"],["0x4649da","mov dword ptr [esp + 0x18], eax"],["0x4649de","call dword ptr [->USER32.dll::ClientToScreen (IMPORT)]"],["0x4649e4","mov eax, dword ptr [esp + 0x10]"],["0x4649e8","mov ecx, dword ptr [esp + 0xc]"],["0x4649ec","push eax"],["0x4649ed","push ecx"]],"recomp":[]},{"both":[["0x4649ee","call dword ptr [->USER32.dll::SetCursorPos (IMPORT)]","0x434098"],["0x4649f4","mov al, byte ptr [g_bWindowedMode (DATA)] \t(win.cpp:778)","0x43409e"],["0x4649f9","test al, al","0x4340a3"],["0x4649fb","mov byte ptr [g_bGameRunning (DATA)], 1","0x4340a5"],["0x464a02","je 0xf","0x4340ac"]]},{"orig":[["0x464a04","mov edx, dword ptr [<OFFSET32>]"]],"recomp":[["0x4340ae","mov ecx, dword ptr [g_hMainWindow (DATA)] \t(win.cpp:780)"]]},{"both":[["0x464a0a","push 1","0x4340b4"]]},{"orig":[["0x464a0c","push edx"]],"recomp":[["0x4340b6","push ecx"]]},{"both":[["0x464a0d","call dword ptr [->USER32.dll::ShowWindow (IMPORT)]","0x4340b7"],["0x464a13","push 0 \t(win.cpp:782)","0x4340bd"],["0x464a15","call dword ptr [->USER32.dll::ShowCursor (IMPORT)]","0x4340bf"]]},{"orig":[["0x464a1b","mov eax, dword ptr [theMainWindow (DATA)]"],["0x464a20","push eax"]],"recomp":[["0x4340c5","mov edx, dword ptr [theMainWindow (DATA)] \t(win.cpp:783)"],["0x4340cb","push edx"]]},{"both":[["0x464a21","call dword ptr [->USER32.dll::UpdateWindow (IMPORT)]","0x4340cc"],["0x464a27","mov al, byte ptr [quit (DATA)] \t(win.cpp:785)","0x4340d2"],["0x464a2c","test al, al","0x4340d7"]]},{"orig":[["0x464a2e","jne 0x3d"]],"recomp":[["0x4340d9","jne 0x3e"]]},{"both":[["0x464a30","mov esi, dword ptr [KERNEL32.dll::Sleep (IMPORT)]","0x4340db"],["0x464a36","call `anonymous namespace'::PumpMessages (FUNCTION) \t(win.cpp:787)","0x4340e1"],["0x464a3b","mov al, byte ptr [g_bAppActive (DATA)] \t(win.cpp:790)","0x4340e6"],["0x464a40","test al, al","0x4340eb"]]},{"orig":[["0x464a42","jne 0x1b"]],"recomp":[["0x4340ed","jne 0x1c"],["0x4340ef","nop "]]},{"both":[["0x464a44","mov al, byte ptr [quit (DATA)]","0x4340f0"],["0x464a49","test al, al","0x4340f5"],["0x464a4b","jne 0x12","0x4340f7"],["0x464a4d","call `anonymous namespace'::PumpMessages (FUNCTION) \t(win.cpp:792)","0x4340f9"],["0x464a52","push 0xa \t(win.cpp:793)","0x4340fe"],["0x464a54","call esi","0x434100"],["0x464a56","mov al, byte ptr [g_bAppActive (DATA)]","0x434102"],["0x464a5b","test al, al","0x434107"],["0x464a5d","je -0x1b","0x434109"]]},{"orig":[["0x464a5f","call <OFFSET50>"]],"recomp":[["0x43410b","call RWS::MainLoop::Render::Poll (FUNCTION) \t(win.cpp:796)"]]},{"both":[["0x464a64","mov al, byte ptr [quit (DATA)]","0x434110"],["0x464a69","test al, al","0x434115"]]},{"orig":[["0x464a6b","je -0x37"],["0x464a6d","call <OFFSET51>"],["0x464a72","call <OFFSET52>"],["0x464a77","mov ecx, dword ptr [g_nSoundEffectVolume (DATA)]"]],"recomp":[["0x434117","je -0x38"],["0x434119","call RWS::StartUp::Close (FUNCTION) \t(win.cpp:800)"],["0x43411e","mov eax, dword ptr [g_nSoundEffectVolume (DATA)] \t(win.cpp:804)"],["0x434123","mov ecx, dword ptr [g_pRegistry (DATA)]"],["0x434129","push eax"],["0x43412a","push \"Settings\\\\Options\\\\Effect\" (STRING)"],["0x43412f","call CRegistry::WriteInt (FUNCTION)"],["0x434134","mov ecx, dword ptr [g_nMusicVolume (DATA)] \t(win.cpp:805)"]]},{"both":[["0x464a7d","push ecx","0x43413a"],["0x464a7e","mov ecx, dword ptr [g_pRegistry (DATA)]","0x43413b"]]},{"orig":[["0x464a84","push \"Settings\\\\Options\\\\Effect\" (STRING)"],["0x464a89","call <OFFSET55>"],["0x464a8e","mov edx, dword ptr [g_nMusicVolume (DATA)]"]],"recomp":[["0x434141","push \"Settings\\\\Options\\\\Music\" (STRING)"],["0x434146","call CRegistry::WriteInt (FUNCTION)"],["0x43414b","movzx edx, byte ptr [g_bRumbleOff (DATA)] \t(win.cpp:806)"]]},{"both":[["0x464a94","mov ecx, dword ptr [g_pRegistry (DATA)]","0x434152"],["0x464a9a","push edx","0x434158"]]},{"orig":[["0x464a9b","push \"Settings\\\\Options\\\\Music\" (STRING)"],["0x464aa0","call <OFFSET55>"],["0x464aa5","call <OFFSET58>"],["0x464aaa","mov ecx, dword ptr [g_pRegistry (DATA)]"]],"recomp":[["0x434159","push \"Settings\\\\Options\\\\RumbleOff\" (STRING)"],["0x43415e","call CRegistry::WriteInt (FUNCTION)"],["0x434163","call RestoreFileIOHooks (FUNCTION) \t(win.cpp:808)"],["0x434168","mov eax, dword ptr [g_hMainWindow (DATA)] \t(win.cpp:810)"],["0x43416d","test eax, eax"],["0x43416f","pop edi"],["0x434170","pop esi"],["0x434171","je 0x11"]]},{"both":[["0x464ab0","push eax","0x434173"]]},{"orig":[["0x464ab1","push \"Settings\\\\Options\\\\RumbleOff\" (STRING)"],["0x464ab6","call <OFFSET55>"]],"recomp":[["0x434174","call dword ptr [->USER32.dll::DestroyWindow (IMPORT)]"],["0x43417a","mov dword ptr [g_hMainWindow (DATA)], 0"],["0x434184","push 0 \t(win.cpp:812)"],["0x434186","push 0"],["0x434188","call dword ptr [->USER32.dll::ChangeDisplaySettingsA (IMPORT)]"],["0x43418e","test eax, eax"],["0x434190","je 0x14"],["0x434192","push 0 \t(win.cpp:814)"],["0x434194","push \"Error\" (STRING)"],["0x434199","push \"Display reset failed\" (STRING)"],["0x43419e","push 0"],["0x4341a0","call dword ptr [->USER32.dll::MessageBoxA (IMPORT)]"],["0x4341a6","cmp ebp, -1 \t(win.cpp:819)"],["0x4341a9","je 0x7"],["0x4341ab","push ebp \t(win.cpp:821)"],["0x4341ac","call dword ptr [g_pfnCloseHandle (DATA)]"],["0x4341b2","mov eax, 1 \t(win.cpp:823)"],["0x4341b7","pop ebp"],["0x4341b8","add esp, 0x64 \t(win.cpp:824)"],["0x4341bb","ret 0x10"]]}]]],"type":1},{"address":"0x464ef0","name":"MemHandlerEndBlock","matching":1.0,"recomp":"0x430af0","type":1},{"address":"0x519f00","name":"`anonymous namespace'::CreateMainWindow","matching":0.6098654708520179,"recomp":"0x432740","diff":[["@@ -0x519f09,107 +0x432749,108 @@",[{"both":[["0x519f09","push esi","0x432749"],["0x519f0a","xor eax, eax","0x43274a"],["0x519f0c","push edi","0x43274c"],["0x519f0d","mov ecx, 0xc","0x43274d"],["0x519f12","lea edi, [esp + 0x20]","0x432752"],["0x519f16","rep stosd dword ptr es:[edi], eax","0x432756"],["0x519f18","mov eax, dword ptr [esp + 0x6c]","0x432758"],["0x519f1c","mov ecx, dword ptr [esp + 0x70]","0x43275c"],["0x519f20","mov dword ptr [esp + 0x28], eax","0x432760"],["0x519f24","mov eax, dword ptr [esp + 0x74] \t(win.cpp:341)","0x432764"]]},{"orig":[["0x519f28","xor esi, esi"],["0x519f2a","cmp eax, esi"]],"recomp":[["0x432768","xor ebx, ebx"],["0x43276a","cmp eax, ebx"]]},{"both":[["0x519f2c","mov dword ptr [esp + 0x20], 0x30","0x43276c"]]},{"orig":[["0x519f34","mov dword ptr [esp + 0x24], 0x40"]],"recomp":[["0x432774","mov dword ptr [esp + 0x24], 0x20"]]},{"both":[["0x519f3c","mov dword ptr [esp + 0x34], ecx","0x43277c"],["0x519f40","mov dword ptr [esp + 0x48], edx","0x432780"]]},{"orig":[["0x519f44","je 0xf"],["0x519f46","movzx eax, ax"]],"recomp":[["0x432784","je 0x11"],["0x432786","and eax, 0xffff \t(win.cpp:343)"]]},{"both":[["0x519f49","push eax","0x43278b"],["0x519f4a","push ecx","0x43278c"],["0x519f4b","call dword ptr [->USER32.dll::LoadIconA (IMPORT)]","0x43278d"],["0x519f51","mov dword ptr [esp + 0x38], eax","0x432793"]]},{"orig":[["0x519f55","mov ebp, dword ptr [esp + 0x5c]"],["0x519f59","mov ebx, dword ptr [esp + 0x60]"],["0x519f5d","lea ecx, [esp + 0x20]"],["0x519f61","push ecx"]],"recomp":[["0x432797","lea eax, [esp + 0x20] \t(win.cpp:345)"],["0x43279b","push eax"]]},{"both":[["0x519f62","call dword ptr [->USER32.dll::RegisterClassExA (IMPORT)]","0x43279c"],["0x519f68","mov al, byte ptr [esp + 0x78] \t(win.cpp:347)","0x4327a2"],["0x519f6c","test al, al","0x4327a6"]]},{"orig":[["0x519f6e","mov dword ptr [esp + 0x6c], esi"],["0x519f72","push esi"],["0x519f73","jne 0x86"],["0x519f79","mov edx, dword ptr [esp + 0x68]"],["0x519f7d","mov eax, dword ptr [esp + 0x6c]"]],"recomp":[["0x4327a8","push ebx \t(win.cpp:353)"],["0x4327a9","je 0x27"],["0x4327ab","mov edi, dword ptr [USER32.dll::GetSystemMetrics (IMPORT)]"],["0x4327b1","mov dword ptr [esp + 0x7c], 0x80000000"],["0x4327b9","mov dword ptr [esp + 0x70], 8"],["0x4327c1","xor ebp, ebp"],["0x4327c3","call edi"],["0x4327c5","push 1 \t(win.cpp:354)"],["0x4327c7","mov esi, eax"],["0x4327c9","call edi"],["0x4327cb","mov edi, eax"],["0x4327cd","jmp 0x8e \t(win.cpp:356)"],["0x4327d2","mov ecx, dword ptr [esp + 0x68] \t(win.cpp:366)"],["0x4327d6","mov edx, dword ptr [esp + 0x6c] \t(win.cpp:367)"]]},{"both":[["0x519f81","push 0x80c80000 \t(win.cpp:368)","0x4327da"]]},{"orig":[["0x519f86","lea ecx, [esp + 0x18]"],["0x519f8a","push ecx"]],"recomp":[["0x4327df","lea eax, [esp + 0x18]"],["0x4327e3","push eax"]]},{"both":[["0x519f8b","mov dword ptr [esp + 0x84], 0x80c80000","0x4327e4"]]},{"orig":[["0x519f96","mov dword ptr [esp + 0x1c], esi"],["0x519f9a","mov dword ptr [esp + 0x20], esi"],["0x519f9e","mov dword ptr [esp + 0x24], edx"],["0x519fa2","mov dword ptr [esp + 0x28], eax"]],"recomp":[["0x4327ef","mov dword ptr [esp + 0x78], ebx"],["0x4327f3","mov dword ptr [esp + 0x1c], ebx"],["0x4327f7","mov dword ptr [esp + 0x20], ebx"],["0x4327fb","mov dword ptr [esp + 0x24], ecx"],["0x4327ff","mov dword ptr [esp + 0x28], edx"]]},{"both":[["0x519fa6","call dword ptr [->USER32.dll::AdjustWindowRect (IMPORT)]","0x432803"],["0x519fac","mov eax, dword ptr [esp + 0x10] \t(win.cpp:370)","0x432809"],["0x519fb0","mov ecx, dword ptr [esp + 0x14] \t(win.cpp:371)","0x43280d"],["0x519fb4","mov esi, dword ptr [esp + 0x18]","0x432811"],["0x519fb8","mov edi, dword ptr [esp + 0x1c]","0x432815"]]},{"orig":[],"recomp":[["0x432819","mov ebp, dword ptr [esp + 0x5c] \t(win.cpp:375)"]]},{"both":[["0x519fbc","sub esi, eax","0x43281d"],["0x519fbe","sub edi, ecx","0x43281f"],["0x519fc0","neg eax","0x432821"],["0x519fc2","neg ecx","0x432823"],["0x519fc4","cmp ebp, -1","0x432825"]]},{"orig":[["0x519fc7","mov dword ptr [<OFFSET4>], eax"],["0x519fcc","mov dword ptr [<OFFSET5>], ecx"]],"recomp":[["0x432828","mov dword ptr [g_nWindowBorderX (DATA)], eax"],["0x43282d","mov dword ptr [g_nWindowBorderY (DATA)], ecx"]]},{"both":[["0x519fd2","jne 0x11","0x432833"],["0x519fd4","push 0 \t(win.cpp:376)","0x432835"],["0x519fd6","call dword ptr [->USER32.dll::GetSystemMetrics (IMPORT)]","0x432837"],["0x519fdc","sub eax, esi","0x43283d"],["0x519fde","cdq ","0x43283f"],["0x519fdf","sub eax, edx","0x432840"],["0x519fe1","mov ebp, eax","0x432842"],["0x519fe3","sar ebp, 1","0x432844"]]},{"orig":[["0x519fe5","cmp dword ptr [esp + 0x60], -1"],["0x519fea","jne 0x37"]],"recomp":[["0x432846","mov ebx, dword ptr [esp + 0x60] \t(win.cpp:377)"],["0x43284a","cmp ebx, -1"],["0x43284d","jne 0x11"]]},{"both":[["0x519fec","push 1 \t(win.cpp:378)","0x43284f"],["0x519fee","call dword ptr [->USER32.dll::GetSystemMetrics (IMPORT)]","0x432851"],["0x519ff4","sub eax, edi","0x432857"],["0x519ff6","cdq ","0x432859"],["0x519ff7","sub eax, edx","0x43285a"],["0x519ff9","mov ebx, eax","0x43285c"],["0x519ffb","sar ebx, 1","0x43285e"]]},{"orig":[["0x519ffd","jmp 0x24"],["0x519fff","mov edi, dword ptr [USER32.dll::GetSystemMetrics (IMPORT)]"],["0x51a005","mov dword ptr [esp + 0x7c], 0x80000000"],["0x51a00d","mov dword ptr [esp + 0x70], 8"],["0x51a015","xor ebp, ebp"],["0x51a017","xor ebx, ebx"],["0x51a019","call edi"],["0x51a01b","push 1"],["0x51a01d","mov esi, eax"],["0x51a01f","call edi"],["0x51a021","mov edi, eax"]],"recomp":[]},{"both":[["0x51a023","push 0 \t(win.cpp:381)","0x432860"],["0x51a025","call dword ptr [->KERNEL32.dll::SetLastError (IMPORT)]","0x432862"]]},{"orig":[["0x51a02b","mov edx, dword ptr [esp + 0x70]"],["0x51a02f","mov eax, dword ptr [esp + 0x78]"],["0x51a033","mov ecx, dword ptr [esp + 0x58]"]],"recomp":[["0x432868","mov ecx, dword ptr [esp + 0x70] \t(win.cpp:383)"],["0x43286c","mov edx, dword ptr [esp + 0x78]"],["0x432870","mov eax, dword ptr [esp + 0x58]"]]},{"both":[["0x51a037","push 0","0x432874"]]},{"orig":[["0x51a039","push edx"],["0x51a03a","mov edx, dword ptr [esp + 0x5c]"]],"recomp":[["0x432876","push ecx"],["0x432877","mov ecx, dword ptr [esp + 0x5c]"]]},{"both":[["0x51a03e","push 0","0x43287b"],["0x51a040","push 0","0x43287d"],["0x51a042","push edi","0x43287f"],["0x51a043","push esi","0x432880"],["0x51a044","push ebx","0x432881"],["0x51a045","push ebp","0x432882"]]},{"orig":[],"recomp":[["0x432883","push edx"],["0x432884","mov edx, dword ptr [esp + 0x90]"]]},{"both":[["0x51a046","push eax","0x43288b"]]},{"orig":[["0x51a047","mov eax, dword ptr [esp + 0x90]"]],"recomp":[]},{"both":[["0x51a04e","push ecx","0x43288c"],["0x51a04f","push edx","0x43288d"]]},{"orig":[["0x51a050","push eax"]],"recomp":[]},{"both":[["0x51a051","call dword ptr [->USER32.dll::CreateWindowExA (IMPORT)]","0x43288e"],["0x51a057","pop edi","0x432894"],["0x51a058","pop esi","0x432895"],["0x51a059","pop ebp","0x432896"]]},{"orig":[["0x51a05a","mov dword ptr [<OFFSET10>], eax"]],"recomp":[["0x432897","mov dword ptr [g_hMainWindow (DATA)], eax"]]},{"both":[["0x51a05f","pop ebx","0x43289c"]]},{"orig":[],"recomp":[["0x43289d","add esp, 0x40 \t(win.cpp:386)"],["0x4328a0","ret "]]}]]],"type":1},{"address":"0x51a100","name":"`anonymous namespace'::PumpMessages","matching":0.37142857142857144,"recomp":"0x4328b0","diff":[["@@ -0x51a100,30 +0x4328b0,40 @@",[{"orig":[["0x51a100","mov eax, dword ptr [<OFFSET1>]"]],"recomp":[["0x4328b0","mov eax, dword ptr [g_hMainWindow (DATA)] \t(win.cpp:400)"]]},{"both":[["0x51a105","sub esp, 0x1c","0x4328b5"]]},{"orig":[["0x51a108","test eax, eax"],["0x51a10a","je 0x2e"],["0x51a10c","mov ecx, dword ptr [<OFFSET2>]"],["0x51a112","mov edx, ecx"],["0x51a114","inc ecx"],["0x51a115","cmp edx, 0xc8"],["0x51a11b","mov dword ptr [<OFFSET2>], ecx"],["0x51a121","jb 0x17"],["0x51a123","push 0"],["0x51a125","push 0"],["0x51a127","push eax"],["0x51a128","push 0xf"],["0x51a12a","mov dword ptr [<OFFSET2>], 0"],["0x51a134","call dword ptr [->USER32.dll::SystemParametersInfoA (IMPORT)]"],["0x51a13a","mov eax, dword ptr [<OFFSET4>]"]],"recomp":[]},{"both":[["0x51a13f","push esi","0x4328b8"],["0x51a140","mov esi, dword ptr [USER32.dll::PeekMessageA (IMPORT)]","0x4328b9"],["0x51a146","push 1","0x4328bf"],["0x51a148","push 0","0x4328c1"],["0x51a14a","push 0","0x4328c3"],["0x51a14c","push eax","0x4328c5"],["0x51a14d","lea ecx, [esp + 0x14]","0x4328c6"],["0x51a151","push ecx","0x4328ca"],["0x51a152","call esi","0x4328cb"],["0x51a154","test eax, eax","0x4328cd"]]},{"orig":[["0x51a156","je 0x36"]],"recomp":[["0x4328cf","je 0x37"]]},{"both":[["0x51a158","push ebx","0x4328d1"],["0x51a159","mov ebx, dword ptr [USER32.dll::DispatchMessageA (IMPORT)]","0x4328d2"]]},{"orig":[],"recomp":[["0x4328d8","push edi"],["0x4328d9","mov edi, dword ptr [USER32.dll::TranslateMessage (IMPORT)]"],["0x4328df","nop "],["0x4328e0","lea edx, [esp + 0xc] \t(win.cpp:402)"],["0x4328e4","push edx"],["0x4328e5","call edi"],["0x4328e7","lea eax, [esp + 0xc] \t(win.cpp:403)"],["0x4328eb","push eax"],["0x4328ec","call ebx"],["0x4328ee","mov ecx, dword ptr [g_hMainWindow (DATA)]"],["0x4328f4","push 1"],["0x4328f6","push 0"],["0x4328f8","push 0"],["0x4328fa","push ecx"],["0x4328fb","lea edx, [esp + 0x1c]"],["0x4328ff","push edx"],["0x432900","call esi"],["0x432902","test eax, eax"],["0x432904","jne -0x26"],["0x432906","pop edi"],["0x432907","pop ebx"],["0x432908","xor eax, eax \t(win.cpp:406)"],["0x43290a","pop esi"],["0x43290b","add esp, 0x1c \t(win.cpp:407)"],["0x43290e","ret "]]}]]],"type":1},{"address":"0x55a0b2","name":"_WinMainCRTStartup","matching":1.0,"recomp":"0x539179","type":1},{"address":"0x5602c7","name":"$CRT_C_Initializer(5)","matching":0.9523809523809523,"recomp":"0x538263","diff":[["@@ -0x560307,39 +0x5382a3,39 @@",[{"both":[["0x560307","test eax, eax","0x5382a3"],["0x560309","pop ecx","0x5382a5"],["0x56030a","pop ecx","0x5382a6"],["0x56030b","mov dword ptr [___piob (DATA)], eax","0x5382a7"],["0x560310","jne 0x5","0x5382ac"],["0x560312","push 0x1a","0x5382ae"],["0x560314","pop eax","0x5382b0"],["0x560315","pop esi","0x5382b1"],["0x560316","ret ","0x5382b2"],["0x560317","xor edx, edx","0x5382b3"]]},{"orig":[["0x560319","mov ecx, __iob (DATA)"]],"recomp":[["0x5382b5","mov ecx, _iob (DATA)"]]},{"both":[["0x56031e","jmp 0x5","0x5382ba"],["0x560320","mov eax, dword ptr [___piob (DATA)]","0x5382bc"],["0x560325","mov dword ptr [edx + eax], ecx","0x5382c1"],["0x560328","add ecx, 0x20","0x5382c4"],["0x56032b","add edx, 4","0x5382c7"]]},{"orig":[["0x56032e","cmp ecx, 0x612170"]],"recomp":[["0x5382ca","cmp ecx, _NAME_ (DATA)"]]},{"both":[["0x560334","jl -0x16","0x5382d0"],["0x560336","xor ecx, ecx","0x5382d2"],["0x560338","mov edx, <OFFSET5>","0x5382d4"],["0x56033d","mov esi, ecx","0x5382d9"],["0x56033f","mov eax, ecx","0x5382db"],["0x560341","and eax, 0x1f","0x5382dd"],["0x560344","sar esi, 5","0x5382e0"],["0x560347","mov esi, dword ptr [esi*4 + ___pioinfo (DATA)]","0x5382e3"],["0x56034e","lea eax, [eax + eax*8]","0x5382ea"],["0x560351","mov eax, dword ptr [esi + eax*4]","0x5382ed"],["0x560354","cmp eax, -1","0x5382f0"],["0x560357","je 0x4","0x5382f3"],["0x560359","test eax, eax","0x5382f5"],["0x56035b","jne 0x3","0x5382f7"],["0x56035d","or dword ptr [edx], 0xffffffff","0x5382f9"],["0x560360","add edx, 0x20","0x5382fc"],["0x560363","inc ecx","0x5382ff"]]},{"orig":[["0x560364","cmp edx, 0x611f60"]],"recomp":[["0x538300","cmp edx, 0x5dc600"]]},{"both":[["0x56036a","jl -0x2f","0x538306"],["0x56036c","xor eax, eax","0x538308"],["0x56036e","pop esi","0x53830a"],["0x56036f","ret ","0x53830b"]]}]]],"type":1},{"address":"0x560370","name":"$CRT_C_Pre-Terminator","matching":1.0,"recomp":"0x53830c","type":1},{"address":"0x5ca3ec","name":"Script::ScriptReference::`vftable'","matching":1.0,"recomp":"0x5921b4","diff":[["@@ -vtable0x00,11 +vtable0x00,11 @@",[{"both":[["vtable0x00","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x00"],["vtable0x04","(0x436a40 / 0x432c50)  :  Script::NamedObject::getTypeName","vtable0x04"],["vtable0x08","(0x416530 / 0x438bb0)  :  Script::ScriptReference::addRef","vtable0x08"],["vtable0x0c","(0x4025c0 / 0x438bd0)  :  Script::ScriptReference::`scalar deleting destructor'","vtable0x0c"],["vtable0x10","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x10"],["vtable0x14","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x14"],["vtable0x18","(0x42cbe0 / 0x438bc0)  :  Script::ScriptReference::UNK0x18","vtable0x18"],["vtable0x1c","(0x43dc80 / 0x401050)  :  RWS::CAttributeHandler::GetAttrPostUpdateFunc","vtable0x1c"],["vtable0x20","(0x4025a0 / 0x431070)  :  std::vector<RWS::CLinearMemoryManager::LinearMemoryPool *,std::allocator<RWS::CLinearMemoryManager::LinearMemoryPool *> >::_Destroy","vtable0x20"],["vtable0x24","(0x4025b0 / 0x43df80)  :  std::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >","vtable0x24"],["vtable0x28","(0x464ef0 / 0x430af0)  :  MemHandlerEndBlock","vtable0x28"]]}]]],"type":5},{"address":"0x5ca418","name":"Script::NamedObject::`vftable'","matching":1.0,"recomp":"0x591ef0","diff":[["@@ -vtable0x00,2 +vtable0x00,2 @@",[{"both":[["vtable0x00","(0x55805e / 0x536ef0)  :  __purecall","vtable0x00"],["vtable0x04","(0x436a40 / 0x432c50)  :  Script::NamedObject::getTypeName","vtable0x04"]]}]]],"type":5},{"address":"0x5cd2bc","name":"Script::OpContext::`vftable'","matching":1.0,"recomp":"0x591f2c","diff":[["@@ -vtable0x00,2 +vtable0x00,2 @@",[{"both":[["vtable0x00","(0x429750 / 0x4332e0)  :  Script::OpContext::getName","vtable0x00"],["vtable0x04","(0x429740 / 0x4332f0)  :  Script::OpContext::getTypeName","vtable0x04"]]}]]],"type":5},{"address":"0x5cdc80","name":"Script::OpCode::`vftable'","matching":0.7333333333333333,"recomp":"0x5921e0","diff":[["@@ -vtable0x00,15 +vtable0x00,15 @@",[{"orig":[["vtable0x00","0x42f7a0 from orig not annotated."]],"recomp":[["vtable0x00","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds"]]},{"both":[["vtable0x04","(0x436a40 / 0x432c50)  :  Script::NamedObject::getTypeName","vtable0x04"],["vtable0x08","(0x416530 / 0x438bb0)  :  Script::ScriptReference::addRef","vtable0x08"]]},{"orig":[["vtable0x0c","0x4314a0 from orig not annotated."],["vtable0x10","0x431870 from orig not annotated."]],"recomp":[["vtable0x0c","(no orig / 0x438c20)  :  Script::OpCode::`scalar deleting destructor'"]]},{"both":[["vtable0x14","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x10"]]},{"orig":[["vtable0x18","0x43efe0 from orig not annotated."]],"recomp":[["vtable0x14","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds"],["vtable0x18","(0x42cbe0 / 0x438bc0)  :  Script::ScriptReference::UNK0x18"]]},{"both":[["vtable0x1c","(0x43dc80 / 0x401050)  :  RWS::CAttributeHandler::GetAttrPostUpdateFunc","vtable0x1c"],["vtable0x20","(0x4025a0 / 0x431070)  :  std::vector<RWS::CLinearMemoryManager::LinearMemoryPool *,std::allocator<RWS::CLinearMemoryManager::LinearMemoryPool *> >::_Destroy","vtable0x20"],["vtable0x24","(0x4025b0 / 0x43df80)  :  std::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >::_Tree_val<std::_Tmap_traits<unsigned int,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *),std::less<unsigned int>,std::allocator<std::pair<unsigned int const ,void (__cdecl*)(RwChunkHeaderInfo &,RwStream *)> >,0> >","vtable0x24"],["vtable0x28","(0x464ef0 / 0x430af0)  :  MemHandlerEndBlock","vtable0x28"],["vtable0x2c","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x2c"],["vtable0x30","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x30"],["vtable0x34","(0x431130 / 0x438c60)  :  Script::OpCode::execute","vtable0x34"],["vtable0x38","(0x43e6f0 / 0x4333b0)  :  CMemHandler::CheckAllocatedBounds","vtable0x38"]]}]]],"type":5}],"function_count":8244};
+    </script>
+    <script>/******************************************************************************/
+// globals.js
+
+/** @type {Window & ReccmpWindowProps} */
+const reccmpWindow = /** @type {?} */ (window);
+
+const { data: global_reccmp_data, ...global_reccmp_metadata } = reccmpWindow.global_reccmp_report;
+
+// Unwrap array of functions into a dictionary with address as the key.
+const dataDict = Object.fromEntries(
+  global_reccmp_data.map(
+    /**
+     * @param {ReccmpComparedEntity} row
+     * @returns {[string, ReccmpComparedEntity]}
+     */
+    (row) => [row.address, row],
+  ),
+);
+
+/**
+ * @param {string} addr
+ * @returns {ReccmpComparedEntity}
+ */
+function getDataByAddr(addr) {
+  return dataDict[addr];
+}
+
+
+/******************************************************************************/
+// events.js
+
+class ReccmpRegisterEvent extends Event {
+  /** @readonly */
+  static eventName = 'reccmp-register';
+  /** @param {InternalStateCallback} callback */
+  constructor(callback) {
+    super(ReccmpRegisterEvent.eventName, { bubbles: true, composed: true });
+    this.callback = callback;
+  }
+}
+
+class ReccmpTableEvent extends Event {
+  /** @readonly */
+  static eventName = 'reccmp-table';
+  /** @param {InternalStateCallback} callback */
+  constructor(callback) {
+    super(ReccmpTableEvent.eventName, { bubbles: true, composed: true });
+    this.callback = callback;
+  }
+}
+
+class ReccmpSetPageEvent extends Event {
+  /** @readonly */
+  static eventName = 'setPage';
+  /** @param {number} value */
+  constructor(value) {
+    super(ReccmpSetPageEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpQueryEvent extends Event {
+  /** @readonly */
+  static eventName = 'setQuery';
+  /** @param {string} value */
+  constructor(value) {
+    super(ReccmpQueryEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpFilterTypeEvent extends Event {
+  /** @readonly */
+  static eventName = 'setFilterType';
+  /** @param {string} value */
+  constructor(value) {
+    super(ReccmpFilterTypeEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpHidePerfectEvent extends Event {
+  /** @readonly */
+  static eventName = 'setHidePerfect';
+  /** @param {boolean} value */
+  constructor(value) {
+    super(ReccmpHidePerfectEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpHideStubEvent extends Event {
+  /** @readonly */
+  static eventName = 'setHideStub';
+  /** @param {boolean} value */
+  constructor(value) {
+    super(ReccmpHideStubEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpShowRecompEvent extends Event {
+  /** @readonly */
+  static eventName = 'setShowRecomp';
+  /** @param {boolean} value */
+  constructor(value) {
+    super(ReccmpShowRecompEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpPrevPageEvent extends Event {
+  /** @readonly */
+  static eventName = 'prevPage';
+  constructor() {
+    super(ReccmpPrevPageEvent.eventName, { bubbles: true, composed: true });
+  }
+}
+
+class ReccmpNextPageEvent extends Event {
+  /** @readonly */
+  static eventName = 'nextPage';
+  constructor() {
+    super(ReccmpNextPageEvent.eventName, { bubbles: true, composed: true });
+  }
+}
+
+class ReccmpSortColEvent extends Event {
+  /** @readonly */
+  static eventName = 'setSortCol';
+  /** @param {ColumnNames} value */
+  constructor(value) {
+    super(ReccmpSortColEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpPageSizeEvent extends Event {
+  /** @readonly */
+  static eventName = 'setPageSize';
+  /** @param {string} value */
+  constructor(value) {
+    super(ReccmpPageSizeEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+class ReccmpToggleExpandedEvent extends Event {
+  /** @readonly */
+  static eventName = 'toggleExpanded';
+  /** @param {string} value */
+  constructor(value) {
+    super(ReccmpToggleExpandedEvent.eventName, { bubbles: true, composed: true });
+    this.value = value;
+  }
+}
+
+
+/******************************************************************************/
+// state.js
+/**
+ * Special internal values to ensure this sort order for matching column:
+ * 1. Stub
+ * 2. Any match percentage [0.0, 1.0)
+ * 3. Effective match
+ * 4. Actual 100% match
+ * @param {ReccmpComparedEntity} row
+ * @returns {number}
+ */
+function getRowSortValue(row) {
+  // Stubs appear at the bottom, below even a 0% match.
+  if ('stub' in row) {
+    return -1;
+  }
+
+  // An effective match sorts near the top
+  // but under a non-effective match.
+  if ('effective' in row) {
+    return 1.0;
+  }
+
+  // Boost non-effective match so they appear at the top.
+  if (row.matching === 1.0) {
+    return 1000;
+  }
+
+  return row.matching;
+}
+
+/**
+ * @param {Object} args
+ * @param {ColumnNames} args.sortCol
+ * @param {boolean} args.sortDesc
+ * @returns {(x: ReccmpComparedEntity, y: ReccmpComparedEntity) => number}
+ */
+function createSortFunction({ sortCol, sortDesc }) {
+  /**
+   * @param {ReccmpComparedEntity} rowA
+   * @param {ReccmpComparedEntity} rowB
+   * @returns {number}
+   */
+  return (rowA, rowB) => {
+    const valA = sortCol === 'matching' ? getRowSortValue(rowA) : rowA[sortCol];
+    const valB = sortCol === 'matching' ? getRowSortValue(rowB) : rowB[sortCol];
+
+    if (valA > valB) {
+      return sortDesc ? -1 : 1;
+    } else if (valA < valB) {
+      return sortDesc ? 1 : -1;
+    }
+
+    return 0;
+  };
+}
+
+/**
+ * @param {Object} args
+ * @param {boolean} args.hidePerfect
+ * @param {boolean} args.hideStub
+ * @param {string} args.query
+ * @param {number} args.filterType
+ * @returns {(row: ReccmpComparedEntity) => boolean}
+ */
+function createFilterFunction({ hidePerfect, hideStub, query, filterType }) {
+  const queryNormalized = query.toLowerCase().trim();
+
+  /**
+   * @param {ReccmpComparedEntity} row
+   * @returns {boolean}
+   */
+  return (row) => {
+    // Destructuring sets defaults for optional values from this object.
+    const { effective = false, stub = false, diff = '', name, address, matching } = row;
+
+    if (hidePerfect && (effective || matching >= 1)) {
+      return false;
+    }
+
+    if (hideStub && stub) {
+      return false;
+    }
+
+    if (queryNormalized === '') {
+      return true;
+    }
+
+    // Name/addr search
+    if (filterType === 1) {
+      return address.includes(queryNormalized) || name.toLowerCase().includes(queryNormalized);
+    }
+
+    // no diff for review.
+    if (diff === '') {
+      return false;
+    }
+
+    /**
+     * special matcher for combined diff
+     * @type {(frag: DiffFragBoth | DiffFragSingle) => boolean}
+     */
+    const anyLineMatch = (frag) => frag[1].toLowerCase().trim().includes(queryNormalized);
+
+    // Flatten all diff groups for the search
+    const diffs = diff.flatMap(([_slug, subgroups]) => subgroups);
+    for (const subgroup of diffs) {
+      const { both = [], orig = [], recomp = [] } = subgroup;
+
+      // If search includes context
+      if (filterType === 2 && both.some(anyLineMatch)) {
+        return true;
+      }
+
+      if (orig.some(anyLineMatch) || recomp.some(anyLineMatch)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+}
+
+/**
+ * @param {ReccmpComparedEntity[]} input
+ * @param {number} chunkSize
+ * @returns {ReccmpComparedEntity[][]}
+ */
+function batched(input, chunkSize) {
+  /**
+   * @template T
+   * @generator
+   * @param {Array<T>} arr
+   * @param {number} n
+   * @yields {Array<T>}
+   */
+  function* gen(arr, n) {
+    for (let i = 0; i < arr.length; i += n) {
+      yield arr.slice(i, i + n);
+    }
+  }
+
+  return [...gen(input, Math.max(1, chunkSize))];
+}
+
+class ReccmpState {
+  /** @param {ReccmpComparedEntity[]} dataset */
+  constructor(dataset) {
+    /**
+     * @readonly
+     * @type {ReccmpComparedEntity[]}
+     */
+    this.dataset = dataset;
+
+    /** @type {ReccmpInternalState} */
+    this.state = {
+      results: this.dataset,
+
+      // Results split into subarrays according to the pageSize.
+      pages: [],
+
+      // Sort column and direction
+      sortCol: 'address',
+      sortDesc: false,
+
+      // Query text and which fields to search.
+      query: '',
+      filterType: 1,
+
+      // Row filtering
+      hidePerfect: false,
+      hideStub: false,
+
+      // Column hiding
+      showRecomp: false,
+
+      // Rows with detail row (keyed by address)
+      expanded: {},
+
+      // Paging. Numbers are 0-based. Display components add 1 to both for
+      currentPage: [],
+      pageNumber: 0,
+      maxPageNumber: 0,
+      pageSize: 200,
+    };
+
+    // Populate fields with default search options.
+    this.updateResults();
+  }
+
+  /**
+   * @param {number} desiredPage
+   * @returns {number}
+   */
+  clampPage(desiredPage) {
+    // Clamp desiredPage to (0, maxPageNumber] --> a page that actually exists.
+    return Math.max(0, Math.min(desiredPage, this.state.maxPageNumber));
+  }
+
+  updateCurrentPage() {
+    // Should be called whenever state.pageNumber changes.
+    // If the current search filters yield no results, then there will be no pages
+    // so don't try to index the pages array in that case.
+    if (this.state.pages.length > 0) {
+      this.state.currentPage = this.state.pages[this.state.pageNumber];
+    } else {
+      this.state.currentPage = [];
+    }
+  }
+
+  updateResults() {
+    const filterFn = createFilterFunction(this.state);
+    const sortFn = createSortFunction(this.state);
+
+    this.state.results = this.dataset.filter(filterFn).sort(sortFn);
+    this.state.pages = batched(this.state.results, this.state.pageSize);
+    this.state.maxPageNumber = Math.max(0, this.state.pages.length - 1);
+    this.state.pageNumber = Math.min(this.state.pageNumber, this.state.maxPageNumber);
+    this.updateCurrentPage();
+  }
+
+  /** @param {number} page */
+  setPageNumber(page) {
+    this.state.pageNumber = this.clampPage(page);
+    this.updateCurrentPage();
+  }
+
+  /** @param {string} value */
+  setFilterType(value) {
+    // 1: Search by address or name.
+    // 2: Search disassembly.
+    // 3: Search disassembly, diff instructions only.
+    const filterType = parseInt(value);
+    if (filterType >= 1 && filterType <= 3) {
+      this.state.filterType = filterType;
+    }
+
+    this.updateResults();
+  }
+
+  /** @param {string} query */
+  setQuery(query) {
+    this.state.query = query;
+    this.updateResults();
+  }
+
+  /** @param {boolean} value */
+  setShowRecomp(value) {
+    this.state.showRecomp = value;
+
+    // Don't sort by the recomp column we are about to hide
+    if (!this.state.showRecomp && this.state.sortCol === 'recomp') {
+      this.state.sortCol = 'address';
+      // Re-sort using the address column (GH issue #195)
+      this.updateResults();
+    }
+  }
+
+  /** @param {ColumnNames} column */
+  setSortCol(column) {
+    // Flip sort direction if this is the current sort column.
+    if (column === this.state.sortCol) {
+      this.state.sortDesc = !this.state.sortDesc;
+    } else {
+      this.state.sortCol = column;
+    }
+    this.state.sortCol = column;
+    this.updateResults();
+  }
+
+  /** @param {boolean} value */
+  setHidePerfect(value) {
+    this.state.hidePerfect = value;
+    this.updateResults();
+  }
+
+  /** @param {boolean} value */
+  setHideStub(value) {
+    this.state.hideStub = value;
+    this.updateResults();
+  }
+
+  /** @param {string} value */
+  setPageSize(value) {
+    this.state.pageSize = parseInt(value);
+    this.updateResults();
+  }
+
+  /** @param {string} addr */
+  toggleExpanded(addr) {
+    if (addr in this.state.expanded) {
+      delete this.state.expanded[addr];
+    } else {
+      this.state.expanded[addr] = true;
+    }
+  }
+}
+
+
+/******************************************************************************/
+// provider.js
+
+class ReccmpProvider extends window.HTMLElement {
+  constructor() {
+    super();
+    /** @type {ReccmpState} */
+    this.reccmp = new ReccmpState(global_reccmp_data);
+    /** @type {InternalStateCallback[]} */
+    this.listeners = [];
+    /** @type {InternalStateCallback[]} */
+    this.tables = [];
+
+    this.addEventListener(ReccmpRegisterEvent.eventName, (evt) => {
+      evt.stopImmediatePropagation();
+      this.listeners.push(evt.callback);
+      // Call the listener immediately after registering.
+      // This populates the component with data.
+      evt.callback(this.reccmp.state);
+    });
+
+    this.addEventListener(ReccmpTableEvent.eventName, (evt) => {
+      evt.stopImmediatePropagation();
+      this.tables.push(evt.callback);
+    });
+
+    this.addEventListener(ReccmpHidePerfectEvent.eventName, (evt) => {
+      this.reccmp.setHidePerfect(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpHideStubEvent.eventName, (evt) => {
+      this.reccmp.setHideStub(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpShowRecompEvent.eventName, (evt) => {
+      this.reccmp.setShowRecomp(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpPrevPageEvent.eventName, () => {
+      this.reccmp.setPageNumber(this.reccmp.state.pageNumber - 1);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpNextPageEvent.eventName, () => {
+      this.reccmp.setPageNumber(this.reccmp.state.pageNumber + 1);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpSetPageEvent.eventName, (evt) => {
+      this.reccmp.setPageNumber(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpQueryEvent.eventName, (evt) => {
+      this.reccmp.setQuery(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpFilterTypeEvent.eventName, (evt) => {
+      this.reccmp.setFilterType(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpSortColEvent.eventName, (evt) => {
+      this.reccmp.setSortCol(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpPageSizeEvent.eventName, (evt) => {
+      this.reccmp.setPageSize(evt.value);
+      this.callListeners();
+    });
+
+    this.addEventListener(ReccmpToggleExpandedEvent.eventName, (evt) => {
+      this.reccmp.toggleExpanded(evt.value);
+      for (const fn of this.tables) {
+        fn(this.reccmp.state);
+      }
+    });
+  }
+
+  callListeners() {
+    for (const fn of this.listeners) {
+      fn(this.reccmp.state);
+    }
+  }
+}
+
+
+/******************************************************************************/
+// components/clickToCopy.js
+/** @param {string} value */
+function copyToClipboard(value) {
+  navigator.clipboard.writeText(value);
+}
+
+class ClickToCopy extends window.HTMLElement {
+  connectedCallback() {
+    this.addEventListener('mouseout', () => {
+      this.removeAttribute('copied');
+    });
+
+    this.addEventListener('click', (evt) => {
+      copyToClipboard(/** @type {HTMLElement} */ (evt.target).textContent);
+      this.setAttribute('copied', '');
+      // Display "copied!" message for up to 2 seconds
+      // if the user keeps their mouse on the link.
+      setTimeout(() => {
+        this.removeAttribute('copied');
+      }, 2000);
+    });
+  }
+}
+
+
+/******************************************************************************/
+// components/diffDisplay.js
+
+/** @param {MatchingOrMismatchingBlock[]} entries */
+function formatAsm(entries) {
+  /** @type {HTMLTableRowElement[]} */
+  const output = [];
+
+  /**
+   * @param {string} text
+   * @returns {HTMLTableCellElement}
+   */
+  const createTh = (text) => {
+    const th = document.createElement('th');
+    th.innerText = text;
+    return th;
+  };
+
+  /**
+   * @param {string} text
+   * @param {string} className
+   * @returns {HTMLTableCellElement}
+   */
+  const createTd = (text, className = '') => {
+    const td = document.createElement('td');
+    td.innerText = text;
+    td.className = className;
+    return td;
+  };
+
+  entries.forEach((obj) => {
+    // These won't all be present. You get "both" for an equal node
+    // and orig/recomp for a diff.
+    const { both = [], orig = [], recomp = [] } = obj;
+
+    output.push(
+      ...both.map(([addr, line, recompAddr]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTh(recompAddr));
+        tr.appendChild(createTd(line));
+        return tr;
+      }),
+    );
+
+    output.push(
+      ...orig.map(([addr, line]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTh(''));
+        tr.appendChild(createTd(`-${line}`, 'diffneg'));
+        return tr;
+      }),
+    );
+
+    output.push(
+      ...recomp.map(([addr, line]) => {
+        const tr = document.createElement('tr');
+        tr.appendChild(createTh(''));
+        tr.appendChild(createTh(addr));
+        tr.appendChild(createTd(`+${line}`, 'diffpos'));
+        return tr;
+      }),
+    );
+  });
+
+  return output;
+}
+
+class DiffDisplayOptions extends window.HTMLElement {
+  static observedAttributes = ['data-option'];
+
+  connectedCallback() {
+    if (this.shadowRoot !== null) {
+      return;
+    }
+
+    const shadow = this.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+      <style>
+        fieldset {
+          align-items: center;
+          display: flex;
+          margin-bottom: 20px;
+        }
+
+        label {
+          margin-right: 10px;
+          user-select: none;
+        }
+
+        label, input {
+          cursor: pointer;
+        }
+      </style>
+      <fieldset>
+        <legend>Address display:</legend>
+        <input type="radio" id="showNone" name="addrDisplay" value=0>
+        <label for="showNone">None</label>
+        <input type="radio" id="showOrig" name="addrDisplay" value=1>
+        <label for="showOrig">Original</label>
+        <input type="radio" id="showBoth" name="addrDisplay" value=2>
+        <label for="showBoth">Both</label>
+      </fieldset>`;
+
+    shadow.querySelectorAll('input[type=radio]').forEach((element) => {
+      const radio = /** @type {HTMLInputElement} */ (element);
+      radio.checked = this.option === radio.getAttribute('value');
+
+      radio.addEventListener('change', (evt) => {
+        this.option = /** @type {HTMLInputElement} */ (evt.target).value;
+      });
+    });
+  }
+
+  set option(value) {
+    this.setAttribute('data-option', value);
+  }
+
+  get option() {
+    return this.getAttribute('data-option') ?? '1';
+  }
+
+  /** @param {string} name */
+  attributeChangedCallback(name) {
+    if (name !== 'data-option') {
+      return;
+    }
+
+    this.dispatchEvent(new Event('change'));
+  }
+}
+
+class DiffDisplay extends window.HTMLElement {
+  static observedAttributes = ['data-option'];
+
+  connectedCallback() {
+    if (this.querySelector('diff-display-options') !== null) {
+      return;
+    }
+
+    const optControl = new DiffDisplayOptions();
+    optControl.option = this.option;
+    optControl.addEventListener('change', (evt) => {
+      this.option = /** @type {DiffDisplayOptions} */ (evt.target).option;
+    });
+    this.appendChild(optControl);
+
+    const div = document.createElement('div');
+    const obj = getDataByAddr(this.address);
+
+    /**
+     * @param {string} text
+     * @param {string} className
+     */
+    const createHeaderLine = (text, className) => {
+      const div = document.createElement('div');
+      div.textContent = text;
+      div.className = className;
+      return div;
+    };
+
+    const groups = obj.diff ?? [];
+    groups.forEach(([slug, subgroups]) => {
+      const secondTable = document.createElement('table');
+      secondTable.classList.add('diffTable');
+
+      const hdr = document.createElement('div');
+      hdr.appendChild(createHeaderLine('---', 'diffneg'));
+      hdr.appendChild(createHeaderLine('+++', 'diffpos'));
+      hdr.appendChild(createHeaderLine(slug, 'diffslug'));
+      div.appendChild(hdr);
+
+      const tbody = document.createElement('tbody');
+      secondTable.appendChild(tbody);
+
+      const diffs = formatAsm(subgroups);
+      for (const el of diffs) {
+        tbody.appendChild(el);
+      }
+
+      div.appendChild(secondTable);
+    });
+
+    this.appendChild(div);
+  }
+
+  get address() {
+    return this.getAttribute('data-address') ?? ''; // required?
+  }
+
+  set address(value) {
+    this.setAttribute('data-address', value);
+  }
+
+  get option() {
+    return this.getAttribute('data-option') ?? '1';
+  }
+
+  set option(value) {
+    this.setAttribute('data-option', value);
+  }
+}
+
+/******************************************************************************/
+// components/hidePerfect.js
+class HidePerfect extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<label><input type="checkbox" />Hide 100% match</label>`;
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.addEventListener('change', (evt) => {
+      this.dispatchEvent(new ReccmpHidePerfectEvent(/** @type {HTMLInputElement} */ (evt.target).checked));
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ hidePerfect }) {
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.checked = hidePerfect;
+  }
+}
+
+
+/******************************************************************************/
+// components/hideStub.js
+class HideStub extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<label><input type="checkbox" />Hide stubs</label>`;
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.addEventListener('change', (evt) => {
+      this.dispatchEvent(new ReccmpHideStubEvent(/** @type {HTMLInputElement} */ (evt.target).checked));
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ hideStub }) {
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.checked = hideStub;
+  }
+}
+
+
+/******************************************************************************/
+// components/listingTable.js
+/** @param {ReccmpComparedEntity} row */
+function countDiffs(row) {
+  const { diff = '' } = row;
+  if (diff === '') {
+    return '';
+  }
+
+  const diffs = diff.flatMap(([_slug, subgroups]) => subgroups);
+  const diffLength = diffs.filter((d) => !('both' in d)).length;
+  const diffWord = diffLength === 1 ? 'diff' : 'diffs';
+  return diffLength === 0 ? '' : `${diffLength} ${diffWord}`;
+}
+
+/**
+ * @param {ReccmpComparedEntity} row
+ * @returns {string}
+ */
+function getMatchPercentText(row) {
+  if ('stub' in row) {
+    return 'stub';
+  }
+
+  if ('effective' in row) {
+    return '100.00%*';
+  }
+
+  return `${(row.matching * 100).toFixed(2)}%`;
+}
+
+/**
+ * @param {ReccmpComparedEntity} obj
+ * @param {boolean} showRecomp
+ * @returns {HTMLTableRowElement}
+ */
+function createDiffRow(obj, showRecomp) {
+  let contents;
+
+  // If "diff" is undefined or empty, that means
+  // there are no diffs for this entity. (GH #201)
+  const { diff = [], matching = 0.0 } = obj;
+
+  if (diff.length === 0) {
+    contents = document.createElement('div');
+    contents.className = 'no-diff';
+    contents.textContent = matching === 1.0 ? 'Identical function - no diff' : 'No diff available';
+  } else {
+    contents = document.createElement('diff-display');
+    contents.dataset.option = '1';
+    contents.dataset.address = obj.address;
+  }
+
+  const td = document.createElement('td');
+  td.setAttribute('colspan', showRecomp ? '5' : '4');
+  td.append(contents);
+
+  const tr = document.createElement('tr');
+  tr.dataset.diff = obj.address;
+  tr.append(td);
+  return tr;
+}
+
+/**
+ * @param {ReccmpComparedEntity} obj
+ * @param {boolean} showRecomp
+ * @returns {HTMLTableRowElement}
+ */
+function createFuncRow(obj, showRecomp) {
+  /**
+   * @param {string} dataCol
+   * @param {boolean} canCopy
+   * @param {string} textContent
+   * @returns {HTMLTableCellElement}
+   */
+  const createColumn = (dataCol, canCopy, textContent) => {
+    const td = document.createElement('td');
+    td.dataset.col = dataCol;
+    if (canCopy) {
+      const copy = document.createElement('click-to-copy');
+      copy.textContent = textContent;
+      td.append(copy);
+    } else {
+      td.append(textContent);
+    }
+
+    return td;
+  };
+
+  const cols = {
+    address: createColumn('address', true, obj.address),
+    ...(showRecomp && { recomp: createColumn('recomp', true, obj.recomp) }),
+    name: createColumn('name', false, obj.name),
+    diffs: createColumn('diffs', false, countDiffs(obj)),
+    matching: createColumn('matching', false, getMatchPercentText(obj)),
+  };
+
+  const tr = document.createElement('tr');
+  tr.dataset.address = obj.address;
+  tr.append(...Object.values(cols));
+  return tr;
+}
+
+/**
+ * @param {boolean} showRecomp
+ * @param {ColumnNames} sortCol
+ * @param {boolean} sortDesc
+ * @returns {HTMLTableRowElement}
+ */
+function createHeaderRow(showRecomp, sortCol, sortDesc) {
+  const cols = {
+    address: 'Address',
+    ...(showRecomp && { recomp: 'Recomp' }),
+    name: 'Name',
+    diffs: '',
+    matching: 'Matching',
+  };
+
+  const headers = Object.entries(cols).map(([key, name]) => {
+    if (key === 'diffs') {
+      /** @type {HTMLTableCellElement} */
+      const th = document.createElement('th');
+      th.dataset.col = 'diffs';
+      th.dataset.noSort = 'true';
+      return th;
+    }
+
+    const sort_indicator = document.createElement('div');
+    if (key === sortCol) {
+      sort_indicator.innerHTML = sortDesc ? '&#9660' : '&#9650';
+    }
+
+    /** @type {HTMLTableCellElement} */
+    const th = document.createElement('th');
+    th.dataset.col = key;
+    const div = document.createElement('div');
+    const span = document.createElement('span');
+    span.textContent = name;
+    div.append(span, sort_indicator);
+    th.append(div);
+    return th;
+  });
+
+  const tr = document.createElement('tr');
+  tr.append(...headers);
+  return tr;
+}
+
+class ListingTable extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = '<table id="listing"><thead></thead><tbody></tbody></table>';
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+    this.dispatchEvent(new ReccmpTableEvent(this.setDiffRow.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ currentPage, expanded, showRecomp, sortCol, sortDesc }) {
+    const header_row = createHeaderRow(showRecomp, sortCol, sortDesc);
+
+    const rows = [];
+
+    // Create rows for this page.
+    for (const obj of currentPage) {
+      rows.push(createFuncRow(obj, showRecomp));
+      if (obj.address in expanded) {
+        rows.push(createDiffRow(obj, showRecomp));
+      }
+    }
+
+    const thead = /** @type {HTMLTableSectionElement } */ (this.querySelector('thead'));
+    const tbody = /** @type {HTMLTableSectionElement } */ (this.querySelector('tbody'));
+
+    thead.replaceChildren(header_row);
+    tbody.replaceChildren(...rows);
+
+    this.querySelectorAll('th:not([data-no-sort])').forEach((element) => {
+      const th = /** @type {HTMLTableCellElement} */ (element);
+      const col = /** @type {ColumnNames} */ (th.dataset.col);
+      if (col) {
+        const span = th.querySelector('span');
+        if (span) {
+          span.addEventListener('click', () => {
+            this.dispatchEvent(new ReccmpSortColEvent(col));
+          });
+        }
+      }
+    });
+
+    this.querySelectorAll('tr[data-address]').forEach((element) => {
+      const row = /** @type {HTMLTableRowElement} */ (element);
+      // Clicking the name column toggles the diff detail row.
+      // This is added or removed without replacing the entire <tbody>.
+      const cell = /** @type {HTMLTableCellElement} */ (row.querySelector('td[data-col="name"]'));
+      cell.addEventListener('click', () => {
+        this.dispatchEvent(new ReccmpToggleExpandedEvent(row.dataset.address ?? ''));
+      });
+    });
+  }
+
+  /** @param {ReccmpInternalState} state */
+  setDiffRow({ currentPage, expanded, showRecomp }) {
+    const tbody = /** @type {HTMLTableSectionElement} */ (this.querySelector('tbody'));
+
+    for (const obj of currentPage) {
+      const address = obj.address;
+      const funcrow = /** @type {HTMLTableRowElement} */ (tbody.querySelector(`tr[data-address="${address}"]`));
+      if (funcrow === null) {
+        continue;
+      }
+
+      const existing = /** @type {HTMLTableRowElement} */ (tbody.querySelector(`tr[data-diff="${address}"]`));
+      const isExpanded = existing !== null;
+      const shouldExpand = address in expanded;
+
+      if (!isExpanded && shouldExpand) {
+        // Insert the diff row after the parent func row.
+        funcrow.insertAdjacentElement('afterend', createDiffRow(obj, showRecomp));
+      } else if (isExpanded && !shouldExpand) {
+        tbody.removeChild(existing);
+      }
+    }
+  }
+}
+
+
+/******************************************************************************/
+// components/nextPageButton.js
+class NextPageButton extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<button>next</button>`;
+    const button = /** @type {HTMLButtonElement} */ (this.querySelector('button'));
+    button.addEventListener('click', () => {
+      this.dispatchEvent(new ReccmpNextPageEvent());
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ pageNumber, maxPageNumber }) {
+    const button = /** @type {HTMLButtonElement} */ (this.querySelector('button'));
+    if (pageNumber === maxPageNumber) {
+      button.setAttribute('disabled', '');
+    } else {
+      button.removeAttribute('disabled');
+    }
+  }
+}
+
+
+/******************************************************************************/
+// components/pageNumberOf.js
+class PageNumberOf extends window.HTMLElement {
+  connectedCallback() {
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ pageNumber, maxPageNumber }) {
+    this.textContent = `Page ${pageNumber + 1} of ${maxPageNumber + 1}`;
+  }
+}
+
+
+/******************************************************************************/
+// components/pageSelect.js
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+function getCppClass(str) {
+  const idx = str.indexOf('::');
+  if (idx !== -1) {
+    return str.slice(0, idx);
+  }
+
+  return str;
+}
+
+/**
+ * Clamp string length to specified length and pad with ellipsis
+ * @param {string} str
+ * @param {number} maxlen
+ * @returns {string}
+ */
+function stringTruncate(str, maxlen = 20) {
+  str = getCppClass(str);
+  if (str.length > maxlen) {
+    return `${str.slice(0, maxlen)}...`;
+  }
+
+  return str;
+}
+
+/**
+ * @param {ReccmpComparedEntity[][]} pages
+ * @param {ColumnNames} sortCol
+ * @returns {[number, string, string][]}
+ */
+function pageHeadings(pages, sortCol) {
+  return pages.map((page, index) => {
+    const first = page[0];
+    const last = page[page.length - 1];
+
+    let start = String(first[sortCol]);
+    let end = String(last[sortCol]);
+
+    if (sortCol === 'matching') {
+      start = getMatchPercentText(first);
+      end = getMatchPercentText(last);
+    }
+
+    return [index, stringTruncate(start), stringTruncate(end)];
+  });
+}
+
+class PageSelect extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<select></select>`;
+    const select = /** @type {HTMLSelectElement} */ (this.querySelector('select'));
+    select.addEventListener('change', (evt) => {
+      const target = /** @type {HTMLSelectElement} */ (evt.target);
+      this.dispatchEvent(new ReccmpSetPageEvent(parseInt(target.value)));
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ pages, pageNumber, results, sortCol }) {
+    const select = /** @type {HTMLSelectElement} */ (this.querySelector('select'));
+
+    if (results.length === 0) {
+      select.setAttribute('disabled', '');
+      const option = document.createElement('option');
+      option.textContent = '- no results -';
+      select.replaceChildren(option);
+      return;
+    }
+
+    select.removeAttribute('disabled');
+
+    const options = [];
+    for (const [value, fromText, toText] of pageHeadings(pages, sortCol)) {
+      const option = document.createElement('option');
+      option.value = String(value);
+      if (pageNumber === value) {
+        option.setAttribute('selected', '');
+      }
+      option.textContent = `${sortCol}: ${fromText} to ${toText}`;
+      options.push(option);
+    }
+
+    select.replaceChildren(...options);
+  }
+}
+
+
+/******************************************************************************/
+// components/prevPageButton.js
+class PrevPageButton extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<button>prev</button>`;
+    const button = /** @type {HTMLButtonElement} */ (this.querySelector('button'));
+    button.addEventListener('click', () => {
+      this.dispatchEvent(new ReccmpPrevPageEvent());
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ pageNumber }) {
+    const button = /** @type {HTMLButtonElement} */ (this.querySelector('button'));
+    if (pageNumber === 0) {
+      button.setAttribute('disabled', '');
+    } else {
+      button.removeAttribute('disabled');
+    }
+  }
+}
+
+
+/******************************************************************************/
+// components/resultCount.js
+class ResultCount extends window.HTMLElement {
+  connectedCallback() {
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ results }) {
+    this.textContent = String(results.length);
+  }
+}
+
+
+/******************************************************************************/
+// components/showRecomp.js
+class ShowRecomp extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<label><input type="checkbox" />Show recomp address</label>`;
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.addEventListener('change', (evt) => {
+      this.dispatchEvent(new ReccmpShowRecompEvent(/** @type {HTMLInputElement} */ (evt.target).checked));
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ showRecomp }) {
+    const checkbox = /** @type {HTMLInputElement} */ (this.querySelector('input[type=checkbox]'));
+    checkbox.checked = showRecomp;
+  }
+}
+
+
+/******************************************************************************/
+// components/searchbar.js
+class SearchBar extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `<input type="search"></input>`;
+    const input = /** @type {HTMLInputElement} */ (this.querySelector('input[type=search]'));
+    input.addEventListener('input', (evt) => {
+      this.dispatchEvent(new ReccmpQueryEvent(/** @type {HTMLInputElement} */ (evt.target).value));
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ query, filterType }) {
+    const input = /** @type {HTMLInputElement} */ (this.querySelector('input[type=search]'));
+    input.value = query;
+    input.placeholder = filterType === 1 ? 'Search for offset or function name...' : 'Search for instruction...';
+  }
+}
+
+/******************************************************************************/
+// components/searchOptions.js
+class SearchOptions extends window.HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<label><input type="radio" name="filterType" value=1 />Name/address</label>
+<label><input type="radio" name="filterType" value=2 />Asm output</label>
+<label><input type="radio" name="filterType" value=3 />Asm diffs only</label>`;
+
+    this.querySelectorAll('input[name=filterType]').forEach((element) => {
+      const radio = /** @type {HTMLInputElement} */ (element);
+      radio.addEventListener('change', () => {
+        const value = /** @type {string} */ (radio.getAttribute('value'));
+        this.dispatchEvent(new ReccmpFilterTypeEvent(value));
+      });
+    });
+
+    this.dispatchEvent(new ReccmpRegisterEvent(this.update.bind(this)));
+  }
+
+  /** @param {ReccmpInternalState} state */
+  update({ filterType }) {
+    this.querySelectorAll('input[name=filterType]').forEach((element) => {
+      const radio = /** @type {HTMLInputElement} */ (element);
+      const value = /** @type {string} */ (radio.getAttribute('value'));
+      radio.checked = filterType === parseInt(value);
+    });
+  }
+}
+
+
+/******************************************************************************/
+// main.js
+window.onload = () => {
+  document.title = `reccmp: ${global_reccmp_metadata.file}`;
+
+  window.customElements.define('reccmp-provider', ReccmpProvider);
+  window.customElements.define('click-to-copy', ClickToCopy); // used by listing-table
+  window.customElements.define('listing-table', ListingTable);
+  window.customElements.define('diff-display', DiffDisplay);
+  window.customElements.define('diff-display-options', DiffDisplayOptions);
+  window.customElements.define('search-bar', SearchBar);
+  window.customElements.define('hide-perfect', HidePerfect);
+  window.customElements.define('hide-stub', HideStub);
+  window.customElements.define('next-page-button', NextPageButton);
+  window.customElements.define('prev-page-button', PrevPageButton);
+  window.customElements.define('result-count', ResultCount);
+  window.customElements.define('search-options', SearchOptions);
+  window.customElements.define('show-recomp', ShowRecomp);
+  window.customElements.define('page-number-of', PageNumberOf);
+  window.customElements.define('page-select', PageSelect);
+};
+
+</script>
+  </head>
+  <body>
+    <div class="main">
+      <h1>Decompilation Status</h1>
+      <reccmp-provider>
+        <search-bar></search-bar>
+        <div class="filters">
+          <fieldset>
+            <legend>Options:</legend>
+            <hide-perfect></hide-perfect>
+            <hide-stub></hide-stub>
+            <show-recomp></show-recomp>
+          </fieldset>
+          <fieldset>
+            <legend>Search filters on:</legend>
+            <search-options></search-options>
+          </fieldset>
+        </div>
+        <div class="filters">
+          <p class="rowcount">Results: <result-count></result-count></p>
+          <fieldset id="pageDisplay">
+            <legend><page-number-of></page-number-of></legend>
+            <prev-page-button></prev-page-button>
+            <page-select></page-select>
+            <next-page-button></next-page-button>
+          </fieldset>
+        </div>
+        <listing-table>
+        </listing-table>
+      </reccmp-provider>
+    </div>
+  </body>
+</html>

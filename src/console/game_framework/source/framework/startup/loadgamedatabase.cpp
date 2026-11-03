@@ -31,6 +31,8 @@
 #include "framework/core/macros/debugmacros.h"
 #include "framework/core/streamhandler/streamhandler.h"
 
+#include "framework/decomp_helpers.h"
+
 namespace RWS
 {
    namespace StartUp
@@ -45,15 +47,21 @@ namespace RWS
       *  \param pFileName String containing the name of the game database file to load.
       *
       */
-      bool LoadGameDatabaseFile(RwChar *pFileName)
+      bool LoadGameDatabaseFile(RwChar *pFileName, RwBool checkExistsOnly)
       {
          RWS_FUNCTION("Startup::LoadGameDatabaseFile");
 
+         DECOMP_DEBUG_PRINT("LOAD %s\n",pFileName);
+
          RwStream* pStream = RwStreamOpen(rwSTREAMFILENAME, rwSTREAMREAD, pFileName);
+
+         DECOMP_DEBUG_PRINT("[ProcessStream] LOAD Was stream opened?: %d\n", pStream != NULL);
 
          if (pStream)
          {
+            DECOMP_DEBUG_PRINT("Processing %s\n",pFileName);
             CStreamHandler::ProcessStream(pStream);
+            DECOMP_DEBUG_PRINT("Closing %s\n",pFileName);
 
             RwStreamClose(pStream, pFileName);
 

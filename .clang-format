@@ -1,0 +1,34 @@
+# .clang-format
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+NamespaceIndentation: All
+AccessModifierOffset: -4
+AlignAfterOpenBracket: DontAlign
+ContinuationIndentWidth: 4
+IndentPPDirectives: None
+
+# Braces
+BreakBeforeBraces: Allman
+
+# Short constructs
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortBlocksOnASingleLine: Never
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Pointers / references
+DerivePointerAlignment: false
+PointerAlignment: Right
+
+# Misc
+ColumnLimit: 120
+FixNamespaceComments: false
+SortIncludes: false
+EmptyLineBeforeAccessModifier: LogicalBlock
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1

@@ -33,7 +33,10 @@ def _link(tc: Toolchain, output: str, args: list[str], inputs: list[str], cwd: s
     result = subprocess.run([tc.link, *(mode or []), "@" + rsp], cwd=cwd, env=tc.env,
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, errors="replace")
     for line in result.stdout.splitlines():
-        say(f"    {line}")
+        # The toolkit's CRT libraries reference a libcmt.pdb it does not ship;
+        # this linker cannot /IGNORE the warning.
+        if "LNK4099" not in line:
+            say(f"    {line}")
     if result.returncode != 0:
         util.remove(rsp)
         return False
@@ -48,15 +51,28 @@ def build_library(tc: Toolchain, proj: Project) -> bool:
     return _link(tc, proj.output, args, objs, proj.dir, ["/lib"])
 
 
-def build_executable(tc: Toolchain, proj: Project, dep_libs: list[str], st_debug_crt: bool) -> bool:
+def build_executable(tc: Toolchain, proj: Project, dep_libs: list[str], st_debug_crt: bool,
+                     pdb_objs: list[str] | None = None, keep_unused: bool = False) -> bool:
+    """pdb_objs: link a PDB for a configuration without debug info, adding these objects.
+    keep_unused: keep unreferenced functions (identical ones are still folded, like the original)."""
     l = proj.linker
     a = ["/OUT:" + quote(proj.output)]
     if (l.get("SuppressStartupBanner") or "").upper() == "TRUE":
         a.append("/nologo")
     a += {"1": ["/INCREMENTAL:NO"], "2": ["/INCREMENTAL"]}.get(l.get("LinkIncremental"), [])
-    if (l.get("GenerateDebugInformation") or "").upper() == "TRUE":
+    debug = (l.get("GenerateDebugInformation") or "").upper() == "TRUE"
+    pdb = pdb_objs is not None
+    if debug or pdb:
         a.append("/DEBUG")
-    if l.get("ProgramDatabaseFile"):
+    if keep_unused:
+        a += ["/OPT:NOREF", "/OPT:ICF"]
+    if pdb and not debug:
+        if not keep_unused:
+            # /DEBUG turns off unreferenced-code removal and identical-code folding;
+            # keep the release layout.
+            a += ["/OPT:REF", "/OPT:ICF"]
+        a.append("/PDB:" + quote(os.path.splitext(proj.output)[0] + ".pdb"))
+    elif l.get("ProgramDatabaseFile"):
         a.append("/PDB:" + quote(resolve_proj_path(proj.dir, l["ProgramDatabaseFile"])))
     a += {"1": ["/SUBSYSTEM:CONSOLE"], "2": ["/SUBSYSTEM:WINDOWS"]}.get(l.get("SubSystem"), [])
     a.append("/MACHINE:X86")
@@ -67,7 +83,7 @@ def build_executable(tc: Toolchain, proj: Project, dep_libs: list[str], st_debug
         # still request the MT debug CRT, even when this project itself is /MT.
         a += ["/NODEFAULTLIB:libcmtd.lib", "/NODEFAULTLIB:libcpmtd.lib"]
     a += split_list(l.get("AdditionalOptions"), r"\s+")
-    objs = [u.obj for u in proj.units]
+    objs = [u.obj for u in proj.units] + (pdb_objs or [])
     a += [quote(o) for o in objs]
     a += [quote(d) for d in dep_libs]
     a += split_list(l.get("AdditionalDependencies"), r"\s+") + INHERITED_LIBS

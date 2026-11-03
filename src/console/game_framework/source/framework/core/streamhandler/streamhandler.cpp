@@ -39,6 +39,8 @@
 #include "strfunc.h"
 #include "../macros/debugmacros.h"
 
+#include "framework/decomp_helpers.h"
+
 #ifdef _DEBUG
 namespace
 {
@@ -234,9 +236,13 @@ namespace RWS
    void CStreamHandler::ProcessStream(RwStream* pStream)
    {
       RWS_FUNCTION("RWS::CStreamHandler::ProcessStream");
+
+      DECOMP_DEBUG_PRINT("[ProcessStream] Do we have a stream?: %d\n", pStream != NULL);
       
       RWS_PRE(pStream);
       
+      DECOMP_DEBUG_PRINT("[ProcessStream] Start\n");
+
       // For each chunk
       //
       while (!RwStreamEOF(pStream))

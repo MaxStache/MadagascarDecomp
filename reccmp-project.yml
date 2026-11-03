@@ -1,0 +1,20 @@
+targets:
+  GAME:
+    filename: Game.exe
+    source_root: .
+    hash:
+      sha256: a8dcfe45da2a9145528845a863101611074896f2453a4cc16a360397f7ecda28
+    data_sources: []
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+    data-sources:
+      - crt.csv

@@ -35,10 +35,10 @@ namespace RWS
 {
    RpWorld *CLevel::sm_pOpaqueWorld = 0;
    RpWorld *CLevel::sm_pTranslucentWorld = 0;
+   RpWorld *CLevel::sm_pSkyWorld = 0;
    RpWorld *CLevel::sm_pActiveWorld = 0;
-
-   RpClump *CLevel::g_pLevelClump = 0;
-   RwBool CLevel::g_bWorldsReady = FALSE;
+   RpWorld *CLevel::sm_pFogWorld = 0;
+   RpWorld *CLevel::sm_pPreOpaqueWorld = 0;
 
    namespace
    {
@@ -428,16 +428,16 @@ namespace RWS
    RpWorld *CLevel::AddAtomic(RpAtomic *atomic)
    {
       RWS_FUNCTION("RWS::CLevel::AddAtomic");
-
-      if (g_pLevelClump != NULL)
-      {
-         RpClumpAddAtomic(g_pLevelClump, atomic);
-         if (g_bWorldsReady != 0)
-         {
-            RpWorld *pWorld = RpClumpGetWorld(g_pLevelClump);
-            RpWorldAddAtomic(pWorld, atomic);
-         }
-      }
+        // TODO: TODO
+      //if (g_pLevelClump != NULL)
+      //{
+      //   RpClumpAddAtomic(g_pLevelClump, atomic);
+      //   if (g_bWorldsReady != 0)
+      //   {
+      //      RpWorld *pWorld = RpClumpGetWorld(g_pLevelClump);
+      //      RpWorldAddAtomic(pWorld, atomic);
+      //   }
+      //}
       RWS_RETURN(0);
    }
 

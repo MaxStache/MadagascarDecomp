@@ -4,6 +4,7 @@ import argparse
 import os
 import shutil
 import time
+import subprocess
 
 from . import compile, link, toolchain, util, vcproj
 from .util import BuildError, say
@@ -47,7 +48,18 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
     p.add_argument("--st-debug-crt", action="store_true",
                    help="build /MTd configurations against the single-threaded debug CRT (/MLd); "
                         "automatic when libcmtd.lib/libcpmtd.lib are not installed")
+    p.add_argument("--pdb", action="store_true",
+                   help="compile with /Z7 and link a PDB next to the executable; object code is unchanged")
+    p.add_argument("--keep-unused", action="store_true",
+                   help="link with /OPT:NOREF so unreferenced functions are kept; identical (e.g. empty) "
+                        "functions are still folded together (/OPT:ICF), as in the original")
+    p.add_argument("-D", "--define", action="append", default=[], metavar="NAME[=VALUE]",
+                   help="define a preprocessor macro for every source file, e.g. --define DECOMP_ENABLE_CONSOLE "
+                        "(repeatable; changing defines recompiles the affected objects)")
     p.add_argument("-v", "--verbose", action="store_true", help="print compiler and linker command lines")
+
+    p.add_argument("-run", action="store_true", help="run the built program")
+
     return p.parse_args(argv)
 
 
@@ -64,6 +76,17 @@ def build(args: argparse.Namespace) -> bool:
     st_debug_crt = args.st_debug_crt or auto_st_crt
 
     projects = [vcproj.load(p, args.configuration, st_debug_crt) for p in PROJECTS]
+    if args.pdb:
+        for p in projects:
+            for u in p.units:
+                if not u.debug_info:
+                    # /Z7 keeps the debug info in each object, so compiles stay parallel.
+                    u.flags.append("/Z7")
+    if args.define:
+        defines = ["/D" + util.quote(d) for d in args.define]
+        for p in projects:
+            for u in p.units:
+                u.flags += defines
 
     if args.clean or args.rebuild:
         clean(projects)
@@ -74,12 +97,17 @@ def build(args: argparse.Namespace) -> bool:
     say(f"Configuration: {args.configuration}")
     say(f"Compiler:      {tc.toolkit}")
     say(f"Windows SDK:   {tc.sdk.name}")
-    say(f"RenderWare:    {tc.rwgsdk}")
+    say(f"RenderWare SDK:    {tc.rwgsdk}")
+    if args.define:
+        say(f"Defines:       {' '.join(args.define)}")
     if auto_st_crt and any(p.runtime_library == "1" for p in projects):
         say("Note:          libcmtd.lib/libcpmtd.lib not found; using the single-threaded debug CRT (/MLd).", "yellow")
     start = time.perf_counter()
 
     dep_libs: list[str] = []
+    # With /Z7, PCH users keep their type info in the PCH object, which nothing
+    # pulls out of a static library; link those objects in directly.
+    pdb_objs: list[str] = []
     for p in projects:
         say(f"\n== {p.name}", "cyan")
         if not compile.build_objects(tc, p, args.jobs):
@@ -88,14 +116,22 @@ def build(args: argparse.Namespace) -> bool:
         if p.is_library:
             ok = link.build_library(tc, p)
         else:
-            ok = link.build_executable(tc, p, dep_libs, st_debug_crt)
+            ok = link.build_executable(tc, p, dep_libs, st_debug_crt, pdb_objs if args.pdb else None,
+                                         args.keep_unused)
         if not ok:
             say(f"\nBuild FAILED ({p.name} link).", "red")
             return False
         if p.is_library:
             dep_libs.append(p.output)
+            pdb_objs += [u.obj for u in p.units if u.creates_pch]
 
     say(f"\nBuild succeeded in {time.perf_counter() - start:.1f}s: {projects[-1].output}", "green")
+    
+    if args.run:  
+        say("\nStarting built executeable...", "green")
+
+        subprocess.run([projects[-1].output], check=False)
+
     return True
 
 

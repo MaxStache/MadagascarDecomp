@@ -20,3 +20,9 @@ __pycache__/
 rwsdk/
 
 *.gig.*
+
+tools/objdiff.exe
+
+originals/
+reccmp-user.yml
+reccmp-build.yml

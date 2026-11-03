@@ -37,6 +37,6 @@ namespace RWS
       *  \param pFileName String containing the name of the game database file to load.
       *
       */
-      bool LoadGameDatabaseFile(RwChar *pFileName);
+      bool LoadGameDatabaseFile(RwChar *pFileName, RwBool checkExistsOnly);
    }
 }
