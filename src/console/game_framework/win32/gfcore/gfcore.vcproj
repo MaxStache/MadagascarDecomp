@@ -235,7 +235,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				InlineFunctionExpansion="1"
+				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="..\..\source\framework\core\memoryhandler,$(RWGSDK)\include\d3d8,..\..\source\"
 				PreprocessorDefinitions="NDEBUG;RWS_DISABLE_MEMORY_CHECKING;_WINDOWS;WIN32;RW_USE_SPF"
 				StringPooling="TRUE"

@@ -29,15 +29,16 @@ The toolchain runs under Wine in the prefix `~/.wine-vs2003`:
 ./build-wine.sh --help               # all options are passed through to tools/build.py
 ```
 
-reccmp itself runs natively on macOS (it only shells out to Wine to read the PDB):
+
 
 ```
 python3 -m venv .venv && ./.venv/bin/pip install reccmp
 cp /path/to/original/Game.exe originals/Game.exe     # sha256 a8dcfe45...
 ./.venv/bin/reccmp-project detect --search-path ./originals
 
-./reccmp_check.sh                    # build + full report -> report.html
-./reccmp_check.sh --no-build         # compare only
-./reccmp_check.sh 0x464ef0           # verbose asm diff for one address
-./reccmp_check.sh --vtable           # also check vtables
+python3 reccmp-check.py                    # build + full report -> report.html
+python3 reccmp-check.py --no-build         # compare only
+python3 reccmp-check.py 0x464ef0           # verbose asm diff for one address
+python3 reccmp-check.py --vtable           # also check vtables
+python3 reccmp-check.py build --run        # build only, then run the game
 ```

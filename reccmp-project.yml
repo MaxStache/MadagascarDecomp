@@ -18,3 +18,4 @@ targets:
     marker_aliases: {}
     data-sources:
       - crt.csv
+      - rwplcore.csv

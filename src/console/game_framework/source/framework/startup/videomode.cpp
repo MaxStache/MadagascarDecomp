@@ -102,6 +102,7 @@ namespace RWS
       *
       *  \returns Returns true on success.
       */
+     // FUNCTION: GAME 0x00462bf0
       RwBool SelectVideoMode( RwInt32& screenWidth, RwInt32& screenHeight, RwInt32 bitDepth, 
                             RwUInt32 flags, RwUInt32 zDepth)
       {

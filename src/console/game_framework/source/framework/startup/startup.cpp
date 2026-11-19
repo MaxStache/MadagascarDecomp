@@ -145,6 +145,7 @@ namespace RWS
          
          RWS::FunctionProfile::CProfileManager::OpenProfiler(10000, RWS::Time::GetTime);
 
+
          if (RwEngineInit(memfuncs, 0, ArenaSize))
          {
 #ifdef WITH_AUDIO
@@ -242,3 +243,6 @@ namespace RWS
       }
    }
 }
+
+// GLOBAL: GAME 0x00606c90
+// pDefMemFuncs

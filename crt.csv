@@ -460,3 +460,6 @@ address|name|type
 0x006336ac|___onexitbegin|global
 0x006336b0|___mbctype_initialized|global
 0x006336b4|__acmdln|global
+
+# 4 zero bytes: 0.0f, folded by /OPT:ICF with this wide literal in the recomp PDB
+0x005ca5a8|L"\\x00"|widechar

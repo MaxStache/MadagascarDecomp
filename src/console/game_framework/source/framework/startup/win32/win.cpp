@@ -558,20 +558,6 @@ void DestroyMainWindow(void)
     }
 }
 
-/*
- *
- *  \ingroup Win
- *
- *  Win32 only: Run a game frame
- *
- */
-void RunGameFrame(void)
-{
-    // TODO: Actually implement
-    RWS::MainLoop::Logic::Poll();
-    RWS::MainLoop::Render::Poll();
-}
-
 void SaveSystemSettings()
 {
     RWS_FUNCTION("SaveSystemSettings");
@@ -650,7 +636,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE /* prevInstance */, LPSTR cmdL
     #ifdef DECOMP_ENABLE_CONSOLE
     AllocConsole();
     freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr); 
+    freopen("CONOUT$", "w", stderr);
     #endif
 
     g_pRegistry = InitPlatform();
@@ -794,7 +780,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE /* prevInstance */, LPSTR cmdL
                     Sleep(10);
                 }
 
-                RunGameFrame();
+                RWS::MainLoop::Poll();
             }
 
             // TODO: FreeLevelResources() (0x460d50);

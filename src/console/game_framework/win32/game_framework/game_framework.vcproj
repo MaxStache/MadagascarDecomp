@@ -15553,6 +15553,120 @@
 				<File
 					RelativePath="..\..\source\framework\mainloop\render.h">
 				</File>
+				<Filter
+					Name="CFrameTimer"
+					Filter="">
+					<File
+						RelativePath="..\..\source\framework\mainloop\cframetimer.cpp">
+						<FileConfiguration
+							Name="D3D Design Metrics|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Metrics|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Design Release|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="D3D Design Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="0"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="D3D Release|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="D3D Design Release|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="0"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Release|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Design Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="0"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="D3D Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="0"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="OGL Design Metrics|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""
+								BrowseInformation="1"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="D3D Metrics|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="2"
+								AdditionalIncludeDirectories=""
+								PreprocessorDefinitions=""/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\source\framework\mainloop\cframetimer.h">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="StartUp"

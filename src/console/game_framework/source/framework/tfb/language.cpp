@@ -7,12 +7,15 @@ const char *g_langCodes[18] = {
 		"JP", "NL", "PT", "UK", "DK", "FI",   
 		"NO", "SK", "RS", "LT", "ES", "GK",  
 }; 
+
+// GLOBAL: GAME 0x006035b0
 const char *g_langNames[18] = {
 	"English", "French", "German", "Spanish", "Swedish", "Italian", 
 	"Japanese", "Dutch", "Portuguese", "British", "Danish", "Finnish",
 	"Norwegian", "Norse", "Russian", "Latin", "Esperanto", "Greek",
 };
 
+// GLOBAL: GAME 0x00626554
 int g_activeLangIndex;
 
 // FUNCTION: GAME 0x00447670

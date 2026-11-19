@@ -4530,6 +4530,7 @@ void *MemHandlerNewHint(size_t size, RwMemoryHintDuration hint)
  *
  */
 
+// FUNCTION: GAME 0x005500f0 FOLDED
 void MemHandlerDel(void *pMem)
 {
    if (pMem)
@@ -4631,6 +4632,7 @@ void *operator new[](size_t size)
  *
  */
 
+// FUNCTION: GAME 0x005500f0 FOLDED
 void operator delete(void *pMem)
 {
    if (pMem)
@@ -4655,6 +4657,7 @@ void operator delete(void *pMem)
  *
  */
 
+// FUNCTION: GAME 0x005500f0 FOLDED
 void operator delete[](void *pMem)
 {
    if (pMem)
@@ -4879,6 +4882,7 @@ void *RWSMalloc(size_t size, RwUInt32 hint)
  *
  */
 
+// FUNCTION: GAME 0x005500f0 FOLDED
 void RWSFree(void *pMem)
 {
    if (pMem)

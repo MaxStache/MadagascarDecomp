@@ -70,7 +70,40 @@ def clean(projects: list[vcproj.Project]) -> None:
         util.remove(p.output + ".rsp")
 
 
-def build(args: argparse.Namespace) -> bool:
+# Options accepted by build(); keys match the argparse destinations.
+BUILD_DEFAULTS = {
+    "configuration": "D3D Release",
+    "rebuild": False,
+    "clean": False,
+    "jobs": os.cpu_count() or 1,
+    "toolkit_dir": None,
+    "winsdk_dir": None,
+    "rwgsdk": None,
+    "st_debug_crt": False,
+    "pdb": False,
+    "keep_unused": False,
+    "define": [],
+    "run": False,
+}
+
+
+def build_cli(args: argparse.Namespace) -> bool:
+    """Builds from parsed command line arguments."""
+    opts = {k: v for k, v in vars(args).items() if k in BUILD_DEFAULTS}
+    return build(opts) is not None
+
+
+def build(options: dict) -> str | None:
+    """Builds with the given options; missing keys fall back to BUILD_DEFAULTS.
+
+    Returns the executable's path (buildOutputPath) on success, None on a compile/link failure.
+    """
+    unknown = set(options) - set(BUILD_DEFAULTS)
+    if unknown:
+        raise BuildError(f"unknown build option(s): {', '.join(sorted(unknown))}")
+    args = argparse.Namespace(**{**BUILD_DEFAULTS, **options})
+    args.configuration = _configuration(args.configuration)
+
     tc = toolchain.setup(ROOT, args.toolkit_dir, args.winsdk_dir, args.rwgsdk)
     auto_st_crt = not tc.has_mt_debug_crt and not args.st_debug_crt
     st_debug_crt = args.st_debug_crt or auto_st_crt
@@ -92,7 +125,7 @@ def build(args: argparse.Namespace) -> bool:
         clean(projects)
         say(f"Cleaned [{args.configuration}].")
         if args.clean:
-            return True
+            return projects[-1].output
 
     say(f"Configuration: {args.configuration}")
     say(f"Compiler:      {tc.toolkit}")
@@ -112,7 +145,7 @@ def build(args: argparse.Namespace) -> bool:
         say(f"\n== {p.name}", "cyan")
         if not compile.build_objects(tc, p, args.jobs):
             say("\nBuild FAILED.", "red")
-            return False
+            return None
         if p.is_library:
             ok = link.build_library(tc, p)
         else:
@@ -120,26 +153,26 @@ def build(args: argparse.Namespace) -> bool:
                                          args.keep_unused)
         if not ok:
             say(f"\nBuild FAILED ({p.name} link).", "red")
-            return False
+            return None
         if p.is_library:
             dep_libs.append(p.output)
             pdb_objs += [u.obj for u in p.units if u.creates_pch]
 
-    say(f"\nBuild succeeded in {time.perf_counter() - start:.1f}s: {projects[-1].output}", "green")
-    
-    if args.run:  
-        say("\nStarting built executeable...", "green")
+    buildOutputPath = projects[-1].output
+    say(f"\nBuild succeeded in {time.perf_counter() - start:.1f}s: {buildOutputPath}", "green")
 
-        subprocess.run([projects[-1].output], check=False)
+    if args.run:
+        say("\nStarting built executable...", "green")
+        subprocess.run([buildOutputPath], check=False)
 
-    return True
+    return buildOutputPath
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     util.verbose = args.verbose
     try:
-        return 0 if build(args) else 1
+        return 0 if build_cli(args) else 1
     except BuildError as e:
         say(f"error: {e}", "red")
         return 1

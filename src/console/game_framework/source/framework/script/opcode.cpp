@@ -13,10 +13,10 @@ namespace Script
     {
         RwUInt32 end = (flags >> 11) + tfb_current_instruction_index;
 
-        for (RwUInt32 i = tfb_current_instruction_index; i < end; i = tfb_current_instruction_index)
+        while (tfb_current_instruction_index < end)
         {
-            tfb_current_instruction_index = i + 1;
-            OpCode *op =     tfb_currentScript->ops[i];
+            RwUInt32 i = tfb_current_instruction_index++;
+            OpCode *op = tfb_currentScript->ops[i];
             if (op)
             {
                 int result = op->execute() - 1;

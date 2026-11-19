@@ -44,15 +44,7 @@ extern int g_levelWorldsReady;  // nonzero once the opaque and active world exis
 extern float g_nearClip;
 extern float g_farClip;
 extern float g_levelFarDefault;  // far clip the level started with (-1 until command 3 sets it)
-extern int g_fogMode;  // 0 off, else the RwFogType
-extern int g_fogFlag;                     // 0x6296f0 nonzero when RenderFogPass sets the camera's fog plane
-extern unsigned g_vertFogColor;  // D3DCOLOR
-extern float g_vertFogDist;
-extern float g_levelFogParam;  // handed to RwRenderState FOGDENSITY
-extern float g_fogParamA;  // far clip of the fog pass (SetFogFarClip)
-extern float g_fogParamB;  // fog plane of the fog pass (SetFogPlane)
 extern int g_levelZone;  // ScriptSystem LevelZone
-// Shrink fog and pixel-fog distances on the levels outside {1, 3, 8, 11, 13, 14, 15}: divided by 3 - g_distance * 0.02. Purpose unknown (a video option?).
 extern unsigned char g_distClip;
 extern int g_distance;
 
