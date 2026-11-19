@@ -1,0 +1,9 @@
+address|name|type
+
+# MSVC 7.1 Dinkumware STL instantiations.
+0x00433da0|std::vector<Script::NameEntry,std::allocator<Script::NameEntry> >::_Construct_n|library
+0x00434070|std::vector<Script::NameEntry,std::allocator<Script::NameEntry> >::push_back|library
+0x00433580|std::vector<Script::NameEntry,std::allocator<Script::NameEntry> >::_Xlen|library
+0x00433e50|std::vector<Script::NameEntry,std::allocator<Script::NameEntry> >::insert|library
+0x00432f10|std::_Uninit_fill_n<Script::NameEntry *,unsigned int,Script::NameEntry,std::allocator<Script::NameEntry> >|library
+0x0051ce60|std::vector<RWS::CLinearMemoryManager::LinearMemoryPool *,std::allocator<RWS::CLinearMemoryManager::LinearMemoryPool *> >::~vector<RWS::CLinearMemoryManager::LinearMemoryPool *,std::allocator<RWS::CLinearMemoryManager::LinearMemoryPool *> >|library

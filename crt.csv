@@ -17,7 +17,7 @@ address|name|type
 0x00558492|__local_unwind2|library
 0x005584fa|__abnormal_termination|library
 0x00558576|__fpmath|library
-0x00558594|__CxxThrowException@8|library
+0x00558594|_CxxThrowException|library
 0x005585df|exception|library
 0x00558629|~exception|library
 0x00558668|~type_info|library
@@ -150,6 +150,8 @@ address|name|type
 0x0055ff60|__filbuf|library
 0x00560041|__read_lk|library
 0x0056021c|__read|library
+0x005602c7|__initstdio|library
+0x00560370|__endstdio|library
 0x00560384|__lock_file|library
 0x005603d6|__unlock_file|library
 0x00560428|__openfile|library
@@ -338,7 +340,7 @@ address|name|type
 0x00611df0|___rgctypeflag|global
 0x00611df8|___rgcode_page_info|global
 0x00611ee8|__pmatherr|global
-0x00611ef0|__iob|global
+0x00611ef0|_iob|global
 0x00612180|_rterrs|global
 0x00612218|__XcptActTab|global
 0x00612290|__First_FPE_Indx|global

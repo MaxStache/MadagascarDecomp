@@ -17112,6 +17112,223 @@
 				<File
 					RelativePath="..\..\source\framework\script\opcode.h">
 				</File>
+				<File
+					RelativePath="..\..\source\framework\script\scripthash.cpp">
+					<FileConfiguration
+						Name="D3D Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\source\framework\script\scriptnametable.cpp">
+					<FileConfiguration
+						Name="D3D Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\source\framework\script\scriptnametable.h">
+				</File>
 			</Filter>
 			<Filter
 				Name="TFB"
@@ -17453,6 +17670,113 @@
 				</File>
 				<File
 					RelativePath="..\..\source\framework\tfb\language.h">
+				</File>
+				<File
+					RelativePath="..\..\source\framework\tfb\reader.cpp">
+					<FileConfiguration
+						Name="D3D Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Design Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="OGL Design Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""
+							BrowseInformation="1"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="D3D Metrics|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="2"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions=""/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\source\framework\tfb\reader.h">

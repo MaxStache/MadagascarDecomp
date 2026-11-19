@@ -3,20 +3,18 @@
 
 #include <stddef.h>
 
-// GLOBAL: GAME 0x0061f888
-int g_tfbReadPos;
-// GLOBAL: GAME 0x0061f88c
-unsigned char *g_tfbReadBuf;
+extern int g_tfbReadPos;
+extern unsigned char *g_tfbReadBuf;
 
 // FUNCTION: GAME 0x004328d0
-void TFBRead_u8(unsigned char *out)
+inline void TFBRead_u8(unsigned char *out)
 {
 	*out = g_tfbReadBuf[g_tfbReadPos];
 	g_tfbReadPos++;
 }
 
 // FUNCTION: GAME 0x004328f0
-void TFBRead_u16(unsigned short *out)
+inline void TFBRead_u16(unsigned short *out)
 {
 	unsigned char lo = g_tfbReadBuf[g_tfbReadPos++];
 	unsigned char hi = g_tfbReadBuf[g_tfbReadPos++];
@@ -24,7 +22,7 @@ void TFBRead_u16(unsigned short *out)
 }
 
 // FUNCTION: GAME 0x00432920
-void TFBRead_u32(unsigned int *out)
+inline void TFBRead_u32(unsigned int *out)
 {
 	unsigned char b[4];
 	TFBRead_u8(&b[0]);
@@ -35,7 +33,7 @@ void TFBRead_u32(unsigned int *out)
 }
 
 // FUNCTION: GAME 0x004329a0
-void TFBRead_pstr(char *out)
+inline void TFBRead_pstr(char *out)
 {
 	char scratch[256];
 	unsigned char n = g_tfbReadBuf[g_tfbReadPos++];

@@ -828,7 +828,12 @@ void *BaseMemAlloc(size_t size, RwUInt32 userTypeNum)
    return (RwsDolphinHeapAlloc(size));
 #else
 
-   return (malloc(size));
+   if (size)
+   {
+      return (malloc(size));
+   }
+
+   return (0);
 #endif
 }
 
@@ -1570,7 +1575,7 @@ public:
     * \see CMemHandler::CMemHandler
     *
     */
-
+    // FUNCTION: GAME 0x00550130
    static CMemHandler &GetRef(void)
    {
       static CMemHandler memHandler; // This variable is the global memory handler instance.
@@ -1720,6 +1725,15 @@ public:
 
 #endif
 };
+
+// GLOBAL: GAME 0x0062feac
+// memHandler
+
+// GLOBAL: GAME 0x0062feb0
+// ?$S1@?1??GetRef@CMemHandler@@SAAAV2@XZ@4IA
+
+// SYNTHETIC: GAME 0x005c8a70
+// `CMemHandler::GetRef'::`2'::memHandler
 
 /**
  *
@@ -4563,6 +4577,7 @@ void MemHandlerDel(void *pMem)
  *
  */
 
+// FUNCTION: GAME 0x00550170 FOLDED
 void *operator new(size_t size)
 {
    // NOTE: must always call CMemHandler so that initialization of underlying memory system occurs.
@@ -4599,6 +4614,7 @@ void *operator new(size_t size)
  *
  */
 
+// FUNCTION: GAME 0x00550170 FOLDED
 void *operator new[](size_t size)
 {
    // NOTE: must always call CMemHandler so that initialization of underlying memory system occurs.

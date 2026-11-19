@@ -70,6 +70,8 @@ namespace RWS
         // FUNCTION: GAME 0x0041c310
         void CTFBWorld::HandleEvents(CMsg &msg)
         {
+            RWS_FUNCTION("RWS::TFB::CTFBWorld::HandleEvents");
+
             if (msg.Id == m_renderEvent)
             {
                 DECOMP_DEBUG_PRINT("RENDEREVENT, has camera? %d\n", msg.pData != NULL);

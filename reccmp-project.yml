@@ -19,3 +19,4 @@ targets:
     data-sources:
       - crt.csv
       - rwplcore.csv
+      - stl.csv

@@ -8,6 +8,7 @@ namespace Script
 {
     extern RwUInt32 tfb_current_instruction_index;
     extern OpContext *tfb_currentScript;
+    extern RwUInt32 *tfb_opArena;
 
     // VTABLE: GAME 0x005cdc80
     class OpCode : public ScriptReference
