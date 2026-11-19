@@ -9,7 +9,7 @@ namespace Script
     OpContext *tfb_currentScript;
 
     // FUNCTION: GAME 0x00431130
-    int OpCode::execute()
+    int OpCode::Execute()
     {
         RwUInt32 end = (flags >> 11) + tfb_current_instruction_index;
 
@@ -19,7 +19,7 @@ namespace Script
             OpCode *op = tfb_currentScript->ops[i];
             if (op)
             {
-                int result = op->execute() - 1;
+                int result = op->Execute() - 1;
                 if (result != 0)
                 {
                     tfb_current_instruction_index = end;

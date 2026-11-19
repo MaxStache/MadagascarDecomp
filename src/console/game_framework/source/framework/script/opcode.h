@@ -14,15 +14,15 @@ namespace Script
     {
     public:
         // FUNCTION: GAME 0x0043e6f0 FOLDED
-        virtual int getScopeType() { return 0; }
+        virtual int IsBlock() { return 0; }
 
         // FUNCTION: GAME 0x0043e6f0 FOLDED
-        virtual OpCode *instantiate() { return NULL; }
+        virtual OpCode *Clone() { return NULL; }
 
-        virtual int execute();
+        virtual int Execute();
 
         // FUNCTION: GAME 0x0043e6f0 FOLDED
-        virtual int parse() { return 0; }
+        virtual int Parse() { return 0; }
 
     public:
         RwUInt32 flags;

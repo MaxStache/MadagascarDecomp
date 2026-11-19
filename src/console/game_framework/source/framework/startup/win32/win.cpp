@@ -722,7 +722,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE /* prevInstance */, LPSTR cmdL
         #endif
 
         Script::OpContext *myscript = RWS_NEW Script::OpContext;
-        static RwUInt8 ME_Sound_Ambient_data[] = {
+        static unsigned char ME_Sound_Ambient_data[] = {
     0x0A, 0x54, 0x46, 0x42, 0x20, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x22,
     0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x18, 0x63, 0x68, 0x65, 0x63,
     0x6B, 0x20, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6E, 0x63, 0x65, 0x3A,
@@ -744,11 +744,12 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE /* prevInstance */, LPSTR cmdL
     0x08, 0x00, 0xC0, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00,
     0x00, 0x00, 0x04, 0x00, 0x40, 0x00, 0x00,
 };
-        void *pData = ME_Sound_Ambient_data;
-        myscript->load("SCRIPT", &pData);
+        unsigned char *pData = ME_Sound_Ambient_data;
+        myscript->Load("SCRIPT", &pData);
 
         if (RWS::StartUp::Open(NULL, NULL, 0x1000000, videoMode, 16, theMainWindow))
         {
+            // TODO: RE ENABLE
             RWS::StartUp::LoadGameDatabaseFile("levels\\kingofny.stream", 0);
             // TODO: g_nWorldObjectCount (0x602ea0) = GetLoadedObjectCount() (0x432cb0);
 

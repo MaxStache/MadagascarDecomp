@@ -41,16 +41,19 @@ def venv_tool(name: str) -> Path:
 # ---------- build ----------
 def build_defines(args: argparse.Namespace) -> list[str]:
     defines = ["WITH_AUDIO"]
-    if args.release:
-        return defines
 
     if args.no_audio:
         defines.remove("WITH_AUDIO")
 
+    if args.release:
+        return defines
+
+    
     if not args.no_console:
         defines.append("DECOMP_ENABLE_CONSOLE")
     if not args.no_window:
         defines.append("DECOMP_DEBUG_WINDOWED")
+
     return defines
 
 
@@ -61,7 +64,7 @@ def do_build(args: argparse.Namespace) -> Path | None:
         from tools.build.cli import build
 
         try:
-            output = build({"pdb": True, "keep_unused": True, "define": defines})
+            output = build({"configuration": "D3D Release","pdb": True, "keep_unused": True, "define": defines})
         except BuildError as e:
             say(f"error: {e}", "red")
             return None

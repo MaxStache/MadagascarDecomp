@@ -17454,6 +17454,9 @@
 				<File
 					RelativePath="..\..\source\framework\tfb\language.h">
 				</File>
+				<File
+					RelativePath="..\..\source\framework\tfb\reader.h">
+				</File>
 			</Filter>
 			<File
 				RelativePath="..\..\source\framework\decomp_helpers.h">

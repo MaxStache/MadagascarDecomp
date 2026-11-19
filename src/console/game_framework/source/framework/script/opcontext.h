@@ -4,20 +4,25 @@
 #include "namedobject.h"
 #include "scriptreference.h"
 
+#include "framework/decomp_helpers.h"
+
 namespace Script
 {
+    extern int g_tfbNextInstrPos;
+    extern char* g_tfbLoadArg;
+
     class OpCode;
 
     // VTABLE: GAME 0x005cd2bc
     class OpContext : public NamedObject
     {
         // FUNCTION: GAME 0x00429750
-        virtual const char *getName() { return "script"; }
+        virtual const char *GetName() { return "script"; }
         // FUNCTION: GAME 0x00429740
-        virtual const char *getTypeName() { return "TFB Script"; }
+        virtual const char *GetTypeName() { return "TFB Script"; }
 
     public:
-        bool load(char *pszTypeName, void **ppData);
+        bool Load(char *pszTypeName, unsigned char **ppData);
 
     public:
         RwUInt32 behaviorInstructionIndex;

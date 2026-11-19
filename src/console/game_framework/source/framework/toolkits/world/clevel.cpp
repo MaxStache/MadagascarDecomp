@@ -428,7 +428,7 @@ namespace RWS
    RpWorld *CLevel::AddAtomic(RpAtomic *atomic)
    {
       RWS_FUNCTION("RWS::CLevel::AddAtomic");
-        // TODO: TODO
+        // TODO: IMPLEMENT
       //if (g_pLevelClump != NULL)
       //{
       //   RpClumpAddAtomic(g_pLevelClump, atomic);

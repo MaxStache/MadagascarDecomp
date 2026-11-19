@@ -1,4 +1,4 @@
 /nologo
-/OUT:"C:\Users\maxst\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\LoadingScreen.lib"
-"C:\Users\maxst\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\obj\CLoadingScreen.obj"
-"C:\Users\maxst\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\obj\precomp.obj"
+/OUT:"Z:\Users\max\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\LoadingScreen.lib"
+"Z:\Users\max\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\obj\CLoadingScreen.obj"
+"Z:\Users\max\Projects\MadagascarDecomp\src\console\plugins\loading_screen\win32\bin\Win32 D3D Release\obj\precomp.obj"

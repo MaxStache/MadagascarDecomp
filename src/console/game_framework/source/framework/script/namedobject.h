@@ -7,10 +7,10 @@ namespace Script
     class NamedObject
     {
     public:
-        virtual const char *getName() = 0;
+        virtual const char *GetName() = 0;
 
         // FUNCTION: GAME 0x00436a40
-        virtual const char *getTypeName() { return getName(); }
+        virtual const char *GetTypeName() { return GetName(); }
     };
 }
 
