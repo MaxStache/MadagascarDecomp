@@ -29,6 +29,8 @@ The toolchain runs under Wine in the prefix `~/.wine-vs2003`:
 ./build-wine.sh --help               # all options are passed through to tools/build.py
 ```
 
+## ATTENTION
+Because Renderware Audio is not fully decompiled yet you need to build/check with `--no-audio` flag. (`python .\reccmp-check.py build --no-audio`)
 
 
 ```
@@ -41,4 +43,6 @@ python3 reccmp-check.py --no-build         # compare only
 python3 reccmp-check.py 0x464ef0           # verbose asm diff for one address
 python3 reccmp-check.py --vtable           # also check vtables
 python3 reccmp-check.py build --run        # build only, then run the game
+python3 reccmp-check.py check              # build, then check with reccmp
 ```
+

@@ -181,7 +181,7 @@ def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else list(argv)
 
     if not argv or argv[0] not in ("check", "build", "-h", "--help", "--version"):
-        argv = ["check", *argv]
+        argv = ["build" if "--run" in argv else "check", *argv]
     args = parser.parse_args(argv)
 
     try:
