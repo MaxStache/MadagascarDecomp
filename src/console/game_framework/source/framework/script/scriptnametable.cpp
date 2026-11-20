@@ -22,8 +22,6 @@ void Script::NameTable::Read()
         e.refCount = 0;
         strcpy(e.name, buf);
 
-        DECOMP_DEBUG_PRINT("Loading Name in Table: %u, %s", i, e.name );
-
         push_back(e);
     }
 }
@@ -35,4 +33,49 @@ void Script::NameTable::Clear()
     empty.refCount = 0;
     std::vector<NameEntry> tmp(0, empty);
     swap(tmp);
+}
+
+// name::sub::type
+// FUNCTION: GAME 0x00432a10
+void Script::SplitTypedName(const char *src, char *name, char *sub, char *type)
+{
+    const char *p = src;
+
+    // skip past the first "::"
+    do
+    {
+        p = strchr(p, ':');
+        if (p == NULL)
+            return;
+        p++;
+    } while (*p != ':');
+    while (*++p == ':')
+        ;
+
+    int nameLen = p - src - 2;
+    strncpy(name, src, nameLen);
+    name[nameLen] = '\0';
+
+    const char *subStart = p;
+
+    // skip past the second "::"
+    do
+    {
+        p = strchr(p, ':');
+        if (p == NULL)
+        {
+            // no second "::": sub and type both get the rest
+            strcpy(sub, subStart);
+            strcpy(type, sub);
+            return;
+        }
+        p++;
+    } while (*p != ':');
+    while (*++p == ':')
+        ;
+
+    int subLen = p - subStart - 2;
+    strncpy(sub, subStart, subLen);
+    sub[subLen] = '\0';
+    strcpy(type, p);
 }

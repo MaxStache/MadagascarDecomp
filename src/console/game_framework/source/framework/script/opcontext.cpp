@@ -20,7 +20,6 @@ namespace Script
     // FUNCTION: GAME 0x004349e0
     bool OpContext::Load(char *pszTypeName, unsigned char **ppData)
     {
-        DECOMP_DEBUG_PRINT("SCRIPT LOADING....");
         bool ret;
 
         g_tfbLoadArg = pszTypeName;
@@ -60,7 +59,6 @@ namespace Script
             ops = (OpCode **)arena;
 
             unsigned int declCount = tfb_scopes[1].table.size();
-            DECOMP_DEBUG_PRINT("declCount: %u, %s", declCount, tfb_scopes[1].table.front().name );
             this->locals = (ScriptReference **)RWS_OP_NEW((declCount - 1) * sizeof(ScriptReference *));
             this->localCount = 0;
 
@@ -70,11 +68,40 @@ namespace Script
             for (unsigned i = 0; i < tfb_scopes[1].table.size() - 1; entry++, i++)
             {
                 DECOMP_DEBUG_PRINT("I: %u %s", i, entry->name);
-                // tfb_splitQualifiedName
-                //(entry->name, declName, (char *)headerName_declMiddle,
-                //  (int)declType );
 
-                // -PLACEHOLDER DECMP127-186
+                char declName[0x100];
+                char declSubType[0x100];
+                char declType[0x100];
+                SplitTypedName(entry->name, declName, declSubType, declType);
+
+                // TODO: FIXME: Get real registry here
+                std::vector<ScriptReference *> *typeRegistry;
+
+                unsigned typeIdx = 0;
+                for (unsigned i = 0; i < typeRegistry->size(); ++i)
+                {
+                    if (stricmp(declType, (*typeRegistry)[i]->GetName()) == 0)
+                        break; // found
+                }
+
+                if (stricmp(declSubType, TFBType_Behavior()->GetTypeName()) == 0)
+                {
+                    TFBType_Behavior()->resolveOrDeclareSymbol(this, declName, NULL);
+                    continue;
+                }
+
+                ScriptReference *type = typeRegistry[typeIdx];
+
+                if (stricmp(declSubType, tfb_getUserReferenceProto()->GetTypeName()) == 0)
+                {
+                    getUserReferenceProto()->resolveOrDeclareSymbol(
+                        this, declName, type == getValueInterfaceType() ? getValueInterfaceProto() : type);
+                }
+                else
+                {
+                    tfb_getReferenceSetProto()->resolveOrDeclareSymbol(
+                        this, declName, type == tfb_getValueInterfaceType() ? tfb_getValueInterfaceProto() : type);
+                }
             }
 
             // -PLACEHOLDER DECMP188-287

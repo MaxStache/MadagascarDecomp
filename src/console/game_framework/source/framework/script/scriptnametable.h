@@ -16,6 +16,9 @@ namespace Script
 
     unsigned int NameHashNoCase(const char* pszName);
 
+    // Splits up strings like: name::sub::type, example: MyCounter::user::value
+    void SplitTypedName(const char *src, char *name, char *sub, char *type);
+
     class NameTable : public std::vector<NameEntry>
     {
     public:
@@ -29,7 +32,6 @@ namespace Script
         NameTable table;
     };
 
-    // new SymbolScope[3] in ScriptReference::resolveOrDeclareSymbol
     extern SymbolScope *tfb_scopes;
 }
 
